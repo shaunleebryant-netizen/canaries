@@ -71,7 +71,7 @@ const LOGOS = ["[Logo]", "[Logo]", "[Logo]", "[Logo]", "[Logo]"];
 const FAQ = [
   {
     q: "Is this investment advice?",
-    a: "[Stub] No. Education only — a market-health reading frame, not recommendations to buy or sell.",
+    a: "No. Education only — a market-health reading frame, not recommendations to buy or sell.",
   },
   {
     q: "What do I see for free?",
@@ -79,7 +79,7 @@ const FAQ = [
   },
   {
     q: "What’s the Singapore seminar?",
-    a: "[Stub] Primary lead magnet: a live session on allocation clarity with the canary framework. Date/city details TBD.",
+    a: "Primary lead magnet: a live session on allocation clarity with the canary framework. Date & venue TBD · Singapore. Friends and private signup welcome.",
   },
   {
     q: "How often does the light update?",
@@ -87,7 +87,7 @@ const FAQ = [
   },
   {
     q: "Can I join the weekly letter without the seminar?",
-    a: "[Stub] Yes — secondary CTA. Form stores locally in this scaffold; no email is sent yet.",
+    a: "Yes — secondary CTA. Same education-only frame; form is stubbed until owner approves send.",
   },
   {
     q: "When is About / media live?",
@@ -138,17 +138,23 @@ export default function HomePage() {
                 href="#seminar"
                 className="rounded-xl bg-canary-gold px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
               >
-                Singapore seminar
+                Join the Singapore waitlist
               </a>
               <a
                 href="#letter"
                 className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10"
               >
-                Weekly letter
+                Get the weekly letter
               </a>
             </div>
+            <p className="mt-2 text-xs text-slate-400">
+              <a href="#seminar" className="underline decoration-white/20 underline-offset-2 hover:text-canary-gold">
+                Prefer private / friends signup
+              </a>
+              <span className="text-slate-500"> — same waitlist, priority review.</span>
+            </p>
             <p className="mt-3 text-xs text-slate-500">
-              Primary: seminar / friends / private signup · Secondary: weekly letter
+              Primary: seminar · friends · private signup · Secondary: weekly letter · Education only
             </p>
           </div>
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
@@ -358,40 +364,43 @@ export default function HomePage() {
                 Lead magnet
               </p>
               <h2 className="mt-3 text-3xl font-semibold text-white">
-                Singapore seminar
+                Singapore seminar — see the traffic light live
               </h2>
               <p className="mt-2 text-sm text-slate-400">
-                [Stub] Date & venue TBD · Singapore · friends / private signup welcome
+                Date & venue TBD · Singapore · friends & private signup welcome
               </p>
               <ul className="mt-6 space-y-3 text-sm text-slate-300">
                 <li className="flex gap-2">
                   <span className="text-canary-gold">✓</span>
-                  [Stub] Live walkthrough of the traffic-light frame
+                  Live walkthrough of the canary traffic-light frame for US-market posture
                 </li>
                 <li className="flex gap-2">
                   <span className="text-canary-gold">✓</span>
-                  [Stub] How to use Green / Amber / Red for US allocation clarity
+                  How to read Green / Amber / Red without turning it into a ticker tip sheet
                 </li>
                 <li className="flex gap-2">
                   <span className="text-canary-gold">✓</span>
-                  [Stub] Q&amp;A — education only, no ticker tips
+                  Open Q&amp;A — education only
                 </li>
                 <li className="flex gap-2">
                   <span className="text-canary-gold">✓</span>
-                  [Stub] Path into members / private circle
+                  Path into the members flock and private circle (if it fits)
                 </li>
               </ul>
             </div>
             <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-8">
               <h3 className="text-lg font-semibold text-white">Register interest</h3>
-              <p className="mt-2 text-xs text-slate-500">
-                Form stub — logs locally; no email is sent.
+              <p className="mt-2 text-xs text-slate-400">
+                Coming with a friend, or want a private seat? Note it in your waitlist message —
+                same list, priority review.
               </p>
               <div className="mt-6">
                 <NewsletterForm
                   source="singapore_seminar"
                   showName
-                  buttonLabel="Join Singapore waitlist"
+                  showNote
+                  buttonLabel="Join the Singapore waitlist"
+                  helperText="Friends & private signup welcome. Date/city TBD — we'll confirm when seats open. Form stores interest only; no email is sent yet."
                 />
               </div>
             </div>
@@ -404,11 +413,15 @@ export default function HomePage() {
         <div className="mx-auto max-w-5xl px-4 py-16 text-center">
           <h2 className="text-2xl font-semibold text-white">Weekly canary letter</h2>
           <p className="mx-auto mt-2 max-w-xl text-sm text-slate-400">
-            Secondary CTA. One clear reading each week. Stub form — stores locally, does not send
-            email.
+            One clear reading each week — the light, the composite frame, and what would change our
+            mind. Secondary to the seminar; no ticker tips.
           </p>
           <div className="mt-8 flex justify-center">
-            <NewsletterForm source="weekly_letter" buttonLabel="Get the weekly letter" />
+            <NewsletterForm
+              source="weekly_letter"
+              buttonLabel="Get the weekly letter"
+              helperText="Stub form for now — stores locally; does not send email. Education only."
+            />
           </div>
         </div>
       </section>
@@ -441,15 +454,15 @@ export default function HomePage() {
             Get clear on US-market posture
           </h2>
           <p className="mt-4 text-sm text-slate-400">
-            [Stub] Start with the Singapore seminar waitlist — or grab the weekly letter while seats
-            / dates firm up.
+            Start with the Singapore seminar waitlist (friends & private signup welcome). Grab the
+            weekly letter while dates firm up.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#seminar"
               className="rounded-xl bg-canary-gold px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
             >
-              Singapore seminar
+              Singapore seminar waitlist
             </a>
             <a
               href="#letter"

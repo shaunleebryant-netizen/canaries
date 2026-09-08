@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   let email = "";
   let name = "";
+  let note = "";
   let source = "weekly_letter";
   const contentType = request.headers.get("content-type") || "";
   try {
@@ -17,11 +18,13 @@ export async function POST(request: Request) {
       const body = await request.json();
       email = String(body.email || "").trim();
       name = String(body.name || "").trim();
+      note = String(body.note || "").trim();
       source = String(body.source || "weekly_letter").trim() || "weekly_letter";
     } else {
       const form = await request.formData();
       email = String(form.get("email") || "").trim();
       name = String(form.get("name") || "").trim();
+      note = String(form.get("note") || "").trim();
       source = String(form.get("source") || "weekly_letter").trim() || "weekly_letter";
     }
   } catch {
@@ -35,9 +38,10 @@ export async function POST(request: Request) {
   const entry = {
     email,
     name: name || undefined,
+    note: note || undefined,
     source,
     at: new Date().toISOString(),
-    note: "stub — no email sent",
+    stub: "no email sent",
   };
   console.log("[newsletter-stub]", entry);
 
