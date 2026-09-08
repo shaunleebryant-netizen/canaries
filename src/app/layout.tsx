@@ -25,12 +25,18 @@ export default function RootLayout({
                 </span>
                 Coherant Canary
               </a>
-              <nav className="flex items-center gap-4 text-sm text-slate-300">
+              <nav className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm text-slate-300">
                 <a href="/#seminar" className="hover:text-canary-gold">
                   Singapore seminar
                 </a>
                 <a href="/#letter" className="hover:text-canary-gold">
                   Weekly letter
+                </a>
+                <a href="/indicators" className="hover:text-canary-gold">
+                  Indicators
+                </a>
+                <a href="/tuition" className="hover:text-canary-gold">
+                  Tuition
                 </a>
                 <a href="/members" className="hover:text-canary-gold">
                   Members

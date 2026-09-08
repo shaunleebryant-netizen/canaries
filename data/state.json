@@ -289,7 +289,7 @@
     }
   ],
   "placeholders": {
-    "tradingViewIndicatorsUrl": "#tv-indicators-stub",
-    "bookTuitionUrl": "#book-tuition-stub"
+    "tradingViewIndicatorsUrl": "/indicators",
+    "bookTuitionUrl": "/tuition"
   }
 }

@@ -3,6 +3,7 @@ import { toMembersPayload } from "@/lib/composite";
 import { TrafficLightDisplay } from "@/components/TrafficLight";
 import { CanaryTable } from "@/components/CanaryTable";
 import { StripeStubButton } from "@/components/StripeStubButton";
+import { MembersPricingNote } from "@/components/MembersPricingNote";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,7 @@ export default function MembersPage() {
           <p className="mt-1 text-sm text-slate-400">
             Full canary table, composite, archive, and product stubs.
           </p>
+          <MembersPricingNote />
           {payload.fixture ? (
             <p className="mt-3 inline-block rounded-full bg-amber-500/15 px-3 py-1 text-xs font-medium text-amber-200 ring-1 ring-amber-400/30">
               {payload.fixtureLabel}
