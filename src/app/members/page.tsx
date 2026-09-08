@@ -46,9 +46,17 @@ export default function MembersPage() {
           <MembersPricingNote />
           {payload.fixture ? (
             <p className="mt-3 inline-block rounded-full bg-amber-500/15 px-3 py-1 text-xs font-medium text-amber-200 ring-1 ring-amber-400/30">
-              {payload.fixtureLabel}
+              {payload.fixtureLabel ?? "Fixture data — not a live reading"}
             </p>
-          ) : null}
+          ) : (
+            <p className="mt-3 inline-block rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-200 ring-1 ring-emerald-400/30">
+              Live flock
+              {payload.packMark ? ` · ${payload.packMark}` : ""}
+              {payload.unverified && payload.unverified.length
+                ? ` · ${payload.unverified.length} UNVERIFIED zeroed`
+                : ""}
+            </p>
+          )}
         </div>
         <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-sm">
           <TrafficLightDisplay

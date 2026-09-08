@@ -1,42 +1,69 @@
 import type {
   CanaryReading,
   CanaryScore,
+  CanaryState,
   MembersPayload,
   PublicSnapshot,
   Stance,
   TrafficLight,
 } from "./types";
 
+export function normalizeLight(raw: string | undefined | null): TrafficLight | null {
+  if (!raw) return null;
+  const k = raw.trim().toLowerCase();
+  if (k === "green") return "Green";
+  if (k === "amber" || k === "yellow") return "Amber";
+  if (k === "red") return "Red";
+  return null;
+}
+
+export function isUnverified(c: CanaryReading): boolean {
+  if (c.status === "UNVERIFIED") return true;
+  if (c.verified === false) return true;
+  if (c.score === "UNVERIFIED" || c.score === null) return true;
+  return false;
+}
+
 export function numericScore(score: CanaryScore): number | null {
-  if (score === "UNVERIFIED") return null;
+  if (score === "UNVERIFIED" || score === null || score === undefined) return null;
   return score;
 }
 
-export function contributionOf(c: CanaryReading): number | null {
-  const n = numericScore(c.score);
-  if (n === null) return null;
-  return Number((c.weight * n).toFixed(4));
+export function effectiveWeight(c: CanaryReading): number {
+  if (typeof c.weightEffective === "number") return c.weightEffective;
+  return c.weight;
 }
 
-/** S = sum(w_i * s_i); UNVERIFIED treated as 0 contribution. */
+export function contributionOf(c: CanaryReading): number | null {
+  if (typeof c.contribution === "number") return c.contribution;
+  if (isUnverified(c)) return null;
+  const n = numericScore(c.score);
+  if (n === null) return null;
+  return Number((effectiveWeight(c) * n).toFixed(4));
+}
+
+/** S = sum(w_i * s_i); UNVERIFIED / null treated as 0 contribution. Prefer weightEffective. */
 export function computeS(canaries: CanaryReading[]): number {
   let s = 0;
   for (const c of canaries) {
+    if (isUnverified(c)) continue;
     const n = numericScore(c.score);
     if (n === null) continue;
-    s += c.weight * n;
+    s += effectiveWeight(c) * n;
   }
   return Number(s.toFixed(4));
 }
 
-function isSick(score: CanaryScore): boolean {
-  if (score === "UNVERIFIED") return false;
-  return score <= -1;
+function isSick(c: CanaryReading): boolean {
+  if (isUnverified(c)) return false;
+  const n = numericScore(c.score);
+  if (n === null) return false;
+  return n <= -1;
 }
 
 /**
  * Veto: VIX/US10Y Danger Above 5 AND both NYSE A-D and % above 200-day sick
- * → cannot be green.
+ * → cannot be green. Live packs may supply veto.triggered instead.
  */
 export function vetoBlocksGreen(canaries: CanaryReading[]): boolean {
   const vix = canaries.find((c) => c.id === "vix-us10y");
@@ -50,7 +77,7 @@ export function vetoBlocksGreen(canaries: CanaryReading[]): boolean {
       !Number.isNaN(Number(vix.lastReading)) &&
       Number(vix.lastReading) > 5);
 
-  return dangerAbove5 && isSick(nyse.score) && isSick(breadth.score);
+  return dangerAbove5 && isSick(nyse) && isSick(breadth);
 }
 
 export function trafficLightFor(
@@ -78,51 +105,64 @@ export function stanceFor(light: TrafficLight): Stance {
   }
 }
 
-export function toPublicSnapshot(
-  canaries: CanaryReading[],
-  asOf: string,
-  fixture: boolean,
-  fixtureLabel?: string
-): PublicSnapshot {
-  const S = computeS(canaries);
-  const { light, vetoApplied } = trafficLightFor(S, canaries);
+/** Prefer Scorekeeper composite when present — do not invent alternate S/light. */
+export function toPublicSnapshot(state: CanaryState): PublicSnapshot {
+  const fromPack = normalizeLight(state.composite?.light);
+  const S =
+    typeof state.composite?.S === "number"
+      ? state.composite.S
+      : computeS(state.canaries);
+
+  let light: TrafficLight;
+  let vetoApplied: boolean;
+
+  if (fromPack) {
+    light = fromPack;
+    vetoApplied = Boolean(state.veto?.triggered);
+  } else {
+    const computed = trafficLightFor(S, state.canaries);
+    light = computed.light;
+    vetoApplied = computed.vetoApplied;
+  }
+
   return {
     light,
     S,
-    asOf,
+    asOf: state.asOf,
     stance: stanceFor(light),
-    fixture,
-    fixtureLabel: fixture ? fixtureLabel : undefined,
+    fixture: Boolean(state.fixture),
+    fixtureLabel: state.fixture ? state.fixtureLabel : undefined,
     vetoApplied,
   };
 }
 
-export function toMembersPayload(state: {
-  canaries: CanaryReading[];
-  asOf: string;
-  fixture: boolean;
-  fixtureLabel: string;
-  letterArchive: MembersPayload["letterArchive"];
-  placeholders: MembersPayload["placeholders"];
-}): MembersPayload {
-  const publicSnap = toPublicSnapshot(
-    state.canaries,
-    state.asOf,
-    state.fixture,
-    state.fixtureLabel
-  );
+export function toMembersPayload(state: CanaryState): MembersPayload {
+  const publicSnap = toPublicSnapshot(state);
   const weightSum = Number(
-    state.canaries.reduce((acc, c) => acc + c.weight, 0).toFixed(2)
+    state.canaries.reduce((acc, c) => acc + effectiveWeight(c), 0).toFixed(4)
   );
   return {
     ...publicSnap,
     weightSum,
-    letterArchive: state.letterArchive,
+    letterArchive: state.letterArchive ?? [],
     placeholders: state.placeholders,
-    canaries: state.canaries.map((c) => ({
-      ...c,
-      numericScore: numericScore(c.score),
-      contribution: contributionOf(c),
-    })),
+    packMark: state.packMark,
+    unverified: state.unverified,
+    renormalization: state.renormalization,
+    canaries: state.canaries.map((c) => {
+      const unverified = isUnverified(c);
+      // Preserve numeric scores when present; map null-only UNVERIFIED to the label.
+      const score =
+        unverified && (c.score === null || c.score === undefined)
+          ? ("UNVERIFIED" as const)
+          : c.score;
+      return {
+        ...c,
+        score,
+        displayWeight: effectiveWeight(c),
+        numericScore: unverified ? null : numericScore(c.score),
+        contribution: contributionOf(c),
+      };
+    }),
   };
 }

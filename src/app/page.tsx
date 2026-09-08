@@ -97,12 +97,7 @@ const FAQ = [
 
 export default function HomePage() {
   const state = loadState();
-  const snap = toPublicSnapshot(
-    state.canaries,
-    state.asOf,
-    state.fixture,
-    state.fixtureLabel
-  );
+  const snap = toPublicSnapshot(state);
 
   return (
     <div className="bg-slate-950 text-slate-100">

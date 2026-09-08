@@ -44,7 +44,7 @@ Never commit real secrets.
 | Path | Notes |
 | --- | --- |
 | `/` | Public lead — mine metaphor, traffic light + S + asOf only, proof blocks, newsletter CTA |
-| `/members` | Env-gated dashboard — full table from fixture |
+| `/members` | Env-gated dashboard — full table from `data/state.json` (live or fixture) |
 | `/members/login` | Password stub |
 | `GET /api/public` | `light`, `S`, `asOf`, stance — **no full table** |
 | `GET /api/members` | Full payload (auth) |
@@ -54,10 +54,19 @@ Never commit real secrets.
 
 ## Data & scoring
 
-- Fixture: `data/state.json` (all scores `0` → `S = 0` → **Amber**). UI labels **Fixture data — not a live reading**.
-- Types: `src/lib/types.ts`. Composite helpers: `src/lib/composite.ts`.
-- `S = sum(w_i * s_i)`. Lights: Green `S >= +0.6`; Amber `-0.3 <= S < +0.6`; Red `S < -0.3`.
-- Veto: VIX/US10Y Danger Above 5 **and** NYSE A–D + % above 200-day both sick → cannot be Green.
+- **Source of truth (live):** `/home/box/canaries/state.json` (Scout/Scorekeeper).
+- **Site copy:** `data/state.json` — refresh after each rescore (local only, no deploy):
+
+```bash
+./scripts/refresh-state.sh
+# or: cp /home/box/canaries/state.json data/state.json
+```
+
+- When `fixture: false`, members drops the fixture banner and shows the live flock (packMark, UNVERIFIED rows with weightEffective zeroed when present). Prefer Scorekeeper `composite.S` / `composite.light` — do not invent scores.
+- Types: `src/lib/types.ts` (null scores, packMark, renormalization, optional sparkline). Helpers: `src/lib/composite.ts`.
+- Fallback math if composite missing: `S = sum(w_i * s_i)` using `weightEffective` when present. Lights: Green `S >= +0.6`; Amber `-0.3 <= S < +0.6`; Red `S < -0.3`.
+- Veto: VIX/US10Y Danger Above 5 **and** NYSE A–D + % above 200-day both sick → cannot be Green (or use live `veto.triggered`).
+- Public `/` + `/api/public`: **light + optional S/asOf only** — no per-canary depth.
 
 ### Canary weights (sum 1.00)
 
@@ -78,7 +87,7 @@ Never commit real secrets.
 **Scaffolded (working locally)**
 
 - Public lead UI + members dashboard UI
-- Fixture `state.json` + TS types + composite/traffic-light math (incl. veto)
+- `data/state.json` (refresh from `/home/box/canaries/state.json`) + TS types + composite/traffic-light math (incl. veto)
 - Public vs members API split
 - Members cookie/middleware auth stub
 - Newsletter POST → console + `data/newsletter-signups.json` append
@@ -101,7 +110,7 @@ Never commit real secrets.
 3. Configure Stripe products/prices and enable Checkout only after review
 4. Connect an email provider for the weekly letter (double opt-in)
 5. Deploy to Vercel when ready (or evaluate Cloudflare Pages later)
-6. Replace fixture banner when first live reading ships
+6. Keep refreshing `data/state.json` after Scout/Scorekeeper rescores (`./scripts/refresh-state.sh`)
 
 ## License
 
