@@ -5,7 +5,7 @@ import { useState } from "react";
 /** Design-mode buy CTA — toast only; never creates a live Stripe charge. */
 export function IndicatorBuyButton({
   productId,
-  label = "Buy / Get invite",
+  label = "Get invite",
 }: {
   productId: string;
   label?: string;

@@ -12,22 +12,22 @@ const PRODUCTS = [
     name: "Canary Breadth Pane",
     tagline: "See participation, not just the index print",
     measures:
-      "Market breadth across advancers/decliners and % above key averages — the flock under the headline index.",
+      "Breadth / % above averages under the headline index — participation, not just the print.",
     bestUsed: "When indexes look strong but you suspect thin leadership or a soft underbelly.",
     pairsWith: "Members weekly light · Leadership Quality Meter",
     includes: "TradingView invite · setup notes PDF · update access (stub)",
-    price: "Price TBD · one-time stub",
+    price: "Price TBD · one-time (Stripe stub)",
   },
   {
     id: "risk-on-ratio-ribbon",
     name: "Risk-On Ratio Ribbon",
     tagline: "Risk appetite as a ribbon, not a guess",
     measures:
-      "Relative risk-on vs risk-off posture via ratio structure — clarity on whether the flock is leaning aggressive or defensive.",
+      "Risk-on vs defensive posture on the chart — appetite as a ribbon, not a guess.",
     bestUsed: "When narrative flips week to week and you need a chart-side posture check.",
     pairsWith: "Members weekly light · Fragility Guard",
     includes: "TradingView invite · setup notes PDF · update access (stub)",
-    price: "Price TBD · one-time stub",
+    price: "Price TBD · one-time (Stripe stub)",
   },
   {
     id: "fragility-guard",
@@ -38,55 +38,55 @@ const PRODUCTS = [
     bestUsed: "Around rate shocks, vol spikes, or when Danger Above 5 style stress matters.",
     pairsWith: "Members weekly light · Risk-On Ratio Ribbon",
     includes: "TradingView invite · setup notes PDF · update access (stub)",
-    price: "Price TBD · one-time stub",
+    price: "Price TBD · one-time (Stripe stub)",
   },
   {
     id: "leadership-quality-meter",
     name: "Leadership Quality Meter",
     tagline: "Who is carrying the market — and how cleanly",
     measures:
-      "Leadership quality and concentration — whether gains are broad or resting on a narrow perch.",
+      "Leadership quality and concentration — who is carrying the market, and how cleanly.",
     bestUsed: "When a handful of names dominate returns and you want quality of leadership, not noise.",
     pairsWith: "Members weekly light · Canary Breadth Pane",
     includes: "TradingView invite · setup notes PDF · update access (stub)",
-    price: "Price TBD · one-time stub",
+    price: "Price TBD · one-time (Stripe stub)",
   },
 ];
 
 const BUY_STEPS = [
   {
     n: "01",
-    title: "Pay",
-    body: "Checkout stub for now — no live charge in design mode. Production will use Stripe.",
+    title: "Request invite",
+    body: "Design mode stores interest; pay when priced (Stripe in production, owner keys).",
   },
   {
     n: "02",
     title: "Receive access",
-    body: "TradingView invite / access link after purchase (owner fulfills — stub path).",
+    body: "TradingView invite after purchase / fulfill (owner fulfills).",
   },
   {
     n: "03",
     title: "Drop on chart",
-    body: "Add the Pine tool to your existing charts. Education frame only — not a trade tip sheet.",
+    body: "Add the Pine tool to your charts. Education frame only — not a tip sheet.",
   },
 ];
 
 const FAQ = [
   {
     q: "Works on free TradingView?",
-    a: "[Stub] Most scripts run on free plans; some features may need a paid TV tier. Exact matrix TBD by owner.",
+    a: "Most scripts run on free plans; some features may need a paid TV tier. Exact matrix TBD.",
   },
   {
     q: "Refunds?",
-    a: "[Stub] Refund policy TBD. Design mode — no purchases are processed.",
+    a: "Policy TBD. Design mode — no purchases processed.",
   },
   {
     q: "Do I get updates?",
-    a: "[Stub] Included update access is planned with each invite. Versioning details later.",
+    a: "Update access planned with each invite; versioning later.",
   },
   {
     q: "Is this financial advice?",
-    a: "No. Education only — chart tools and a reading frame, not recommendations to buy or sell any security.",
+    a: "No. Education only — not recommendations to buy or sell any security.",
   },
 ];
 
@@ -168,12 +168,10 @@ export default function IndicatorsPage() {
       {/* Catalog */}
       <section id="catalog" className="border-b border-white/5">
         <div className="mx-auto max-w-5xl px-4 py-16">
-          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
-            Catalog
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold text-white">Placeholder products</h2>
+          <h2 className="text-3xl font-semibold text-white">Catalog</h2>
           <p className="mt-2 max-w-2xl text-sm text-slate-400">
-            Fake names for design preview until the owner supplies the real list and prices.
+            Real product names &amp; prices TBD — placeholders below for design review only. No
+            invented live prices.
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {PRODUCTS.map((p) => (
@@ -264,10 +262,9 @@ export default function IndicatorsPage() {
             Already on the weekly light?
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-slate-400">
-            Members pay{" "}
-            <span className="font-semibold text-white">US$50 / month</span> in production (Stripe
-            entitlement). Some indicators may bundle or discount for members — stub until owner
-            confirms.
+            Members:{" "}
+            <span className="font-semibold text-white">US$50/mo</span> (production Stripe). Some
+            indicators may bundle or discount later — stub until owner confirms.
           </p>
           <a
             href="/members"
@@ -304,7 +301,7 @@ export default function IndicatorsPage() {
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
           <h2 className="text-3xl font-semibold text-white">Clarity on the chart</h2>
           <p className="mt-4 text-sm text-slate-400">
-            Browse the placeholder catalog, or join members for the weekly traffic light.
+            Browse the catalog (prices TBD), or join members for the weekly traffic light.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a

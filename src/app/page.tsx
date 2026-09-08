@@ -297,7 +297,10 @@ export default function HomePage() {
               </article>
             ))}
           </div>
-          <div className="mt-8 text-center">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <span className="inline-flex rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-100 ring-1 ring-amber-400/40">
+              US$50/mo
+            </span>
             <a
               href="/members"
               className="inline-block rounded-xl border border-white/20 px-5 py-3 text-sm font-medium text-white hover:bg-white/5"

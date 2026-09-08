@@ -23,19 +23,19 @@ const WHO = [
 const FAQ = [
   {
     q: "How long is a session?",
-    a: "60-minute online video call. Limited weekly seats — capacity stub until owner calendars open.",
+    a: "60-minute online video call. Limited weekly seats.",
   },
   {
     q: "When do I pay?",
-    a: "Design mode stores your request only — no charge. Production will invoice or Stripe Payment Link for S$115 × hours after Shaun confirms.",
+    a: "Design mode stores request only. Production: invoice or Stripe Payment Link for S$115 × hours after Shaun confirms.",
   },
   {
     q: "What’s included beyond the call?",
-    a: "All Coherant Canary indicators walkthrough + how to interpret them, and a copy of Canary-Style Investor.",
+    a: "Indicators walkthrough + interpretation + copy of Canary-Style Investor.",
   },
   {
     q: "Is this financial advice?",
-    a: "No. Education only — not personalised trade execution advice or recommendations to buy or sell.",
+    a: "No. Education only — not personalised trade execution advice.",
   },
 ];
 
@@ -68,7 +68,7 @@ export default function TuitionPage() {
           <div className="mt-8">
             <a
               href="#request"
-              className="inline-block rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10"
+              className="inline-block rounded-xl bg-canary-gold px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
             >
               Request a session
             </a>
@@ -114,10 +114,10 @@ export default function TuitionPage() {
                 <ul className="mt-3 space-y-2 text-sm text-slate-300">
                   <li>60-minute online video call</li>
                   <li>
-                    <span className="font-medium text-white">Limited weekly seats</span> — owner
-                    capacity stub
+                    <span className="font-medium text-white">Limited weekly seats</span> (owner
+                    capacity)
                   </li>
-                  <li>Prep: brief form below so the hour isn’t spent on basics you already know</li>
+                  <li>Prep form so the hour isn’t spent on basics</li>
                 </ul>
               </div>
             </div>
@@ -133,8 +133,8 @@ export default function TuitionPage() {
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-white">Book interest</h2>
           <p className="mt-2 text-sm text-slate-400">
-            All fields help Shaun prep. Submit stores locally like the newsletter — no charge, no
-            email send.
+            S$115 / hour · online video call. Submit stores the lead locally — no charge, no email
+            send in design mode.
           </p>
           <div className="mt-8 rounded-3xl border border-white/10 bg-slate-950/70 p-6 md:p-8">
             <TuitionForm />
