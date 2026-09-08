@@ -13,3 +13,7 @@ next-env.d.ts
 /data/seminar-signups.json
 /data/tuition-leads.json
 *-debug.log*
+.open-next
+.wrangler
+dev.vars
+.dev.vars

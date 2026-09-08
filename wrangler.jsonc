@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "coherant-canary",
+  "main": ".open-next/worker.js",
+  "account_id": "fb5eacd7ec6aea8c62b14fc5a98896ad",
+  "compatibility_date": "2026-09-08",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "coherant-canary"
+    }
+  ],
+  "routes": [
+    { "pattern": "coherantcanary.com", "custom_domain": true },
+    { "pattern": "www.coherantcanary.com", "custom_domain": true }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
