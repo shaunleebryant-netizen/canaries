@@ -4,7 +4,10 @@ import { toPublicSnapshot } from "@/lib/composite";
 
 export const dynamic = "force-dynamic";
 
-/** Public: light + S + asOf only — never the full scored table. */
+/**
+ * Public paywall surface: pulsing light sneak peek + optional S / asOf.
+ * Never returns per-canary metrics, holdings, adds/trims, or veto internals.
+ */
 export async function GET() {
   const state = loadState();
   const snap = toPublicSnapshot(
@@ -17,9 +20,9 @@ export async function GET() {
     light: snap.light,
     S: snap.S,
     asOf: snap.asOf,
+    // Stance is a light label only — not paywalled depth
     stance: snap.stance,
     fixture: snap.fixture,
     fixtureLabel: snap.fixtureLabel,
-    vetoApplied: snap.vetoApplied,
   });
 }
