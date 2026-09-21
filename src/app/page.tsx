@@ -34,8 +34,8 @@ const MEMBER_TEASE = [
     body: "[Stub] Concise weekly commentary summarised for members.",
   },
   {
-    title: "Canary flock",
-    body: "[Stub] Each bird: description, reading, last 5 weeks, score. Bird states coming: flapping / perched / dead.",
+    title: "Numbers, not news",
+    body: "Members don’t have to trust news sources — they trust the numbers on the dashboard: the composite light, regime, vol curve, and flock seats.",
   },
 ];
 
@@ -279,7 +279,9 @@ export default function HomePage() {
             What’s inside after signup
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-400">
-            Marketing tease only — not live paid data on this page.
+            Marketing tease only — not live paid data on this page. The point of
+            membership: you don’t have to trust the news cycle — you trust the
+            numbers on the board.
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {MEMBER_TEASE.map((c) => (

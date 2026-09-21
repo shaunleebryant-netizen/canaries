@@ -1,0 +1,178 @@
+{
+  "asOf": "2026-09-18T12:32:17.054Z",
+  "priorityAllowlist": [
+    "OptionRunners",
+    "kiantrades",
+    "Mr_Derivatives"
+  ],
+  "allowlist": [
+    "unusual_whales",
+    "cheddarflow",
+    "OptionsHawk",
+    "snorlax_uw",
+    "WallStJesus",
+    "BlackBoxStocks",
+    "bullflowio",
+    "OptionRunners",
+    "kiantrades",
+    "Mr_Derivatives"
+  ],
+  "filters": [
+    "Ignore 0\u20133 DTE lottery tickets",
+    "Prefer repeat prints + rising OI + add-on rolls over a single sweep",
+    "Prefer large ITM / stock-replacement flow over far OTM calls"
+  ],
+  "flows": [
+    {
+      "id": "kian-gfs-2100818327048421431",
+      "handle": "kiantrades",
+      "url": "https://x.com/kiantrades/status/2100818327048421431",
+      "postedAt": "2026-09-18T05:24:55.000Z",
+      "ticker": "GFS",
+      "right": "call",
+      "contract": "55C \u00b7 15 Jan \u00b7 ~119 DTE \u00b7 $1.1M \u00b7 3.38 avg",
+      "summary": "Notable bullish flow: $GFS Jan 55 calls ~$1.1M premium (longer-dated, size over lottery).",
+      "tags": [
+        "notable-flow",
+        "bullish",
+        "large-premium"
+      ],
+      "priority": true,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "kian-mir-2100818327048421431",
+      "handle": "kiantrades",
+      "url": "https://x.com/kiantrades/status/2100818327048421431",
+      "postedAt": "2026-09-18T05:24:55.000Z",
+      "ticker": "MIR",
+      "right": "call",
+      "contract": "20C \u00b7 15 Jan \u00b7 ~119 DTE \u00b7 $2.7M \u00b7 0.86 avg",
+      "summary": "Notable bullish flow: $MIR Jan 20 calls ~$2.7M premium.",
+      "tags": [
+        "notable-flow",
+        "bullish",
+        "large-premium"
+      ],
+      "priority": true,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "kian-dhr-2100818327048421431",
+      "handle": "kiantrades",
+      "url": "https://x.com/kiantrades/status/2100818327048421431",
+      "postedAt": "2026-09-18T05:24:55.000Z",
+      "ticker": "DHR",
+      "right": "call",
+      "contract": "250C \u00b7 15 Jan \u00b7 ~119 DTE \u00b7 $2.9M \u00b7 4.35 avg",
+      "summary": "Notable bullish flow: $DHR Jan 250 calls ~$2.9M premium.",
+      "tags": [
+        "notable-flow",
+        "bullish",
+        "large-premium"
+      ],
+      "priority": true,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "kian-cldx-2100818327048421431",
+      "handle": "kiantrades",
+      "url": "https://x.com/kiantrades/status/2100818327048421431",
+      "postedAt": "2026-09-18T05:24:55.000Z",
+      "ticker": "CLDX",
+      "right": "put",
+      "contract": "38P \u00b7 16 Oct \u00b7 ~28 DTE \u00b7 $2.6M \u00b7 8.80 avg",
+      "summary": "Notable bearish flow: $CLDX Oct 38 puts ~$2.6M premium (excluded near-dated lotteries; this is ~28 DTE).",
+      "tags": [
+        "notable-flow",
+        "bearish",
+        "large-premium"
+      ],
+      "priority": true,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "kian-gh-2100818327048421431",
+      "handle": "kiantrades",
+      "url": "https://x.com/kiantrades/status/2100818327048421431",
+      "postedAt": "2026-09-18T05:24:55.000Z",
+      "ticker": "GH",
+      "right": "put",
+      "contract": "160P STO \u00b7 15 Jan \u00b7 ~119 DTE \u00b7 $3.1M \u00b7 12.07 avg",
+      "summary": "Notable put-sell (STO): $GH Jan 160 puts ~$3.1M \u2014 stock-replacement / credit bias over far-OTM lottery calls.",
+      "tags": [
+        "notable-flow",
+        "put-sell",
+        "large-premium"
+      ],
+      "priority": true,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "kian-spy-2100818327048421431",
+      "handle": "kiantrades",
+      "url": "https://x.com/kiantrades/status/2100818327048421431",
+      "postedAt": "2026-09-18T05:24:55.000Z",
+      "ticker": "SPY",
+      "right": "put",
+      "contract": "724P \u00b7 16 Oct \u00b7 ~28 DTE \u00b7 $5.8M \u00b7 2.79 avg",
+      "summary": "ETF flow: $SPY Oct 724 puts ~$5.8M premium (size; not 0\u20133 DTE).",
+      "tags": [
+        "notable-flow",
+        "etf",
+        "large-premium"
+      ],
+      "priority": true,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "cheddar-soxx-2100706350871248928",
+      "handle": "cheddarflow",
+      "url": "https://x.com/CheddarFlow/status/2100706350871248928",
+      "postedAt": "2026-09-17T21:59:57.000Z",
+      "ticker": "SOXX",
+      "right": "put",
+      "contract": "Put sweep \u00b7 $1.87M \u00b7 635.6x V/OI (see Cheddar writeup)",
+      "summary": "$SOXX $1.87M put sweep at 635.6x V/OI after semiconductor selloff \u2014 elevated V/OI vs single thin print.",
+      "tags": [
+        "put-sweep",
+        "high-voi",
+        "semis"
+      ],
+      "priority": false,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "snorlax-aapl-2100922788160635005",
+      "handle": "snorlax_uw",
+      "url": "https://x.com/snorlax_uw/status/2100922788160635005",
+      "postedAt": "2026-09-18T12:20:00.000Z",
+      "ticker": "AAPL",
+      "right": "call",
+      "contract": "330C \u00b7 9 Oct \u00b7 ~21 DTE \u00b7 opening + afternoon volume (OI note)",
+      "summary": "OI/changes note: $AAPL Oct 9 330 calls saw opening volume around noon plus afternoon follow-on \u2014 watching for add-on vs noise.",
+      "tags": [
+        "oi-change",
+        "follow-on-volume"
+      ],
+      "priority": false,
+      "pinned": false,
+      "qualifiedAt": "2026-09-18T12:32:17.054Z",
+      "qualifiedBy": "CoS"
+    }
+  ]
+}

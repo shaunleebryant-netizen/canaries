@@ -1,11 +1,29 @@
-/** Placeholder 13-week sparkline from score history (−2..+2). */
-export function Sparkline({ values }: { values: number[] }) {
-  const w = 104;
-  const h = 28;
+/** Compact line chart for ~10 session series (or any numeric series). Auto-scales. */
+export function Sparkline({
+  values,
+  width = 88,
+  height = 28,
+}: {
+  values: number[];
+  width?: number;
+  height?: number;
+}) {
+  const w = width;
+  const h = height;
   const pad = 2;
-  const min = -2;
-  const max = 2;
-  const pts = values.length ? values : Array(13).fill(0);
+  const pts = values.length ? values : [];
+  if (pts.length < 2) {
+    return (
+      <span className="text-xs text-slate-500" aria-hidden>
+        —
+      </span>
+    );
+  }
+  const dataMin = Math.min(...pts);
+  const dataMax = Math.max(...pts);
+  const span = dataMax - dataMin || Math.abs(dataMax) * 0.01 || 1;
+  const min = dataMin - span * 0.08;
+  const max = dataMax + span * 0.08;
   const step = (w - pad * 2) / Math.max(pts.length - 1, 1);
   const coords = pts
     .map((v, i) => {
@@ -15,12 +33,24 @@ export function Sparkline({ values }: { values: number[] }) {
     })
     .join(" ");
 
+  const last = pts[pts.length - 1]!;
+  const first = pts[0]!;
+  const up = last >= first;
+
   return (
-    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden className="text-slate-400">
+    <svg
+      width={w}
+      height={h}
+      viewBox={`0 0 ${w} ${h}`}
+      aria-hidden
+      className={up ? "text-emerald-400/90" : "text-rose-400/90"}
+    >
       <polyline
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
         points={coords}
       />
     </svg>

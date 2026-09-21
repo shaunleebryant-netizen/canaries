@@ -1,0 +1,201 @@
+{
+  "asOf": "2026-09-21",
+  "purpose": "Fish alerts weekly Bottom Finder scan (smile/fish only)",
+  "groups": [
+    {
+      "group": "Quantum",
+      "tickers": [
+        "IONQ",
+        "QBTS",
+        "RGTI",
+        "QUBT",
+        "QTUM"
+      ]
+    },
+    {
+      "group": "Robotics / autonomy / space",
+      "tickers": [
+        "TER",
+        "SYM",
+        "TSLA",
+        "RKLB",
+        "UBER",
+        "ASTS",
+        "ROK",
+        "ZBRA"
+      ]
+    },
+    {
+      "group": "Semis & AI hardware",
+      "tickers": [
+        "NVDA",
+        "AMD",
+        "INTC",
+        "TSM",
+        "AVGO",
+        "MU",
+        "MRVL",
+        "AMAT",
+        "ASML",
+        "SMH",
+        "CRDO",
+        "APH",
+        "KLAC",
+        "LRCX",
+        "SNPS",
+        "ALAB",
+        "QCOM",
+        "ARM",
+        "MPWR",
+        "COHR",
+        "LITE",
+        "CIEN"
+      ]
+    },
+    {
+      "group": "Cloud / software",
+      "tickers": [
+        "MSFT",
+        "AAPL",
+        "GOOG",
+        "META",
+        "AMZN",
+        "ORCL",
+        "CRM",
+        "NOW",
+        "SNOW",
+        "PLTR",
+        "NET",
+        "MDB",
+        "DDOG",
+        "QQQ",
+        "DELL"
+      ]
+    },
+    {
+      "group": "Cyber",
+      "tickers": [
+        "HACK",
+        "ZS",
+        "CRWD",
+        "PANW"
+      ]
+    },
+    {
+      "group": "Nuclear / uranium / power",
+      "tickers": [
+        "SMR",
+        "OKLO",
+        "LEU",
+        "URNM",
+        "CCJ",
+        "NXE",
+        "UEC",
+        "BWXT",
+        "VST",
+        "CEG",
+        "GEV",
+        "PWR",
+        "VRT"
+      ]
+    },
+    {
+      "group": "Solar / clean",
+      "tickers": [
+        "FSLR",
+        "BE",
+        "TAN",
+        "ENPH"
+      ]
+    },
+    {
+      "group": "AI / genomics / surgical",
+      "tickers": [
+        "TEM",
+        "WGS",
+        "GH",
+        "ISRG",
+        "ANET"
+      ]
+    }
+  ],
+  "tickers": [
+    "IONQ",
+    "QBTS",
+    "RGTI",
+    "QUBT",
+    "QTUM",
+    "TER",
+    "SYM",
+    "TSLA",
+    "RKLB",
+    "UBER",
+    "ASTS",
+    "ROK",
+    "ZBRA",
+    "NVDA",
+    "AMD",
+    "INTC",
+    "TSM",
+    "AVGO",
+    "MU",
+    "MRVL",
+    "AMAT",
+    "ASML",
+    "SMH",
+    "CRDO",
+    "APH",
+    "KLAC",
+    "LRCX",
+    "SNPS",
+    "ALAB",
+    "QCOM",
+    "ARM",
+    "MPWR",
+    "COHR",
+    "LITE",
+    "CIEN",
+    "MSFT",
+    "AAPL",
+    "GOOG",
+    "META",
+    "AMZN",
+    "ORCL",
+    "CRM",
+    "NOW",
+    "SNOW",
+    "PLTR",
+    "NET",
+    "MDB",
+    "DDOG",
+    "QQQ",
+    "DELL",
+    "HACK",
+    "ZS",
+    "CRWD",
+    "PANW",
+    "SMR",
+    "OKLO",
+    "LEU",
+    "URNM",
+    "CCJ",
+    "NXE",
+    "UEC",
+    "BWXT",
+    "VST",
+    "CEG",
+    "GEV",
+    "PWR",
+    "VRT",
+    "FSLR",
+    "BE",
+    "TAN",
+    "ENPH",
+    "TEM",
+    "WGS",
+    "GH",
+    "ISRG",
+    "ANET"
+  ],
+  "count": 76
+}

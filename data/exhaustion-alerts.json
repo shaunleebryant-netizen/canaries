@@ -1,0 +1,10 @@
+{
+  "asOf": "2026-09-21",
+  "scannedAt": "2026-09-21T02:03:35+12:00",
+  "universeCount": 76,
+  "scannedCount": 76,
+  "failed": [],
+  "signals": [],
+  "method": "yahoo-daily-exhaustion-approx",
+  "note": "Daily chart exhaustion (RSI cross 80, EMA13>EMA55). Education only."
+}

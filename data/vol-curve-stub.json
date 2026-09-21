@@ -1,0 +1,31 @@
+{
+  "draft": false,
+  "asOf": "2026-09-18",
+  "note": "Fri 2026-09-18: VIX 14.81 / VIX3M 18.24 \u2192 ratio 0.8120 SAFE.",
+  "feeds": {
+    "vix": {
+      "value": 14.81,
+      "status": "VERIFIED",
+      "asOf": "2026-09-18"
+    },
+    "vix3m": {
+      "value": 18.24,
+      "status": "VERIFIED",
+      "asOf": "2026-09-18"
+    },
+    "hygIef": {
+      "ratio": 0.864868,
+      "sma20": 0.85987,
+      "rollingOver": false,
+      "status": "VERIFIED",
+      "asOf": "2026-09-18",
+      "note": "Yahoo daily HYG/IEF ratio vs SMA20 (same backfill as flock seats)"
+    }
+  },
+  "mediumHistory": [],
+  "ownerLock": {
+    "date": "2026-09-19",
+    "volCurveUi": "VIX/VIX3M stance bands + slope + Spec/Core + optional HYG/IEF credit confirm; not a flock score"
+  },
+  "seedRatio": 0.812
+}

@@ -22,7 +22,7 @@ export interface CanaryReading {
   lastReading: string;
   readingUnit: string;
   oneSentenceRead: string;
-  /** Optional 13-wk history; live packs may omit until history lands. */
+  /** Optional ~10-session series (Yahoo); omit when no clean series. */
   sparkline?: number[];
   statusHint?: string;
   verified?: boolean;
@@ -47,6 +47,12 @@ export interface CompositeBlock {
   lightBeforeVeto?: string;
   bands?: Record<string, string>;
   priorPartial?: {
+    S: number;
+    light: string;
+    note?: string;
+  };
+  priorPack?: {
+    sessionDate?: string;
     S: number;
     light: string;
     note?: string;
@@ -80,7 +86,13 @@ export interface CanaryState {
   /** Prefer this over recomputing when Scorekeeper wrote it. */
   composite?: CompositeBlock;
   veto?: VetoBlock;
-  flags?: string[];
+  flags?: Array<
+    | string
+    | { id: string; seat?: string; note?: string; [key: string]: unknown }
+  >;
+  board?: string;
+  sessionPhase?: string;
+  droppedFromBoard?: string[];
   unverified?: string[];
   renormalization?: RenormalizationBlock;
   notes?: string[];

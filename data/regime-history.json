@@ -1,0 +1,18 @@
+{
+  "asOf": "2026-09-16",
+  "stateShown": "RISK_ON",
+  "pendingState": null,
+  "pendingCount": 0,
+  "daysInState": 1,
+  "lastChangeDate": "2026-09-16",
+  "sessions": [
+    {
+      "date": "2026-09-16",
+      "C": 0.4071,
+      "stateRaw": "RISK_ON",
+      "stateShown": "RISK_ON",
+      "note": "legacy C from v1 stub"
+    }
+  ],
+  "note": "Regime box v2 bootstrap. Pill uses 2-day hysteresis on R bands; sessions may carry legacy C from v1 \u2014 prefer R going forward."
+}

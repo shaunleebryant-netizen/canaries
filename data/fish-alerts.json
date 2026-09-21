@@ -1,0 +1,102 @@
+{
+  "asOf": "2026-09-21",
+  "scannedAt": "2026-09-21T01:55:07+12:00",
+  "universeCount": 76,
+  "scannedCount": 76,
+  "failed": [],
+  "signals": [
+    {
+      "ticker": "CRDO",
+      "signal": "both",
+      "asOf": "2026-09-16",
+      "timeframe": "4H",
+      "note": "smile@2026-09-15 fish@2026-09-16"
+    },
+    {
+      "ticker": "META",
+      "signal": "fish",
+      "asOf": "2026-09-04",
+      "timeframe": "4H",
+      "note": "fish RSI=69.3"
+    },
+    {
+      "ticker": "QTUM",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=42.5"
+    },
+    {
+      "ticker": "TSLA",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=67.9"
+    },
+    {
+      "ticker": "LRCX",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=40.0"
+    },
+    {
+      "ticker": "QCOM",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=57.6"
+    },
+    {
+      "ticker": "QQQ",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=53.7"
+    },
+    {
+      "ticker": "TAN",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=40.6"
+    },
+    {
+      "ticker": "TEM",
+      "signal": "fish",
+      "asOf": "2026-09-03",
+      "timeframe": "4H",
+      "note": "fish RSI=52.2"
+    },
+    {
+      "ticker": "KLAC",
+      "signal": "fish",
+      "asOf": "2026-09-02",
+      "timeframe": "4H",
+      "note": "fish RSI=32.8"
+    },
+    {
+      "ticker": "BWXT",
+      "signal": "fish",
+      "asOf": "2026-09-02",
+      "timeframe": "4H",
+      "note": "fish RSI=46.4"
+    },
+    {
+      "ticker": "VRT",
+      "signal": "fish",
+      "asOf": "2026-09-02",
+      "timeframe": "4H",
+      "note": "fish RSI=43.5"
+    },
+    {
+      "ticker": "IONQ",
+      "signal": "fish",
+      "asOf": "2026-08-31",
+      "timeframe": "4H",
+      "note": "fish RSI=44.7"
+    }
+  ],
+  "method": "yahoo-4h-bottom-finder-approx",
+  "note": "Scout/scan: daily chart context \u00b7 4H signal TF (Yahoo 4H approx of Bottom Finder). Education only \u2014 not the live TradingView Pine plot. Not buy/sell advice."
+}

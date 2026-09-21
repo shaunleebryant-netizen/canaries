@@ -11,3 +11,9 @@ cp /home/box/canaries/state.json data/state.json
 Re-copy after each Scout/Scorekeeper rescore. Local only — no deploy.
 
 Do not invent scores; prefer fields written into the live JSON (composite, packMark, renormalization, per-canary status / weightEffective).
+
+## Market regime (draft)
+
+`regime-state.json` — scored daily closes for Market Regime panel.
+Refresh: fetch Yahoo → `npx tsx scripts/compute-regime.ts` (writes here + `/home/box/canaries/regime-state.json`).
+Do **not** deploy until owner review.

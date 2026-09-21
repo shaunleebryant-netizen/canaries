@@ -1,9 +1,11 @@
-import { readFileSync } from "fs";
-import path from "path";
 import type { CanaryState } from "./types";
+import stateJson from "../../data/state.json";
 
+/**
+ * Load the weekly canary pack.
+ * Bundled JSON import — works on Cloudflare Workers (no runtime fs).
+ * Refresh by copying /home/box/canaries/state.json → data/state.json, then rebuild.
+ */
 export function loadState(): CanaryState {
-  const file = path.join(process.cwd(), "data", "state.json");
-  const raw = readFileSync(file, "utf8");
-  return JSON.parse(raw) as CanaryState;
+  return stateJson as CanaryState;
 }

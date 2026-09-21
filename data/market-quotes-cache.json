@@ -1,0 +1,120 @@
+{
+  "asOf": "",
+  "note": "Optional last-good Yahoo snapshot for SSR shell. Null quotes until refreshed by script/API \u2014 never invent prints. LiveTickers fetches /api/members/quotes on mount.",
+  "tickers": [
+    {
+      "id": "spx",
+      "label": "SPX",
+      "yahooSymbol": "^GSPC",
+      "description": "S&P 500 \u2014 the main US large-company stock index.",
+      "quote": null
+    },
+    {
+      "id": "qqq",
+      "label": "QQQ",
+      "yahooSymbol": "QQQ",
+      "description": "Nasdaq-100 ETF \u2014 big growth and tech names.",
+      "quote": null
+    },
+    {
+      "id": "sp600",
+      "label": "SP600",
+      "yahooSymbol": "^SP600",
+      "description": "S&P SmallCap 600 index \u2014 smaller US companies (stricter quality filter than the Russell 2000).",
+      "quote": null
+    },
+    {
+      "id": "rsp",
+      "label": "RSP",
+      "yahooSymbol": "RSP",
+      "description": "Equal-weight S&P 500 \u2014 less mega-cap dominated than SPX.",
+      "quote": null
+    },
+    {
+      "id": "vix",
+      "label": "VIX",
+      "yahooSymbol": "^VIX",
+      "description": "CBOE Volatility Index \u2014 expected near-term stock-market fear.",
+      "quote": null
+    },
+    {
+      "id": "wti",
+      "label": "WTI",
+      "yahooSymbol": "CL=F",
+      "description": "West Texas Intermediate crude oil \u2014 US oil price benchmark.",
+      "quote": null
+    },
+    {
+      "id": "xau",
+      "label": "XAUUSD",
+      "yahooSymbol": "GC=F",
+      "description": "Gold vs US dollar \u2014 often watched as a fear / inflation / dollar hedge.",
+      "quote": null
+    },
+    {
+      "id": "btc",
+      "label": "BTCUSD",
+      "yahooSymbol": "BTC-USD",
+      "description": "Bitcoin vs US dollar \u2014 risk appetite outside traditional stocks.",
+      "quote": null
+    }
+  ],
+  "sectors": [
+    {
+      "symbol": "XLC",
+      "name": "Communication Services",
+      "quote": null
+    },
+    {
+      "symbol": "XLY",
+      "name": "Consumer Discretionary",
+      "quote": null
+    },
+    {
+      "symbol": "XLP",
+      "name": "Consumer Staples",
+      "quote": null
+    },
+    {
+      "symbol": "XLE",
+      "name": "Energy",
+      "quote": null
+    },
+    {
+      "symbol": "XLF",
+      "name": "Financials",
+      "quote": null
+    },
+    {
+      "symbol": "XLV",
+      "name": "Health Care",
+      "quote": null
+    },
+    {
+      "symbol": "XLI",
+      "name": "Industrials",
+      "quote": null
+    },
+    {
+      "symbol": "XLB",
+      "name": "Materials",
+      "quote": null
+    },
+    {
+      "symbol": "XLK",
+      "name": "Technology",
+      "quote": null
+    },
+    {
+      "symbol": "XLU",
+      "name": "Utilities",
+      "quote": null
+    },
+    {
+      "symbol": "XLRE",
+      "name": "Real Estate",
+      "quote": null
+    }
+  ],
+  "failed": []
+}
