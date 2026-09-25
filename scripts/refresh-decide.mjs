@@ -283,6 +283,31 @@ function priceRule(series, source, label, noun) {
   };
 }
 
+/**
+ * Row-level mirror fields some inputs carry next to `evidence` (read by the UI
+ * / regime). They are ALWAYS re-derived from the row's final evidence block so
+ * they can never drift from it (09-25 bug: nyse-ad sma20/rawClose and
+ * vix-vix3m mediumRatio were carried over from 09-23). A mirror whose source
+ * value is missing is deleted rather than left stale.
+ */
+const ROW_MIRRORS = {
+  "nyse-ad": (ev) => ({ sma20: ev?.sma20, rawClose: ev?.value }),
+  "vix-vix3m": (ev, row) => ({
+    mediumRatio: typeof ev?.value === "number" ? Number(ev.value.toFixed(4)) : undefined,
+    band: row.statusHint,
+  }),
+};
+
+export function syncRowMirrors(row) {
+  const f = ROW_MIRRORS[row.id];
+  if (!f) return row;
+  for (const [k, v] of Object.entries(f(row.evidence, row))) {
+    if (v == null || (typeof v === "number" && !Number.isFinite(v))) delete row[k];
+    else row[k] = v;
+  }
+  return row;
+}
+
 /** Which fetched series each input needs (for held/needsFill on failure). */
 const NEEDS = {
   "cyclical-defensive": ["cycdef"],
@@ -415,7 +440,7 @@ async function main() {
   const statePath = join(DATA, "state.json");
   const prev = readJson(statePath);
   const fills = existsSync(FILLS_PATH) ? readJson(FILLS_PATH) : {};
-  const { bandFromMediumRatio, boardOneLiner, resolveStance, policiesForStance } = loadTs("src/lib/volCurve/computeVolCurve.ts");
+  const { bandFromMediumRatio, boardOneLiner, resolveStance, policiesForStance, creditConfirm, delta5d } = loadTs("src/lib/volCurve/computeVolCurve.ts");
   const { computeRegime } = loadTs("src/lib/regime/computeRegime.ts");
 
   const { S, errors } = await fetchAll(sessionDate);
@@ -492,7 +517,12 @@ async function main() {
         row.fresh = fill.asOf >= sessionDate;
         row.heldSince = row.fresh ? null : fill.asOf;
         row.asOf = fill.asOf;
-        row.evidence = { source: fill.source || "Scorekeeper manual fill (decide-fills.json)", date: fill.asOf, text: `${fill.source || "Scorekeeper fill"} · ${row.lastReading} · @ ${fill.asOf}` };
+        row.evidence = {
+          ...(fill.evidence && typeof fill.evidence === "object" ? fill.evidence : {}),
+          source: fill.source || "Scorekeeper manual fill (decide-fills.json)",
+          date: fill.asOf,
+          text: `${fill.source || "Scorekeeper fill"} · ${row.lastReading} · @ ${fill.asOf}`,
+        };
       } else {
         row.fresh = false;
         row.heldSince = heldSince;
@@ -513,6 +543,7 @@ async function main() {
         volBand = row.statusHint || null;
       }
     }
+    syncRowMirrors(row);
     row.contribution = Number((w * (typeof row.score === "number" ? row.score : 0)).toFixed(6));
     rows.push(row);
     evidenceById[id] = row.evidence;
@@ -574,7 +605,28 @@ async function main() {
     const pv = prev.volCurve || {};
     const ratio4 = Number(volRatio.toFixed(4));
     const stance = resolveStance({ band: volBand, mediumRatio: volRatio });
-    const credit = { label: pv.credit?.label ?? "Quiet", detail: pv.credit?.detail ?? "", riskOffConfirm: pv.credit?.riskOffConfirm ?? false };
+    // HYG/IEF feed from the same S.hygief series the hyg-ief-sma20 seat uses
+    // (same definition as scripts/refresh-vol-curve.mjs). Kept as-is if the
+    // series failed or is not at the vol bar's date.
+    let hygIef = pv.feeds?.hygIef;
+    const hb = S.hygief?.bars;
+    if (hb && hb.length >= 21 && hb[hb.length - 1].date === volFeed?.date) {
+      const line = smaSeries(hb);
+      const sNow = line[line.length - 1]?.close;
+      const sPrev = line[line.length - 2]?.close;
+      if (Number.isFinite(sNow)) {
+        hygIef = {
+          ratio: Number(hb[hb.length - 1].close.toFixed(4)),
+          sma20: Number(sNow.toFixed(4)),
+          rollingOver: Number.isFinite(sPrev) ? sNow < sPrev : null,
+          status: "VERIFIED",
+          asOf: hb[hb.length - 1].date,
+          source: "Yahoo HYG ÷ IEF daily closes",
+        };
+      }
+    }
+    const d5 = S.vixratio?.bars ? delta5d(S.vixratio.bars.map((b) => b.close)) : null;
+    const credit = creditConfirm(hygIef, volRatio, d5 != null ? d5 > 0 : null);
     volCurve = {
       ...pv,
       ratio: ratio4,
@@ -587,6 +639,7 @@ async function main() {
         ...(pv.feeds || {}),
         ...(volFeed?.vix != null ? { vix: { value: Number(volFeed.vix.toFixed(2)), status: "VERIFIED", asOf: volFeed.date, source: "Yahoo ^VIX" } } : {}),
         ...(volFeed?.vix3m != null ? { vix3m: { value: Number(volFeed.vix3m.toFixed(2)), status: "VERIFIED", asOf: volFeed.date, source: "Yahoo ^VIX3M" } } : {}),
+        ...(hygIef ? { hygIef } : {}),
       },
       asOf: volFeed?.date ?? sessionDate,
       source: "Yahoo ^VIX/^VIX3M",
