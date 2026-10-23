@@ -62,10 +62,12 @@ function SectorTile({ item }: { item: SectorQuoteItem }) {
  */
 export function XlSectors({ data: initial }: { data: MarketQuotesPayload }) {
   const [data, setData] = useState(initial);
+  const [seenInitial, setSeenInitial] = useState(initial);
 
-  useEffect(() => {
+  if (seenInitial !== initial) {
+    setSeenInitial(initial);
     setData(initial);
-  }, [initial]);
+  }
 
   useEffect(() => {
     let cancelled = false;

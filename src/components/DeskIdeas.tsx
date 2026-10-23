@@ -106,6 +106,8 @@ function IdeaCard({ idea }: { idea: DeskIdea }) {
 
 export function DeskIdeas() {
   const data = loadIdeas();
+  // Members page is dynamic; the 3-day window is the request time, not a client render.
+  // eslint-disable-next-line react-hooks/purity -- request-time cutoff on a dynamic server render
   const ideas = visibleIdeas(data.ideas, Date.now());
   void data.allowlist; // kept in JSON; not shown in UI
 

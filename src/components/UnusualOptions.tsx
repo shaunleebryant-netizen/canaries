@@ -114,6 +114,8 @@ function FlowCard({ flow }: { flow: OptionsFlowItem }) {
 
 export function UnusualOptions() {
   const data = loadOptionsFlow();
+  // Members page is dynamic; the 3-day window is the request time, not a client render.
+  // eslint-disable-next-line react-hooks/purity -- request-time cutoff on a dynamic server render
   const flows = visibleFlows(data.flows, Date.now());
   const priority = data.priorityAllowlist;
   const also = data.allowlist.filter(
