@@ -63,7 +63,13 @@ function TickerChip({ item }: { item: TickerStripItem }) {
 
 export function LiveTickers({ initial }: { initial: MarketQuotesPayload }) {
   const [data, setData] = useState(initial);
+  const [seenInitial, setSeenInitial] = useState(initial);
   const [busy, setBusy] = useState(false);
+
+  if (seenInitial !== initial) {
+    setSeenInitial(initial);
+    setData(initial);
+  }
 
   const refresh = useCallback(async () => {
     setBusy(true);
@@ -82,14 +88,25 @@ export function LiveTickers({ initial }: { initial: MarketQuotesPayload }) {
     }
   }, []);
 
-  useEffect(() => {
-    setData(initial);
-  }, [initial]);
-
   // Fill strip after shell paint — do not block SSR on Yahoo.
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/members/quotes?refresh=1", {
+          credentials: "same-origin",
+        });
+        if (!res.ok || cancelled) return;
+        const json = (await res.json()) as MarketQuotesPayload;
+        if (!cancelled) setData(json);
+      } catch {
+        /* soft-fail */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <section
