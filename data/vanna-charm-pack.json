@@ -1,0 +1,11 @@
+{
+  "sessionDate": "2026-10-22",
+  "asOf": "2026-10-22",
+  "packScannedAt": "2026-10-23T11:24:59+13:00",
+  "status": "ON_HOLIDAY",
+  "window": {
+    "start": 1,
+    "end": 21
+  },
+  "note": "NY calendar rule (1st Thu → 3rd Wed). Live UI also computes this; stamp for pack parity."
+}

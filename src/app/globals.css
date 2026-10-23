@@ -40,3 +40,246 @@ body {
   background-color: #ef4444;
   box-shadow: 0 0 28px rgba(239, 68, 68, 0.4);
 }
+
+/* ── DRAFT (2026-09-26): DECIDE_THEME mockups A/B/C ──────────────────────
+   Only applies when the Decide <aside> carries data-decide-theme (set only
+   when NEXT_PUBLIC_DECIDE_THEME=A|B|C). Default "current" = no attribute,
+   so none of these rules match on the live site.
+   Sky #38bdf8 (Tailwind sky-400) chosen to contrast with canary gold and to
+   stay clear of the traffic-light green/amber/red. */
+[data-decide-theme] > .rounded-xl,
+[data-decide-theme] > section.rounded-xl {
+  border-color: rgba(56, 189, 248, 0.55);
+  --tw-ring-color: rgba(56, 189, 248, 0.12);
+}
+[data-decide-theme="B"] {
+  background: rgba(56, 189, 248, 0.04);
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 1rem;
+  padding: 0.625rem;
+}
+[data-decide-theme="C"] {
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.07), rgba(56, 189, 248, 0.02) 60%);
+  border-left: 3px solid rgba(56, 189, 248, 0.45);
+  border-radius: 0 1rem 1rem 0;
+  padding: 0.625rem 0.625rem 0.625rem 0.75rem;
+}
+[data-decide-theme="C"] > .rounded-xl,
+[data-decide-theme="C"] > section.rounded-xl {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+/* C only: Decide card titles switch from gold to sky so the whole rail reads as one section. */
+[data-decide-theme="C"] h2.text-canary-gold {
+  color: #7dd3fc;
+}
+/* B/C add inner padding to the Decide column; widen it on desktop so the
+   cards keep their current 340px width (main column gives up ~20px).
+   `aside` raises specificity above Tailwind's lg:w-[340px], which is emitted later. */
+@media (min-width: 1024px) {
+  aside[data-decide-theme="B"] {
+    width: calc(340px + 1.25rem + 2px);
+  }
+  aside[data-decide-theme="C"] {
+    width: calc(340px + 1.375rem + 3px);
+  }
+}
+
+/* ── (2026-09-26): DECIDE_THEME "R" (regime-coloured Decide, sky scanners) ──
+   Default theme since owner approval 2026-09-26; revert via featureFlags.ts.
+   Decide colours use the exact traffic-light tokens (tailwind colors.canary.*,
+   same hex as .canary-light-*); unknown regime → neutral slate-400. */
+aside[data-decide-theme="R"] {
+  --regime: theme("colors.slate.400");
+  --regime-55: theme("colors.slate.400 / 55%");
+  --regime-14: theme("colors.slate.400 / 14%");
+  --regime-12: theme("colors.slate.400 / 12%");
+  --regime-05: theme("colors.slate.400 / 5%");
+  background: var(--regime-05);
+  border: 1px solid var(--regime-14);
+  border-radius: 1rem;
+  padding: 0.625rem;
+}
+aside[data-decide-theme="R"][data-regime="green"] {
+  --regime: theme("colors.canary.green");
+  --regime-55: theme("colors.canary.green / 55%");
+  --regime-14: theme("colors.canary.green / 14%");
+  --regime-12: theme("colors.canary.green / 12%");
+  --regime-05: theme("colors.canary.green / 5%");
+}
+aside[data-decide-theme="R"][data-regime="amber"] {
+  --regime: theme("colors.canary.amber");
+  --regime-55: theme("colors.canary.amber / 55%");
+  --regime-14: theme("colors.canary.amber / 14%");
+  --regime-12: theme("colors.canary.amber / 12%");
+  --regime-05: theme("colors.canary.amber / 5%");
+}
+aside[data-decide-theme="R"][data-regime="red"] {
+  --regime: theme("colors.canary.red");
+  --regime-55: theme("colors.canary.red / 55%");
+  --regime-14: theme("colors.canary.red / 14%");
+  --regime-12: theme("colors.canary.red / 12%");
+  --regime-05: theme("colors.canary.red / 5%");
+}
+aside[data-decide-theme="R"] > .rounded-xl,
+aside[data-decide-theme="R"] > section.rounded-xl {
+  border-color: var(--regime-55);
+  --tw-ring-color: var(--regime-12);
+}
+aside[data-decide-theme="R"] .decide-r-title {
+  color: var(--regime);
+}
+aside[data-decide-theme="R"] .decide-r-accent {
+  border-left: 3px solid var(--regime);
+  border-radius: 2px;
+}
+@media (min-width: 1024px) {
+  aside[data-decide-theme="R"] {
+    width: calc(340px + 1.25rem + 2px);
+  }
+}
+/* R: Main, Sub and ETFs & Crypto scanners swap canary gold for the Option B sky blue. */
+[data-scan-theme="R"] .border-canary-gold\/25 { border-color: rgba(56, 189, 248, 0.25); }
+[data-scan-theme="R"] .border-canary-gold\/40 { border-color: rgba(56, 189, 248, 0.45); }
+[data-scan-theme="R"] .border-canary-gold\/70 { border-color: rgba(56, 189, 248, 0.7); }
+[data-scan-theme="R"] .ring-canary-gold\/10 { --tw-ring-color: rgba(56, 189, 248, 0.1); }
+[data-scan-theme="R"] .ring-canary-gold\/20 { --tw-ring-color: rgba(56, 189, 248, 0.2); }
+[data-scan-theme="R"] .text-canary-gold\/80 { color: rgba(125, 211, 252, 0.85); }
+[data-scan-theme="R"] .text-canary-gold { color: #7dd3fc; }
+[data-scan-theme="R"] .hover\:border-canary-gold:hover { border-color: #38bdf8; }
+[data-scan-theme="R"] .hover\:text-canary-gold:hover { color: #7dd3fc; }
+[data-scan-theme="R"] .focus-visible\:ring-canary-gold\/60:focus-visible { --tw-ring-color: rgba(56, 189, 248, 0.6); }
+
+/* Smooth in-page jump to the Canary readings (Decide subtitle "Canaries" link); only on pages
+   that have the table, and never for users who prefer reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(#canary-table) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* SCANNER_DECLUTTER: Main cards louder, sub/ETF quieter.
+   Equal-height scroll boxes (~12–15 ticker rows). Owner 2026-10-05 —
+   fixed 26rem so mobile and desktop match; list scrolls inside the box. */
+[data-scanner-declutter="1"] #bullish-setups,
+[data-scanner-declutter="1"] #bearish-setups,
+[data-scanner-declutter="1"] #fish-alerts,
+[data-scanner-declutter="1"] #exhaustion-alerts,
+[data-scanner-declutter="1"] #money-flow-alerts,
+[data-scanner-declutter="1"] #ibd-setups,
+[data-scanner-declutter="1"] #weekly-state,
+[data-scanner-declutter="1"] #bullish-strong,
+[data-scanner-declutter="1"] #etf-watch,
+[data-scanner-declutter="1"] #etf-countries,
+[data-scanner-declutter="1"] #crypto-watch {
+  max-height: 26rem !important; /* ~12–15 rows + header */
+  height: 26rem !important;
+  overflow: hidden !important;
+}
+[data-scanner-declutter="1"] #bullish-setups,
+[data-scanner-declutter="1"] #bearish-setups {
+  border-color: rgba(56, 189, 248, 0.55) !important;
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+[data-scanner-declutter="1"] #fish-alerts,
+[data-scanner-declutter="1"] #exhaustion-alerts,
+[data-scanner-declutter="1"] #money-flow-alerts,
+[data-scanner-declutter="1"] #ibd-setups,
+[data-scanner-declutter="1"] #weekly-state,
+[data-scanner-declutter="1"] #bullish-strong,
+[data-scanner-declutter="1"] #etf-watch,
+[data-scanner-declutter="1"] #etf-countries,
+[data-scanner-declutter="1"] #crypto-watch {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(15, 23, 42, 0.4) !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+}
+
+/* Collapsible Decide (owner t581u PREVIEW; only rendered when MEMBERS_DECIDE_COLLAPSE / design preview). */
+[data-decide-rail] { display: none; }
+html[data-decide="collapsed"] [data-decide-layout] [data-decide-panel] { display: none; }
+html[data-decide="collapsed"] [data-decide-layout] [data-decide-rail] { display: block; }
+
+/* Owner 2026-10-10: members tab bar + "Ticker Universe" on one row when the scan column
+   is >= 760px wide (ScannerDeclutterShell); below that the button stacks above the tab bar. */
+.scan-tabrow-wrap {
+  container-type: inline-size;
+}
+@container (min-width: 760px) {
+  .scan-tabrow {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+/* Owner 2026-10-10 Setups polish: Bullish/Bearish Setups tables tighten in narrow boxes
+   (mobile, 1024px with Risk Guidance open) so the default columns fit without sideways scroll. */
+.setups-table {
+  container-type: inline-size;
+}
+/* Same Stock width in both boxes so the Growth bars line up side by side. */
+.setups-table th:first-child {
+  min-width: 84px;
+}
+/* Narrow box, or extra columns switched on (setups-dense): tighter padding, shorter Growth bar. */
+.setups-dense th:first-child {
+  min-width: 0;
+}
+.setups-dense th,
+.setups-dense td {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.setups-dense th:first-child,
+.setups-dense td:first-child {
+  padding-left: 8px;
+}
+.setups-dense .gs-bar {
+  width: 28px;
+}
+@container (max-width: 400px) {
+  .setups-table th:first-child {
+    min-width: 0;
+  }
+  .setups-table th,
+  .setups-table td {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .setups-table th:first-child,
+  .setups-table td:first-child {
+    padding-left: 8px;
+  }
+  .setups-table .gs-bar {
+    width: 28px;
+  }
+}
+@container (max-width: 330px) {
+  .setups-table th,
+  .setups-table td {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+  .setups-table th:first-child,
+  .setups-table td:first-child {
+    padding-left: 6px;
+  }
+  .setups-table th:last-child,
+  .setups-table td:last-child {
+    padding-right: 6px;
+  }
+  .setups-table .gs-bar {
+    width: 18px;
+  }
+  .setups-table .emo-row {
+    gap: 1px;
+  }
+  .setups-table table {
+    font-size: 10.5px;
+  }
+  .setups-table .gs-row {
+    gap: 3px;
+  }
+}

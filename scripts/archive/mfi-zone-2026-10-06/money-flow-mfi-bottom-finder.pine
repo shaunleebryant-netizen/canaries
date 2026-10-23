@@ -1,0 +1,84 @@
+//@version=6
+indicator("MFI Bottom Finder", shorttitle = "MFI BF", overlay = false, max_labels_count = 500)
+
+// ── Inputs
+grpMfi = "MFI"
+int   mfiLen     = input.int(14, "MFI length", minval = 1, group = grpMfi)
+float osLevel    = input.float(20.0, "Oversold level", minval = 1.0, maxval = 50.0, step = 0.5, group = grpMfi)
+int   osLookback = input.int(8, "Oversold lookback (bars)", minval = 1, maxval = 50, group = grpMfi, tooltip = "MFI must have been at or below the oversold level within this many bars.")
+float resetLevel = input.float(40.0, "Max MFI for signal", minval = 10.0, maxval = 70.0, step = 0.5, group = grpMfi, tooltip = "Ignore hooks once MFI has already recovered this far.")
+bool  requireHook = input.bool(true, "Require local hook (down then up)", group = grpMfi, tooltip = "On: previous bar is a local MFI low. Off: any up-bar after a recent oversold print.")
+
+grpVol = "Volume filter"
+bool  useVolFilter   = input.bool(true, "Use volume climax + contraction", group = grpVol)
+int   volLen         = input.int(20, "Volume SMA length", minval = 1, group = grpVol)
+float volClimaxMult  = input.float(1.5, "Climax multiple vs SMA", minval = 1.0, step = 0.1, group = grpVol)
+bool  requireContract = input.bool(true, "Require volume contraction on turn", group = grpVol)
+
+grpVis = "Visuals"
+bool  showMfi        = input.bool(true, "Show MFI", group = grpVis)
+bool  colorMfi       = input.bool(true, "Color MFI by slope", group = grpVis)
+bool  showBg         = input.bool(true, "Highlight oversold zone", group = grpVis)
+bool  markOnPane     = input.bool(true, "Markers on MFI pane", group = grpVis)
+bool  markOnPrice    = input.bool(true, "Markers on price chart", group = grpVis)
+color colMfiUp       = input.color(color.new(#26a69a, 0), "MFI rising", group = grpVis)
+color colMfiDn       = input.color(color.new(#ef5350, 0), "MFI falling", group = grpVis)
+color colSignal      = input.color(color.new(#00e676, 0), "Bottom signal", group = grpVis)
+color colOs          = input.color(color.new(#26a69a, 88), "Oversold fill", group = grpVis)
+
+// ── MFI
+float mfi = ta.mfi(hlc3, mfiLen)
+bool  hasVolume = nz(volume) > 0
+bool  ready = not na(mfi) and hasVolume
+
+bool mfiRising  = ready and mfi > mfi[1]
+bool mfiHook    = ready and mfi > mfi[1] and mfi[1] <= mfi[2]
+bool recentlyOs = ready and ta.lowest(mfi, osLookback) <= osLevel
+bool stillLow   = ready and mfi <= resetLevel
+
+bool rawTurn = requireHook ? mfiHook : mfiRising
+
+// ── Volume filter (climax on the prior bar, then optional contraction)
+float volSma = ta.sma(volume, volLen)
+bool  climaxBar = nz(volume[1]) >= nz(volSma[1]) * volClimaxMult
+bool  contracted = nz(volume) <= nz(volume[1])
+bool  volOk = not useVolFilter or (climaxBar and (not requireContract or contracted))
+
+// ── One signal per oversold episode
+var bool armed = false
+if ready and ta.lowest(mfi, osLookback) <= osLevel
+    armed := true
+if ready and mfi > resetLevel
+    armed := false
+
+bool bottomSignal = ready and armed and rawTurn and recentlyOs and stillLow and volOk
+
+if bottomSignal
+    armed := false
+
+// ── Plots
+color mfiCol = colorMfi ? (mfiRising ? colMfiUp : colMfiDn) : colMfiUp
+plot(showMfi ? mfi : na, "MFI", mfiCol, 2)
+
+hOs    = hline(osLevel, "Oversold", color.new(#26a69a, 20), hline.style_dashed)
+hReset = hline(resetLevel, "Reset / max signal", color.new(#787b86, 30), hline.style_dotted)
+hMid   = hline(50.0, "Mid", color.new(#787b86, 55), hline.style_dotted)
+hOb    = hline(80.0, "Overbought", color.new(#ef5350, 40), hline.style_dashed)
+fill(hOs, hline(0.0, display = display.none), showBg ? colOs : na)
+
+plotshape(markOnPane and bottomSignal, "Bottom (pane)", shape.triangleup, location.bottom, colSignal, size = size.small)
+plotshape(markOnPrice and bottomSignal, "Bottom (price)", shape.triangleup, location.belowbar, colSignal, size = size.tiny, force_overlay = true)
+
+bgcolor(showBg and ready and mfi <= osLevel ? colOs : na, title = "Oversold background")
+
+// ── No-volume warning
+var table warn = table.new(position.top_right, 1, 1)
+if barstate.islast and not hasVolume
+    table.cell(warn, 0, 0, "MFI needs volume — this symbol has none", text_color = color.white, bgcolor = color.new(color.red, 20))
+else if barstate.islast
+    table.clear(warn, 0, 0)
+
+// ── Alerts
+alertcondition(bottomSignal, "MFI bottom", "MFI bottom finder fired on {{ticker}} @ {{close}}")
+if bottomSignal
+    alert("MFI bottom finder: " + syminfo.ticker + " @ " + str.tostring(close), alert.freq_once_per_bar_close)

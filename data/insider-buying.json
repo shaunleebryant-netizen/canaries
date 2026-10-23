@@ -1,0 +1,293 @@
+{
+  "asOf": "2026-10-22",
+  "windowStart": "2026-09-22",
+  "scannedAt": "2026-10-22T22:29:00.037Z",
+  "source": "SEC EDGAR Form 4 (open-market purchases, code P)",
+  "note": "Members only. Education only. Form 4 is filed up to 2 business days after the trade.",
+  "universeCount": 198,
+  "mappedCount": 198,
+  "unmapped": [],
+  "filingsChecked": 3585,
+  "purchaseRows": 42,
+  "buysCounted": 11,
+  "fetch": {
+    "requests": 226,
+    "newFilings": 28,
+    "submissionFailures": [],
+    "xmlFailures": [],
+    "xmlFailureCount": 0
+  },
+  "signals": [
+    {
+      "ticker": "APLD",
+      "totalUsd": 6664686,
+      "insiders": 2,
+      "roleTag": "CEO +",
+      "roles": [
+        "CEO",
+        "Director",
+        "Officer"
+      ],
+      "latestTxnDate": "2026-10-16",
+      "latestFilingDate": "2026-10-19",
+      "basis": [
+        "group",
+        "single"
+      ],
+      "buyers": [
+        {
+          "name": "Zhang Jason Gechen",
+          "roles": [
+            "Officer"
+          ],
+          "usd": 5658000
+        },
+        {
+          "name": "Cummins Wes",
+          "roles": [
+            "CEO",
+            "Director"
+          ],
+          "usd": 1006686
+        }
+      ],
+      "trades": [
+        {
+          "name": "Zhang Jason Gechen",
+          "roles": [
+            "Officer"
+          ],
+          "txnDate": "2026-10-16",
+          "filingDate": "2026-10-19",
+          "shares": 300000,
+          "avgPrice": 18.86,
+          "usd": 5658000,
+          "url": "https://www.sec.gov/Archives/edgar/data/1144879/000190044526000006/0001900445-26-000006-index.htm"
+        },
+        {
+          "name": "Cummins Wes",
+          "roles": [
+            "CEO",
+            "Director"
+          ],
+          "txnDate": "2026-10-16",
+          "filingDate": "2026-10-19",
+          "shares": 55803,
+          "avgPrice": 18.04,
+          "usd": 1006686,
+          "url": "https://www.sec.gov/Archives/edgar/data/1144879/000139193526000009/0001391935-26-000009-index.htm"
+        }
+      ]
+    },
+    {
+      "ticker": "ORCL",
+      "totalUsd": 3483800,
+      "insiders": 1,
+      "roleTag": "Director",
+      "roles": [
+        "Director"
+      ],
+      "latestTxnDate": "2026-09-29",
+      "latestFilingDate": "2026-10-01",
+      "basis": [
+        "single"
+      ],
+      "buyers": [
+        {
+          "name": "RUSCKOWSKI STEPHEN H",
+          "roles": [
+            "Director"
+          ],
+          "usd": 3483800
+        }
+      ],
+      "trades": [
+        {
+          "name": "RUSCKOWSKI STEPHEN H",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-09-29",
+          "filingDate": "2026-10-01",
+          "shares": 25000,
+          "avgPrice": 139.352,
+          "usd": 3483800,
+          "url": "https://www.sec.gov/Archives/edgar/data/1341439/000134143926000099/0001341439-26-000099-index.htm"
+        }
+      ]
+    },
+    {
+      "ticker": "HEI",
+      "totalUsd": 1400595,
+      "insiders": 8,
+      "roleTag": "CEO +",
+      "roles": [
+        "CEO",
+        "Director"
+      ],
+      "latestTxnDate": "2026-10-08",
+      "latestFilingDate": "2026-10-13",
+      "basis": [
+        "group"
+      ],
+      "buyers": [
+        {
+          "name": "MENDELSON VICTOR H",
+          "roles": [
+            "CEO",
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "CULLIGAN THOMAS M",
+          "roles": [
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "Hildebrandt Mark H",
+          "roles": [
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "Fine Carol F.",
+          "roles": [
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "SCHRIESHEIM ALAN",
+          "roles": [
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "HENRIQUES ADOLFO",
+          "roles": [
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "CHERUVATATH NANDAKUMAR",
+          "roles": [
+            "Director"
+          ],
+          "usd": 175142
+        },
+        {
+          "name": "Neitzel Julie",
+          "roles": [
+            "Director"
+          ],
+          "usd": 174601
+        }
+      ],
+      "trades": [
+        {
+          "name": "MENDELSON VICTOR H",
+          "roles": [
+            "CEO",
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000103108226000007/0001031082-26-000007-index.htm"
+        },
+        {
+          "name": "CULLIGAN THOMAS M",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000121758526000002/0001217585-26-000002-index.htm"
+        },
+        {
+          "name": "Hildebrandt Mark H",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000144523326000002/0001445233-26-000002-index.htm"
+        },
+        {
+          "name": "Fine Carol F.",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000196001626000002/0001960016-26-000002-index.htm"
+        },
+        {
+          "name": "SCHRIESHEIM ALAN",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000120063126000006/0001200631-26-000006-index.htm"
+        },
+        {
+          "name": "HENRIQUES ADOLFO",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000118180326000002/0001181803-26-000002-index.htm"
+        },
+        {
+          "name": "CHERUVATATH NANDAKUMAR",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 795,
+          "avgPrice": 220.3043,
+          "usd": 175142,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000169895726000008/0001698957-26-000008-index.htm"
+        },
+        {
+          "name": "Neitzel Julie",
+          "roles": [
+            "Director"
+          ],
+          "txnDate": "2026-10-08",
+          "filingDate": "2026-10-13",
+          "shares": 592,
+          "avgPrice": 294.9343,
+          "usd": 174601,
+          "url": "https://www.sec.gov/Archives/edgar/data/46619/000162081126000006/0001620811-26-000006-index.htm"
+        }
+      ]
+    }
+  ]
+}

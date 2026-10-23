@@ -1,12 +1,19 @@
-/** Compact line chart for ~10 session series (or any numeric series). Auto-scales. */
+/**
+ * Compact line chart for ~10 session series (or any numeric series). Auto-scales.
+ * `signal` (owner 2026-10-10): colour by the canary's CURRENT signal (>0 Healthy green, <0 Warning red,
+ * 0 Neutral / null No data grey) instead of the line's direction, so the line never contradicts the
+ * status next to it. Without `signal` the old up/down colouring is kept.
+ */
 export function Sparkline({
   values,
   width = 88,
   height = 28,
+  signal,
 }: {
   values: number[];
   width?: number;
   height?: number;
+  signal?: number | null;
 }) {
   const w = width;
   const h = height;
@@ -43,7 +50,17 @@ export function Sparkline({
       height={h}
       viewBox={`0 0 ${w} ${h}`}
       aria-hidden
-      className={up ? "text-emerald-400/90" : "text-rose-400/90"}
+      className={
+        signal === undefined
+          ? up
+            ? "text-emerald-400/90"
+            : "text-rose-400/90"
+          : signal != null && signal > 0
+            ? "text-emerald-400/90"
+            : signal != null && signal < 0
+              ? "text-rose-400/90"
+              : "text-slate-400/80"
+      }
     >
       <polyline
         fill="none"

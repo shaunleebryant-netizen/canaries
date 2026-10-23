@@ -1,0 +1,153 @@
+//@version=6
+indicator("Bottom Finder + Exhaustion Combo ✅ v2.3", overlay=true, max_labels_count=500)
+
+// ═════════════════════════════════════════════════════════════
+// INPUTS
+// ═════════════════════════════════════════════════════════════
+signalTF     = input.timeframe("240", "Signal timeframe (4H = 240)", group="General")
+useTinyEmoji = input.bool(true, "Use smaller emoji size?", group="General")
+
+emaFastLen   = input.int(13, "Fast EMA Length", minval=1, group="Regime")
+emaSlowLen   = input.int(55, "Slow EMA Length", minval=1, group="Regime")
+
+rsiLen       = input.int(14, "RSI Length", minval=1, group="RSI")
+
+// Deep bottom (original)
+rsiDeep      = input.float(25.0, "🙂 Deep RSI", step=0.5, group="Bottom")
+useTrendDirBottom = input.bool(true, "🙂 Deep: require fast EMA < slow EMA", group="Bottom")
+
+// Hook bottom (catches missed washes)
+useHook      = input.bool(true, "Enable 🙂 hook (RSI cross back up)", group="Bottom")
+rsiHook      = input.float(32.0, "🙂 Hook RSI cross level", step=0.5, group="Bottom")
+hookNeedLl   = input.bool(true, "🙂 Hook: price must make a lower low vs prior 8 4H bars", group="Bottom")
+
+// Divergence bottom
+useDivBot    = input.bool(true, "Enable 🙂 bullish RSI divergence", group="Bottom")
+divLook      = input.int(12, "Divergence lookback (4H bars)", minval=4, maxval=40, group="Bottom")
+
+lookbackFish = input.int(60, "🐟 must follow 🙂 within N 4H bars", minval=1, maxval=400, group="Fish")
+fishExitLevel     = input.float(30.0, "🐟 RSI level", step=0.5, group="Fish")
+fishMinRiseAmount = input.float(5.0, "🐟 Min RSI rise from bottom", step=0.5, group="Fish")
+fishUseRsiMA      = input.bool(true, "🐟 Require RSI MA rising", group="Fish")
+fishRsiMALen      = input.int(5, "🐟 RSI MA length", minval=2, group="Fish")
+fishRequirePriceUp = input.bool(true, "🐟 Require close > bottom close", group="Fish")
+fishNeedStrongBar  = input.bool(true, "🐟 Require close in top half of 4H bar", group="Fish")
+fishCooldown       = input.int(10, "🐟 Cooldown 4H bars", minval=1, group="Fish")
+
+rsiWarn      = input.float(78.0, "🥵 4H RSI warning cross", step=0.5, group="Top")
+useTrendDirTop = input.bool(true, "🥵 Require fast EMA > slow EMA", group="Top")
+useHookTop   = input.bool(true, "Enable 🥵 hook (RSI cross back down from overbought)", group="Top")
+useDivTop    = input.bool(true, "Enable 🥵 bearish RSI divergence", group="Top")
+
+detBars      = input.int(2, "💀 RSI down bars", minval=1, maxval=8, group="Skull")
+detUseRSIMA  = input.bool(true, "💀 RSI < RSI MA", group="Skull")
+detRsiMALen  = input.int(8, "💀 RSI MA length", minval=2, group="Skull")
+detMinDrop   = input.float(0.5, "💀 Min RSI drop per bar", step=0.1, group="Skull")
+requireRedCandle = input.bool(true, "💀 Require 4H close < prior close", group="Skull")
+
+emojiBottom  = input.string("🙂", "Bottom")
+emojiFish    = input.string("🐟", "Fish")
+emojiExhaust = input.string("🥵", "Exhaustion")
+emojiSkull   = input.string("💀", "Skull")
+
+// ═════════════════════════════════════════════════════════════
+// 4H ENGINE
+// ═════════════════════════════════════════════════════════════
+f_signals() =>
+    emaF = ta.ema(close, emaFastLen)
+    emaS = ta.ema(close, emaSlowLen)
+    rsi  = ta.rsi(close, rsiLen)
+    rsiMA_fish = ta.sma(rsi, fishRsiMALen)
+    rsiMA_det  = ta.sma(rsi, detRsiMALen)
+    barLoc = (high - low) > 0 ? (close - low) / (high - low) : 0.5
+
+    // --- Deep bottom (original, still the highest quality 🙂)
+    deep = (rsi < rsiDeep) and (useTrendDirBottom ? emaF < emaS : true)
+
+    // --- Hook: first cross back up through hook level after being below it
+    hook = useHook and ta.crossover(rsi, rsiHook) and (useTrendDirBottom ? emaF < emaS : true)
+    if hook and hookNeedLl
+        hook := close < ta.lowest(close[1], 8)
+
+    // --- Bullish div: new price low, RSI higher than RSI at that prior low
+    ll = close < ta.lowest(close[1], divLook)
+    rsiAtPriorLow = ta.valuewhen(close == ta.lowest(close, divLook), rsi, 1)
+    bullDiv = useDivBot and ll and not na(rsiAtPriorLow) and rsi > rsiAtPriorLow and rsi < 40
+
+    bottomSignal = deep or hook or bullDiv
+
+    var float bottomRSI   = na
+    var float bottomPrice = na
+    var int   lastBottom  = na
+    var int   lastFish    = na
+
+    if bottomSignal
+        lastBottom  := bar_index
+        bottomRSI   := rsi
+        bottomPrice := close
+
+    barsFromBottom = not na(lastBottom) ? bar_index - lastBottom : 999999
+    inWindow = barsFromBottom > 0 and barsFromBottom <= lookbackFish
+    coolOK   = not na(lastFish) ? (bar_index - lastFish) >= fishCooldown : true
+
+    fish = inWindow and coolOK and
+           rsi > fishExitLevel and
+           rsi > rsi[1] and
+           (not na(bottomRSI) ? rsi > bottomRSI + fishMinRiseAmount : false) and
+           (fishUseRsiMA ? rsiMA_fish > rsiMA_fish[1] : true) and
+           (fishRequirePriceUp ? close > bottomPrice : true) and
+           (fishNeedStrongBar ? barLoc >= 0.5 : true)
+
+    if fish
+        lastFish := bar_index
+
+    // --- Exhaustion on 4H (was chart TF — that was the missed/fake top source)
+    regimeUp = useTrendDirTop ? emaF > emaS : true
+    hotCross = ta.crossover(rsi, rsiWarn)
+    hotHook  = useHookTop and ta.crossunder(rsi, rsiWarn) and rsi[1] >= rsiWarn
+    hh = close > ta.highest(close[1], divLook)
+    rsiAtPriorHigh = ta.valuewhen(close == ta.highest(close, divLook), rsi, 1)
+    bearDiv = useDivTop and hh and not na(rsiAtPriorHigh) and rsi < rsiAtPriorHigh and rsi > 60
+    exhaustion = regimeUp and (hotCross or hotHook or bearDiv)
+
+    // --- Skull: 4H deterioration after a 🥵
+    fallSeq = true
+    for i = 0 to detBars - 1
+        dropOK = detMinDrop <= 0 ? true : (rsi[i + 1] - rsi[i] >= detMinDrop)
+        fallSeq := fallSeq and (rsi[i] < rsi[i + 1]) and dropOK
+    det = fallSeq and (detUseRSIMA ? rsi < rsiMA_det : true)
+    priceFalling = requireRedCandle ? close < close[1] : true
+
+    var bool skullArmed = false
+    if exhaustion
+        skullArmed := true
+    skull = skullArmed and det and priceFalling
+    if skull
+        skullArmed := false
+
+    [bottomSignal, fish, exhaustion, skull]
+
+[bottom_4h, fish_4h, exhaust_4h, skull_4h] =
+     request.security(syminfo.tickerid, signalTF, f_signals(), barmerge.gaps_off, barmerge.lookahead_off)
+
+// ═════════════════════════════════════════════════════════════
+// PLOT
+// ═════════════════════════════════════════════════════════════
+plotchar(useTinyEmoji and bottom_4h,  title="🙂 tiny",  char=emojiBottom,  location=location.belowbar, color=color.yellow, size=size.tiny)
+plotchar(not useTinyEmoji and bottom_4h, title="🙂 small", char=emojiBottom,  location=location.belowbar, color=color.yellow, size=size.small)
+plotchar(useTinyEmoji and fish_4h,    title="🐟 tiny",  char=emojiFish,    location=location.belowbar, color=color.green,  size=size.tiny)
+plotchar(not useTinyEmoji and fish_4h,   title="🐟 small", char=emojiFish,    location=location.belowbar, color=color.green,  size=size.small)
+plotchar(useTinyEmoji and exhaust_4h, title="🥵 tiny",  char=emojiExhaust, location=location.abovebar, color=color.red,    size=size.tiny)
+plotchar(not useTinyEmoji and exhaust_4h, title="🥵 small", char=emojiExhaust, location=location.abovebar, color=color.red,    size=size.small)
+plotchar(useTinyEmoji and skull_4h,   title="💀 tiny",  char=emojiSkull,   location=location.abovebar, color=color.white,  size=size.tiny)
+plotchar(not useTinyEmoji and skull_4h,  title="💀 small", char=emojiSkull,   location=location.abovebar, color=color.white,  size=size.small)
+
+bgcolor(bottom_4h ? color.new(color.yellow, 90) : na)
+bgcolor(fish_4h ? color.new(color.green, 90) : na)
+bgcolor(exhaust_4h ? color.new(color.red, 90) : na)
+bgcolor(skull_4h ? color.new(color.gray, 85) : na)
+
+alertcondition(bottom_4h, title="4H Bottom", message="4H bottom 🙂")
+alertcondition(fish_4h, title="4H Fish", message="4H FISH 🐟")
+alertcondition(exhaust_4h, title="4H Exhaustion", message="4H exhaustion 🥵")
+alertcondition(skull_4h, title="4H Skull", message="4H skull 💀")

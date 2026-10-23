@@ -1,31 +1,92 @@
 {
   "draft": false,
-  "asOf": "2026-09-18",
-  "note": "Fri 2026-09-18: VIX 14.81 / VIX3M 18.24 \u2192 ratio 0.8120 SAFE.",
+  "asOf": "2026-10-22",
+  "method": "yahoo-1d-vix-vix3m",
+  "source": "Yahoo ^VIX / ^VIX3M daily closes (scripted pack step; was hand-typed TV)",
+  "note": "2026-10-22 close: Yahoo VIX 19.03 / VIX3M 20.12 → ratio 0.9458 CAUTION.",
   "feeds": {
     "vix": {
-      "value": 14.81,
+      "value": 19.03,
       "status": "VERIFIED",
-      "asOf": "2026-09-18"
+      "asOf": "2026-10-22",
+      "source": "Yahoo ^VIX"
     },
     "vix3m": {
-      "value": 18.24,
+      "value": 20.12,
       "status": "VERIFIED",
-      "asOf": "2026-09-18"
+      "asOf": "2026-10-22",
+      "source": "Yahoo ^VIX3M"
     },
     "hygIef": {
-      "ratio": 0.864868,
-      "sma20": 0.85987,
-      "rollingOver": false,
+      "ratio": 0.8454,
+      "sma20": 0.8599,
+      "rollingOver": true,
       "status": "VERIFIED",
-      "asOf": "2026-09-18",
-      "note": "Yahoo daily HYG/IEF ratio vs SMA20 (same backfill as flock seats)"
+      "asOf": "2026-10-22",
+      "source": "Yahoo HYG ÷ IEF daily closes"
     }
   },
-  "mediumHistory": [],
+  "mediumHistory": [
+    0.8293,
+    0.8815,
+    0.8867,
+    0.8895,
+    0.8821,
+    0.8501,
+    0.8622,
+    0.8509,
+    0.851,
+    0.8523,
+    0.8351,
+    0.8483,
+    0.8502,
+    0.8978,
+    0.8902,
+    0.9751,
+    0.9408,
+    0.9115,
+    0.891,
+    0.9458
+  ],
+  "mediumHistoryDates": [
+    "2026-09-25",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22"
+  ],
   "ownerLock": {
     "date": "2026-09-19",
-    "volCurveUi": "VIX/VIX3M stance bands + slope + Spec/Core + optional HYG/IEF credit confirm; not a flock score"
+    "volCurveUi": "VIX/VIX3M stance bands + optional HYG/IEF credit confirm; not a flock score",
+    "bands": "< 0.91 SAFE · 0.91–0.95 CAUTION · ≥ 0.96 DANGER (VIX/VIX3M only)"
   },
-  "seedRatio": 0.812
+  "seedRatio": 0.9458,
+  "computed": {
+    "band": "CAUTION",
+    "stance": "CAUTION",
+    "mediumRatio": 0.9458,
+    "policies": {
+      "spec": "trim 25–50% tactical / short-vol / overnight",
+      "core": "hold"
+    },
+    "oneLiner": "VIX/VIX3M 0.91–0.95 with credit confirming — tighten risk."
+  },
+  "held": false,
+  "heldSince": null,
+  "scannedAt": "2026-10-23T11:24:59+13:00"
 }

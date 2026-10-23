@@ -1,0 +1,480 @@
+{
+  "note": "X Rumours rules (owner approved 2026-10-10). Edit here, not in code. Regexes are case-insensitive unless noted. Members box shows Reported / Confirmed / Denied only.",
+  "types": [
+    "M&A",
+    "Activist",
+    "Partnership",
+    "Supply deal",
+    "Financing",
+    "Regulatory/FDA",
+    "Spin-off",
+    "Index"
+  ],
+  "expirySessions": 10,
+  "minIndependentEvidence": 2,
+  "budgetXReads": 25,
+  "outlets": [
+    {
+      "name": "Bloomberg",
+      "re": "\\bBloomberg\\b",
+      "handles": [
+        "business",
+        "markets",
+        "technology",
+        "bloombergtv",
+        "bloombergdeals",
+        "bpolitics"
+      ]
+    },
+    {
+      "name": "Reuters",
+      "re": "\\bReuters\\b|\\bRTRS\\b",
+      "handles": [
+        "reuters",
+        "reutersbiz",
+        "reuterstech"
+      ]
+    },
+    {
+      "name": "WSJ",
+      "re": "\\bWSJ\\b|Wall Street Journal",
+      "handles": [
+        "wsj",
+        "wsjmarkets",
+        "wsjbusiness",
+        "wsjdeals"
+      ]
+    },
+    {
+      "name": "FT",
+      "re": "\\bFT\\b|Financial Times",
+      "handles": [
+        "ft",
+        "ftmarkets"
+      ]
+    },
+    {
+      "name": "The Information",
+      "re": "The Information\\b|@theinformation",
+      "handles": [
+        "theinformation"
+      ]
+    },
+    {
+      "name": "CNBC",
+      "re": "\\bCNBC\\b",
+      "handles": [
+        "cnbc",
+        "cnbcnow"
+      ]
+    },
+    {
+      "name": "Barron's",
+      "re": "Barron['’]s",
+      "handles": [
+        "barronsonline"
+      ]
+    },
+    {
+      "name": "Business Insider",
+      "re": "Business ?Insider",
+      "handles": [
+        "businessinsider"
+      ]
+    },
+    {
+      "name": "Nikkei",
+      "re": "\\bNikkei\\b",
+      "handles": [
+        "nikkeiasia"
+      ]
+    },
+    {
+      "name": "Washington Post",
+      "re": "Washington Post|\\bWaPo\\b",
+      "handles": [
+        "washingtonpost"
+      ]
+    },
+    {
+      "name": "New York Times",
+      "re": "New York Times|\\bNYT\\b"
+    },
+    {
+      "name": "Axios",
+      "re": "\\bAxios\\b",
+      "handles": [
+        "axios"
+      ]
+    },
+    {
+      "name": "Semafor",
+      "re": "\\bSemafor\\b",
+      "handles": [
+        "semafor"
+      ]
+    },
+    {
+      "name": "Puck",
+      "re": "\\bPuck\\b"
+    },
+    {
+      "name": "Dealreporter",
+      "re": "Dealreporter|Deal Reporter"
+    },
+    {
+      "name": "MarketWatch",
+      "re": "MarketWatch",
+      "handles": [
+        "marketwatch"
+      ]
+    },
+    {
+      "name": "Fortune",
+      "re": "\\bFortune\\b",
+      "handles": [
+        "fortune"
+      ]
+    },
+    {
+      "name": "Yonhap",
+      "re": "\\bYonhap\\b"
+    },
+    {
+      "name": "Caixin",
+      "re": "\\bCaixin\\b"
+    },
+    {
+      "name": "DigiTimes",
+      "re": "DigiTimes"
+    },
+    {
+      "name": "Culpium (Tim Culpan)",
+      "re": "Culpium|Tim Culpan|@tculpan"
+    },
+    {
+      "name": "Mark Gurman (Bloomberg)",
+      "re": "Gurman"
+    },
+    {
+      "name": "STAT",
+      "re": "\\bSTAT News\\b|@statnews",
+      "handles": [
+        "statnews"
+      ]
+    },
+    {
+      "name": "Endpoints",
+      "re": "Endpoints News",
+      "handles": [
+        "endpts"
+      ]
+    }
+  ],
+  "partySources": [
+    {
+      "name": "Company",
+      "re": "\\b(announc(?:e|ed|es|ement)|agreed to (?:buy|acquire|sell)|signed (?:a |an )?(?:definitive )?(?:agreement|deal)|definitive agreement|press release|said in a statement|confirm(?:s|ed)?|to acquire|acquires|completes)\\b"
+    },
+    {
+      "name": "Index provider",
+      "re": "\\b(Nasdaq-100|Nasdaq 100|S&P 500|S&P Dow Jones Indices|FTSE Russell|MSCI|Russell 1000)\\b"
+    },
+    {
+      "name": "Activist letter",
+      "re": "\\b(letter|open letter|presentation|stake)\\b"
+    },
+    {
+      "name": "SEC filing",
+      "re": "\\b(8-K|13D|SC TO|DEFM14A|filing)\\b"
+    }
+  ],
+  "dealVerbs": "\\b(bid|bids|bidding|acquire|acquires|acquired|acquiring|acquisition|buy|buys|buying|bought|takeover|buyout|merger|merge|talks|stake|deal|agreement|partnership|partner|financing|borrow|loan|debt|raise|sale|sell|selling|spin|spinoff|spin-off|join|joins|added|inclusion|approval|approve|approved|plan|contract|order|letter|urges|wants|proposes|lease|draft|drafting|policy|allow|allowing|rule|rules|stopgap|FDA|regulators?)\\b",
+  "denialWords": "\\b(den(?:y|ies|ied)|denial|not in talks|no plans|doesn['’]t match|does not match|won['’]t|will not|rejected|dismissed|ZERO doubt|at most|no operational role|false|untrue)\\b",
+  "nameAliases": {
+    "SPCX": [
+      "SpaceX"
+    ],
+    "TSM": [
+      "TSMC",
+      "Taiwan Semiconductor"
+    ],
+    "GOOG": [
+      "Google",
+      "Alphabet"
+    ],
+    "META": [
+      "Meta"
+    ],
+    "XYZ": [
+      "Block",
+      "Square"
+    ],
+    "NU": [
+      "Nubank",
+      "Nu Holdings"
+    ],
+    "SE": [
+      "Sea Ltd",
+      "Shopee"
+    ],
+    "CRM": [
+      "Salesforce"
+    ],
+    "AVGO": [
+      "Broadcom"
+    ],
+    "STX": [
+      "Seagate"
+    ],
+    "WDC": [
+      "Western Digital"
+    ],
+    "SNDK": [
+      "Sandisk"
+    ],
+    "HIMS": [
+      "Hims"
+    ],
+    "MRNA": [
+      "Moderna"
+    ],
+    "GFS": [
+      "GlobalFoundries"
+    ],
+    "ZETA": [
+      "Zeta Global",
+      "Zeta"
+    ],
+    "AAPL": [
+      "Apple"
+    ],
+    "AMZN": [
+      "Amazon",
+      "AWS"
+    ],
+    "MSFT": [
+      "Microsoft",
+      "Azure"
+    ],
+    "NVDA": [
+      "Nvidia"
+    ],
+    "TSLA": [
+      "Tesla"
+    ],
+    "ORCL": [
+      "Oracle"
+    ],
+    "CRWV": [
+      "CoreWeave"
+    ],
+    "NBIS": [
+      "Nebius"
+    ],
+    "LLY": [
+      "Eli Lilly",
+      "Lilly"
+    ],
+    "NVO": [
+      "Novo Nordisk",
+      "Novo"
+    ],
+    "UNH": [
+      "UnitedHealth"
+    ],
+    "NIO": [
+      "NIO"
+    ],
+    "PDD": [
+      "PDD",
+      "Temu"
+    ],
+    "MELI": [
+      "MercadoLibre"
+    ],
+    "GRAB": [
+      "Grab"
+    ],
+    "S": [
+      "SentinelOne"
+    ],
+    "U": [
+      "Unity Software",
+      "Unity"
+    ],
+    "O": [
+      "Realty Income"
+    ],
+    "ON": [
+      "onsemi",
+      "ON Semiconductor"
+    ],
+    "APP": [
+      "AppLovin"
+    ],
+    "NOW": [
+      "ServiceNow"
+    ],
+    "CAT": [
+      "Caterpillar"
+    ],
+    "GE": [
+      "GE Aerospace"
+    ],
+    "BA": [
+      "Boeing"
+    ],
+    "DE": [
+      "Deere"
+    ],
+    "FMS": [
+      "Fresenius Medical"
+    ],
+    "EL": [
+      "Estee Lauder",
+      "Estée Lauder"
+    ],
+    "CAKE": [
+      "Cheesecake Factory"
+    ],
+    "SIRI": [
+      "Sirius XM",
+      "SiriusXM"
+    ],
+    "ARM": [
+      "Arm Holdings"
+    ],
+    "MU": [
+      "Micron"
+    ],
+    "INTC": [
+      "Intel"
+    ],
+    "AMD": [
+      "AMD",
+      "Advanced Micro Devices"
+    ],
+    "QCOM": [
+      "Qualcomm"
+    ],
+    "ASML": [
+      "ASML"
+    ],
+    "PLTR": [
+      "Palantir"
+    ],
+    "HOOD": [
+      "Robinhood"
+    ],
+    "COIN": [
+      "Coinbase"
+    ],
+    "BMNR": [
+      "Bitmine"
+    ],
+    "CRCL": [
+      "Circle"
+    ],
+    "RKLB": [
+      "Rocket Lab"
+    ],
+    "ASTS": [
+      "AST SpaceMobile"
+    ],
+    "UBER": [
+      "Uber"
+    ],
+    "DASH": [
+      "DoorDash"
+    ],
+    "ABNB": [
+      "Airbnb"
+    ],
+    "BKNG": [
+      "Booking"
+    ],
+    "SPOT": [
+      "Spotify"
+    ],
+    "RBLX": [
+      "Roblox"
+    ],
+    "TTD": [
+      "Trade Desk"
+    ],
+    "NFLX": [
+      "Netflix"
+    ],
+    "SNAP": [
+      "Snap"
+    ],
+    "SHOP": [
+      "Shopify"
+    ],
+    "NET": [
+      "Cloudflare"
+    ],
+    "PANW": [
+      "Palo Alto Networks"
+    ],
+    "CRWD": [
+      "CrowdStrike"
+    ],
+    "ZS": [
+      "Zscaler"
+    ],
+    "FTNT": [
+      "Fortinet"
+    ],
+    "TENB": [
+      "Tenable"
+    ],
+    "CHKP": [
+      "Check Point"
+    ],
+    "OKTA": [
+      "Okta"
+    ],
+    "MDB": [
+      "MongoDB"
+    ],
+    "DDOG": [
+      "Datadog"
+    ],
+    "SNOW": [
+      "Snowflake"
+    ],
+    "VKTX": [
+      "Viking Therapeutics",
+      "Viking"
+    ],
+    "VRTX": [
+      "Vertex"
+    ],
+    "ISRG": [
+      "Intuitive Surgical"
+    ],
+    "DXCM": [
+      "Dexcom"
+    ],
+    "PODD": [
+      "Insulet"
+    ],
+    "BSX": [
+      "Boston Scientific"
+    ],
+    "SYK": [
+      "Stryker"
+    ],
+    "ACN": [
+      "Accenture"
+    ],
+    "FRSH": [
+      "Freshworks"
+    ],
+    "NCNO": [
+      "nCino"
+    ]
+  }
+}

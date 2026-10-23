@@ -14,6 +14,5 @@ Do not invent scores; prefer fields written into the live JSON (composite, packM
 
 ## Market regime (draft)
 
-`regime-state.json` — scored daily closes for Market Regime panel.
-Refresh: fetch Yahoo → `npx tsx scripts/compute-regime.ts` (writes here + `/home/box/canaries/regime-state.json`).
+`regime-state.json` / `regime-stub.json` — ARCHIVED 2026-09-25 to `archive/regime-engine-2026-09-25/` (unused). Market Regime v2 uses `state.json` scores + `regime-history.json` (written by `scripts/refresh-decide.mjs`).
 Do **not** deploy until owner review.

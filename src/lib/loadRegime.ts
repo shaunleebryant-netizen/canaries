@@ -5,7 +5,6 @@ import {
 } from "./regime/computeRegime";
 import type { CanaryReading } from "./types";
 import historyJson from "../../data/regime-history.json";
-import stubJson from "../../data/regime-stub.json";
 import volStubJson from "../../data/vol-curve-stub.json";
 import { ratioOrNull } from "./volCurve/computeVolCurve";
 
@@ -18,14 +17,12 @@ export interface RegimeStubPayload extends ComputeRegimeResult {
 /**
  * Build members Regime box from live canary scores (6 ids only).
  * Optional VIX/VIX3M mediumRatio from vol-curve stub feeds when present.
- * DRAFT — do not deploy.
  */
 export function loadRegimeFromCanaries(
   canaries: CanaryReading[],
   asOf?: string
 ): RegimeStubPayload {
   const history = historyJson as RegimeHistoryFile;
-  const stub = stubJson as { draft?: boolean; asOf?: string };
   const volStub = volStubJson as {
     feeds?: {
       vix?: { value?: number | null };
@@ -39,14 +36,15 @@ export function loadRegimeFromCanaries(
   );
 
   const result = computeRegime(canaries, {
-    asOf: asOf ?? stub.asOf ?? history.asOf,
+    asOf: asOf ?? history.asOf,
     history,
     mediumRatio,
   });
 
   return {
     ...result,
-    draft: stub.draft !== false,
+    // Regime v2 is live (old regime-stub.json archived 2026-09-25).
+    draft: false,
   };
 }
 

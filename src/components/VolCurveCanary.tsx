@@ -1,3 +1,4 @@
+import { HeldNote } from "./HeldNote";
 import type {
   ComputeVolCurveResult,
   ChecklistDot,
@@ -56,15 +57,110 @@ function ChecklistDots({
   );
 }
 
-export function VolCurveCanary({ data }: { data: VolCurveView }) {
+/** Plain sentence per stance, used instead of the data one-liner (no bands). */
+const STANCE_LINE: Record<VolCurveStance, string> = {
+  SAFE: "Short-term fear is calm, so normal position sizes are reasonable.",
+  CAUTION:
+    "Short-term fear is creeping up, so it may be wise to size a little smaller.",
+  DANGER:
+    "Short-term fear is high, so smaller positions, hedges or cash make more sense.",
+};
+
+function HowToRead() {
+  return (
+    <details className="rounded-lg border border-white/10 bg-slate-950/40 px-2.5 py-1.5">
+      <summary className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+        How to read
+      </summary>
+      <div className="mt-2 space-y-2 text-left text-[11px] leading-relaxed text-slate-400">
+        <p>
+          The vol curve compares how nervous investors are about the next month
+          with how nervous they are about the next few months. It uses the VIX
+          (the market&apos;s &ldquo;fear gauge&rdquo;) and its three-month
+          version.
+        </p>
+        <p>
+          In normal times, people worry more about the long run than about next
+          week, so the short-term number sits lower. When short-term fear
+          catches up with or overtakes the longer one, markets are usually under
+          stress. The number shown is simply one divided by the other: lower
+          is calmer.
+        </p>
+        <p>
+          <span className="text-emerald-300">Safe</span>,{" "}
+          <span className="text-amber-300">Caution</span> and{" "}
+          <span className="text-red-300">Danger</span> sum that up. Use it to
+          decide how big your positions should be, not when to buy or sell. If the date says
+          &ldquo;held since&rdquo;, the data wasn&apos;t updated today and we
+          are showing the last good reading.
+          Education only, not advice.
+        </p>
+      </div>
+    </details>
+  );
+}
+
+export function VolCurveCanary({
+  data,
+  compact = false,
+  heldSince = null,
+}: {
+  data: VolCurveView;
+  compact?: boolean;
+  /** Set when this box was not refreshed on the pack session. */
+  heldSince?: string | null;
+}) {
   const stanceLabel = data.stance.replaceAll("_", " ");
-  // Keep VIX/VIX3M (+ optional HYG/IEF detail line). Never show Credit Quiet badge.
-  const checklist = data.checklist.filter((item) => item.id !== "credit" || item.detail);
+  const checklist = data.checklist.filter(
+    (item) => item.id !== "credit" || item.detail
+  );
+
+  if (compact) {
+    return (
+      <section
+        id="vol-curve-canary"
+        className="w-full rounded-xl border border-white/10 bg-slate-900/70 p-3 shadow-sm"
+      >
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-canary-gold">
+            Vol curve
+          </h2>
+          <p className="text-[10px] tabular-nums text-slate-500">
+            {heldSince ? <HeldNote since={heldSince} /> : data.asOf}
+          </p>
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          <span
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold tracking-wide ring-2 ${STANCE_PILL[data.stance]}`}
+          >
+            {stanceLabel}
+          </span>
+          {data.mediumRatio != null ? (
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-slate-950/60 px-2 py-0.5 text-[11px] text-slate-200">
+              <span className="text-slate-500">VIX/VIX3M</span>
+              <span className="font-semibold tabular-nums text-white">
+                {data.mediumRatio.toFixed(3)}
+              </span>
+            </span>
+          ) : null}
+        </div>
+
+        <p className="mt-1.5 text-[11px] leading-snug text-slate-400">
+          {STANCE_LINE[data.stance]}
+        </p>
+
+        <div className="mt-2">
+          <HowToRead />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       id="vol-curve-canary"
-      className="mt-6 w-full rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-sm"
+      className="w-full rounded-2xl border border-white/10 bg-slate-900/70 p-5 shadow-sm"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 max-w-3xl">
@@ -84,6 +180,7 @@ export function VolCurveCanary({ data }: { data: VolCurveView }) {
         </div>
         <p className="shrink-0 text-xs tabular-nums text-slate-500">
           as of {data.asOf}
+          {heldSince ? <HeldNote since={heldSince} className="ml-1" /> : null}
         </p>
       </div>
 
@@ -103,14 +200,9 @@ export function VolCurveCanary({ data }: { data: VolCurveView }) {
         ) : null}
       </div>
 
-      <p className="mt-3 text-sm leading-snug text-slate-300">{data.oneLiner}</p>
-
-      <div className="mt-3 rounded-xl border border-white/5 bg-slate-950/30 px-3 py-2 text-[11px] leading-relaxed text-slate-400">
-        <span className="font-semibold text-slate-300">Bands:</span>{" "}
-        <span className="text-emerald-300">SAFE</span> = under 0.91 (calm) ·{" "}
-        <span className="text-amber-300">CAUTION</span> = 0.91–0.95 ·{" "}
-        <span className="text-red-300">DANGER</span> = 0.96+ (stress).
-      </div>
+      <p className="mt-3 text-sm leading-snug text-slate-300">
+        {STANCE_LINE[data.stance]}
+      </p>
 
       <div className="mt-5">
         <ChecklistDots items={checklist} />
@@ -122,51 +214,9 @@ export function VolCurveCanary({ data }: { data: VolCurveView }) {
         </p>
       </div>
 
-      <details className="mt-4 rounded-xl border border-white/10 bg-slate-950/40 p-3">
-        <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-slate-400">
-          How to read this box (new traders)
-        </summary>
-        <ul className="mt-3 space-y-3 text-xs leading-relaxed text-slate-400">
-          <li>
-            <span className="font-medium text-slate-300">What this box answers:</span>{" "}
-            how stressed the options market looks right now — near-term fear
-            (VIX) versus medium-term fear (VIX3M). Current volatility vs 3-month
-            average volatility.
-            <br />
-            VIX = 30-day fear. VIX3M = 3-month fear.
-            <br />
-            Calm market: 3-month fear is higher (ratio under 1).
-            <br />
-            Panic: 30-day fear jumps above 3-month fear (ratio over 1).{" "}
-            <span className="text-slate-300">sizing guide</span>, not a trade
-            trigger.
-          </li>
-          <li>
-            <span className="font-medium text-slate-300">SAFE / CAUTION / DANGER:</span>{" "}
-            Bands for the VIX/VIX3M ratio —{" "}
-            <span className="text-emerald-300">SAFE</span> under 0.91 (calm),{" "}
-            <span className="text-amber-300">CAUTION</span> 0.91–0.95,{" "}
-            <span className="text-red-300">DANGER</span> 0.96+ (stress). Calm
-            band → Low vol, stay in markets; caution/danger → tighten risk,
-            expect volatility.
-          </li>
-          <li>
-            <span className="font-medium text-slate-300">HYG / IEF</span> shows
-            whether investors want risk or safety in credit.
-            <br />
-            HYG = junk bonds (credit risk).
-            <br />
-            IEF = Treasuries (safety).
-            <br />
-            Rising ratio: junk beating Treasuries → risk-on.
-            <br />
-            Falling ratio: Treasuries winning → risk-off.
-            <br />
-            Junk often moves with stocks, so a rising ratio supports equities. A
-            drop is a warning, sometimes before stocks roll over.
-          </li>
-        </ul>
-      </details>
+      <div className="mt-4">
+        <HowToRead />
+      </div>
 
       <p className="mt-3 text-[11px] leading-snug text-slate-600">
         {data.draftsNote}

@@ -1,0 +1,119 @@
+{
+  "asOf": "2026-10-21",
+  "scannedAt": "2026-10-23T11:26:18+13:00",
+  "universeCount": 22,
+  "scannedCount": 21,
+  "failed": [
+    "TOTAL"
+  ],
+  "failedDetail": [
+    {
+      "ticker": "TOTAL",
+      "error": "^CMC200: HTTP 404"
+    }
+  ],
+  "signals": [
+    {
+      "ticker": "XMRUSD",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "asOf": "2026-10-21",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-18 sweat RelRSI reach RSI=67.2 · 💀@2026-10-21 skull RelRSI reach",
+      "exhaustionAsOf": "2026-10-18",
+      "skullAsOf": "2026-10-21"
+    },
+    {
+      "ticker": "HYPEUSD",
+      "signals": [
+        "smile"
+      ],
+      "asOf": "2026-10-17",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-17 smile RelRSI cross under",
+      "smileAsOf": "2026-10-17"
+    },
+    {
+      "ticker": "XRPUSD",
+      "signals": [
+        "smile"
+      ],
+      "asOf": "2026-10-17",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-17 smile RelRSI cross under",
+      "smileAsOf": "2026-10-17"
+    },
+    {
+      "ticker": "TRXUSD",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-13",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-11 smile RelRSI cross under · 🐟@2026-10-13 RSI=31.7",
+      "smileAsOf": "2026-10-11",
+      "fishAsOf": "2026-10-13"
+    },
+    {
+      "ticker": "LEOUSD",
+      "signals": [
+        "smile"
+      ],
+      "asOf": "2026-10-10",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-10 smile RelRSI cross under",
+      "smileAsOf": "2026-10-10"
+    },
+    {
+      "ticker": "ADAUSD",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "asOf": "2026-10-05",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-04 sweat RelRSI reach RSI=65.2 · 💀@2026-10-05 skull RelRSI reach",
+      "exhaustionAsOf": "2026-10-04",
+      "skullAsOf": "2026-10-05"
+    },
+    {
+      "ticker": "BTCUSD",
+      "signals": [
+        "exhaustion"
+      ],
+      "asOf": "2026-10-04",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-04 sweat RelRSI reach RSI=68.5",
+      "exhaustionAsOf": "2026-10-04"
+    },
+    {
+      "ticker": "SOLUSD",
+      "signals": [
+        "exhaustion"
+      ],
+      "asOf": "2026-10-04",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-04 sweat RelRSI reach RSI=66.1",
+      "exhaustionAsOf": "2026-10-04"
+    },
+    {
+      "ticker": "BCHUSD",
+      "signals": [
+        "exhaustion"
+      ],
+      "asOf": "2026-10-03",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-03 sweat RelRSI reach RSI=63.5",
+      "exhaustionAsOf": "2026-10-03"
+    }
+  ],
+  "method": "yahoo-1d-canary-relrsi-daily-2026-10-02",
+  "note": "Crypto Watch · Canary RelRSI daily (🙂/🐟 and/or 🥵/💀) · last 20 sessions · Yahoo 1d full history (crypto: UTC daily candles) · universe /workspace/repos/canaries/data/crypto-watch-universe.json. Never invented. · full-pack session 2026-10-22 · Crypto Watch Canary RelRSI daily (UTC candles for spot crypto)",
+  "sessionDate": "2026-10-22",
+  "held": true,
+  "heldSince": "2026-10-21",
+  "packScannedAt": "2026-10-23T11:24:59+13:00"
+}

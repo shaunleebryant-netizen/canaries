@@ -22,6 +22,8 @@ export interface CanarySparklinesPayload {
   note: string;
   series: Record<string, CanarySparkSeries>;
   emptyNotes: Record<string, string>;
+  /** Inputs whose line was not refreshed this pack (old line kept). */
+  heldSince?: Record<string, string>;
   fetchErrors?: Record<string, string>;
   liveRefresh?: boolean;
 }
@@ -35,6 +37,7 @@ type StubFile = {
     { dates?: string[]; values?: number[]; source?: string }
   >;
   emptyNotes?: Record<string, string>;
+  heldSince?: Record<string, string>;
   fetchErrors?: Record<string, string>;
 };
 
@@ -57,6 +60,7 @@ function fromStub(): CanarySparklinesPayload {
       "Last ~10 trading sessions from Yahoo daily closes. Empty seats have no clean series.",
     series,
     emptyNotes: stub.emptyNotes ?? {},
+    heldSince: stub.heldSince ?? {},
     fetchErrors: stub.fetchErrors,
   };
 }
@@ -150,12 +154,8 @@ export async function loadCanarySparklines(
       (c) => (c[0]! + c[1]!) / (c[2]! + c[3]!),
       "(XLK+XLY)/(XLP+XLU)"
     );
-    setRatio(
-      "xlf-kre",
-      [xlf, kre],
-      (c) => c[0]! / c[1]!,
-      "XLF/KRE"
-    );
+    // Owner 2026-10-10: KRE price (same default line as the Banks chart pop-up), not the XLF/KRE ratio.
+    setPrice("xlf-kre", kre, "KRE");
     setRatio(
       "vix-vix3m",
       [vix, vix3m],
@@ -172,7 +172,7 @@ export async function loadCanarySparklines(
     setPrice("sp600", sp600idx, "S&P SmallCap 600 (^SP600)");
     setPrice("rsp", rsp, "RSP");
     setPrice("qqq-sma20", qqq, "QQQ");
-    setPrice("vix-vvix", vix, "^VIX (sparkline for VIX+VVIX seat)");
+    setPrice("vix-vvix", vix, "^VIX");
 
     const es = await closes("ES=F");
     setPrice("es1-jp30", es, "ES=F (ES leg; JP30 bond pending)");
@@ -209,12 +209,13 @@ export async function loadCanarySparklines(
 
 /** Merge sparkline values onto members canary rows. */
 export function attachSparklines<
-  T extends { id: string; sparkline?: number[] },
+  T extends { id: string; sparkline?: number[]; sparklineHeldSince?: string },
 >(rows: T[], payload: CanarySparklinesPayload): T[] {
   return rows.map((row) => {
     const s = payload.series[row.id];
     if (s?.values?.length) {
-      return { ...row, sparkline: s.values };
+      const held = payload.heldSince?.[row.id];
+      return { ...row, sparkline: s.values, sparklineHeldSince: held };
     }
     // Drop stale 13-wk score sparklines if present
     const { sparkline: _drop, ...rest } = row as T & { sparkline?: number[] };

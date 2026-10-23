@@ -1,0 +1,21 @@
+{
+  "finra-margin": {
+    "score": 1,
+    "asOf": "2026-10-09",
+    "lastReading": "Aug-26 1,453,832 ($mm); MoM up vs Jul-26 1,417,225 (latest official FINRA release; Sep-26 not yet published)",
+    "rationale": "MoM rising \u2192 +1. FINRA page re-checked for Fri 2026-10-09 pack (curl 2026-10-10 11:39 NZDT, Sep-26 not published): top row still Aug-26 1,453,832 vs Jul-26 1,417,225. finra_release_week false.",
+    "oneSentenceRead": "Latest official margin debt is higher month-over-month.",
+    "source": "FINRA margin statistics (Aug-26 \u2014 latest official; page checked for 2026-10-09 pack; Mine VERIFIED)",
+    "evidence": {
+      "month": "Aug-26",
+      "value": 1453832,
+      "priorMonth": "Jul-26",
+      "prior": 1417225,
+      "change": 36607,
+      "unit": "usd_millions",
+      "url": "https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics",
+      "checked": "2026-10-10T11:39+13:00"
+    },
+    "finra_release_week": false
+  }
+}

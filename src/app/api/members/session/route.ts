@@ -4,6 +4,7 @@ import { MEMBERS_COOKIE, expectedMembersPassword } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  if (process.env.NODE_ENV === "production") return NextResponse.json({ error: "Not found" }, { status: 404 });
   let password = "";
   try {
     const body = await request.json();

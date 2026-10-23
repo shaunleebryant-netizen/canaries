@@ -1,5 +1,6 @@
 "use client";
 
+import { Honeypot } from "@/components/Honeypot";
 import { useState } from "react";
 
 const TIMEZONES = [
@@ -55,7 +56,8 @@ export function TuitionForm() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const payload = {
       fullName: String(fd.get("fullName") || "").trim(),
       email: String(fd.get("email") || "").trim(),
@@ -75,6 +77,7 @@ export function TuitionForm() {
       consent: fd.get("consent") === "on",
       notes: String(fd.get("notes") || "").trim(),
       source: "tuition",
+      hp_field: String(fd.get("hp_field") || ""),
     };
 
     if (!markets.length || !days.length || !windows.length) {
@@ -101,8 +104,8 @@ export function TuitionForm() {
         return;
       }
       setStatus("ok");
-      setMessage(data.message || "Saved (stub — no charge, no email).");
-      e.currentTarget.reset();
+      setMessage(data.message || "Request saved.");
+      form.reset();
       setMarkets([]);
       setDays([]);
       setWindows([]);
@@ -114,6 +117,7 @@ export function TuitionForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5" id="tuition-form">
+        <Honeypot />
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label className={labelCls} htmlFor="fullName">
@@ -318,7 +322,7 @@ export function TuitionForm() {
         </div>
         <div>
           <label className={labelCls} htmlFor="isMember">
-            Are you a Coherant Canary member?
+            Are you a Canary Dashboard member?
           </label>
           <select id="isMember" name="isMember" defaultValue="No" className={field}>
             <option value="Yes">Yes</option>
@@ -360,7 +364,7 @@ export function TuitionForm() {
             />
             <span>
               I understand this is education only — not financial advice — and tuition is{" "}
-              <strong className="text-white">S$115 / hour</strong>. No charge until Shaun confirms
+              <strong className="text-white">$120 USD/hr</strong>. No charge until Shaun confirms
               a session. *
             </span>
           </label>
@@ -368,7 +372,7 @@ export function TuitionForm() {
       </div>
 
       <div className="rounded-xl border border-canary-gold/25 bg-amber-500/10 px-4 py-3 text-sm text-slate-200">
-        Pricing reminder: <strong className="text-white">S$115 / hour</strong> · online video call.
+        Pricing reminder: <strong className="text-white">$120 USD/hr</strong> · online video call.
         Submit stores the lead locally — <em>no charge</em>, no email send in design mode.
       </div>
 

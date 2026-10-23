@@ -1,0 +1,152 @@
+{
+  "sessionDate": "2026-10-22",
+  "packMark": "SCRIPTED_2026-10-22_PARTIAL_HELD",
+  "volCurve": {
+    "ratio": 0.9458,
+    "mediumRatio": 0.9458,
+    "band": "CAUTION",
+    "oneLiner": "VIX/VIX3M 0.91–0.95 with credit confirming — tighten risk.",
+    "asOf": "2026-10-22"
+  },
+  "S": -0.535,
+  "light": "red",
+  "lightBeforeVeto": "red",
+  "oldS": -0.138,
+  "oldLight": "amber",
+  "veto": false,
+  "regime": {
+    "R": -3,
+    "raw": "RISK_OFF",
+    "shown": "RISK_OFF",
+    "spec": "OFF",
+    "pending": null,
+    "pendingCount": 0
+  },
+  "needsFill": [
+    {
+      "id": "finra-margin",
+      "heldSince": "2026-10-17",
+      "reason": "manual input (monthly FINRA) — Scorekeeper fill"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "cyclical-defensive",
+      "old": -2,
+      "new": -2,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo (XLK+XLY)/(XLP+XLU) daily closes",
+      "reading": "2.2381 < SMA20 2.4494"
+    },
+    {
+      "id": "xlf-kre",
+      "old": 1,
+      "new": 1,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo XLF, KRE daily closes",
+      "reading": "XLF 56.65 > SMA20 54.63 · KRE 72.41 > SMA20 69.98"
+    },
+    {
+      "id": "vix-vix3m",
+      "old": 2,
+      "new": 0,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo ^VIX ÷ ^VIX3M daily closes",
+      "reading": "0.9458 (VIX 19.03 / VIX3M 20.12) · CAUTION"
+    },
+    {
+      "id": "nyse-ad",
+      "old": -1,
+      "new": -1,
+      "fresh": true,
+      "heldSince": null,
+      "source": "TradingView guest INDEX:NSHF daily (SMA20 vs 0)",
+      "reading": "NSHF SMA20 -44.65 < 0 (raw close 427)"
+    },
+    {
+      "id": "pct-above-200dma",
+      "old": -1,
+      "new": -1,
+      "fresh": true,
+      "heldSince": null,
+      "source": "TradingView guest INDEX:MMTH daily",
+      "reading": "44.62"
+    },
+    {
+      "id": "es1-jp30",
+      "old": -2,
+      "new": -2,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily, roll back-adjusted via TVC:JP30Y",
+      "reading": "ES 7709.25 / JP30 price 104.401 = 73.8427"
+    },
+    {
+      "id": "sp-top-50",
+      "old": -2,
+      "new": -2,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo XLG daily closes",
+      "reading": "XLG 62.55 < SMA20 64.0495"
+    },
+    {
+      "id": "sp600",
+      "old": 1,
+      "new": 1,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo ^SP600 index daily closes (not SPSM)",
+      "reading": "^SP600 1686.53 > SMA20 1670.9640"
+    },
+    {
+      "id": "rsp",
+      "old": 2,
+      "new": 2,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo RSP daily closes",
+      "reading": "RSP 218.22 > SMA20 212.3925"
+    },
+    {
+      "id": "vix-vvix",
+      "old": 1,
+      "new": -2,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo ^VIX daily closes",
+      "reading": "VIX 19.03"
+    },
+    {
+      "id": "finra-margin",
+      "old": 1,
+      "new": 1,
+      "fresh": false,
+      "heldSince": "2026-10-17",
+      "source": "FINRA margin statistics (Sep-26, latest official; page checked 2026-10-17)",
+      "reading": "Sep-26 1,480,054 ($mm); MoM up vs Aug-26 1,453,832 (latest official FINRA release)"
+    },
+    {
+      "id": "qqq-sma20",
+      "old": -1,
+      "new": -1,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo QQQ daily closes",
+      "reading": "QQQ 704.47 < SMA20 737.2400"
+    },
+    {
+      "id": "hyg-ief-sma20",
+      "old": -1,
+      "new": -1,
+      "fresh": true,
+      "heldSince": null,
+      "source": "Yahoo HYG ÷ IEF daily closes",
+      "reading": "ratio 0.8454 < SMA20 0.8599"
+    }
+  ],
+  "fetchErrors": {}
+}

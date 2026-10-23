@@ -1,5 +1,5 @@
 /**
- * Fish alerts watchlist — smile 🙂 / fish 🐟 from Bottom Finder.
+ * Fish alerts watchlist — smile 🙂 / fish 🐟 from Canary RelRSI (daily).
  * Never invent signals; empty = awaiting universe + first scan.
  */
 

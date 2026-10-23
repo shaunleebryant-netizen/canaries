@@ -1,0 +1,219 @@
+{
+  "asOf": "2026-10-22",
+  "scannedAt": "2026-10-23T11:26:08+13:00",
+  "universeCount": 23,
+  "scannedCount": 23,
+  "failed": [],
+  "failedDetail": [],
+  "signals": [
+    {
+      "ticker": "GLD",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-22 smile RelRSI cross under · 🐟@2026-10-22 RSI=35.7",
+      "smileAsOf": "2026-10-22",
+      "fishAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "KWEB",
+      "signals": [
+        "smile"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-22 smile RelRSI cross under",
+      "smileAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "QQQ",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-16 smile RelRSI cross under · 🐟@2026-10-22 RSI=36.5",
+      "smileAsOf": "2026-10-16",
+      "fishAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "SLV",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-13 smile RelRSI cross under · 🐟@2026-10-22 RSI=32.8",
+      "smileAsOf": "2026-10-13",
+      "fishAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "URNM",
+      "signals": [
+        "fish"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🐟@2026-10-22 RSI=30.9",
+      "fishAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "XLB",
+      "signals": [
+        "fish",
+        "exhaustion"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🐟@2026-09-30 RSI=31.3 · 🥵@2026-10-22 sweat RelRSI reach RSI=64.7",
+      "fishAsOf": "2026-09-30",
+      "exhaustionAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "XLC",
+      "signals": [
+        "smile"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-22 smile RelRSI cross under",
+      "smileAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "XLK",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-15 smile RelRSI cross under · 🐟@2026-10-22 RSI=36.4",
+      "smileAsOf": "2026-10-15",
+      "fishAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "XLP",
+      "signals": [
+        "fish",
+        "exhaustion",
+        "skull"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🐟@2026-09-30 RSI=32.9 · 🥵@2026-10-14 sweat RelRSI reach RSI=66.6 · 💀@2026-10-22 skull RelRSI reach",
+      "fishAsOf": "2026-09-30",
+      "exhaustionAsOf": "2026-10-14",
+      "skullAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "XLV",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-15 sweat RelRSI reach RSI=67.5 · 💀@2026-10-22 skull RelRSI reach",
+      "exhaustionAsOf": "2026-10-15",
+      "skullAsOf": "2026-10-22"
+    },
+    {
+      "ticker": "IWM",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-13 smile RelRSI cross under · 🐟@2026-10-16 RSI=31.9",
+      "smileAsOf": "2026-10-13",
+      "fishAsOf": "2026-10-16"
+    },
+    {
+      "ticker": "VUG",
+      "signals": [
+        "smile"
+      ],
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-16 smile RelRSI cross under",
+      "smileAsOf": "2026-10-16"
+    },
+    {
+      "ticker": "SP600",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-14",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-14 smile RelRSI cross under · 🐟@2026-10-14 RSI=31.7",
+      "smileAsOf": "2026-10-14",
+      "fishAsOf": "2026-10-14"
+    },
+    {
+      "ticker": "URA",
+      "signals": [
+        "smile",
+        "fish"
+      ],
+      "asOf": "2026-10-14",
+      "timeframe": "1D",
+      "note": "🙂@2026-10-01 smile RelRSI cross under · 🐟@2026-10-14 RSI=29.2",
+      "smileAsOf": "2026-10-01",
+      "fishAsOf": "2026-10-14"
+    },
+    {
+      "ticker": "XLE",
+      "signals": [
+        "exhaustion"
+      ],
+      "asOf": "2026-10-13",
+      "timeframe": "1D",
+      "note": "🥵@2026-10-13 sweat RelRSI reach RSI=69.8",
+      "exhaustionAsOf": "2026-10-13"
+    },
+    {
+      "ticker": "XLF",
+      "signals": [
+        "fish"
+      ],
+      "asOf": "2026-10-07",
+      "timeframe": "1D",
+      "note": "🐟@2026-10-07 RSI=32.1",
+      "fishAsOf": "2026-10-07"
+    },
+    {
+      "ticker": "XLI",
+      "signals": [
+        "fish"
+      ],
+      "asOf": "2026-09-30",
+      "timeframe": "1D",
+      "note": "🐟@2026-09-30 RSI=32.4",
+      "fishAsOf": "2026-09-30"
+    },
+    {
+      "ticker": "RSP",
+      "signals": [
+        "fish"
+      ],
+      "asOf": "2026-09-28",
+      "timeframe": "1D",
+      "note": "🐟@2026-09-28 RSI=32.9",
+      "fishAsOf": "2026-09-28"
+    }
+  ],
+  "method": "yahoo-1d-canary-relrsi-daily-2026-10-02",
+  "note": "Etf Watch · Canary RelRSI daily (🙂/🐟 and/or 🥵/💀) · last 20 sessions · Yahoo 1d full history (crypto: UTC daily candles) · universe /workspace/repos/canaries/data/etf-watch-universe.json. Never invented. · full-pack session 2026-10-22 · ETF Watch Canary RelRSI daily",
+  "sessionDate": "2026-10-22",
+  "packAsOf": "2026-10-22",
+  "held": false,
+  "heldSince": null,
+  "packScannedAt": "2026-10-23T11:24:59+13:00"
+}

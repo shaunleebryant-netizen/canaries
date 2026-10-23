@@ -1,0 +1,1379 @@
+{
+  "asOf": "2026-10-22",
+  "generatedAt": "2026-10-22T22:29:46.433Z",
+  "method": "x-rumours-v1 (agent X reads + scripted source gate, corroboration, ticker match, SEC submissions check)",
+  "source": "X posts and X news stories (links out); SEC EDGAR submissions; Yahoo daily closes",
+  "note": "Members only. Rumours aren't facts. We list what named outlets or the parties said, credit them and link out. Education only.",
+  "expirySessions": 10,
+  "xReads": 10,
+  "rawFile": "/home/box/canaries/cache/x-rumours/raw-2026-10-21.json",
+  "secRequests": 0,
+  "counts": {
+    "shown": 31,
+    "reported": 10,
+    "confirmed": 20,
+    "denied": 1,
+    "filteredTonight": 4
+  },
+  "rows": [
+    {
+      "key": "NVDA|Financing|firmus",
+      "ticker": "NVDA",
+      "type": "Financing",
+      "line": "Nvidia, already a backer, is discussing a several-hundred-million-dollar equity stake in Australian AI cloud firm Firmus after Firmus shelved its IPO, Bloomberg reported.",
+      "source": "Bloomberg",
+      "link": "https://x.com/business/status/2112753267922940384",
+      "firstSeenAt": "2026-10-21T02:33:54.000Z",
+      "firstSeen": "2026-10-20",
+      "lastUpdate": "2026-10-21",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Firmus"
+      ],
+      "refDate": "2026-10-20",
+      "refClose": 216.47,
+      "lastDate": "2026-10-22",
+      "lastClose": 212.21,
+      "movePct": -1.97
+    },
+    {
+      "key": "CRM|M&A|braze",
+      "ticker": "CRM",
+      "type": "M&A",
+      "line": "Salesforce signed a deal to acquire marketing-software firm Braze for roughly $5.66bn in cash, about $47.50 a share; closing is expected in its fiscal 2028.",
+      "source": "Bloomberg",
+      "link": "https://x.com/business/status/2112558232489099437",
+      "firstSeenAt": "2026-10-20T12:37:33.000Z",
+      "firstSeen": "2026-10-20",
+      "lastUpdate": "2026-10-20",
+      "status": "Confirmed",
+      "statusNote": "8-K filed 2026-10-20",
+      "note": null,
+      "sec": {
+        "form": "8-K",
+        "date": "2026-10-20",
+        "items": "7.01,9.01",
+        "url": "https://www.sec.gov/Archives/edgar/data/1108524/000119312526425881/"
+      },
+      "partyKeywords": [
+        "Braze"
+      ],
+      "refDate": "2026-10-19",
+      "refClose": 242.45,
+      "lastDate": "2026-10-22",
+      "lastClose": 250.29,
+      "movePct": 3.23
+    },
+    {
+      "key": "AMZN|Supply deal|3m",
+      "ticker": "AMZN",
+      "type": "Supply deal",
+      "line": "3M expanded its data-centre product deal with an Amazon unit; Amazon gets a seven-year option on about 3.16m 3M shares, most of it earned as its purchases climb toward $6bn.",
+      "source": "Company (3M SEC filing)",
+      "link": "https://x.com/FirstSquawk/status/2112288639917150517",
+      "firstSeenAt": "2026-10-19T21:03:50.000Z",
+      "firstSeen": "2026-10-19",
+      "lastUpdate": "2026-10-19",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "3M"
+      ],
+      "refDate": "2026-10-19",
+      "refClose": 262.45,
+      "lastDate": "2026-10-22",
+      "lastClose": 250.38,
+      "movePct": -4.6
+    },
+    {
+      "key": "NVDA|Supply deal|modal",
+      "ticker": "NVDA",
+      "type": "Supply deal",
+      "line": "AI cloud startup Modal plans to run AI-agent work on Nvidia's new Vera CPUs, a job it had only given to Intel and AMD chips, Reuters reported.",
+      "source": "Reuters",
+      "link": "https://x.com/SparkyMark96/status/2112239194076598338",
+      "firstSeenAt": "2026-10-19T14:25:36.000Z",
+      "firstSeen": "2026-10-19",
+      "lastUpdate": "2026-10-19",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Modal"
+      ],
+      "refDate": "2026-10-16",
+      "refClose": 214.13,
+      "lastDate": "2026-10-22",
+      "lastClose": 212.21,
+      "movePct": -0.9
+    },
+    {
+      "key": "PLTR|Partnership|knox",
+      "ticker": "PLTR",
+      "type": "Partnership",
+      "line": "Palantir teamed up with Knox Systems, a large federal managed-cloud provider, to help software makers clear FedRAMP and IL5 security approval faster; no money terms were given.",
+      "source": "Company (Business Wire)",
+      "link": "https://x.com/MikeLongTerm/status/2112149748819865890",
+      "firstSeenAt": "2026-10-19T11:02:46.000Z",
+      "firstSeen": "2026-10-19",
+      "lastUpdate": "2026-10-19",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Knox"
+      ],
+      "refDate": "2026-10-16",
+      "refClose": 186.03,
+      "lastDate": "2026-10-22",
+      "lastClose": 196.19,
+      "movePct": 5.46
+    },
+    {
+      "key": "META|Partnership|apple",
+      "ticker": "META",
+      "type": "Partnership",
+      "line": "Meta released the weights for Muse Spark Open and worked with Apple so the model runs locally on clusters of two to four high-end Mac Studios.",
+      "source": "CNBC",
+      "link": "https://x.com/Techmeme/status/2110783076364394791",
+      "firstSeenAt": "2026-10-15T17:08:46.000Z",
+      "firstSeen": "2026-10-15",
+      "lastUpdate": "2026-10-15",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Apple"
+      ],
+      "refDate": "2026-10-14",
+      "refClose": 737.54,
+      "lastDate": "2026-10-22",
+      "lastClose": 648.85,
+      "movePct": -12.03
+    },
+    {
+      "key": "INTU|M&A|sequence",
+      "ticker": "INTU",
+      "type": "M&A",
+      "line": "Intuit agreed to buy Sequence, an AI billing and revenue-management startup, to fold into QuickBooks and Intuit Enterprise Suite; terms were not disclosed.",
+      "source": "Company",
+      "link": "https://x.com/WeDoPunchHoes/status/2110728246035898867",
+      "firstSeenAt": "2026-10-15T13:00:47.000Z",
+      "firstSeen": "2026-10-15",
+      "lastUpdate": "2026-10-15",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Sequence"
+      ],
+      "refDate": "2026-10-14",
+      "refClose": 310.44,
+      "lastDate": "2026-10-22",
+      "lastClose": 354.9,
+      "movePct": 14.32
+    },
+    {
+      "key": "IONQ|Financing|heights",
+      "ticker": "IONQ",
+      "type": "Financing",
+      "line": "IonQ raised $2bn by selling stock and pre-funded warrants at $40 each in a deal led by Heights Capital Management, plus warrants on 100m more shares.",
+      "source": "Company",
+      "link": "https://x.com/CaktusJxck/status/2110353899877957916",
+      "firstSeenAt": "2026-10-14T12:55:52.000Z",
+      "firstSeen": "2026-10-14",
+      "lastUpdate": "2026-10-14",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Heights"
+      ],
+      "refDate": "2026-10-13",
+      "refClose": 34.73,
+      "lastDate": "2026-10-22",
+      "lastClose": 31.16,
+      "movePct": -10.28
+    },
+    {
+      "key": "GFS|Financing|japan",
+      "ticker": "GFS",
+      "type": "Financing",
+      "line": "GlobalFoundries will run two new chip plants at its Malta, New York site paid for with up to $21bn from Japan; Washington is also taking about a 4% stake.",
+      "source": "Company; Reuters / Bloomberg",
+      "link": "https://x.com/Techmeme/status/2110356430377402721",
+      "firstSeenAt": "2026-10-14T12:41:44.000Z",
+      "firstSeen": "2026-10-14",
+      "lastUpdate": "2026-10-14",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Japan"
+      ],
+      "refDate": "2026-10-13",
+      "refClose": 46.7,
+      "lastDate": "2026-10-22",
+      "lastClose": 43.37,
+      "movePct": -7.13
+    },
+    {
+      "key": "UUUU|M&A|vac",
+      "ticker": "UUUU",
+      "type": "M&A",
+      "line": "Energy Fuels amended its roughly $1.9bn deal for magnet maker VAC so the price can be cut if a customer supply dispute at VAC's South Carolina plant costs value.",
+      "source": "SEC filing",
+      "link": "https://x.com/cekdrew/status/2110126965155934665",
+      "firstSeenAt": "2026-10-13T21:12:10.000Z",
+      "firstSeen": "2026-10-13",
+      "lastUpdate": "2026-10-13",
+      "status": "Confirmed",
+      "statusNote": "8-K filed 2026-10-13",
+      "note": null,
+      "sec": {
+        "form": "8-K",
+        "date": "2026-10-13",
+        "items": "1.01,8.01,9.01",
+        "url": "https://www.sec.gov/Archives/edgar/data/1385849/000106299326005306/"
+      },
+      "partyKeywords": [
+        "VAC"
+      ],
+      "refDate": "2026-10-13",
+      "refClose": 9.27,
+      "lastDate": "2026-10-22",
+      "lastClose": 7.69,
+      "movePct": -17.04
+    },
+    {
+      "key": "NOW|M&A|decagon",
+      "ticker": "NOW",
+      "type": "M&A",
+      "line": "ServiceNow's president Amit Zavery said the company has no plan to buy Decagon, pushing back on a Business Insider report of early sale talks.",
+      "source": "Business Insider",
+      "link": "https://x.com/azavery/status/2110161538145558598",
+      "firstSeenAt": "2026-10-13T16:36:54.000Z",
+      "firstSeen": "2026-10-13",
+      "lastUpdate": "2026-10-14",
+      "status": "Denied",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Decagon"
+      ],
+      "refDate": "2026-10-12",
+      "refClose": 140.32,
+      "lastDate": "2026-10-22",
+      "lastClose": 157,
+      "movePct": 11.89
+    },
+    {
+      "key": "WDAY|M&A|c1-ai",
+      "ticker": "WDAY",
+      "type": "M&A",
+      "line": "Workday agreed to buy C1.ai, an identity-control platform covering both staff and AI agents, and separately linked its Sana agents to Anthropic's Claude; no price given.",
+      "source": "Company",
+      "link": "https://x.com/i/trending/2110056139274809581",
+      "firstSeenAt": "2026-10-13T12:59:00.000Z",
+      "firstSeen": "2026-10-13",
+      "lastUpdate": "2026-10-13",
+      "status": "Confirmed",
+      "statusNote": "8-K filed 2026-10-13",
+      "note": null,
+      "sec": {
+        "form": "8-K",
+        "date": "2026-10-13",
+        "items": "8.01,9.01",
+        "url": "https://www.sec.gov/Archives/edgar/data/1327811/000132781126000051/"
+      },
+      "partyKeywords": [
+        "C1.ai"
+      ],
+      "refDate": "2026-10-12",
+      "refClose": 188.25,
+      "lastDate": "2026-10-22",
+      "lastClose": 209.99,
+      "movePct": 11.55
+    },
+    {
+      "key": "AMD|Financing|fermi",
+      "ticker": "AMD",
+      "type": "Financing",
+      "line": "AMD signed a credit support deal backing the lease for the first 222MW phase of Fermi's Project Matador AI power campus in Texas, where GPU cloud TensorWave is the tenant.",
+      "source": "Company",
+      "link": "https://x.com/newsinvesting/status/2109991638646825268",
+      "firstSeenAt": "2026-10-13T12:40:19.000Z",
+      "firstSeen": "2026-10-13",
+      "lastUpdate": "2026-10-13",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Fermi"
+      ],
+      "refDate": "2026-10-12",
+      "refClose": 594.24,
+      "lastDate": "2026-10-22",
+      "lastClose": 507.93,
+      "movePct": -14.52
+    },
+    {
+      "key": "SYM|M&A|cellumation",
+      "ticker": "SYM",
+      "type": "M&A",
+      "line": "Symbotic bought cellumation, the Bremen firm behind the celluveyor modular sorting system, to widen its warehouse automation footprint in Europe.",
+      "source": "Company",
+      "link": "https://x.com/MaxG_TTM/status/2109949801261322541",
+      "firstSeenAt": "2026-10-13T10:10:08.000Z",
+      "firstSeen": "2026-10-13",
+      "lastUpdate": "2026-10-13",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "cellumation"
+      ],
+      "refDate": "2026-10-12",
+      "refClose": 40.78,
+      "lastDate": "2026-10-22",
+      "lastClose": 40.36,
+      "movePct": -1.03
+    },
+    {
+      "key": "CRM|M&A|loops",
+      "ticker": "CRM",
+      "type": "M&A",
+      "line": "Salesforce agreed terms to acquire Loops, a small AI analytics company, to bolt performance-monitoring tools onto Tableau; price not disclosed.",
+      "source": "Company",
+      "link": "https://x.com/i/trending/2109629421594312859",
+      "firstSeenAt": "2026-10-12T15:00:05.000Z",
+      "firstSeen": "2026-10-12",
+      "lastUpdate": "2026-10-12",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Loops"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 229.13,
+      "lastDate": "2026-10-22",
+      "lastClose": 250.29,
+      "movePct": 9.23
+    },
+    {
+      "key": "FRSH|M&A|torii",
+      "ticker": "FRSH",
+      "type": "M&A",
+      "line": "Freshworks agreed to buy Torii, which tracks company software and AI spending, to add it to Freshservice; no price given, closing expected in Q4.",
+      "source": "Company",
+      "link": "https://x.com/marketwirenews/status/2109618772851978618",
+      "firstSeenAt": "2026-10-12T12:14:44.000Z",
+      "firstSeen": "2026-10-12",
+      "lastUpdate": "2026-10-12",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Torii"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 13.92,
+      "lastDate": "2026-10-22",
+      "lastClose": 15.32,
+      "movePct": 10.06
+    },
+    {
+      "key": "IONQ|M&A|elisity",
+      "ticker": "IONQ",
+      "type": "M&A",
+      "line": "IonQ agreed an all-stock takeover of zero-trust security firm Elisity worth up to $1.3bn including earnouts; it expects to close in Q4.",
+      "source": "Company",
+      "link": "https://x.com/i/trending/2109613672880300111",
+      "firstSeenAt": "2026-10-12T12:12:51.000Z",
+      "firstSeen": "2026-10-12",
+      "lastUpdate": "2026-10-12",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Elisity"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 39.89,
+      "lastDate": "2026-10-22",
+      "lastClose": 31.16,
+      "movePct": -21.89
+    },
+    {
+      "key": "SYK|Partnership|cmr",
+      "ticker": "SYK",
+      "type": "Partnership",
+      "line": "Stryker is putting about $400m of preferred equity into CMR Surgical, becoming sole US seller of its Versius robot, with an option to buy all of CMR.",
+      "source": "Company",
+      "link": "https://x.com/theflynews/status/2109637714957971622",
+      "firstSeenAt": "2026-10-12T12:05:13.000Z",
+      "firstSeen": "2026-10-12",
+      "lastUpdate": "2026-10-12",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "CMR"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 277.33,
+      "lastDate": "2026-10-22",
+      "lastClose": 307.08,
+      "movePct": 10.73
+    },
+    {
+      "key": "IREN|Supply deal|anthropic",
+      "ticker": "IREN",
+      "type": "Supply deal",
+      "line": "The Information says Anthropic has signed a multiyear cloud computing contract with IREN; neither company has announced the terms.",
+      "source": "The Information",
+      "link": "https://x.com/LumiritX/status/2110162428231041259",
+      "firstSeenAt": "2026-10-11T23:35:21.000Z",
+      "firstSeen": "2026-10-11",
+      "lastUpdate": "2026-10-14",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Anthropic"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 35.19,
+      "lastDate": "2026-10-22",
+      "lastClose": 25.51,
+      "movePct": -27.51
+    },
+    {
+      "key": "AMZN|M&A|decart",
+      "ticker": "AMZN",
+      "type": "M&A",
+      "line": "Amazon is negotiating to buy Decart, a startup that builds real-time AI video models, for about $7bn, the WSJ reported.",
+      "source": "WSJ",
+      "link": "https://x.com/ThProblemSniper/status/2111179374049321306",
+      "firstSeenAt": "2026-10-11T21:14:38.000Z",
+      "firstSeen": "2026-10-11",
+      "lastUpdate": "2026-10-16",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Decart"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 262.43,
+      "lastDate": "2026-10-22",
+      "lastClose": 250.38,
+      "movePct": -4.59
+    },
+    {
+      "key": "NVDA|M&A|reflection",
+      "ticker": "NVDA",
+      "type": "M&A",
+      "line": "Nvidia is in early talks to either take over open-weight AI lab Reflection AI or enlarge its existing stake, the FT reported.",
+      "source": "FT",
+      "link": "https://x.com/KevinJEnnis1/status/2110952229553185127",
+      "firstSeenAt": "2026-10-10T19:28:41.000Z",
+      "firstSeen": "2026-10-10",
+      "lastUpdate": "2026-10-16",
+      "status": "Reported",
+      "statusNote": null,
+      "note": "Reflection AI's CTO called the report baseless; Nvidia hasn't commented.",
+      "sec": null,
+      "partyKeywords": [
+        "Reflection"
+      ],
+      "refDate": "2026-10-09",
+      "refClose": 229.28,
+      "lastDate": "2026-10-22",
+      "lastClose": 212.21,
+      "movePct": -7.45
+    },
+    {
+      "key": "SPCX|M&A|grain",
+      "ticker": "SPCX",
+      "type": "M&A",
+      "line": "SpaceX agreed to buy Grain Management's nationwide 800 MHz mobile spectrum, subject to FCC sign-off; WSJ put the price near $8bn.",
+      "source": "Reuters / WSJ",
+      "link": "https://x.com/Reuters/status/2108349265772785665",
+      "firstSeenAt": "2026-10-08T20:14:57.000Z",
+      "firstSeen": "2026-10-08",
+      "lastUpdate": "2026-10-09",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Grain"
+      ],
+      "refDate": "2026-10-08",
+      "refClose": 160.57,
+      "lastDate": "2026-10-22",
+      "lastClose": 144.75,
+      "movePct": -9.85
+    },
+    {
+      "key": "GFS|Supply deal|tsmc",
+      "ticker": "GFS",
+      "type": "Supply deal",
+      "line": "GlobalFoundries will make silicon interposers for TSMC's CoWoS chip packaging at its New York fab under a five-year, roughly $2bn agreement.",
+      "source": "Company",
+      "link": "https://x.com/Temple_Eight/status/2108315304493556126",
+      "firstSeenAt": "2026-10-08T12:47:32.000Z",
+      "firstSeen": "2026-10-08",
+      "lastUpdate": "2026-10-08",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "TSMC"
+      ],
+      "refDate": "2026-10-07",
+      "refClose": 48.07,
+      "lastDate": "2026-10-22",
+      "lastClose": 43.37,
+      "movePct": -9.78
+    },
+    {
+      "key": "HIMS|Regulatory/FDA|peptide",
+      "ticker": "HIMS",
+      "type": "Regulatory/FDA",
+      "line": "The Washington Post says the administration is drafting a temporary path for compounding pharmacies to sell some restricted peptides while permanent rules are written.",
+      "source": "Washington Post",
+      "link": "https://x.com/topsecretstocks/status/2108045062810570979",
+      "firstSeenAt": "2026-10-08T01:09:47.000Z",
+      "firstSeen": "2026-10-07",
+      "lastUpdate": "2026-10-09",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "peptide"
+      ],
+      "refDate": "2026-10-07",
+      "refClose": 29.54,
+      "lastDate": "2026-10-22",
+      "lastClose": 29.13,
+      "movePct": -1.39
+    },
+    {
+      "key": "AVGO|Financing|blackstone",
+      "ticker": "AVGO",
+      "type": "Financing",
+      "line": "Broadcom is trying to line up more than $50bn of private debt for the custom chips it is building with OpenAI; Apollo and Blackstone are among lenders in early talks.",
+      "source": "WSJ",
+      "link": "https://x.com/rohanpaul_ai/status/2107996158115401800",
+      "firstSeenAt": "2026-10-08T00:47:03.000Z",
+      "firstSeen": "2026-10-07",
+      "lastUpdate": "2026-10-08",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Blackstone"
+      ],
+      "refDate": "2026-10-07",
+      "refClose": 376.51,
+      "lastDate": "2026-10-22",
+      "lastClose": 323.24,
+      "movePct": -14.15
+    },
+    {
+      "key": "ORCL|Financing|goldman",
+      "ticker": "ORCL",
+      "type": "Financing",
+      "line": "Oracle is talking to Apollo and Goldman Sachs about debt to fund a large AI chip purchase.",
+      "source": "WSJ",
+      "link": "https://x.com/kidtsang/status/2108205224263360934",
+      "firstSeenAt": "2026-10-07T21:33:35.000Z",
+      "firstSeen": "2026-10-07",
+      "lastUpdate": "2026-10-08",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Goldman"
+      ],
+      "refDate": "2026-10-07",
+      "refClose": 143.56,
+      "lastDate": "2026-10-22",
+      "lastClose": 125.54,
+      "movePct": -12.55
+    },
+    {
+      "key": "SPCX|Financing|apollo",
+      "ticker": "SPCX",
+      "type": "Financing",
+      "line": "SpaceX is in early talks to borrow around $40bn, with Apollo leading, to pay for Nvidia AI chips.",
+      "source": "FT / Bloomberg",
+      "link": "https://x.com/AlertsAndNews/status/2107665302117081505",
+      "firstSeenAt": "2026-10-07T02:52:21.000Z",
+      "firstSeen": "2026-10-06",
+      "lastUpdate": "2026-10-08",
+      "status": "Reported",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Apollo"
+      ],
+      "refDate": "2026-10-06",
+      "refClose": 171.92,
+      "lastDate": "2026-10-22",
+      "lastClose": 144.75,
+      "movePct": -15.8
+    },
+    {
+      "key": "STX|M&A|tdk",
+      "ticker": "STX",
+      "type": "M&A",
+      "line": "Seagate was reported to be bidding against Toshiba for TDK's hard-drive head unit, a multibillion-dollar asset.",
+      "source": "Bloomberg",
+      "link": "https://x.com/BitsWattsDesk/status/2107397043266416687",
+      "firstSeenAt": "2026-10-06T06:05:11.000Z",
+      "firstSeen": "2026-10-06",
+      "lastUpdate": "2026-10-09",
+      "status": "Reported",
+      "statusNote": null,
+      "note": "Toshiba disputed the report; Seagate hasn't commented.",
+      "sec": null,
+      "partyKeywords": [
+        "TDK"
+      ],
+      "refDate": "2026-10-05",
+      "refClose": 887.09,
+      "lastDate": "2026-10-22",
+      "lastClose": 642.14,
+      "movePct": -27.61
+    },
+    {
+      "key": "MRNA|Index|nasdaq-100",
+      "ticker": "MRNA",
+      "type": "Index",
+      "line": "Moderna rejoined the Nasdaq-100 index this week.",
+      "source": "Nasdaq (index provider)",
+      "link": "https://x.com/i/trending/2108560057134715203",
+      "firstSeenAt": "2026-10-05T18:50:43.000Z",
+      "firstSeen": "2026-10-05",
+      "lastUpdate": "2026-10-09",
+      "status": "Confirmed",
+      "statusNote": null,
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Nasdaq-100"
+      ],
+      "refDate": "2026-10-02",
+      "refClose": 190.01,
+      "lastDate": "2026-10-22",
+      "lastClose": 202.63,
+      "movePct": 6.64
+    },
+    {
+      "key": "TSM|Partnership|terafab",
+      "ticker": "TSM",
+      "type": "Partnership",
+      "line": "TSMC's CEO said on the Oct 15 earnings call that it is in talks over Musk's Texas Terafab and has sent teams to look, but that any plant it joins must be run by TSMC.",
+      "source": "Company (TSMC earnings call)",
+      "link": "https://x.com/NikkeiAsia/status/2111336428944723972",
+      "firstSeenAt": "2026-10-04T09:29:41.000Z",
+      "firstSeen": "2026-10-04",
+      "lastUpdate": "2026-10-19",
+      "status": "Confirmed",
+      "statusNote": "Musk says his companies will run the plant themselves.",
+      "note": null,
+      "sec": null,
+      "partyKeywords": [
+        "Terafab"
+      ],
+      "refDate": "2026-10-02",
+      "refClose": 472.78,
+      "lastDate": "2026-10-22",
+      "lastClose": 412.35,
+      "movePct": -12.78
+    },
+    {
+      "key": "ON|M&A|synaptics",
+      "ticker": "ON",
+      "type": "M&A",
+      "line": "onsemi switched its Synaptics offer to all cash, about $5.7bn or $123 a share, in place of the earlier stock-based bid.",
+      "source": "Company",
+      "link": "https://x.com/SeekingAlpha/status/2108241553227477378",
+      "firstSeenAt": "2026-10-03T15:40:48.000Z",
+      "firstSeen": "2026-10-03",
+      "lastUpdate": "2026-10-08",
+      "status": "Confirmed",
+      "statusNote": "8-K filed 2026-10-01",
+      "note": null,
+      "sec": {
+        "form": "8-K",
+        "date": "2026-10-01",
+        "items": "1.01,8.01,9.01",
+        "url": "https://www.sec.gov/Archives/edgar/data/1097864/000114036126038294/"
+      },
+      "partyKeywords": [
+        "Synaptics"
+      ],
+      "refDate": "2026-10-02",
+      "refClose": 84.89,
+      "lastDate": "2026-10-22",
+      "lastClose": 73.23,
+      "movePct": -13.74
+    }
+  ],
+  "log": [
+    {
+      "key": "CRM|M&A|braze",
+      "ticker": "CRM",
+      "type": "M&A",
+      "line": "Salesforce signed a deal to acquire marketing-software firm Braze for roughly $5.66bn in cash, about $47.50 a share; closing is expected in its fiscal 2028.",
+      "source": "Bloomberg",
+      "link": "https://x.com/business/status/2112558232489099437",
+      "firstSeen": "2026-10-20",
+      "firstShown": "2026-10-21",
+      "statusHistory": [
+        {
+          "date": "2026-10-21",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "NVDA|Financing|firmus",
+      "ticker": "NVDA",
+      "type": "Financing",
+      "line": "Nvidia, already a backer, is discussing a several-hundred-million-dollar equity stake in Australian AI cloud firm Firmus after Firmus shelved its IPO, Bloomberg reported.",
+      "source": "Bloomberg",
+      "link": "https://x.com/business/status/2112753267922940384",
+      "firstSeen": "2026-10-20",
+      "firstShown": "2026-10-21",
+      "statusHistory": [
+        {
+          "date": "2026-10-21",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "AMZN|Supply deal|3m",
+      "ticker": "AMZN",
+      "type": "Supply deal",
+      "line": "3M expanded its data-centre product deal with an Amazon unit; Amazon gets a seven-year option on about 3.16m 3M shares, most of it earned as its purchases climb toward $6bn.",
+      "source": "Company (3M SEC filing)",
+      "link": "https://x.com/FirstSquawk/status/2112288639917150517",
+      "firstSeen": "2026-10-19",
+      "firstShown": "2026-10-19",
+      "statusHistory": [
+        {
+          "date": "2026-10-19",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "NVDA|Supply deal|modal",
+      "ticker": "NVDA",
+      "type": "Supply deal",
+      "line": "AI cloud startup Modal plans to run AI-agent work on Nvidia's new Vera CPUs, a job it had only given to Intel and AMD chips, Reuters reported.",
+      "source": "Reuters",
+      "link": "https://x.com/SparkyMark96/status/2112239194076598338",
+      "firstSeen": "2026-10-19",
+      "firstShown": "2026-10-19",
+      "statusHistory": [
+        {
+          "date": "2026-10-19",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "PLTR|Partnership|knox",
+      "ticker": "PLTR",
+      "type": "Partnership",
+      "line": "Palantir teamed up with Knox Systems, a large federal managed-cloud provider, to help software makers clear FedRAMP and IL5 security approval faster; no money terms were given.",
+      "source": "Company (Business Wire)",
+      "link": "https://x.com/MikeLongTerm/status/2112149748819865890",
+      "firstSeen": "2026-10-19",
+      "firstShown": "2026-10-19",
+      "statusHistory": [
+        {
+          "date": "2026-10-19",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "META|Partnership|apple",
+      "ticker": "META",
+      "type": "Partnership",
+      "line": "Meta released the weights for Muse Spark Open and worked with Apple so the model runs locally on clusters of two to four high-end Mac Studios.",
+      "source": "CNBC",
+      "link": "https://x.com/Techmeme/status/2110783076364394791",
+      "firstSeen": "2026-10-15",
+      "firstShown": "2026-10-16",
+      "statusHistory": [
+        {
+          "date": "2026-10-16",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "INTU|M&A|sequence",
+      "ticker": "INTU",
+      "type": "M&A",
+      "line": "Intuit agreed to buy Sequence, an AI billing and revenue-management startup, to fold into QuickBooks and Intuit Enterprise Suite; terms were not disclosed.",
+      "source": "Company",
+      "link": "https://x.com/WeDoPunchHoes/status/2110728246035898867",
+      "firstSeen": "2026-10-15",
+      "firstShown": "2026-10-15",
+      "statusHistory": [
+        {
+          "date": "2026-10-15",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "GFS|Financing|japan",
+      "ticker": "GFS",
+      "type": "Financing",
+      "line": "GlobalFoundries will run two new chip plants at its Malta, New York site paid for with up to $21bn from Japan; Washington is also taking about a 4% stake.",
+      "source": "Company; Reuters / Bloomberg",
+      "link": "https://x.com/Techmeme/status/2110356430377402721",
+      "firstSeen": "2026-10-14",
+      "firstShown": "2026-10-14",
+      "statusHistory": [
+        {
+          "date": "2026-10-14",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "IONQ|Financing|heights",
+      "ticker": "IONQ",
+      "type": "Financing",
+      "line": "IonQ raised $2bn by selling stock and pre-funded warrants at $40 each in a deal led by Heights Capital Management, plus warrants on 100m more shares.",
+      "source": "Company",
+      "link": "https://x.com/CaktusJxck/status/2110353899877957916",
+      "firstSeen": "2026-10-14",
+      "firstShown": "2026-10-14",
+      "statusHistory": [
+        {
+          "date": "2026-10-14",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "NOW|M&A|decagon",
+      "ticker": "NOW",
+      "type": "M&A",
+      "line": "ServiceNow's president Amit Zavery said the company has no plan to buy Decagon, pushing back on a Business Insider report of early sale talks.",
+      "source": "Business Insider",
+      "link": "https://x.com/azavery/status/2110161538145558598",
+      "firstSeen": "2026-10-13",
+      "firstShown": "2026-10-13",
+      "statusHistory": [
+        {
+          "date": "2026-10-13",
+          "status": "Reported"
+        },
+        {
+          "date": "2026-10-14",
+          "status": "Denied"
+        }
+      ]
+    },
+    {
+      "key": "WDAY|M&A|c1-ai",
+      "ticker": "WDAY",
+      "type": "M&A",
+      "line": "Workday agreed to buy C1.ai, an identity-control platform covering both staff and AI agents, and separately linked its Sana agents to Anthropic's Claude; no price given.",
+      "source": "Company",
+      "link": "https://x.com/i/trending/2110056139274809581",
+      "firstSeen": "2026-10-13",
+      "firstShown": "2026-10-13",
+      "statusHistory": [
+        {
+          "date": "2026-10-13",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "SYM|M&A|cellumation",
+      "ticker": "SYM",
+      "type": "M&A",
+      "line": "Symbotic bought cellumation, the Bremen firm behind the celluveyor modular sorting system, to widen its warehouse automation footprint in Europe.",
+      "source": "Company",
+      "link": "https://x.com/MaxG_TTM/status/2109949801261322541",
+      "firstSeen": "2026-10-13",
+      "firstShown": "2026-10-13",
+      "statusHistory": [
+        {
+          "date": "2026-10-13",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "UUUU|M&A|vac",
+      "ticker": "UUUU",
+      "type": "M&A",
+      "line": "Energy Fuels amended its roughly $1.9bn deal for magnet maker VAC so the price can be cut if a customer supply dispute at VAC's South Carolina plant costs value.",
+      "source": "SEC filing",
+      "link": "https://x.com/cekdrew/status/2110126965155934665",
+      "firstSeen": "2026-10-13",
+      "firstShown": "2026-10-13",
+      "statusHistory": [
+        {
+          "date": "2026-10-13",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "AMD|Financing|fermi",
+      "ticker": "AMD",
+      "type": "Financing",
+      "line": "AMD signed a credit support deal backing the lease for the first 222MW phase of Fermi's Project Matador AI power campus in Texas, where GPU cloud TensorWave is the tenant.",
+      "source": "Company",
+      "link": "https://x.com/newsinvesting/status/2109991638646825268",
+      "firstSeen": "2026-10-13",
+      "firstShown": "2026-10-13",
+      "statusHistory": [
+        {
+          "date": "2026-10-13",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "AMZN|M&A|decart",
+      "ticker": "AMZN",
+      "type": "M&A",
+      "line": "Amazon is negotiating to buy Decart, a startup that builds real-time AI video models, for about $7bn, the WSJ reported.",
+      "source": "WSJ",
+      "link": "https://x.com/ThProblemSniper/status/2111179374049321306",
+      "firstSeen": "2026-10-11",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "NVDA|M&A|reflection",
+      "ticker": "NVDA",
+      "type": "M&A",
+      "line": "Nvidia is in early talks to either take over open-weight AI lab Reflection AI or enlarge its existing stake, the FT reported.",
+      "source": "FT",
+      "link": "https://x.com/KevinJEnnis1/status/2110952229553185127",
+      "firstSeen": "2026-10-10",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "IONQ|M&A|elisity",
+      "ticker": "IONQ",
+      "type": "M&A",
+      "line": "IonQ agreed an all-stock takeover of zero-trust security firm Elisity worth up to $1.3bn including earnouts; it expects to close in Q4.",
+      "source": "Company",
+      "link": "https://x.com/i/trending/2109613672880300111",
+      "firstSeen": "2026-10-12",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "IREN|Supply deal|anthropic",
+      "ticker": "IREN",
+      "type": "Supply deal",
+      "line": "The Information says Anthropic has signed a multiyear cloud computing contract with IREN; neither company has announced the terms.",
+      "source": "The Information",
+      "link": "https://x.com/LumiritX/status/2110162428231041259",
+      "firstSeen": "2026-10-11",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "CRM|M&A|loops",
+      "ticker": "CRM",
+      "type": "M&A",
+      "line": "Salesforce agreed terms to acquire Loops, a small AI analytics company, to bolt performance-monitoring tools onto Tableau; price not disclosed.",
+      "source": "Company",
+      "link": "https://x.com/i/trending/2109629421594312859",
+      "firstSeen": "2026-10-12",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "FRSH|M&A|torii",
+      "ticker": "FRSH",
+      "type": "M&A",
+      "line": "Freshworks agreed to buy Torii, which tracks company software and AI spending, to add it to Freshservice; no price given, closing expected in Q4.",
+      "source": "Company",
+      "link": "https://x.com/marketwirenews/status/2109618772851978618",
+      "firstSeen": "2026-10-12",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "SYK|Partnership|cmr",
+      "ticker": "SYK",
+      "type": "Partnership",
+      "line": "Stryker is putting about $400m of preferred equity into CMR Surgical, becoming sole US seller of its Versius robot, with an option to buy all of CMR.",
+      "source": "Company",
+      "link": "https://x.com/theflynews/status/2109637714957971622",
+      "firstSeen": "2026-10-12",
+      "firstShown": "2026-10-12",
+      "statusHistory": [
+        {
+          "date": "2026-10-12",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "STX|M&A|tdk",
+      "ticker": "STX",
+      "type": "M&A",
+      "line": "Seagate was reported to be bidding against Toshiba for TDK's hard-drive head unit, a multibillion-dollar asset.",
+      "source": "Bloomberg",
+      "link": "https://x.com/BitsWattsDesk/status/2107397043266416687",
+      "firstSeen": "2026-10-06",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "SNAP|Activist|blue-duck",
+      "ticker": "SNAP",
+      "type": "Activist",
+      "line": "Hedge fund Blue Duck Capital is pressing Snap to sell roughly a fifth of its Specs AR glasses unit to outside investors and stop funding it from the core app.",
+      "source": "Bloomberg + Blue Duck letter",
+      "link": "https://x.com/business/status/2107511216847438083",
+      "firstSeen": "2026-10-06",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        },
+        {
+          "date": "2026-10-22",
+          "status": "Stale"
+        }
+      ],
+      "removed": {
+        "date": "2026-10-22",
+        "reason": "Stale: no update for 11 sessions"
+      }
+    },
+    {
+      "key": "SPCX|M&A|grain",
+      "ticker": "SPCX",
+      "type": "M&A",
+      "line": "SpaceX agreed to buy Grain Management's nationwide 800 MHz mobile spectrum, subject to FCC sign-off; WSJ put the price near $8bn.",
+      "source": "Reuters / WSJ",
+      "link": "https://x.com/Reuters/status/2108349265772785665",
+      "firstSeen": "2026-10-08",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "SPCX|Financing|apollo",
+      "ticker": "SPCX",
+      "type": "Financing",
+      "line": "SpaceX is in early talks to borrow around $40bn, with Apollo leading, to pay for Nvidia AI chips.",
+      "source": "FT / Bloomberg",
+      "link": "https://x.com/AlertsAndNews/status/2107665302117081505",
+      "firstSeen": "2026-10-06",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "AVGO|Financing|blackstone",
+      "ticker": "AVGO",
+      "type": "Financing",
+      "line": "Broadcom is trying to line up more than $50bn of private debt for the custom chips it is building with OpenAI; Apollo and Blackstone are among lenders in early talks.",
+      "source": "WSJ",
+      "link": "https://x.com/rohanpaul_ai/status/2107996158115401800",
+      "firstSeen": "2026-10-07",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "ORCL|Financing|goldman",
+      "ticker": "ORCL",
+      "type": "Financing",
+      "line": "Oracle is talking to Apollo and Goldman Sachs about debt to fund a large AI chip purchase.",
+      "source": "WSJ",
+      "link": "https://x.com/kidtsang/status/2108205224263360934",
+      "firstSeen": "2026-10-07",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "HIMS|Regulatory/FDA|peptide",
+      "ticker": "HIMS",
+      "type": "Regulatory/FDA",
+      "line": "The Washington Post says the administration is drafting a temporary path for compounding pharmacies to sell some restricted peptides while permanent rules are written.",
+      "source": "Washington Post",
+      "link": "https://x.com/topsecretstocks/status/2108045062810570979",
+      "firstSeen": "2026-10-07",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Reported"
+        }
+      ]
+    },
+    {
+      "key": "TSM|Partnership|terafab",
+      "ticker": "TSM",
+      "type": "Partnership",
+      "line": "TSMC's CEO said on the Oct 15 earnings call that it is in talks over Musk's Texas Terafab and has sent teams to look, but that any plant it joins must be run by TSMC.",
+      "source": "Company (Musk on X)",
+      "link": "https://x.com/NikkeiAsia/status/2111336428944723972",
+      "firstSeen": "2026-10-04",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Reported"
+        },
+        {
+          "date": "2026-10-19",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "CRM|M&A|listen-labs",
+      "ticker": "CRM",
+      "type": "M&A",
+      "line": "Salesforce signed a definitive deal for AI customer-research startup Listen Labs; terms were not disclosed, though Business Insider had reported talks near $2bn.",
+      "source": "Company; Business Insider (price)",
+      "link": "https://x.com/augustcool/status/2106401386460311788",
+      "firstSeen": "2026-10-03",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        },
+        {
+          "date": "2026-10-19",
+          "status": "Stale"
+        }
+      ],
+      "removed": {
+        "date": "2026-10-19",
+        "reason": "Stale: no update for 11 sessions"
+      }
+    },
+    {
+      "key": "AMD|M&A|world-labs",
+      "ticker": "AMD",
+      "type": "M&A",
+      "line": "AMD agreed to buy Fei-Fei Li's spatial-AI startup World Labs in an all-stock deal valued around $8.2bn; Li becomes AMD's chief scientist.",
+      "source": "Company",
+      "link": "https://x.com/MosesWang16/status/2105639660550570247",
+      "firstSeen": "2026-10-01",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        },
+        {
+          "date": "2026-10-19",
+          "status": "Stale"
+        }
+      ],
+      "removed": {
+        "date": "2026-10-19",
+        "reason": "Stale: no update for 11 sessions"
+      }
+    },
+    {
+      "key": "ON|M&A|synaptics",
+      "ticker": "ON",
+      "type": "M&A",
+      "line": "onsemi switched its Synaptics offer to all cash, about $5.7bn or $123 a share, in place of the earlier stock-based bid.",
+      "source": "Company",
+      "link": "https://x.com/SeekingAlpha/status/2108241553227477378",
+      "firstSeen": "2026-10-03",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "UBER|M&A|ezcater",
+      "ticker": "UBER",
+      "type": "M&A",
+      "line": "Uber agreed to buy office-catering marketplace ezCater for $2.3bn in cash to grow Uber Eats' business orders.",
+      "source": "Company",
+      "link": "https://x.com/Fiscal_ai/status/2107493610501672998",
+      "firstSeen": "2026-10-06",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        },
+        {
+          "date": "2026-10-21",
+          "status": "Stale"
+        }
+      ],
+      "removed": {
+        "date": "2026-10-21",
+        "reason": "Stale: no update for 11 sessions"
+      }
+    },
+    {
+      "key": "ZETA|M&A|senso",
+      "ticker": "ZETA",
+      "type": "M&A",
+      "line": "Zeta Global bought two small firms in two days: AI search startup Senso and European data company Digital Audience.",
+      "source": "Company",
+      "link": "https://x.com/Sam_Badawi/status/2107202746457973103",
+      "firstSeen": "2026-10-05",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        },
+        {
+          "date": "2026-10-21",
+          "status": "Stale"
+        }
+      ],
+      "removed": {
+        "date": "2026-10-21",
+        "reason": "Stale: no update for 11 sessions"
+      }
+    },
+    {
+      "key": "GFS|Supply deal|tsmc",
+      "ticker": "GFS",
+      "type": "Supply deal",
+      "line": "GlobalFoundries will make silicon interposers for TSMC's CoWoS chip packaging at its New York fab under a five-year, roughly $2bn agreement.",
+      "source": "Company",
+      "link": "https://x.com/Temple_Eight/status/2108315304493556126",
+      "firstSeen": "2026-10-08",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        }
+      ]
+    },
+    {
+      "key": "MRNA|Index|nasdaq-100",
+      "ticker": "MRNA",
+      "type": "Index",
+      "line": "Moderna rejoined the Nasdaq-100 index this week.",
+      "source": "Nasdaq (index provider)",
+      "link": "https://x.com/i/trending/2108560057134715203",
+      "firstSeen": "2026-10-05",
+      "firstShown": "2026-10-09",
+      "statusHistory": [
+        {
+          "date": "2026-10-09",
+          "status": "Confirmed"
+        }
+      ]
+    }
+  ]
+}

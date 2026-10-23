@@ -32,6 +32,23 @@ export interface CanaryReading {
   rationale?: string;
   vs_9D?: string;
   block?: string;
+  /** Scripted Decide: true when scored from this session's data. */
+  fresh?: boolean;
+  /** Last refresh date when the input was held (not re-stamped). */
+  heldSince?: string | null;
+  /** Date of the data the score is based on. */
+  asOf?: string | null;
+  /** Evidence (source, value, SMA20, date) written by scripts/refresh-decide.mjs. */
+  evidence?: {
+    source?: string;
+    date?: string | null;
+    value?: number;
+    sma20?: number | null;
+    text?: string;
+    [key: string]: unknown;
+  };
+  /** Old sparkline kept because its source did not refresh. */
+  sparklineHeldSince?: string;
 }
 
 export interface LetterArchiveItem {

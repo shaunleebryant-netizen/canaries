@@ -1,60 +1,69 @@
 import { NextResponse } from "next/server";
-import { appendFileSync, mkdirSync, existsSync } from "fs";
-import path from "path";
+import {
+  clean,
+  guardFormPost,
+  isBot,
+  maybeSendVerification,
+  normalizeEmail,
+  saveLead,
+  type LeadTag,
+} from "@/lib/leads";
 
 export const dynamic = "force-dynamic";
 
+const OK_MESSAGE =
+  "Thanks, you're signed up. Before we send anything we'll email you a link to confirm.";
+
 /**
- * Lead capture stub (weekly letter + seminar) — stores locally / logs. Does NOT send email.
+ * Free weekly letter (+ optional founding-spots alert) and seminar interest.
+ * Stores in D1 `leads` as `pending` (double opt-in). Sends nothing unless EMAIL_SENDING=1.
+ * Same response whether the address is new or already on the list (no enumeration).
  */
 export async function POST(request: Request) {
-  let email = "";
-  let name = "";
-  let note = "";
-  let source = "weekly_letter";
-  const contentType = request.headers.get("content-type") || "";
+  let body: Record<string, unknown>;
   try {
-    if (contentType.includes("application/json")) {
-      const body = await request.json();
-      email = String(body.email || "").trim();
-      name = String(body.name || "").trim();
-      note = String(body.note || "").trim();
-      source = String(body.source || "weekly_letter").trim() || "weekly_letter";
-    } else {
-      const form = await request.formData();
-      email = String(form.get("email") || "").trim();
-      name = String(form.get("name") || "").trim();
-      note = String(form.get("note") || "").trim();
-      source = String(form.get("source") || "weekly_letter").trim() || "weekly_letter";
-    }
+    const ct = request.headers.get("content-type") || "";
+    body = ct.includes("application/json")
+      ? await request.json()
+      : Object.fromEntries((await request.formData()).entries());
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid body" }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
 
-  if (!email || !email.includes("@")) {
-    return NextResponse.json({ ok: false, error: "Valid email required" }, { status: 400 });
+  const guard = await guardFormPost(request, "newsletter", 10);
+  if ("error" in guard) {
+    return NextResponse.json({ ok: false, error: guard.error }, { status: guard.status });
   }
+  if (isBot(body)) return NextResponse.json({ ok: true, message: OK_MESSAGE });
 
-  const entry = {
+  const email = normalizeEmail(body.email);
+  if (!email) {
+    return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
+  }
+  const rawSource = clean(body.source, 40);
+  const source = rawSource === "seminar" || rawSource === "singapore_seminar" ? "seminar" : "letter";
+  const truthy = (v: unknown) => v === true || v === "true" || v === "on" || v === "1";
+  const consent = truthy(body.consent);
+  if (source === "letter" && !consent) {
+    return NextResponse.json(
+      { ok: false, error: "Please tick the box to confirm you'd like the letter." },
+      { status: 400 },
+    );
+  }
+  const tags: LeadTag[] = source === "seminar" ? ["seminar"] : ["letter"];
+  if (truthy(body.founding_interest)) tags.push("founding_interest");
+
+  const name = clean(body.name, 100);
+  const note = clean(body.note, 1000);
+  const lead = await saveLead(guard.db, {
     email,
-    name: name || undefined,
-    note: note || undefined,
+    name,
     source,
-    at: new Date().toISOString(),
-    stub: "no email sent",
-  };
-  console.log("[newsletter-stub]", entry);
-
-  const dir = path.join(process.cwd(), "data");
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  const file = path.join(
-    dir,
-    source === "singapore_seminar" ? "seminar-signups.json" : "newsletter-signups.json"
-  );
-  appendFileSync(file, JSON.stringify(entry) + "\n", "utf8");
-
-  return NextResponse.json({
-    ok: true,
-    message: "Saved locally (stub). No email was sent.",
+    tags,
+    consent,
+    payload: note ? { note } : undefined,
+    ipH: guard.ipH,
   });
+  await maybeSendVerification(guard.db, request, lead, email);
+  return NextResponse.json({ ok: true, message: OK_MESSAGE });
 }

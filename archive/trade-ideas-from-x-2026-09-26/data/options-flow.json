@@ -1,0 +1,68 @@
+{
+  "asOf": "2026-09-22T11:49:04.489Z",
+  "priorityAllowlist": [
+    "OptionRunners",
+    "kiantrades",
+    "Mr_Derivatives"
+  ],
+  "allowlist": [
+    "unusual_whales",
+    "cheddarflow",
+    "OptionsHawk",
+    "snorlax_uw",
+    "WallStJesus",
+    "BlackBoxStocks",
+    "bullflowio",
+    "OptionRunners",
+    "kiantrades",
+    "Mr_Derivatives"
+  ],
+  "filters": [
+    "Ignore 0–3 DTE lottery tickets",
+    "Prefer repeat prints + rising OI + add-on rolls over a single sweep",
+    "Prefer large ITM / stock-replacement flow over far OTM calls"
+  ],
+  "flows": [
+    {
+      "id": "uw-qqq-2102074944502792457",
+      "handle": "unusual_whales",
+      "url": "https://x.com/unusual_whales/status/2102074944502792457",
+      "postedAt": "2026-09-21T16:38:16.000Z",
+      "ticker": "QQQ",
+      "right": "call",
+      "contract": "815C · Dec exp · ~88 DTE · ~13,000 size · follow-through after open",
+      "summary": "Follow-through on the same longer-dated $QQQ Dec 815 call print: UW notes the ~13,000-size morning trade and that the contract was closing in on an ~75% intraday return as $QQQ ran >2.5%. Aligns with the snorlax open; multi-leg context still not independently verified.",
+      "tags": [
+        "follow-through",
+        "opening-volume",
+        "large-size",
+        "longer-dated",
+        "direction-unconfirmed"
+      ],
+      "priority": false,
+      "pinned": false,
+      "qualifiedAt": "2026-09-22T11:49:04.489Z",
+      "qualifiedBy": "CoS"
+    },
+    {
+      "id": "snorlax-qqq-2102029227549733276",
+      "handle": "snorlax_uw",
+      "url": "https://x.com/snorlax_uw/status/2102029227549733276",
+      "postedAt": "2026-09-21T13:36:36.000Z",
+      "ticker": "QQQ",
+      "right": "call",
+      "contract": "815C · 18 Dec · 88 DTE · 13,663 vol vs 6,211 OI · $5,014,147 · $3.67 avg",
+      "summary": "Unusual longer-dated $QQQ Dec 815 call volume: 13,663 contracts versus 6,211 OI, about $5.014M premium at a $3.67 average; the source says 13,000+ opened. All shown at ask, but multi-leg context was not independently verified.",
+      "tags": [
+        "opening-volume",
+        "large-premium",
+        "at-ask",
+        "direction-unconfirmed"
+      ],
+      "priority": false,
+      "pinned": false,
+      "qualifiedAt": "2026-09-22T11:49:04.489Z",
+      "qualifiedBy": "CoS"
+    }
+  ]
+}

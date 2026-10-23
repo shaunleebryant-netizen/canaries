@@ -1,15 +1,16 @@
 {
-  "asOf": "2026-09-19T06:19:03.000Z",
-  "sessionDate": "2026-09-18",
+  "asOf": "2026-10-22T20:00:00.000Z",
+  "sessionDate": "2026-10-22",
   "sessionPhase": "post-close",
   "fixture": false,
-  "packMark": "VERIFIED_PARTIAL_SMA20",
-  "verificationFile": "verification-2026-09-19-sma20-yahoo.md",
-  "readingsFile": "2026-09-18.md",
+  "packMark": "SCRIPTED_2026-10-22_PARTIAL_HELD",
+  "verificationFile": "verification-2026-09-23-postclose.md",
+  "readingsFile": "2026-09-23.md",
+  "yahooAssistFile": "yahoo-wed-assist-2026-09-23.md",
   "readRulesFile": "read-rules-owner-2026-09-08.md",
   "weightsFile": "weights.md",
   "board": "option-b-13-seat",
-  "vs_9D": "n/a \u2014 MA not on chart; scored with owner level/visible-trend / band rules only",
+  "vs_9D": "n/a — scored with owner SMA20 / level / band rules",
   "droppedFromBoard": [
     "iwf-iwd",
     "uvxy",
@@ -17,95 +18,199 @@
     "vix-curve"
   ],
   "composite": {
-    "S": 0.323,
-    "light": "amber",
-    "lightBeforeVeto": "amber",
+    "S": -0.535,
+    "Sunrounded": -0.535,
+    "light": "red",
+    "lightBeforeVeto": "red",
     "bands": {
       "green": "S >= +0.6",
       "amber": "-0.3 <= S < +0.6",
       "red": "S < -0.3"
     },
     "priorPack": {
-      "sessionDate": "2026-09-18",
-      "S": 0.3655,
+      "sessionDate": "2026-10-21",
+      "S": -0.138,
       "light": "amber",
-      "note": "Before 2026-09-19 evening SMA20 read-rule fix (cyclical +1, SP600 index \u22121)"
+      "note": "Previous state.json (SCRIPTED_2026-10-21_PARTIAL_HELD) — saved as state.prev.json"
     }
   },
   "veto": {
     "triggered": false,
-    "rule": "VIX/VIX3M >= 1.00 AND NYSE A-D sick AND MMTH/%above200 sick \u2192 light cannot be green",
+    "rule": "VIX/VIX3M >= 1.00 AND NYSE A-D sick AND MMTH/%above200 sick → light cannot be green",
     "ownerLock": "2026-09-19",
-    "formerRuleDead": "VIX/US10Y > 4.5 (and Danger Above 5)",
     "inputs": {
       "seat": "vix-vix3m",
-      "vixVix3m": 0.812,
-      "threshold": 1.0,
+      "vixVix3m": 0.9458,
+      "threshold": 1,
       "inDanger": false,
       "nyseAdSick": true,
       "mmthSick": true,
-      "band": "SAFE"
+      "band": "CAUTION"
     }
   },
-  "flags": [
-    {
-      "id": "CONTRARIAN_COMPLACENT",
-      "seat": "vix-vvix",
-      "note": "VIX 14.81 < 15 \u2014 complacency flag (education-only)."
-    }
-  ],
+  "regimeV2": {
+    "draft": false,
+    "asOf": "2026-10-22",
+    "R": -3,
+    "stateRaw": "RISK_OFF",
+    "stateShown": "RISK_OFF",
+    "spec": "OFF",
+    "specNote": "A–D weak · SP600 ok",
+    "oneLiner": "Risk-off (R -3) — Spec off.",
+    "daysInState": 6,
+    "pendingState": null,
+    "pendingCount": 0,
+    "votes": {
+      "qqq-sma20": -1,
+      "cyclical-defensive": -1,
+      "vix-vix3m": 0,
+      "hyg-ief-sma20": -1,
+      "nyse-ad": -1,
+      "sp600": 1
+    },
+    "lights": [
+      {
+        "id": "qqq-sma20",
+        "label": "QQQ20",
+        "vote": -1,
+        "symbol": "−"
+      },
+      {
+        "id": "cyclical-defensive",
+        "label": "Cyc/Def",
+        "vote": -1,
+        "symbol": "−"
+      },
+      {
+        "id": "vix-vix3m",
+        "label": "VIX3M",
+        "vote": 0,
+        "symbol": "○"
+      },
+      {
+        "id": "hyg-ief-sma20",
+        "label": "HYG/IEF",
+        "vote": -1,
+        "symbol": "−"
+      },
+      {
+        "id": "nyse-ad",
+        "label": "A–D",
+        "vote": -1,
+        "symbol": "−"
+      },
+      {
+        "id": "sp600",
+        "label": "SP600",
+        "vote": 1,
+        "symbol": "+"
+      }
+    ],
+    "note": "Regime v2 from scripted Decide 2026-10-22."
+  },
+  "volCurve": {
+    "band": "CAUTION",
+    "stance": "CAUTION",
+    "mediumRatio": 0.9458,
+    "policies": {
+      "spec": "trim 25–50% tactical / short-vol / overnight",
+      "core": "hold"
+    },
+    "oneLiner": "VIX/VIX3M 0.91–0.95 with credit confirming — tighten risk.",
+    "feeds": {
+      "vix": {
+        "value": 19.03,
+        "status": "VERIFIED",
+        "asOf": "2026-10-22",
+        "source": "Yahoo ^VIX"
+      },
+      "vix3m": {
+        "value": 20.12,
+        "status": "VERIFIED",
+        "asOf": "2026-10-22",
+        "source": "Yahoo ^VIX3M"
+      },
+      "hygIef": {
+        "ratio": 0.8454,
+        "sma20": 0.8599,
+        "rollingOver": true,
+        "status": "VERIFIED",
+        "asOf": "2026-10-22",
+        "source": "Yahoo HYG ÷ IEF daily closes"
+      }
+    },
+    "asOf": "2026-10-22",
+    "ratio": 0.9458,
+    "source": "Yahoo ^VIX/^VIX3M"
+  },
+  "flags": [],
   "unverified": [],
   "renormalization": {
-    "droppedNominalWeight": 0.0,
-    "activeNominalSum": 1.0,
-    "note": "Option B 13-seat; SMA20 Yahoo re-gate filled qqq-sma20 + hyg-ief-sma20. All 13 VERIFIED."
+    "droppedNominalWeight": 0,
+    "activeNominalSum": 1,
+    "note": "Option B locked weights; all 13 VERIFIED."
   },
   "notes": [
-    "2026-09-19 PARTIAL: SMA20 Yahoo re-gate \u2014 qqq-sma20 +1, hyg-ief-sma20 +1. Other 11 seats unchanged from Fri pack. S +0.2155 \u2192 +0.3655 AMBER.",
-    "Ship still needs owner yes. Public still Fri ship +0.22 until then.",
-    "Veto unchanged (VIX/VIX3M 0.8120 SAFE; not \u22651.00).",
-    "2026-09-18 Fri post-close VERIFIED (11/13). Option B 13-seat: drop vix-curve. S=+0.2155 AMBER. Material: VIX/VIX3M 0.8120 SAFE (+2); NSHF \u2212912 (\u22122); MMTH 47.95 (\u22121). UNVERIFIED QQQ+HYG SMA20 \u2192 0/0.",
-    "Green veto no: ratio 0.8120 < 1.00 (A-D and MMTH sick but danger gate not met).",
-    "VIX 14.81: CONTRARIAN_COMPLACENT flag. Public still prior +0.41 until Wed/Fri + owner yes.",
-    "FINRA Aug-26 carry; finra_release_week false.",
-    "2026-09-19 evening: owner SMA20 read-rule fix \u2014 cyclical-defensive +1 (above SMA20); SP600 retarget ^SP600 1690.89 < SMA20 \u2192 \u22121; XLG rationale \u2192 SMA20. NSHF/A-D still on raw print pending Scout 20d MA vs 0."
+    "2026-10-22 scripted Decide (decide-points-v1-2026-09-25): S=-0.535 RED; held: finra-margin. Previous S=-0.138 AMBER.",
+    "2026-10-21 scripted Decide (decide-points-v1-2026-09-25): S=-0.138 AMBER; held: finra-margin. Previous S=-0.298 AMBER.",
+    "2026-10-20 scripted Decide (decide-points-v1-2026-09-25): S=-0.298 AMBER; held: finra-margin. Previous S=-0.671 RED.",
+    "2026-10-19 scripted Decide (decide-points-v1-2026-09-25): S=-0.671 RED; held: finra-margin. Previous S=-0.915 RED.",
+    "2026-10-16 scripted Decide (decide-points-v1-2026-09-25): S=-0.915 RED. Previous S=-0.915 RED.",
+    "2026-10-16 scripted Decide (decide-points-v1-2026-09-25): S=-0.915 RED. Previous S=-0.36 RED.",
+    "2026-10-15 scripted Decide (decide-points-v1-2026-09-25): S=-0.36 RED; held: finra-margin. Previous S=-0.36 RED.",
+    "2026-10-15 scripted Decide (decide-points-v1-2026-09-25): S=-0.36 RED; held: finra-margin. Previous S=-0.36 RED.",
+    "2026-10-14 scripted Decide (decide-points-v1-2026-09-25): S=-0.36 RED; held: finra-margin. Previous S=0.282 AMBER.",
+    "2026-10-13 scripted Decide (decide-points-v1-2026-09-25): S=0.282 AMBER; held: finra-margin. Previous S=0.223 AMBER.",
+    "2026-10-12 scripted Decide (decide-points-v1-2026-09-25): S=0.223 AMBER; held: finra-margin. Previous S=0.24 AMBER."
   ],
   "weightageTable": [
     {
       "id": "cyclical-defensive",
       "name": "(XLK+XLY) / (XLP+XLU)",
-      "score": 0,
+      "score": -2,
       "weightNominal": 0.0935,
       "weightEffective": 0.0935,
-      "contribution": 0.0,
-      "status": "VERIFIED"
+      "contribution": -0.187,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo (XLK+XLY)/(XLP+XLU) daily closes · 2.2381 < SMA20 2.4494 · @ 2026-10-22"
     },
     {
       "id": "xlf-kre",
       "name": "XLF and KRE",
-      "score": 0,
+      "score": 1,
       "weightNominal": 0.0765,
       "weightEffective": 0.0765,
-      "contribution": 0.0,
-      "status": "VERIFIED"
+      "contribution": 0.0765,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo XLF, KRE daily closes · XLF 56.65 > SMA20 54.63 · KRE 72.41 > SMA20 69.98 · @ 2026-10-22"
     },
     {
       "id": "vix-vix3m",
       "name": "VIX / VIX3M",
-      "score": 2,
+      "score": 0,
       "weightNominal": 0.1135,
       "weightEffective": 0.1135,
-      "contribution": 0.227,
-      "status": "VERIFIED"
+      "contribution": 0,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo ^VIX ÷ ^VIX3M daily closes · 0.9458 (VIX 19.03 / VIX3M 20.12) · CAUTION · @ 2026-10-22"
     },
     {
       "id": "nyse-ad",
-      "name": "NSHF + NYSE Advances \u2013 Declines",
-      "score": -2,
+      "name": "NSHF + NYSE Advances – Declines",
+      "score": -1,
       "weightNominal": 0.085,
       "weightEffective": 0.085,
-      "contribution": -0.17,
-      "status": "VERIFIED"
+      "contribution": -0.085,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "TradingView guest INDEX:NSHF daily (SMA20 vs 0) · NSHF SMA20 -44.65 < 0 (raw close 427) · @ 2026-10-22"
     },
     {
       "id": "pct-above-200dma",
@@ -114,25 +219,34 @@
       "weightNominal": 0.0935,
       "weightEffective": 0.0935,
       "contribution": -0.0935,
-      "status": "VERIFIED"
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "TradingView guest INDEX:MMTH daily · 44.62 · @ 2026-10-22"
     },
     {
       "id": "es1-jp30",
       "name": "ES1! / JP30",
-      "score": 1,
+      "score": -2,
       "weightNominal": 0.0595,
       "weightEffective": 0.0595,
-      "contribution": 0.0595,
-      "status": "VERIFIED"
+      "contribution": -0.119,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily, roll back-adjusted via TVC:JP30Y · ES 7709.25 / JP30 price 104.401 = 73.8427 · @ 2026-10-22"
     },
     {
       "id": "sp-top-50",
       "name": "XLG",
-      "score": 1,
+      "score": -2,
       "weightNominal": 0.068,
       "weightEffective": 0.068,
-      "contribution": 0.068,
-      "status": "VERIFIED"
+      "contribution": -0.136,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo XLG daily closes · XLG 62.55 < SMA20 64.0495 · @ 2026-10-22"
     },
     {
       "id": "sp600",
@@ -141,25 +255,34 @@
       "weightNominal": 0.068,
       "weightEffective": 0.068,
       "contribution": 0.068,
-      "status": "VERIFIED"
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo ^SP600 index daily closes (not SPSM) · ^SP600 1686.53 > SMA20 1670.9640 · @ 2026-10-22"
     },
     {
       "id": "rsp",
       "name": "RSP (price)",
-      "score": -1,
+      "score": 2,
       "weightNominal": 0.068,
       "weightEffective": 0.068,
-      "contribution": -0.068,
-      "status": "VERIFIED"
+      "contribution": 0.136,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo RSP daily closes · RSP 218.22 > SMA20 212.3925 · @ 2026-10-22"
     },
     {
       "id": "vix-vvix",
-      "name": "VIX and VVIX",
-      "score": 1,
+      "name": "Spot VIX",
+      "score": -2,
       "weightNominal": 0.0565,
       "weightEffective": 0.0565,
-      "contribution": 0.0565,
-      "status": "VERIFIED"
+      "contribution": -0.113,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo ^VIX daily closes · VIX 19.03 · @ 2026-10-22"
     },
     {
       "id": "finra-margin",
@@ -168,25 +291,34 @@
       "weightNominal": 0.068,
       "weightEffective": 0.068,
       "contribution": 0.068,
-      "status": "VERIFIED"
+      "status": "VERIFIED",
+      "fresh": false,
+      "heldSince": "2026-10-17",
+      "evidence": "FINRA margin statistics (Sep-26, latest official; page checked 2026-10-17) · Sep-26 1,480,054 ($mm); MoM up vs Aug-26 1,453,832 (latest official FINRA release) · @ 2026-10-17"
     },
     {
       "id": "qqq-sma20",
       "name": "QQQ vs SMA20",
-      "score": 1,
+      "score": -1,
       "weightNominal": 0.08,
       "weightEffective": 0.08,
-      "contribution": 0.08,
-      "status": "VERIFIED"
+      "contribution": -0.08,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo QQQ daily closes · QQQ 704.47 < SMA20 737.2400 · @ 2026-10-22"
     },
     {
       "id": "hyg-ief-sma20",
       "name": "HYG / IEF vs SMA20",
-      "score": 1,
+      "score": -1,
       "weightNominal": 0.07,
       "weightEffective": 0.07,
-      "contribution": 0.07,
-      "status": "VERIFIED"
+      "contribution": -0.07,
+      "status": "VERIFIED",
+      "fresh": true,
+      "heldSince": null,
+      "evidence": "Yahoo HYG ÷ IEF daily closes · ratio 0.8454 < SMA20 0.8599 · @ 2026-10-22"
     }
   ],
   "canaries": [
@@ -197,16 +329,29 @@
       "block": "risk-on",
       "verified": true,
       "status": "VERIFIED",
-      "score": 1,
+      "score": -2,
       "weightNominal": 0.0935,
       "weight": 0.0935,
       "weightEffective": 0.0935,
-      "contribution": 0.0935,
-      "lastReading": "2.4264 vs SMA20 2.3572 (ABOVE)",
+      "contribution": -0.187,
+      "lastReading": "2.2381 < SMA20 2.4494",
       "readingUnit": "ratio",
-      "rationale": "Ratio 2.4264 > SMA20 2.3572 (Yahoo XLK+XLY)/(XLP+XLU) asOf 2026-09-18 \u2192 +1.",
-      "oneSentenceRead": "Cyclical/defensive ratio above its 20-day average \u2014 risk-on lean.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "rationale": "Ratio 2.2381 vs SMA20 2.4494 (SMA20 5d slope −0.04643, 9d chg −0.2582): below SMA20; slope + 9d change agree → ±2 → -2.",
+      "oneSentenceRead": "Defensives lead cyclicals; the ratio sits under its 20-day average.",
+      "vs_9D": "9d chg −0.2582",
+      "vs_SMA20": "below",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo (XLK+XLY)/(XLP+XLU) daily closes",
+        "date": "2026-10-22",
+        "value": 2.23807,
+        "sma20": 2.449358,
+        "sma20Slope5": -0.046427,
+        "change9": -0.258165,
+        "text": "Yahoo (XLK+XLY)/(XLP+XLU) daily closes · 2.2381 < SMA20 2.4494 · @ 2026-10-22"
+      }
     },
     {
       "id": "xlf-kre",
@@ -215,16 +360,40 @@
       "block": "risk-on",
       "verified": true,
       "status": "VERIFIED",
-      "score": 0,
+      "score": 1,
       "weightNominal": 0.0765,
       "weight": 0.0765,
       "weightEffective": 0.0765,
-      "contribution": 0.0,
-      "lastReading": "XLF 55.86 \u00b7 KRE 72.75",
+      "contribution": 0.0765,
+      "lastReading": "XLF 56.65 > SMA20 54.63 · KRE 72.41 > SMA20 69.98",
       "readingUnit": "usd",
-      "rationale": "Soft/mixed session without 9D \u2192 mixed (0).",
-      "oneSentenceRead": "Banks and financials are mixed \u2014 not a clear break.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "rationale": "XLF 56.65 > SMA20 54.63 · KRE 72.41 > SMA20 69.98. Leg points XLF +2, KRE +1; both above → +1.",
+      "oneSentenceRead": "Banks and regionals sit above their 20-day averages.",
+      "vs_9D": "9d chg +1.9200",
+      "vs_SMA20": "above",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo XLF, KRE daily closes",
+        "date": "2026-10-22",
+        "value": 56.650002,
+        "sma20": 54.632,
+        "sma20Slope5": 0.168,
+        "change9": 1.920002,
+        "text": "Yahoo XLF, KRE daily closes · XLF 56.65 > SMA20 54.63 · KRE 72.41 > SMA20 69.98 · @ 2026-10-22",
+        "extra": {
+          "kre": {
+            "date": "2026-10-22",
+            "value": 72.41000366210938,
+            "sma20": 69.98400039672852,
+            "slope5": -0.2264995574951172,
+            "chg9": 3.4000015258789062
+          },
+          "xlfPoints": 2,
+          "krePoints": 1
+        }
+      }
     },
     {
       "id": "vix-vix3m",
@@ -233,35 +402,65 @@
       "block": "fragility",
       "verified": true,
       "status": "VERIFIED",
-      "score": 2,
+      "score": 0,
       "weightNominal": 0.1135,
       "weight": 0.1135,
       "weightEffective": 0.1135,
-      "contribution": 0.227,
-      "lastReading": "0.8120 (VIX 14.81 / VIX3M 18.24) \u00b7 SAFE",
+      "contribution": 0,
+      "lastReading": "0.9458 (VIX 19.03 / VIX3M 20.12) · CAUTION",
       "readingUnit": "ratio",
-      "rationale": "Ratio 0.8120 < 0.91 SAFE band \u2192 clear healthy (+2).",
-      "oneSentenceRead": "Vol curve is in healthy contango (SAFE).",
-      "vs_9D": "n/a \u2014 MA not on chart",
-      "statusHint": "SAFE"
+      "rationale": "Ratio 0.9458 → CAUTION (<0.91 SAFE +2 · 0.91–0.95 CAUTION 0 · ≥0.96 DANGER −2) → 0.",
+      "oneSentenceRead": "Vol curve is flattening (CAUTION).",
+      "vs_9D": "9d chg +0.1107",
+      "statusHint": "CAUTION",
+      "mediumRatio": 0.9458,
+      "band": "CAUTION",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "vs_SMA20": null,
+      "evidence": {
+        "source": "Yahoo ^VIX ÷ ^VIX3M daily closes",
+        "date": "2026-10-22",
+        "value": 0.945825,
+        "sma20": 0.881085,
+        "sma20Slope5": 0.026727,
+        "change9": 0.11071,
+        "text": "Yahoo ^VIX ÷ ^VIX3M daily closes · 0.9458 (VIX 19.03 / VIX3M 20.12) · CAUTION · @ 2026-10-22"
+      }
     },
     {
       "id": "nyse-ad",
-      "name": "NSHF + NYSE Advances \u2013 Declines",
+      "name": "NSHF + NYSE Advances – Declines",
       "description": "Daily advance/decline internal market health (NSHF).",
       "block": "breadth",
       "verified": true,
       "status": "VERIFIED",
-      "score": -2,
+      "score": -1,
       "weightNominal": 0.085,
       "weight": 0.085,
       "weightEffective": 0.085,
-      "contribution": -0.17,
-      "lastReading": "-912.00",
+      "contribution": -0.085,
+      "lastReading": "NSHF SMA20 -44.65 < 0 (raw close 427)",
       "readingUnit": "net",
-      "rationale": "NSHF \u2212912 deep negative (worse than \u2212517) \u2192 clearly sick (\u22122).",
-      "oneSentenceRead": "NYSE internals remain deeply negative.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "rationale": "NSHF SMA20 -44.65 below 0; SMA20 5d slope +166.85, 9d chg +230.70 do not both agree → ±1 → -1. Raw print is cross-check only.",
+      "oneSentenceRead": "NYSE internals’ 20-day average sits below zero.",
+      "vs_9D": "9d chg +230.7000",
+      "vs_SMA20": "below 0",
+      "sma20": -44.65,
+      "rawClose": 427,
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "TradingView guest INDEX:NSHF daily (SMA20 vs 0)",
+        "date": "2026-10-22",
+        "value": 427,
+        "sma20": -44.65,
+        "sma20Slope5": 166.85,
+        "change9": 230.7,
+        "text": "TradingView guest INDEX:NSHF daily (SMA20 vs 0) · NSHF SMA20 -44.65 < 0 (raw close 427) · @ 2026-10-22"
+      }
     },
     {
       "id": "pct-above-200dma",
@@ -275,11 +474,24 @@
       "weight": 0.0935,
       "weightEffective": 0.0935,
       "contribution": -0.0935,
-      "lastReading": "47.95",
+      "lastReading": "44.62",
       "readingUnit": "percent",
-      "rationale": "MMTH 47.95 <50 \u2192 mildly sick (\u22121). Not CONTRARIAN_WASHED (~<37).",
-      "oneSentenceRead": "Participation sits under 50% \u2014 mildly sick by level.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "rationale": "MMTH 44.62 → bearish <50; 44.62 vs SMA20 43.09 (SMA20 5d slope −1.107, 9d chg +1.28) points +1 → -1.",
+      "oneSentenceRead": "Participation sits under 50% — mildly sick by level.",
+      "vs_9D": "9d chg +1.2800",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "vs_SMA20": null,
+      "evidence": {
+        "source": "TradingView guest INDEX:MMTH daily",
+        "date": "2026-10-22",
+        "value": 44.62,
+        "sma20": 43.087,
+        "sma20Slope5": -1.107,
+        "change9": 1.28,
+        "text": "TradingView guest INDEX:MMTH daily · 44.62 · @ 2026-10-22"
+      }
     },
     {
       "id": "es1-jp30",
@@ -288,17 +500,51 @@
       "block": "leadership",
       "verified": true,
       "status": "VERIFIED",
-      "score": 1,
+      "score": -2,
       "weightNominal": 0.0595,
       "weight": 0.0595,
       "weightEffective": 0.0595,
-      "contribution": 0.0595,
-      "lastReading": "ES1! 7712.50 / JP30 price 98.951 = 77.9426",
+      "contribution": -0.119,
+      "lastReading": "ES 7709.25 / JP30 price 104.401 = 73.8427",
       "readingUnit": "ratio",
-      "rationale": "Bond-price VERIFIED; ES elevated \u2192 +1.",
-      "oneSentenceRead": "US futures leadership remains intact versus Japan 30y bond price.",
-      "vs_9D": "n/a \u2014 MA not on chart",
-      "jp30Instrument": "TVC:JP30 Japan 30y LSEG government bond PRICE"
+      "rationale": "Ratio 73.8427 vs SMA20 76.8787 (SMA20 5d slope −0.55801, 9d chg −3.2545): falling and under SMA20 with SMA20 slope agreeing → ±2 → -2. JP30 benchmark roll 2026-10-09 (97.473→101.946, back-adjusted ×1.0224).",
+      "oneSentenceRead": "Money is sloshing toward Japan 30y bonds versus US futures.",
+      "vs_9D": "9d chg −3.2545",
+      "jp30Instrument": "TVC:JP30 Japan 30y LSEG government bond PRICE",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "vs_SMA20": "below",
+      "evidence": {
+        "source": "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily, roll back-adjusted via TVC:JP30Y",
+        "date": "2026-10-22",
+        "value": 73.842683,
+        "sma20": 76.878737,
+        "sma20Slope5": -0.558011,
+        "change9": -3.254505,
+        "text": "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily, roll back-adjusted via TVC:JP30Y · ES 7709.25 / JP30 price 104.401 = 73.8427 · @ 2026-10-22",
+        "extra": {
+          "jp30Rolls": [
+            {
+              "date": "2026-07-08",
+              "from": 95.191,
+              "to": 99.891,
+              "priceChgPct": 4.937,
+              "yieldImpliedPct": 0.846,
+              "factor": 1.040573
+            },
+            {
+              "date": "2026-10-09",
+              "from": 97.473,
+              "to": 101.946,
+              "priceChgPct": 4.589,
+              "yieldImpliedPct": 2.293,
+              "factor": 1.022445
+            }
+          ],
+          "jp30Method": "yield-back-adjusted"
+        }
+      }
     },
     {
       "id": "sp-top-50",
@@ -307,34 +553,60 @@
       "block": "leadership",
       "verified": true,
       "status": "VERIFIED",
+      "score": -2,
+      "weightNominal": 0.068,
+      "weight": 0.068,
+      "weightEffective": 0.068,
+      "contribution": -0.136,
+      "lastReading": "XLG 62.55 < SMA20 64.0495",
+      "readingUnit": "usd",
+      "rationale": "62.55 vs SMA20 64.05 (SMA20 5d slope −0.173, 9d chg −2.28): below SMA20; slope + 9d change agree → ±2 → -2.",
+      "oneSentenceRead": "Mega-cap leadership sits under its 20-day average and is falling.",
+      "vs_9D": "9d chg −2.2800",
+      "vs_SMA20": "below",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo XLG daily closes",
+        "date": "2026-10-22",
+        "value": 62.549999,
+        "sma20": 64.0495,
+        "sma20Slope5": -0.1725,
+        "change9": -2.280003,
+        "text": "Yahoo XLG daily closes · XLG 62.55 < SMA20 64.0495 · @ 2026-10-22"
+      }
+    },
+    {
+      "id": "sp600",
+      "name": "SP600",
+      "description": "S&P SmallCap 600 index (^SP600) — not SPSM ETF.",
+      "block": "breadth",
+      "verified": true,
+      "status": "VERIFIED",
       "score": 1,
       "weightNominal": 0.068,
       "weight": 0.068,
       "weightEffective": 0.068,
       "contribution": 0.068,
-      "lastReading": "XLG 63.19 vs SMA20 62.53 (ABOVE)",
-      "readingUnit": "usd",
-      "rationale": "XLG close 63.19 > SMA20 62.53 asOf 2026-09-18 \u2192 +1 (price vs SMA20).",
-      "oneSentenceRead": "Mega-cap basket above its 20-day average.",
-      "vs_9D": "n/a \u2014 MA not on chart"
-    },
-    {
-      "id": "sp600",
-      "name": "SP600",
-      "description": "S&P SmallCap 600 proxy (AMEX:SPSM price).",
-      "block": "breadth",
-      "verified": true,
-      "status": "VERIFIED",
-      "score": -1,
-      "weightNominal": 0.068,
-      "weight": 0.068,
-      "weightEffective": 0.068,
-      "contribution": -0.068,
-      "lastReading": "SP600 (^SP600) 1690.89 vs SMA20 1744.20 (BELOW)",
-      "readingUnit": "usd",
-      "rationale": "S&P SmallCap 600 index 1690.89 < SMA20 1744.20 asOf 2026-09-18 \u2014 was wrongly SPSM ETF. \u2192 \u22121.",
-      "oneSentenceRead": "Small-cap 600 index below its 20-day average.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "lastReading": "^SP600 1686.53 > SMA20 1670.9640",
+      "readingUnit": "index",
+      "rationale": "1686.53 vs SMA20 1670.96 (SMA20 5d slope −5.196, 9d chg +13.55): above SMA20; slope/9d change do not both agree → ±1 → +1.",
+      "oneSentenceRead": "Small-cap index sits above its 20-day average.",
+      "vs_9D": "9d chg +13.5500",
+      "vs_SMA20": "above",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo ^SP600 index daily closes (not SPSM)",
+        "date": "2026-10-22",
+        "value": 1686.530029,
+        "sma20": 1670.963995,
+        "sma20Slope5": -5.196497,
+        "change9": 13.550049,
+        "text": "Yahoo ^SP600 index daily closes (not SPSM) · ^SP600 1686.53 > SMA20 1670.9640 · @ 2026-10-22"
+      }
     },
     {
       "id": "rsp",
@@ -343,34 +615,64 @@
       "block": "breadth",
       "verified": true,
       "status": "VERIFIED",
-      "score": -1,
+      "score": 2,
       "weightNominal": 0.068,
       "weight": 0.068,
       "weightEffective": 0.068,
-      "contribution": -0.068,
-      "lastReading": "212.29",
+      "contribution": 0.136,
+      "lastReading": "RSP 218.22 > SMA20 212.3925",
       "readingUnit": "usd",
-      "rationale": "Still off late-August peak \u2192 mildly sick (\u22121).",
-      "oneSentenceRead": "Equal-weight S&P price is still off the August highs.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "rationale": "218.22 vs SMA20 212.39 (SMA20 5d slope +0.944, 9d chg +5.18): above SMA20; slope + 9d change agree → ±2 → +2.",
+      "oneSentenceRead": "Equal-weight S&P sits above its 20-day average and is rising.",
+      "vs_9D": "9d chg +5.1800",
+      "vs_SMA20": "above",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo RSP daily closes",
+        "date": "2026-10-22",
+        "value": 218.220001,
+        "sma20": 212.3925,
+        "sma20Slope5": 0.943501,
+        "change9": 5.180008,
+        "text": "Yahoo RSP daily closes · RSP 218.22 > SMA20 212.3925 · @ 2026-10-22"
+      }
     },
     {
       "id": "vix-vvix",
-      "name": "VIX and VVIX",
-      "description": "Spot VIX with VVIX (vol-of-vol) confirmation.",
+      "name": "Spot VIX",
+      "description": "Spot VIX level versus 19, confirmed by its own 20-day trend.",
       "block": "fragility",
       "verified": true,
       "status": "VERIFIED",
-      "score": 1,
+      "score": -2,
       "weightNominal": 0.0565,
       "weight": 0.0565,
       "weightEffective": 0.0565,
-      "contribution": 0.0565,
-      "lastReading": "VIX 14.81 \u00b7 VVIX 87.38",
+      "contribution": -0.113,
+      "lastReading": "VIX 19.03",
       "readingUnit": "level",
-      "rationale": "VIX 14.81 <19 \u2192 risk-on (+1). Flag CONTRARIAN_COMPLACENT (VIX<15).",
-      "oneSentenceRead": "Spot vol is quiet \u2014 risk-on by level, with a complacency flag.",
-      "vs_9D": "n/a \u2014 MA not on chart"
+      "rationale": "VIX 19.03 > 19 → risk-off −1; inverse points -2 (19.03 vs SMA20 16.31 (SMA20 5d slope +0.836, 9d chg +4.19)) agrees → ±2 → -2. Not CONTRARIAN_COMPLACENT (VIX ≥ 15).",
+      "oneSentenceRead": "Spot vol is risk-off by level (VIX above 19).",
+      "vs_9D": "9d chg +4.1900",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "vs_SMA20": "above",
+      "evidence": {
+        "source": "Yahoo ^VIX daily closes",
+        "date": "2026-10-22",
+        "value": 19.030001,
+        "sma20": 16.307,
+        "sma20Slope5": 0.8355,
+        "change9": 4.190001,
+        "text": "Yahoo ^VIX daily closes · VIX 19.03 · @ 2026-10-22",
+        "extra": {
+          "vvix": 107.94000244140625,
+          "vvixDate": "2026-10-22"
+        }
+      }
     },
     {
       "id": "finra-margin",
@@ -384,13 +686,29 @@
       "weight": 0.068,
       "weightEffective": 0.068,
       "contribution": 0.068,
-      "lastReading": "Aug-26 1,453,832 ($mm); MoM up vs Jul-26 1,417,225",
+      "lastReading": "Sep-26 1,480,054 ($mm); MoM up vs Aug-26 1,453,832 (latest official FINRA release)",
       "readingUnit": "usd_millions",
-      "rationale": "Same Aug-26 print; MoM still up \u2192 +1. finra_release_week false.",
-      "oneSentenceRead": "Latest official margin debt remains higher month-over-month (not release week).",
-      "vs_9D": "n/a \u2014 MA not on chart",
+      "rationale": "MoM rising -> +1. FINRA page checked 2026-10-17: top row Sep-26 1,480,054 vs Aug-26 1,453,832 (+26,222).",
+      "oneSentenceRead": "Latest official margin debt is higher month-over-month.",
+      "vs_9D": "n/a — scored with owner SMA20 / level / band rules",
       "monthlyLagged": true,
-      "finra_release_week": false
+      "finra_release_week": false,
+      "fresh": false,
+      "heldSince": "2026-10-17",
+      "asOf": "2026-10-17",
+      "evidence": {
+        "month": "Sep-26",
+        "value": 1480054,
+        "priorMonth": "Aug-26",
+        "prior": 1453832,
+        "change": 26222,
+        "unit": "usd_millions",
+        "url": "https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics",
+        "checked": "2026-10-17T11:30+13:00",
+        "source": "FINRA margin statistics (Sep-26, latest official; page checked 2026-10-17)",
+        "date": "2026-10-17",
+        "text": "FINRA margin statistics (Sep-26, latest official; page checked 2026-10-17) · Sep-26 1,480,054 ($mm); MoM up vs Aug-26 1,453,832 (latest official FINRA release) · @ 2026-10-17"
+      }
     },
     {
       "id": "qqq-sma20",
@@ -399,18 +717,29 @@
       "block": "leadership",
       "verified": true,
       "status": "VERIFIED",
-      "score": 1,
+      "score": -1,
       "weightNominal": 0.08,
       "weight": 0.08,
       "weightEffective": 0.08,
-      "contribution": 0.08,
-      "lastReading": "QQQ 721.45 > SMA20 713.2355",
+      "contribution": -0.08,
+      "lastReading": "QQQ 704.47 < SMA20 737.2400",
       "readingUnit": "usd",
-      "rationale": "Yahoo SMA20 re-gate: close 721.45 > SMA20 713.2355 \u2192 +1 VERIFIED (was UNVERIFIED 0).",
-      "oneSentenceRead": "Nasdaq sits above its 20-day average.",
-      "vs_9D": "n/a \u2014 scored vs SMA20 (Yahoo)",
-      "vs_SMA20": "above",
-      "sma20Source": "Yahoo Finance daily closes (Mine VERIFIED 2026-09-19)"
+      "rationale": "Close below SMA20 → −1 (rubric: ±1 only).",
+      "oneSentenceRead": "Nasdaq sits under its 20-day average.",
+      "vs_9D": "9d chg −46.8000",
+      "vs_SMA20": "below",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo QQQ daily closes",
+        "date": "2026-10-22",
+        "value": 704.469971,
+        "sma20": 737.240002,
+        "sma20Slope5": -5.861502,
+        "change9": -46.800049,
+        "text": "Yahoo QQQ daily closes · QQQ 704.47 < SMA20 737.2400 · @ 2026-10-22"
+      }
     },
     {
       "id": "hyg-ief-sma20",
@@ -419,18 +748,29 @@
       "block": "fragility",
       "verified": true,
       "status": "VERIFIED",
-      "score": 1,
+      "score": -1,
       "weightNominal": 0.07,
       "weight": 0.07,
       "weightEffective": 0.07,
-      "contribution": 0.07,
-      "lastReading": "HYG/IEF 0.864868 > SMA20 0.859870",
+      "contribution": -0.07,
+      "lastReading": "ratio 0.8454 < SMA20 0.8599",
       "readingUnit": "ratio",
-      "rationale": "Yahoo SMA20 re-gate: ratio 0.864868 > SMA20 0.859870 \u2192 +1 VERIFIED (was UNVERIFIED 0).",
-      "oneSentenceRead": "Credit risk appetite sits above its 20-day average.",
-      "vs_9D": "n/a \u2014 scored vs SMA20 (Yahoo)",
-      "vs_SMA20": "above",
-      "sma20Source": "Yahoo Finance daily closes (Mine VERIFIED 2026-09-19)"
+      "rationale": "Ratio below SMA20 → −1 (rubric: ±1 only).",
+      "oneSentenceRead": "Credit risk appetite sits under its 20-day average.",
+      "vs_9D": "9d chg −0.0185",
+      "vs_SMA20": "below",
+      "fresh": true,
+      "heldSince": null,
+      "asOf": "2026-10-22",
+      "evidence": {
+        "source": "Yahoo HYG ÷ IEF daily closes",
+        "date": "2026-10-22",
+        "value": 0.845395,
+        "sma20": 0.859914,
+        "sma20Slope5": -0.003632,
+        "change9": -0.018476,
+        "text": "Yahoo HYG ÷ IEF daily closes · ratio 0.8454 < SMA20 0.8599 · @ 2026-10-22"
+      }
     }
   ],
   "letterArchive": [],
@@ -438,5 +778,28 @@
     "tradingViewIndicatorsUrl": "/indicators",
     "bookTuitionUrl": "/tuition"
   },
-  "sma20ReGateFile": "sma20-yahoo-backfill-2026-09-19.md"
+  "packStamp": {
+    "sessionDate": "2026-10-22",
+    "refreshedAt": "2026-10-23T11:25:01+13:00",
+    "method": "scripted-nightly-points",
+    "held": [
+      "finra-margin"
+    ]
+  },
+  "scoring": {
+    "method": "scripted-nightly-points",
+    "rulesVersion": "decide-points-v1-2026-09-25",
+    "script": "scripts/refresh-decide.mjs",
+    "doc": "docs/ops/decide-scripted.md",
+    "scoredAt": "2026-10-23T11:25:01+13:00",
+    "fetchErrors": {},
+    "scorekeeperFills": "FINRA + failed feeds only (/home/box/canaries/decide-fills.json)"
+  },
+  "needsFill": [
+    {
+      "id": "finra-margin",
+      "heldSince": "2026-10-17",
+      "reason": "manual input (monthly FINRA) — Scorekeeper fill"
+    }
+  ]
 }

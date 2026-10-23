@@ -1,8 +1,6 @@
 "use client";
 
-import { StripeStubButton } from "@/components/StripeStubButton";
-
-/** Visible production-price note + stub checkout (no live charge). */
+/** Visible production-price note + link to create an account (checkout is on Stripe). */
 export function MembersPricingNote({ compact = false }: { compact?: boolean }) {
   return (
     <div
@@ -16,16 +14,26 @@ export function MembersPricingNote({ compact = false }: { compact?: boolean }) {
         Membership pricing
       </p>
       <p className="mt-2 text-sm leading-relaxed text-slate-200">
-        Production entitlement:{" "}
-        <span className="font-semibold text-white">US$50 / month</span> via Stripe.
-        Design mode only — checkout is stubbed; no live charge.
+        First 100:{" "}
+        <span className="font-semibold text-white">$600/yr</span> (US$50/mo, billed
+        annually), locked for life while renewing. After 100:{" "}
+        <span className="font-semibold text-white">$1,069/yr</span> or{" "}
+        <span className="font-semibold text-white">$99/mo</span> monthly.
       </p>
       <div className="mt-3">
-        <StripeStubButton
-          product="dashboard"
-          label="Stub checkout · US$50/mo (no charge)"
-        />
+        <a
+          href="/account/signup"
+          className="inline-block rounded-xl bg-canary-gold px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
+        >
+          Create account
+        </a>
       </div>
+      <p className="mt-3 text-xs text-slate-400">
+        Already a member?{" "}
+        <a href="/account/login" className="text-canary-gold hover:underline">
+          Log in
+        </a>
+      </p>
     </div>
   );
 }

@@ -1,10 +1,602 @@
 {
-  "asOf": "2026-09-21",
-  "scannedAt": "2026-09-21T02:03:35+12:00",
-  "universeCount": 76,
-  "scannedCount": 76,
+  "asOf": "2026-10-22",
+  "scannedAt": "2026-10-23T11:26:00+13:00",
+  "universeCount": 210,
+  "scannedCount": 210,
   "failed": [],
-  "signals": [],
-  "method": "yahoo-daily-exhaustion-approx",
-  "note": "Daily chart exhaustion (RSI cross 80, EMA13>EMA55). Education only."
+  "failedDetail": [],
+  "signals": [
+    {
+      "ticker": "ISRG",
+      "signal": "exhaustion",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-22 sweat RelRSI reach RSI=67.9"
+    },
+    {
+      "ticker": "ADBE",
+      "signal": "skull",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-22",
+      "skullAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-22 sweat RelRSI reach RSI=65.4 · 💀@2026-10-22 skull RelRSI reach"
+    },
+    {
+      "ticker": "INTU",
+      "signal": "skull",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-20",
+      "skullAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-20 sweat RelRSI reach RSI=65.2 · 💀@2026-10-22 skull RelRSI reach"
+    },
+    {
+      "ticker": "WDAY",
+      "signal": "skull",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-20",
+      "skullAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-20 sweat RelRSI reach RSI=63.2 · 💀@2026-10-22 skull RelRSI reach"
+    },
+    {
+      "ticker": "HUBS",
+      "signal": "exhaustion",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-22 sweat RelRSI reach RSI=67.5"
+    },
+    {
+      "ticker": "MNDY",
+      "signal": "skull",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-20",
+      "skullAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-20 sweat RelRSI reach RSI=64.8 · 💀@2026-10-22 skull RelRSI reach"
+    },
+    {
+      "ticker": "TENB",
+      "signal": "exhaustion",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-22 sweat RelRSI reach RSI=61.7"
+    },
+    {
+      "ticker": "CHKP",
+      "signal": "skull",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-21",
+      "skullAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-21 sweat RelRSI reach RSI=64.4 · 💀@2026-10-22 skull RelRSI reach"
+    },
+    {
+      "ticker": "SPOT",
+      "signal": "exhaustion",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-22 sweat RelRSI reach RSI=70.5"
+    },
+    {
+      "ticker": "FRSH",
+      "signal": "skull",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-15",
+      "skullAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-15 sweat RelRSI reach RSI=66.9 · 💀@2026-10-22 skull RelRSI reach"
+    },
+    {
+      "ticker": "NCNO",
+      "signal": "exhaustion",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-22",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-22 sweat RelRSI reach RSI=69.2"
+    },
+    {
+      "ticker": "CTAS",
+      "signal": "skull",
+      "asOf": "2026-10-20",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-13",
+      "skullAsOf": "2026-10-20",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-13 sweat RelRSI reach RSI=63.2 · 💀@2026-10-20 skull RelRSI reach"
+    },
+    {
+      "ticker": "UNH",
+      "signal": "exhaustion",
+      "asOf": "2026-10-20",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-20",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-20 sweat RelRSI reach RSI=71.2"
+    },
+    {
+      "ticker": "SYK",
+      "signal": "skull",
+      "asOf": "2026-10-20",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-20",
+      "skullAsOf": "2026-10-20",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-20 sweat RelRSI reach RSI=65.5 · 💀@2026-10-20 skull RelRSI reach"
+    },
+    {
+      "ticker": "NOW",
+      "signal": "exhaustion",
+      "asOf": "2026-10-15",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-15",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-15 sweat RelRSI reach RSI=65.4"
+    },
+    {
+      "ticker": "LLY",
+      "signal": "exhaustion",
+      "asOf": "2026-10-15",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-15",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-15 sweat RelRSI reach RSI=67.8"
+    },
+    {
+      "ticker": "EL",
+      "signal": "skull",
+      "asOf": "2026-10-15",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-15",
+      "skullAsOf": "2026-10-15",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-15 sweat RelRSI reach RSI=70.5 · 💀@2026-10-15 skull RelRSI reach"
+    },
+    {
+      "ticker": "SHOP",
+      "signal": "skull",
+      "asOf": "2026-10-15",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-05",
+      "skullAsOf": "2026-10-15",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-05 sweat RelRSI reach RSI=67.6 · 💀@2026-10-15 skull RelRSI reach"
+    },
+    {
+      "ticker": "ACN",
+      "signal": "skull",
+      "asOf": "2026-10-15",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-01",
+      "skullAsOf": "2026-10-15",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-01 sweat RelRSI reach RSI=70.0 · 💀@2026-10-15 skull RelRSI reach"
+    },
+    {
+      "ticker": "NTAP",
+      "signal": "skull",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-01",
+      "skullAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-01 sweat RelRSI reach RSI=70.1 · 💀@2026-10-09 skull RelRSI reach"
+    },
+    {
+      "ticker": "PLTR",
+      "signal": "skull",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-09",
+      "skullAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-09 sweat RelRSI reach RSI=76.3 · 💀@2026-10-09 skull RelRSI reach"
+    },
+    {
+      "ticker": "ZS",
+      "signal": "exhaustion",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-09 sweat RelRSI reach RSI=72.9"
+    },
+    {
+      "ticker": "S",
+      "signal": "skull",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-01",
+      "skullAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-01 sweat RelRSI reach RSI=63.8 · 💀@2026-10-09 skull RelRSI reach"
+    },
+    {
+      "ticker": "OKTA",
+      "signal": "skull",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "skullAsOf": "2026-10-09",
+      "signals": [
+        "skull"
+      ],
+      "note": "💀@2026-10-09 skull RelRSI reach"
+    },
+    {
+      "ticker": "MRNA",
+      "signal": "exhaustion",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-09 sweat RelRSI reach RSI=72.1"
+    },
+    {
+      "ticker": "SNAP",
+      "signal": "skull",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-09",
+      "skullAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-09 sweat RelRSI reach RSI=67.3 · 💀@2026-10-09 skull RelRSI reach"
+    },
+    {
+      "ticker": "ESTC",
+      "signal": "exhaustion",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-09",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-09 sweat RelRSI reach RSI=66.6"
+    },
+    {
+      "ticker": "GTLB",
+      "signal": "skull",
+      "asOf": "2026-10-08",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-05",
+      "skullAsOf": "2026-10-08",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-05 sweat RelRSI reach RSI=65.7 · 💀@2026-10-08 skull RelRSI reach"
+    },
+    {
+      "ticker": "HPE",
+      "signal": "exhaustion",
+      "asOf": "2026-10-07",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-07",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-07 sweat RelRSI reach RSI=71.5"
+    },
+    {
+      "ticker": "ZBRA",
+      "signal": "exhaustion",
+      "asOf": "2026-10-06",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-06",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-06 sweat RelRSI reach RSI=69.0"
+    },
+    {
+      "ticker": "MRVL",
+      "signal": "exhaustion",
+      "asOf": "2026-10-06",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-06",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-06 sweat RelRSI reach RSI=69.9"
+    },
+    {
+      "ticker": "FTNT",
+      "signal": "exhaustion",
+      "asOf": "2026-10-06",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-06",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-06 sweat RelRSI reach RSI=72.2"
+    },
+    {
+      "ticker": "ADI",
+      "signal": "skull",
+      "asOf": "2026-10-06",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-02",
+      "skullAsOf": "2026-10-06",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-02 sweat RelRSI reach RSI=72.1 · 💀@2026-10-06 skull RelRSI reach"
+    },
+    {
+      "ticker": "CIBR",
+      "signal": "exhaustion",
+      "asOf": "2026-10-06",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-06",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-06 sweat RelRSI reach RSI=69.2"
+    },
+    {
+      "ticker": "MPWR",
+      "signal": "exhaustion",
+      "asOf": "2026-10-05",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-05",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-05 sweat RelRSI reach RSI=69.3"
+    },
+    {
+      "ticker": "CRWD",
+      "signal": "exhaustion",
+      "asOf": "2026-10-05",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-05",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-05 sweat RelRSI reach RSI=69.7"
+    },
+    {
+      "ticker": "ZETA",
+      "signal": "exhaustion",
+      "asOf": "2026-10-05",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-05",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-05 sweat RelRSI reach RSI=65.9"
+    },
+    {
+      "ticker": "TXN",
+      "signal": "exhaustion",
+      "asOf": "2026-10-05",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-05",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-05 sweat RelRSI reach RSI=71.0"
+    },
+    {
+      "ticker": "ENTG",
+      "signal": "skull",
+      "asOf": "2026-10-05",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-02",
+      "skullAsOf": "2026-10-05",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-02 sweat RelRSI reach RSI=69.0 · 💀@2026-10-05 skull RelRSI reach"
+    },
+    {
+      "ticker": "BTCUSD",
+      "signal": "exhaustion",
+      "asOf": "2026-10-04",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-04",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-04 sweat RelRSI reach RSI=68.5"
+    },
+    {
+      "ticker": "TSM",
+      "signal": "skull",
+      "asOf": "2026-10-02",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-02",
+      "skullAsOf": "2026-10-02",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-02 sweat RelRSI reach RSI=71.5 · 💀@2026-10-02 skull RelRSI reach"
+    },
+    {
+      "ticker": "RMBS",
+      "signal": "exhaustion",
+      "asOf": "2026-10-02",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-02",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-02 sweat RelRSI reach RSI=69.5"
+    },
+    {
+      "ticker": "DDOG",
+      "signal": "exhaustion",
+      "asOf": "2026-10-02",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-02",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-10-02 sweat RelRSI reach RSI=70.6"
+    },
+    {
+      "ticker": "ACLS",
+      "signal": "skull",
+      "asOf": "2026-10-02",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-02",
+      "skullAsOf": "2026-10-02",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-02 sweat RelRSI reach RSI=73.6 · 💀@2026-10-02 skull RelRSI reach"
+    },
+    {
+      "ticker": "KEYS",
+      "signal": "skull",
+      "asOf": "2026-10-02",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-01",
+      "skullAsOf": "2026-10-02",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-01 sweat RelRSI reach RSI=70.4 · 💀@2026-10-02 skull RelRSI reach"
+    },
+    {
+      "ticker": "SNPS",
+      "signal": "skull",
+      "asOf": "2026-10-01",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-01",
+      "skullAsOf": "2026-10-01",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-01 sweat RelRSI reach RSI=74.4 · 💀@2026-10-01 skull RelRSI reach"
+    },
+    {
+      "ticker": "CDNS",
+      "signal": "skull",
+      "asOf": "2026-10-01",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-10-01",
+      "skullAsOf": "2026-10-01",
+      "signals": [
+        "exhaustion",
+        "skull"
+      ],
+      "note": "🥵@2026-10-01 sweat RelRSI reach RSI=70.6 · 💀@2026-10-01 skull RelRSI reach"
+    },
+    {
+      "ticker": "FORM",
+      "signal": "exhaustion",
+      "asOf": "2026-09-30",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-09-30",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-09-30 sweat RelRSI reach RSI=73.5"
+    },
+    {
+      "ticker": "SMCI",
+      "signal": "exhaustion",
+      "asOf": "2026-09-25",
+      "timeframe": "1D",
+      "exhaustionAsOf": "2026-09-25",
+      "signals": [
+        "exhaustion"
+      ],
+      "note": "🥵@2026-09-25 sweat RelRSI reach RSI=63.8"
+    }
+  ],
+  "method": "yahoo-1d-canary-relrsi-daily-2026-10-02",
+  "note": "Canary RelRSI daily Sweaty 🥵/💀 only · last 20 sessions · Yahoo 1d full history. Never invented. · full-pack session 2026-10-22 · Canary RelRSI daily",
+  "sessionDate": "2026-10-22",
+  "packAsOf": "2026-10-22",
+  "held": false,
+  "heldSince": null,
+  "packScannedAt": "2026-10-23T11:24:59+13:00"
 }

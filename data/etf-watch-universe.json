@@ -1,0 +1,82 @@
+{
+  "asOf": "2026-10-06",
+  "purpose": "Sector ETFs box (was ETF Watch) — Canary RelRSI daily on sector, industry and thematic non-leveraged ETFs plus the key index/metals/uranium reads. Country funds live in data/etf-country-universe.json.",
+  "count": 23,
+  "note": "Owner 2026-10-06: no leveraged or inverse ETFs (2x/3x/-1x) in either ETF universe. Yahoo maps: SPX→^GSPC, SP600→^SP600, XAUUSD→GC=F/XAUUSD=X, XAGUSD→SI=F/XAGUSD=X.",
+  "tickers": [
+    "XLC",
+    "XLY",
+    "XLP",
+    "XLE",
+    "XLF",
+    "XLV",
+    "XLI",
+    "XLB",
+    "XLK",
+    "XLU",
+    "XLRE",
+    "SPX",
+    "VUG",
+    "KWEB",
+    "QQQ",
+    "SP600",
+    "RSP",
+    "IWM",
+    "XLG",
+    "GLD",
+    "SLV",
+    "URA",
+    "URNM"
+  ],
+  "removed2026_09_25": [
+    {
+      "ticker": "VTV",
+      "reason": "value ETF — owner 2026-09-25"
+    }
+  ],
+  "names": {
+    "XLC": "Communication Services Select Sector SPDR",
+    "XLY": "Consumer Discretionary Select Sector SPDR",
+    "XLP": "Consumer Staples Select Sector SPDR",
+    "XLE": "Energy Select Sector SPDR",
+    "XLF": "Financial Select Sector SPDR",
+    "XLV": "Health Care Select Sector SPDR",
+    "XLI": "Industrial Select Sector SPDR",
+    "XLB": "Materials Select Sector SPDR",
+    "XLK": "Technology Select Sector SPDR",
+    "XLU": "Utilities Select Sector SPDR",
+    "XLRE": "Real Estate Select Sector SPDR",
+    "SPX": "S&P 500 index",
+    "VUG": "Vanguard Growth ETF",
+    "KWEB": "KraneShares CSI China Internet ETF",
+    "QQQ": "Invesco QQQ (Nasdaq-100)",
+    "SP600": "S&P SmallCap 600 index",
+    "RSP": "Invesco S&P 500 Equal Weight ETF",
+    "IWM": "iShares Russell 2000 ETF",
+    "XLG": "Invesco S&P 500 Top 50 ETF",
+    "GLD": "SPDR Gold Shares",
+    "SLV": "iShares Silver Trust",
+    "URA": "Global X Uranium ETF",
+    "URNM": "Sprott Uranium Miners ETF"
+  },
+  "removed2026_10_06": [
+    {
+      "ticker": "FXI",
+      "reason": "China large-cap; owner 2026-10-06: use MCHI (Countries box) for China, not FXI"
+    },
+    {
+      "ticker": "EWS",
+      "reason": "moved to Countries (data/etf-country-universe.json) — owner 2026-10-06"
+    }
+  ],
+  "removed2026_10_14": [
+    {
+      "ticker": "XAUUSD",
+      "reason": "owner t697u 2026-10-14: duplicate of GLD/SLV in Sector ETFs box"
+    },
+    {
+      "ticker": "XAGUSD",
+      "reason": "owner t697u 2026-10-14: duplicate of GLD/SLV in Sector ETFs box"
+    }
+  ]
+}

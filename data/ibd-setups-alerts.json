@@ -1,0 +1,254 @@
+{
+  "asOf": "2026-10-22",
+  "scannedAt": "2026-10-23T11:26:54+13:00",
+  "universeCount": 210,
+  "scannedCount": 208,
+  "failed": [
+    "CBRS",
+    "SPCX"
+  ],
+  "failedDetail": [
+    {
+      "ticker": "CBRS",
+      "error": "CBRS: too few daily bars (112 < 257)"
+    },
+    {
+      "ticker": "SPCX",
+      "error": "SPCX: too few daily bars (92 < 257)"
+    }
+  ],
+  "signals": [
+    {
+      "ticker": "MRNA",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 99,
+      "pctBelowHigh": 20.37,
+      "pctAboveLow": 809.47,
+      "note": "RS 99 · 20.4% below 52w high · 809.5% above 52w low"
+    },
+    {
+      "ticker": "TEAM",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 99,
+      "pctBelowHigh": 2.96,
+      "pctAboveLow": 298.43,
+      "note": "RS 99 · 3.0% below 52w high · 298.4% above 52w low"
+    },
+    {
+      "ticker": "OKTA",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 97,
+      "pctBelowHigh": 14.33,
+      "pctAboveLow": 221.31,
+      "note": "RS 97 · 14.3% below 52w high · 221.3% above 52w low"
+    },
+    {
+      "ticker": "RBRK",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 94,
+      "pctBelowHigh": 5.59,
+      "pctAboveLow": 185.8,
+      "note": "RS 94 · 5.6% below 52w high · 185.8% above 52w low"
+    },
+    {
+      "ticker": "CRWD",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 93,
+      "pctBelowHigh": 17.09,
+      "pctAboveLow": 177.71,
+      "note": "RS 93 · 17.1% below 52w high · 177.7% above 52w low"
+    },
+    {
+      "ticker": "FTNT",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 93,
+      "pctBelowHigh": 12.25,
+      "pctAboveLow": 135.19,
+      "note": "RS 93 · 12.3% below 52w high · 135.2% above 52w low"
+    },
+    {
+      "ticker": "GTLB",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 93,
+      "pctBelowHigh": 5.8,
+      "pctAboveLow": 191.14,
+      "note": "RS 93 · 5.8% below 52w high · 191.1% above 52w low"
+    },
+    {
+      "ticker": "QLYS",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 93,
+      "pctBelowHigh": 0.9,
+      "pctAboveLow": 179.43,
+      "note": "RS 93 · 0.9% below 52w high · 179.4% above 52w low"
+    },
+    {
+      "ticker": "ZETA",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 93,
+      "pctBelowHigh": 6.24,
+      "pctAboveLow": 133.34,
+      "note": "RS 93 · 6.2% below 52w high · 133.3% above 52w low"
+    },
+    {
+      "ticker": "CAKE",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 92,
+      "pctBelowHigh": 5.22,
+      "pctAboveLow": 161.06,
+      "note": "RS 92 · 5.2% below 52w high · 161.1% above 52w low"
+    },
+    {
+      "ticker": "NTAP",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 92,
+      "pctBelowHigh": 11.77,
+      "pctAboveLow": 126.82,
+      "note": "RS 92 · 11.8% below 52w high · 126.8% above 52w low"
+    },
+    {
+      "ticker": "ESTC",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 90,
+      "pctBelowHigh": 9.06,
+      "pctAboveLow": 133.56,
+      "note": "RS 90 · 9.1% below 52w high · 133.6% above 52w low"
+    },
+    {
+      "ticker": "OSCR",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 90,
+      "pctBelowHigh": 4.83,
+      "pctAboveLow": 211.69,
+      "note": "RS 90 · 4.8% below 52w high · 211.7% above 52w low"
+    },
+    {
+      "ticker": "TENB",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 90,
+      "pctBelowHigh": 3.82,
+      "pctAboveLow": 167.01,
+      "note": "RS 90 · 3.8% below 52w high · 167.0% above 52w low"
+    },
+    {
+      "ticker": "DDOG",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 88,
+      "pctBelowHigh": 14.28,
+      "pctAboveLow": 162.98,
+      "note": "RS 88 · 14.3% below 52w high · 163.0% above 52w low"
+    },
+    {
+      "ticker": "FRSH",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 86,
+      "pctBelowHigh": 0.78,
+      "pctAboveLow": 125.63,
+      "note": "RS 86 · 0.8% below 52w high · 125.6% above 52w low"
+    },
+    {
+      "ticker": "ZBRA",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 86,
+      "pctBelowHigh": 2.19,
+      "pctAboveLow": 93,
+      "note": "RS 86 · 2.2% below 52w high · 93.0% above 52w low"
+    },
+    {
+      "ticker": "PLTR",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 82,
+      "pctBelowHigh": 7.87,
+      "pctAboveLow": 84.44,
+      "note": "RS 82 · 7.9% below 52w high · 84.4% above 52w low"
+    },
+    {
+      "ticker": "CIBR",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 81,
+      "pctBelowHigh": 7.11,
+      "pctAboveLow": 71.15,
+      "note": "RS 81 · 7.1% below 52w high · 71.2% above 52w low"
+    },
+    {
+      "ticker": "SWKS",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 79,
+      "pctBelowHigh": 11.22,
+      "pctAboveLow": 58.66,
+      "note": "RS 79 · 11.2% below 52w high · 58.7% above 52w low"
+    },
+    {
+      "ticker": "LLY",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 78,
+      "pctBelowHigh": 1.1,
+      "pctAboveLow": 64.61,
+      "note": "RS 78 · 1.1% below 52w high · 64.6% above 52w low"
+    },
+    {
+      "ticker": "ABNB",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 77,
+      "pctBelowHigh": 9.15,
+      "pctAboveLow": 58.61,
+      "note": "RS 77 · 9.2% below 52w high · 58.6% above 52w low"
+    },
+    {
+      "ticker": "GRMN",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 74,
+      "pctBelowHigh": 6.01,
+      "pctAboveLow": 58.25,
+      "note": "RS 74 · 6.0% below 52w high · 58.3% above 52w low"
+    },
+    {
+      "ticker": "MSFT",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 73,
+      "pctBelowHigh": 5.89,
+      "pctAboveLow": 49.22,
+      "note": "RS 73 · 5.9% below 52w high · 49.2% above 52w low"
+    },
+    {
+      "ticker": "AAPL",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "rsRating": 72,
+      "pctBelowHigh": 0.04,
+      "pctAboveLow": 43.05,
+      "note": "RS 72 · 0.0% below 52w high · 43.0% above 52w low"
+    }
+  ],
+  "method": "yahoo-1d-minervini-ibd-rs-vs-spy",
+  "note": "IBD Setups — latest daily Minervini MA/52w template + IBD-style RS ≥70 vs SPY (Yahoo 1d). RS is IBD-style vs SPY approximation, not official IBD percentile. Prints where setup==true (full PASS), not only the on-transition. Never invented. · full-pack session 2026-10-22 · Minervini+RS daily setup==true",
+  "sessionDate": "2026-10-22",
+  "packAsOf": "2026-10-22",
+  "held": false,
+  "heldSince": null,
+  "packScannedAt": "2026-10-23T11:24:59+13:00"
+}

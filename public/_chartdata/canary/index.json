@@ -1,0 +1,22 @@
+{
+  "asOf": "2026-10-22",
+  "built": "2026-10-22T22:28:14.401Z",
+  "charted": [
+    "cyclical-defensive",
+    "xlf-kre",
+    "vix-vix3m",
+    "nyse-ad",
+    "pct-above-200dma",
+    "es1-jp30",
+    "sp-top-50",
+    "sp600",
+    "rsp",
+    "vix-vvix",
+    "qqq-sma20",
+    "hyg-ief-sma20"
+  ],
+  "limited": {
+    "finra-margin": "FINRA margin debt is published monthly and entered by hand, so there is no daily history to chart."
+  },
+  "failed": {}
+}

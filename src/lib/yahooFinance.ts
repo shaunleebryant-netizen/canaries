@@ -4,7 +4,7 @@
  */
 
 export const YAHOO_UA =
-  "Mozilla/5.0 (compatible; CoherantCanary/1.0; +https://coherantcanary.com)";
+  "Mozilla/5.0 (compatible; CanaryDashboard/1.0; +https://canarydashboard.com)";
 
 export interface YahooBar {
   date: string;

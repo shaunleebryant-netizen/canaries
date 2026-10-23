@@ -1,0 +1,31 @@
+{
+  "asOf": "2026-10-05",
+  "purpose": "Crypto Watch universe — Bottom Finder v3.1 on spot crypto. Prints tickers with 🙂/🐟 and/or 🥵/💀 in the recent window (Fish + Sweaty combined).",
+  "count": 22,
+  "note": "Top 20 non-stablecoin coins by CoinGecko market cap (2026-10-04 22:09 UTC), order preserved. Stables skipped: USDT, USDC, USDS (USDE/DAI/USD1/USDG sat below this cut). Levered products removed: ETHU, BTCL, SOLZ. DIMEUSD is Paradex (owner add; Yahoo DIME39656-USD; Dimecoin DIME-USD is a fallback). FIGRHELOCUSD is Figure Heloc, rank 9, not a fiat stable. TOTAL kept (crypto market-cap index, not a coin). Yahoo maps live in scripts/scan-fish-v3.mjs.",
+  "source": "CoinGecko /coins/markets vs_currency=usd order=market_cap_desc 2026-10-04T22:09:30Z",
+  "tickers": [
+    "BTCUSD",
+    "ETHUSD",
+    "BNBUSD",
+    "XRPUSD",
+    "SOLUSD",
+    "TRXUSD",
+    "FIGRHELOCUSD",
+    "ZECUSD",
+    "HYPEUSD",
+    "DOGEUSD",
+    "LINKUSD",
+    "XMRUSD",
+    "WBTUSD",
+    "ADAUSD",
+    "LEOUSD",
+    "RAINUSD",
+    "XLMUSD",
+    "NEARUSD",
+    "BCHUSD",
+    "UNIUSD",
+    "DIMEUSD",
+    "TOTAL"
+  ]
+}

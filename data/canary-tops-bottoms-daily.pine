@@ -1,0 +1,169 @@
+//@version=6
+indicator("Canary Tops & Bottoms (DAILY ONLY) 🙂🐟🥵💀", shorttitle="Canary D", overlay=true, max_labels_count=500)
+
+// INPUTS
+useTinyEmoji = input.bool(true, "Smaller emoji size", group="General")
+
+emaFastLen = input.int(21, "Fast EMA", minval=1, group="Regime")
+emaSlowLen = input.int(55, "Slow EMA", minval=1, group="Regime")
+rsiLen     = input.int(14, "RSI length", minval=2, group="Regime")
+
+useVolFilter = input.bool(true, "Require volume thrust", group="Quality")
+volLen       = input.int(20, "Volume SMA length", minval=2, group="Quality")
+volMult      = input.float(1.1, "Volume vs SMA", step=0.05, group="Quality")
+clusterBars  = input.int(8, "Same-side cluster (bars)", minval=1, group="Quality")
+
+rsiDeep = input.float(30.0, "Oversold RSI", step=0.5, group="Bottom")
+rsiHook = input.float(35.0, "Bottom hook — RSI cross up", step=0.5, group="Bottom")
+useTrendDirBottom = input.bool(false, "Bottoms only in EMA downtrend", group="Bottom")
+useHookBot = input.bool(true, "Enable bottom hook", group="Bottom")
+useDivBot  = input.bool(true, "Enable bullish divergence", group="Bottom")
+markWashBar = input.bool(true, "Mark the wash bar (RSI still below threshold)", group="Bottom")
+markTurnBar = input.bool(true, "Mark the RSI turn up after oversold", group="Bottom")
+minBottomScore = input.int(2, "Min bottom score (deep=3, div=2, hook=1)", minval=1, maxval=6, group="Bottom")
+hideWeakBottoms = input.bool(true, "Hide bottoms below score 3", group="Bottom")
+
+rsiHot  = input.float(70.0, "Overbought RSI", step=0.5, group="Top")
+rsiHookTop = input.float(65.0, "Top hook — RSI cross down", step=0.5, group="Top")
+useTrendDirTop = input.bool(false, "Tops only in EMA uptrend", group="Top")
+useHookTop = input.bool(true, "Enable top hook", group="Top")
+useDivTop  = input.bool(true, "Enable bearish divergence", group="Top")
+markBlowoffBar = input.bool(true, "Mark the blowoff bar (RSI still above threshold)", group="Top")
+markTurnDownBar = input.bool(true, "Mark the RSI turn down after overbought", group="Top")
+minTopScore = input.int(2, "Min top score (hot=3, div=2, hook=1)", minval=1, maxval=6, group="Top")
+hideWeakTops = input.bool(true, "Hide tops below score 3", group="Top")
+
+divLeft  = input.int(5, "Pivot left bars", minval=2, group="Divergence")
+divRight = input.int(3, "Pivot right bars", minval=1, group="Divergence")
+divRsiMaxBot = input.float(45.0, "Bull div: RSI must be below", step=0.5, group="Divergence")
+divRsiMinTop = input.float(55.0, "Bear div: RSI must be above", step=0.5, group="Divergence")
+
+lookbackFish = input.int(12, "🐟 must follow 🙂 within N days", minval=1, group="Fish")
+fishExitLevel = input.float(35.0, "🐟 RSI must be above", step=0.5, group="Fish")
+fishRsiMax    = input.float(55.0, "🐟 RSI must be below", step=0.5, group="Fish")
+fishMinRise   = input.float(5.0, "🐟 Min RSI rise from bottom", step=0.5, group="Fish")
+fishRsiMALen  = input.int(9, "🐟 RSI MA length", minval=2, group="Fish")
+fishUseRsiMA  = input.bool(true, "🐟 RSI MA must be rising", group="Fish")
+fishRequirePriceUp = input.bool(true, "🐟 Close > bottom close", group="Fish")
+fishNeedStrongBar  = input.bool(true, "🐟 Close in top half of day", group="Fish")
+oneFishPerBottom   = input.bool(true, "Only one 🐟 per bottom", group="Fish")
+
+detBars     = input.int(2, "💀 RSI down days", minval=1, maxval=8, group="Skull")
+detMinDrop  = input.float(1.0, "💀 Min RSI drop per day", step=0.1, group="Skull")
+detRsiMALen = input.int(14, "💀 RSI MA length", minval=2, group="Skull")
+detUseRSIMA = input.bool(true, "💀 RSI < RSI MA", group="Skull")
+requireRedCandle = input.bool(true, "💀 Red daily candle", group="Skull")
+oneSkullPerTop   = input.bool(true, "Only one 💀 per top", group="Skull")
+
+// CORE
+emaF = ta.ema(close, emaFastLen)
+emaS = ta.ema(close, emaSlowLen)
+rsi  = ta.rsi(close, rsiLen)
+rsiMA_fish = ta.sma(rsi, fishRsiMALen)
+rsiMA_det  = ta.sma(rsi, detRsiMALen)
+downTrend = emaF < emaS
+upTrend   = emaF > emaS
+volSma    = ta.sma(volume, volLen)
+volOK     = not useVolFilter or volume > volSma * volMult or volume[1] > volSma[1] * volMult
+barLoc    = (high - low) > 0 ? (close - low) / (high - low) : 0.5
+rsiTurnUp   = rsi > rsi[1] and rsi[1] <= rsi[2]
+rsiTurnDown = rsi < rsi[1] and rsi[1] >= rsi[2]
+rsiWash     = rsi < rsiDeep and rsi <= ta.lowest(rsi, 3)
+rsiBlowoff  = rsi > rsiHot and rsi >= ta.highest(rsi, 3)
+
+// PIVOT DIVERGENCE
+pl = ta.pivotlow(low, divLeft, divRight)
+ph = ta.pivothigh(high, divLeft, divRight)
+rsiAtPivot = rsi[divRight]
+var float lastPlPrice = na
+var float lastPlRsi   = na
+var float prevPlPrice = na
+var float prevPlRsi   = na
+var float lastPhPrice = na
+var float lastPhRsi   = na
+var float prevPhPrice = na
+var float prevPhRsi   = na
+bullDiv = false
+bearDiv = false
+if not na(pl)
+    prevPlPrice := lastPlPrice
+    prevPlRsi   := lastPlRsi
+    lastPlPrice := pl
+    lastPlRsi   := rsiAtPivot
+    bullDiv := useDivBot and not na(prevPlPrice) and not na(prevPlRsi) and lastPlPrice < prevPlPrice and lastPlRsi > prevPlRsi and lastPlRsi < divRsiMaxBot
+if not na(ph)
+    prevPhPrice := lastPhPrice
+    prevPhRsi   := lastPhRsi
+    lastPhPrice := ph
+    lastPhRsi   := rsiAtPivot
+    bearDiv := useDivTop and not na(prevPhPrice) and not na(prevPhRsi) and lastPhPrice > prevPhPrice and lastPhRsi < prevPhRsi and lastPhRsi > divRsiMinTop
+
+// BOTTOM
+wash = markWashBar and rsiWash and (useTrendDirBottom ? downTrend : true) and volOK
+turn = markTurnBar and rsi[1] < rsiDeep and rsiTurnUp and (useTrendDirBottom ? downTrend : true) and volOK
+deep = wash or turn
+hook = useHookBot and ta.crossover(rsi, rsiHook) and (useTrendDirBottom ? downTrend : true) and volOK
+botScore = (deep ? 3 : 0) + (bullDiv and volOK ? 2 : 0) + (hook ? 1 : 0)
+bottomSignal = botScore >= minBottomScore
+var float bottomRSI    = na
+var float bottomPrice  = na
+var int   lastBottom   = na
+var bool  fishUsed     = false
+var bool  acceptBottom = false
+acceptBottom := false
+if bottomSignal
+    newCluster  = na(lastBottom) or (bar_index - lastBottom) > clusterBars
+    moreExtreme = not na(bottomRSI) and rsi < bottomRSI
+    if newCluster or moreExtreme
+        lastBottom  := bar_index
+        bottomRSI   := rsi
+        bottomPrice := close
+        acceptBottom := true
+        if newCluster
+            fishUsed := false
+plotBottom = acceptBottom and (not hideWeakBottoms or botScore >= 3)
+
+// FISH
+barsFromBottom = not na(lastBottom) ? bar_index - lastBottom : 999999
+inBotWindow = barsFromBottom > 0 and barsFromBottom <= lookbackFish
+fish = inBotWindow and (not oneFishPerBottom or not fishUsed) and rsi > fishExitLevel and rsi < fishRsiMax and rsi > rsi[1] and not na(bottomRSI) and rsi > bottomRSI + fishMinRise and (fishUseRsiMA ? rsiMA_fish > rsiMA_fish[1] : true) and (fishRequirePriceUp ? close > bottomPrice : true) and (fishNeedStrongBar ? barLoc >= 0.5 : true)
+if fish
+    fishUsed := true
+
+// TOP
+blowoff = markBlowoffBar and rsiBlowoff and (useTrendDirTop ? upTrend : true) and volOK
+turnDn  = markTurnDownBar and rsi[1] > rsiHot and rsiTurnDown and (useTrendDirTop ? upTrend : true) and volOK
+hot = blowoff or turnDn
+hookTop = useHookTop and ta.crossunder(rsi, rsiHookTop) and (useTrendDirTop ? upTrend : true) and volOK
+topScore = (hot ? 3 : 0) + (bearDiv and volOK ? 2 : 0) + (hookTop ? 1 : 0)
+topSignal = topScore >= minTopScore
+var float topRSI     = na
+var float topPrice   = na
+var int   lastTop    = na
+var bool  skullArmed = false
+var bool  acceptTop  = false
+acceptTop := false
+if topSignal
+    newCluster  = na(lastTop) or (bar_index - lastTop) > clusterBars
+    moreExtreme = not na(topRSI) and rsi > topRSI
+    if newCluster or moreExtreme
+        lastTop  := bar_index
+        topRSI   := rsi
+        topPrice := close
+        acceptTop := true
+        if newCluster
+            skullArmed := true
+plotTop = acceptTop and (not hideWeakTops or topScore >= 3)
+
+// SKULL
+fallSeq = true
+for i = 0 to detBars - 1
+    dropOK = detMinDrop <= 0 or (rsi[i + 1] - rsi[i] >= detMinDrop)
+    fallSeq := fallSeq and rsi[i] < rsi[i + 1] and dropOK
+det = fallSeq and (detUseRSIMA ? rsi < rsiMA_det : true)
+priceFalling = requireRedCandle ? close < close[1] : true
+skull = skullArmed and det and priceFalling and not na(lastTop) and bar_index > lastTop
+if skull and oneSkullPerTop
+    skullArmed := false
+
+// (plots, table and alertconditions omitted here: display only; full original in chat 29 Sep 01:10 NZ)

@@ -1,0 +1,48 @@
+// Canary RelRSI 🙂🐟🥵💀 (DAILY ONLY) — owner final for Fish/Sweaty/ETF/Crypto boxes.
+// JS port: src/lib/canaryTopsBottoms.mjs + canaryTopsBottomsConfig.mjs (2026-10-02).
+// PRIVATE: thresholds never on public pages.
+//@version=6
+indicator("Canary RelRSI 🙂🐟🥵💀", overlay=true, max_labels_count=500)
+
+rsiLen      = input.int(14, "RSI length", minval=2)
+lookback    = input.int(500, "RelRSI lookback", minval=50) // owner: 500 (not 252)
+smileLevel  = input.float(10.0, "🙂 smile — RelRSI crosses under")
+fishLevel   = input.float(5.5, "🐟 fish — RelRSI reaches")
+sweatLevel  = input.float(90.0, "🥵 sweat — RelRSI reaches")
+skullLevel  = input.float(95.0, "💀 skull — RelRSI reaches")
+clusterBars = input.int(8, "Same-side cluster bars", minval=1)
+
+rsiVal = ta.rsi(close, rsiLen)
+relRsi = ta.percentrank(rsiVal, lookback)
+
+smileEdge = relRsi < smileLevel and nz(relRsi[1]) >= smileLevel
+fishEdge  = relRsi <= fishLevel and nz(relRsi[1]) > fishLevel
+sweatEdge = relRsi >= sweatLevel and nz(relRsi[1]) < sweatLevel
+skullEdge = relRsi >= skullLevel and nz(relRsi[1]) < skullLevel
+
+var int lastBot = na
+var int lastTop = na
+
+inBotCluster = not na(lastBot) and bar_index - lastBot <= clusterBars
+inTopCluster = not na(lastTop) and bar_index - lastTop <= clusterBars
+
+// Within cluster: only stronger marks (fish / skull) may replot.
+plotSmile = smileEdge and not inBotCluster
+plotFish  = fishEdge
+plotSweat = sweatEdge and not inTopCluster
+plotSkull = skullEdge
+
+if plotSmile
+    lastBot := bar_index
+    label.new(bar_index, low, "🙂", style=label.style_label_up, color=color.new(color.teal, 30), textcolor=color.white, size=size.small)
+if plotFish
+    lastBot := bar_index
+    label.new(bar_index, low, "🐟", style=label.style_label_up, color=color.new(color.green, 20), textcolor=color.white, size=size.small)
+if plotSweat
+    lastTop := bar_index
+    label.new(bar_index, high, "🥵", style=label.style_label_down, color=color.new(color.orange, 20), textcolor=color.white, size=size.small)
+if plotSkull
+    lastTop := bar_index
+    label.new(bar_index, high, "💀", style=label.style_label_down, color=color.new(color.red, 20), textcolor=color.white, size=size.small)
+
+plot(relRsi, "RelRSI", display=display.none)

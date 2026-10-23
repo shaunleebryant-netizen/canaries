@@ -89,7 +89,7 @@ export function XlSectors({ data: initial }: { data: MarketQuotesPayload }) {
   return (
     <section
       id="xl-sectors"
-      className="mt-8 rounded-2xl border border-white/10 bg-slate-900/60 p-6 shadow-sm"
+      className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 shadow-sm"
     >
       <h2 className="text-sm font-semibold uppercase tracking-widest text-canary-gold">
         XL sector prices

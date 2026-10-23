@@ -33,7 +33,7 @@ Credit does not create another stance or flock score.
 
 ## Data and placement
 
-- `data/vol-curve-stub.json` — `draft: true`; seeded VIX 15.44 / VIX3M 18.55 from `regime-stub`.
+- `data/vol-curve-stub.json` — written nightly by `scripts/refresh-vol-curve.mjs` (full-pack step 1) from Yahoo `^VIX` / `^VIX3M` daily closes; `held: true` + `heldSince` if Yahoo fails (never re-stamped).
 - `src/lib/volCurve/computeVolCurve.ts` — pure VIX/VIX3M computation.
 - `src/lib/loadVolCurve.ts` — loads the draft stub without inventing prints.
 - `src/components/VolCurveCanary.tsx` — card rendered beneath MarketRegime.

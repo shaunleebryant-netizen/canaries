@@ -1,0 +1,19 @@
+// LOCAL-ONLY config for members test mode (never used by `npm run deploy`).
+// Provides a local D1 binding for `next dev` via initOpenNextCloudflareForDev
+// when MEMBERS_WRANGLER_CONFIG=wrangler.members-local.jsonc is set in the shell.
+// The database_id below is a placeholder: no remote database exists. Ship day:
+// create the remote D1 and add the binding to wrangler.jsonc (docs/ops/members.md).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "coherant-canary-members-local",
+  "compatibility_date": "2026-09-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "MEMBERS_DB",
+      "database_name": "canary-members",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations/members"
+    }
+  ]
+}

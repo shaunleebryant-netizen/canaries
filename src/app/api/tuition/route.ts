@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
-import { appendFileSync, mkdirSync, existsSync } from "fs";
-import path from "path";
+import { clean, guardFormPost, isBot, normalizeEmail, saveLead } from "@/lib/leads";
 
 export const dynamic = "force-dynamic";
 
+const OK_MESSAGE =
+  "Request saved. No charge and no email have been sent. Shaun will confirm your session by email.";
+
 /**
- * Tuition lead stub — stores locally / logs. Does NOT charge or send email.
+ * Tuition request -> D1 `leads` (consent 0: not on the letter list) + `lead_submissions`
+ * (all answers in payload). Does NOT charge or send email.
  */
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -14,20 +17,25 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ ok: false, error: "Invalid body" }, { status: 400 });
   }
+  const guard = await guardFormPost(request, "tuition", 3);
+  if ("error" in guard) {
+    return NextResponse.json({ ok: false, error: guard.error }, { status: guard.status });
+  }
+  if (isBot(body)) return NextResponse.json({ ok: true, message: OK_MESSAGE });
 
-  const fullName = String(body.fullName || "").trim();
-  const email = String(body.email || "").trim();
-  const mobile = String(body.mobile || "").trim();
-  const timezone = String(body.timezone || "").trim();
-  const experience = String(body.experience || "").trim();
-  const level = String(body.level || "").trim();
-  const markets = Array.isArray(body.markets) ? body.markets.map(String) : [];
-  const accountSize = String(body.accountSize || "").trim();
-  const primaryGoal = String(body.primaryGoal || "").trim();
+  const fullName = clean(body.fullName, 100);
+  const email = normalizeEmail(body.email) ?? "";
+  const mobile = clean(body.mobile, 40);
+  const timezone = clean(body.timezone, 500);
+  const experience = clean(body.experience, 500);
+  const level = clean(body.level, 500);
+  const markets = Array.isArray(body.markets) ? body.markets.slice(0, 20).map((v) => clean(v, 60)) : [];
+  const accountSize = clean(body.accountSize, 500);
+  const primaryGoal = clean(body.primaryGoal, 500);
   const preferredDays = Array.isArray(body.preferredDays)
-    ? body.preferredDays.map(String)
+    ? body.preferredDays.slice(0, 14).map((v) => clean(v, 40))
     : [];
-  const timeWindows = Array.isArray(body.timeWindows) ? body.timeWindows.map(String) : [];
+  const timeWindows = Array.isArray(body.timeWindows) ? body.timeWindows.slice(0, 14).map((v) => clean(v, 60)) : [];
   const consent = Boolean(body.consent);
 
   if (!fullName || !email.includes("@") || !mobile) {
@@ -63,33 +71,31 @@ export async function POST(request: Request) {
     markets,
     accountSize,
     primaryGoal,
-    goalDetail: String(body.goalDetail || "").trim() || undefined,
+    goalDetail: clean(body.goalDetail, 1000) || undefined,
     preferredDays,
     timeWindows,
-    videoPlatform: String(body.videoPlatform || "").trim() || undefined,
-    isMember: String(body.isMember || "").trim() || undefined,
-    hearAbout: String(body.hearAbout || "").trim() || undefined,
+    videoPlatform: clean(body.videoPlatform, 500) || undefined,
+    isMember: clean(body.isMember, 500) || undefined,
+    hearAbout: clean(body.hearAbout, 500) || undefined,
     consent,
-    notes: String(body.notes || "").trim() || undefined,
+    notes: clean(body.notes, 2000) || undefined,
     source: "tuition",
-    priceNote: "S$115/hr — no charge until owner confirms",
+    priceNote: "$120 USD/hr — no charge until owner confirms",
     at: new Date().toISOString(),
-    stub: "no charge · no email sent",
   };
 
-  console.log("[tuition-stub]", entry);
-
-  const dir = path.join(process.cwd(), "data");
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  appendFileSync(
-    path.join(dir, "tuition-leads.json"),
-    JSON.stringify(entry) + "\n",
-    "utf8"
-  );
-
-  return NextResponse.json({
-    ok: true,
-    message:
-      "Request saved locally (stub). No charge and no email were sent — Shaun will confirm seats.",
+  const { email: _email, fullName: _name, ...payload } = entry;
+  void _email;
+  void _name;
+  await saveLead(guard.db, {
+    email,
+    name: fullName,
+    source: "tuition",
+    tags: ["tuition"],
+    consent: false,
+    payload,
+    ipH: guard.ipH,
   });
+
+  return NextResponse.json({ ok: true, message: OK_MESSAGE });
 }

@@ -1,0 +1,81 @@
+<!doctype html><html><head><meta charset=utf-8><title>PREVIEW · New canaries + Valuation & Macro</title>
+<style>
+body{margin:0;background:#0b1220;color:#e2e8f0;font:14px/1.45 Inter,system-ui,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+.banner{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.5);color:#fbbf24;border-radius:10px;padding:8px 14px;font-size:12px;margin-bottom:18px}
+h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#f59e0b;margin:0 0 10px}
+.panel{background:#0f172a;border:1px solid rgba(148,163,184,.16);border-radius:14px;padding:18px;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{color:#94a3b8;font-weight:500;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;border-bottom:1px solid rgba(148,163,184,.18)}
+td{padding:7px 8px;border-bottom:1px solid rgba(148,163,184,.08)}tr.new{background:rgba(245,158,11,.07)}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#cbd5e1}.tag{background:#f59e0b;color:#0f172a;font-size:9px;font-weight:700;border-radius:4px;padding:1px 5px;margin-left:6px}
+.s1{color:#34d399}.s-1{color:#f87171}.s0{color:#94a3b8}small{color:#64748b}
+.cb,.btn{background:transparent;border:1px solid rgba(245,158,11,.6);color:#fbbf24;border-radius:6px;font-size:11px;padding:2px 8px;cursor:pointer}
+.btn.on{background:#f59e0b;color:#0f172a}
+.comp{display:flex;gap:16px;margin:0 0 14px}.comp div{flex:1;background:#0b1220;border:1px solid rgba(148,163,184,.14);border-radius:10px;padding:10px 14px}
+.comp b{font-size:24px;color:#fbbf24;display:block}.muted{color:#94a3b8;font-size:12px}
+#modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,.75);align-items:center;justify-content:center;z-index:9}
+#modal .box{width:860px;background:#0f172a;border:1px solid rgba(245,158,11,.35);border-radius:14px;padding:16px}
+#chart{position:relative;height:380px}#tip{position:absolute;left:8px;top:6px;z-index:3;font:11px ui-monospace,monospace;background:rgba(2,6,23,.7);padding:2px 6px;border-radius:4px;color:#cbd5e1}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:#0b1220;border:1px solid rgba(148,163,184,.14);border-radius:12px;padding:14px}
+.card .v{font-size:26px;font-weight:700;color:#f8fafc}.card .chg{font-size:12px;margin-left:8px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:11px;color:#94a3b8;margin:8px 0}.stats b{display:block;color:#e2e8f0;font-size:12px}
+.pct{font-size:12px;color:#fbbf24;margin:4px 0}.ctrl{display:flex;gap:4px;margin:6px 0}.ctrl .sp{flex:1}
+.note{font-size:10.5px;color:#64748b;margin-top:6px}.fresh{font-size:10px;color:#94a3b8;border:1px solid rgba(148,163,184,.25);border-radius:4px;padding:0 5px;margin-left:6px}
+svg text{fill:#64748b;font-size:9px}
+</style></head><body><div class=wrap>
+<div class=banner>PREVIEW ONLY · not live · not scored on the site · built 14 Oct 2026 NZ from fetched public data · Education only, not financial advice.</div>
+<section id=readings class=panel><h2>Canary readings — with 2 proposed canaries</h2>
+<div class=comp><div><span class=muted>Today, 13 canaries (13 Oct US close, provisional)</span><b>__OLD__</b><span class=muted>__OLDL__</span></div>
+<div><span class=muted>Today, 15 canaries (proposed weights)</span><b>__NEW__</b><span class=muted>__NEWL__</span></div>
+<div><span class=muted>12 Oct pack (live site): 13 → 15</span><b>__OLD12__ → __NEW12__</b><span class=muted>Amber either way</span></div></div>
+<table><tr><th>Canary</th><th>Signal</th><th>Reading</th><th>Weight now</th><th>Proposed</th><th>Contribution</th><th></th></tr>__ROWS__</table>
+<p class=note>13 Oct: NYSE A–D and MMTH held from 12 Oct (TradingView feed not yet at 13 Oct); FINRA held (Aug-26). Treasury: 12 Oct was a bond-market holiday. Proposed weights = existing × 0.90 (order kept) + curve 0.06 + real yield 0.04; sum 1.000.</p></section>
+<section id=macro class=panel><h2>Valuation &amp; Macro <span class=fresh>context only · not in the score · monthly data</span></h2><div class=grid id=cards></div>
+<p class=note>Shiller CAPE, dividends and earnings: Robert J. Shiller, Irrational Exuberance data (shillerdata.com). Treasury yields: U.S. Department of the Treasury. CPI and unemployment: U.S. Bureau of Labor Statistics. "Cheaper" percentile = share of all months in the record with a cheaper reading than today.</p></section>
+</div>
+<div id=modal onclick="if(event.target===this)closeChart()"><div class=box><div style="display:flex;justify-content:space-between;align-items:center"><h2 id=mt style="margin:0"></h2><button class=btn onclick=closeChart()>Close</button></div>
+<p class=muted id=ms></p><div id=chart><div id=tip></div></div><p class=note id=mf></p></div></div>
+<script>/*LWC*/</script><script>
+const P=__DATA__;let ch=null;
+const ZONE={1:"rgba(52,211,153,0.10)",0:"rgba(148,163,184,0.06)","-1":"rgba(248,113,113,0.12)"};
+function openChart(id){const c=P.canaries[id],doc=c.chart;document.getElementById('modal').style.display='flex';
+document.getElementById('mt').textContent=c.name+' — last 12 months';
+document.getElementById('ms').textContent=id==='curve-10y2y'?`Now ${c.value>=0?'+':''}${c.value.toFixed(2)} pts (${c.asOf}) · ${c.band} · last inverted ${c.lastInverted}. Rule: +1 ≥ +0.25 · 0 flat 0–0.25 · −1 inverted · −2 positive but inverted within the last 6 months.`:`Now ${c.value.toFixed(2)}% (${c.asOf}) vs 20-day avg ${c.sma20.toFixed(2)}% · higher than ${c.pctOfHistoryLower}% of days since 2003. Rule (inverse): below avg +1 / above −1; ±2 when 5-day avg slope and 9-day change agree; +2 capped at +1 when ≥ 2.50%.`;
+document.getElementById('mf').textContent=`White line: ${doc.lineLabel} · dashed amber: ${doc.refLabel} · shading: Healthy / Neutral / Warning that day. Source: U.S. Treasury daily yield curves.`;
+const host=document.getElementById('chart');if(ch)ch.remove();const lc=LightweightCharts;
+ch=lc.createChart(host,{autoSize:true,layout:{background:{type:'solid',color:'transparent'},textColor:'#94a3b8',fontSize:11,attributionLogo:true},grid:{vertLines:{color:'rgba(148,163,184,0.06)'},horzLines:{color:'rgba(148,163,184,0.06)'}},rightPriceScale:{borderColor:'rgba(148,163,184,0.18)',scaleMargins:{top:.12,bottom:.08}},timeScale:{borderColor:'rgba(148,163,184,0.18)'}});
+const z=ch.addSeries(lc.HistogramSeries,{priceScaleId:'zones',lastValueVisible:false,priceLineVisible:false});z.priceScale().applyOptions({scaleMargins:{top:0,bottom:0},visible:false});
+z.setData(doc.d.map((t,i)=>({time:t,value:1,color:ZONE[doc.s[i]??0]})));
+const l=ch.addSeries(lc.LineSeries,{color:'#e2e8f0',lineWidth:2});l.setData(doc.d.map((t,i)=>({time:t,value:doc.y[i]})));
+const r=ch.addSeries(lc.LineSeries,{color:'rgba(245,158,11,0.85)',lineWidth:1,lineStyle:2,lastValueVisible:false,priceLineVisible:false});r.setData(doc.d.flatMap((t,i)=>doc.r[i]==null?[]:[{time:t,value:doc.r[i]}]));
+for(const k of doc.consts)l.createPriceLine({price:k.v,color:'rgba(245,158,11,0.75)',lineWidth:1,lineStyle:2,axisLabelVisible:true,title:k.label});
+ch.timeScale().fitContent();const n=doc.d.length,w=s=>s==null?'':s>0?'Healthy':s<0?'Warning':'Neutral';
+document.getElementById('tip').textContent=`${doc.d[n-1]}  ${doc.y[n-1]}  avg ${doc.r[n-1]}  ·  ${w(doc.s[n-1])}`;}
+function closeChart(){document.getElementById('modal').style.display='none';}
+const RANGES={'1y':12,'5y':60,'10y':120,'20y':240,'All':1e9};
+function draw(m,el,range,log){const n=Math.min(m.y.length,RANGES[range]);const ys=m.y.slice(-n),ds=m.d.slice(-n);
+const canLog=Math.min(...m.y)>0&&log;const f=v=>canLog?Math.log(v):v;const W=520,H=150,pad=28;
+const all=[...ys,...m.p,m.mean];let lo=Math.min(...all.map(f)),hi=Math.max(...all.map(f));const sp=(hi-lo)||1;lo-=sp*.05;hi+=sp*.05;
+const X=i=>pad+(W-pad-4)*i/(Math.max(1,n-1)),Y=v=>4+(H-20)*(1-(f(v)-lo)/(hi-lo));
+const band=(a,b,c)=>`<rect x=${pad} width=${W-pad-4} y=${Y(b)} height=${Math.max(0,Y(a)-Y(b))} fill="${c}"/>`;
+let s=band(m.p[0],m.p[3],'rgba(245,158,11,0.06)')+band(m.p[1],m.p[2],'rgba(245,158,11,0.10)');
+s+=`<line x1=${pad} x2=${W-4} y1=${Y(m.mean)} y2=${Y(m.mean)} stroke="rgba(245,158,11,.8)" stroke-dasharray="4 3"/><text x=${W-4} y=${Y(m.mean)-3} text-anchor=end>mean ${m.mean}</text>`;
+if(lo<f(0)&&hi>f(0)&&!canLog)s+=`<line x1=${pad} x2=${W-4} y1=${Y(0)} y2=${Y(0)} stroke="rgba(148,163,184,.3)"/>`;
+s+=`<polyline fill=none stroke="#e2e8f0" stroke-width=1.4 points="${ys.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ')}"/>`;
+s+=`<circle cx=${X(n-1)} cy=${Y(ys[n-1])} r=3 fill="#f59e0b"/>`;
+for(const v of [Math.max(...ys),Math.min(...ys)])s+=`<text x=2 y=${Y(v)+3}>${v.toFixed(1)}</text>`;
+s+=`<text x=${pad} y=${H-3}>${ds[0]}</text><text x=${W-4} y=${H-3} text-anchor=end>${ds[n-1]}</text>`;
+el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width=100%>${s}</svg>`;}
+const fmt=(v,u)=>u==='%'?v.toFixed(2)+'%':u==='x'?v.toFixed(1)+'×':(v>0?'+':'')+v.toFixed(2);
+const box=document.getElementById('cards');
+P.macro.forEach((m,k)=>{const d=document.createElement('div');d.className='card';
+const pctLine=m.key==='cape'?`${m.cheaperPct}% of months since ${m.from} were cheaper`:m.key==='erp'?`Stocks were cheaper vs bonds in ${(100-m.pctBelow).toFixed(1)}% of months since ${m.from}`:m.key==='dy'?`Stocks were cheaper (higher yield) in ${(100-m.pctBelow).toFixed(1)}% of months since ${m.from}`:`Higher than ${m.pctBelow}% of months since ${m.from}`;
+d.innerHTML=`<div class=muted>${m.name}<span class=fresh>as of ${m.asOf}</span></div><div><span class=v>${fmt(m.value,m.unit)}</span><span class="chg ${m.chg>0?'s1':'s-1'}">${m.chg>=0?'+':''}${m.chg.toFixed(2)} vs prior month</span></div>
+<div class=pct>${pctLine}</div><div class=stats><div>Mean<b>${fmt(m.mean,m.unit)}</b></div><div>Median<b>${fmt(m.median,m.unit)}</b></div><div>Min<b>${fmt(m.min[0],m.unit)}</b>${m.min[1]}</div><div>Max<b>${fmt(m.max[0],m.unit)}</b>${m.max[1]}</div></div>
+<div class=ctrl>${Object.keys(RANGES).map(r=>`<button class="btn r${r==='All'?' on':''}" data-r=${r}>${r}</button>`).join('')}<span class=sp></span>${Math.min(...m.y)>0?'<button class="btn lg">Log</button>':''}</div><div class=ch></div><div class=note>${m.note} Bands: 10–90th and 25–75th percentile of the full record.</div>`;
+box.appendChild(d);let st={r:'All',log:false};const re=()=>draw(m,d.querySelector('.ch'),st.r,st.log);
+d.querySelectorAll('.r').forEach(b=>b.onclick=()=>{st.r=b.dataset.r;d.querySelectorAll('.r').forEach(x=>x.classList.toggle('on',x===b));re();});
+const lg=d.querySelector('.lg');if(lg)lg.onclick=()=>{st.log=!st.log;lg.classList.toggle('on',st.log);re();};re();});
+const H=location.hash.slice(1);if(H==='readings')document.getElementById('macro').style.display='none';if(H==='macro')document.getElementById('readings').style.display='none';if(H.startsWith('popup')){document.getElementById('macro').style.display='none';openChart(H==='popup-real'?'real-10y':'curve-10y2y');}
+</script></body></html>

@@ -1,0 +1,80 @@
+{
+  "asOf": "2026-10-09T05:50:00Z",
+  "windowDays": 7,
+  "source": "X posts from the accounts in data/desk-ideas-accounts.json (read by the agent x connector)",
+  "note": "Members only. Third-party ideas, not Canary signals. Education only.",
+  "accounts": [
+    "amitisinvesting",
+    "JonahLupton",
+    "TraderJohnny_",
+    "MMMTwealth",
+    "ZeeContrarian1"
+  ],
+  "lastRun": {
+    "candidates": 29,
+    "kept": 6,
+    "reasons": {
+      "no clear first-person action + ticker": 18,
+      "news / analyst": 3,
+      "crypto / foreign listing": 2,
+      "kept": 6
+    }
+  },
+  "ideas": [
+    {
+      "id": "traderjohnny_-mu-2107920324079882424",
+      "postId": "2107920324079882424",
+      "handle": "TraderJohnny_",
+      "ticker": "MU",
+      "action": "buy",
+      "idea": "Started a position in MU",
+      "postedAt": "2026-10-07T19:45:43.000Z",
+      "url": "https://x.com/TraderJohnny_/status/2107920324079882424",
+      "inUniverse": true
+    },
+    {
+      "id": "traderjohnny_-htfl-2107199673320477005",
+      "postId": "2107199673320477005",
+      "handle": "TraderJohnny_",
+      "ticker": "HTFL",
+      "action": "add",
+      "idea": "Added to HTFL",
+      "postedAt": "2026-10-05T20:02:06.000Z",
+      "url": "https://x.com/TraderJohnny_/status/2107199673320477005",
+      "inUniverse": false
+    },
+    {
+      "id": "traderjohnny_-cyph-2107170816433475875",
+      "postId": "2107170816433475875",
+      "handle": "TraderJohnny_",
+      "ticker": "CYPH",
+      "action": "buy",
+      "idea": "Started a position in CYPH",
+      "postedAt": "2026-10-05T18:07:26.000Z",
+      "url": "https://x.com/TraderJohnny_/status/2107170816433475875",
+      "inUniverse": false
+    },
+    {
+      "id": "traderjohnny_-meta-2107125141675397458",
+      "postId": "2107125141675397458",
+      "handle": "TraderJohnny_",
+      "ticker": "META",
+      "action": "buy",
+      "idea": "Started a position in META",
+      "postedAt": "2026-10-05T15:05:56.000Z",
+      "url": "https://x.com/TraderJohnny_/status/2107125141675397458",
+      "inUniverse": true
+    },
+    {
+      "id": "mmmtwealth-usar-2107052876468048151",
+      "postId": "2107052876468048151",
+      "handle": "MMMTwealth",
+      "ticker": "USAR",
+      "action": "long",
+      "idea": "Long USAR",
+      "postedAt": "2026-10-05T10:18:47.000Z",
+      "url": "https://x.com/MMMTwealth/status/2107052876468048151",
+      "inUniverse": false
+    }
+  ]
+}

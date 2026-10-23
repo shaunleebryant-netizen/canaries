@@ -1,0 +1,222 @@
+//@version=6
+indicator("Minervini + IBD RS Setup", shorttitle="MM+RS70", overlay=true, max_labels_count=50)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INPUTS
+// ─────────────────────────────────────────────────────────────────────────────
+grpMA   = "Moving averages"
+grp52   = "52-week range"
+grpRS   = "IBD-style Relative Strength (not RSI)"
+grpVis  = "Display"
+grpAlrt = "Alerts"
+
+len50  = input.int(50,  "Fast MA",  minval=1, group=grpMA)
+len150 = input.int(150, "Mid MA",   minval=1, group=grpMA)
+len200 = input.int(200, "Slow MA",  minval=1, group=grpMA)
+slopeLen = input.int(21, "Rising lookback (daily bars)", minval=1, group=grpMA,
+     tooltip="An MA is 'rising' if it is higher than this many daily bars ago. 21 ≈ 1 month.")
+requireStack = input.bool(true, "Also require 50 > 150 > 200", group=grpMA,
+     tooltip="Classic Minervini stack. Turn off to only require price above three rising MAs.")
+
+nearHighPct = input.float(25.0, "Max % below 52-week high", minval=0, maxval=100, step=0.5, group=grp52)
+offLowPct   = input.float(25.0, "Min % above 52-week low",  minval=0, maxval=500, step=0.5, group=grp52,
+     tooltip="User range was 25–30%. Default 25. Set 30 for the stricter Minervini rule.")
+len52 = input.int(252, "52-week bars (trading days)", minval=50, group=grp52)
+
+benchSym = input.symbol("AMEX:SPY", "Benchmark", group=grpRS,
+     tooltip="IBD ranks vs the whole market. Pine cannot do that, so performance is measured vs this benchmark and mapped to 1–99.")
+rsMin = input.int(70, "Minimum RS Rating", minval=1, maxval=99, group=grpRS)
+q1 = input.int(63,  "Quarter 1 bars (40% weight)", minval=1, group=grpRS)
+q2 = input.int(126, "Quarter 2 bars (20% weight)", minval=1, group=grpRS)
+q3 = input.int(189, "Quarter 3 bars (20% weight)", minval=1, group=grpRS)
+q4 = input.int(252, "Quarter 4 bars (20% weight)", minval=1, group=grpRS)
+
+showMAs    = input.bool(true,  "Plot MAs",              group=grpVis)
+showBg     = input.bool(true,  "Highlight full setup",  group=grpVis)
+showTable  = input.bool(true,  "Show dashboard",        group=grpVis)
+showRsLine = input.bool(false, "Plot RS line (price/benchmark, scaled)", group=grpVis)
+tblPos = input.string("Top Right", "Table position",
+     options=["Top Right", "Top Left", "Bottom Right", "Bottom Left"], group=grpVis)
+
+col50  = input.color(color.new(#2962FF, 0), "50 MA",  group=grpVis)
+col150 = input.color(color.new(#FF6D00, 0), "150 MA", group=grpVis)
+col200 = input.color(color.new(#E91E63, 0), "200 MA", group=grpVis)
+colOk  = input.color(color.new(#00C853, 82), "Setup background", group=grpVis)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DAILY ENGINE (works on any chart timeframe)
+// ─────────────────────────────────────────────────────────────────────────────
+f_weightedPerf(src, n1, n2, n3, n4) =>
+    float p1 = src / src[n1] - 1.0
+    float p2 = src / src[n2] - 1.0
+    float p3 = src / src[n3] - 1.0
+    float p4 = src / src[n4] - 1.0
+    0.40 * p1 + 0.20 * p2 + 0.20 * p3 + 0.20 * p4
+
+f_dailyPack() =>
+    float s50  = ta.sma(close, len50)
+    float s150 = ta.sma(close, len150)
+    float s200 = ta.sma(close, len200)
+    bool  rise50  = s50  > s50[slopeLen]
+    bool  rise150 = s150 > s150[slopeLen]
+    bool  rise200 = s200 > s200[slopeLen]
+    float hi52 = ta.highest(high, len52)
+    float lo52 = ta.lowest(low,  len52)
+    float wPerf = f_weightedPerf(close, q1, q2, q3, q4)
+    [close, high, low, s50, s150, s200, rise50, rise150, rise200, hi52, lo52, wPerf]
+
+[dClose, dHigh, dLow, sma50, sma150, sma200, rising50, rising150, rising200, hi52, lo52, stockW] =
+     request.security(syminfo.tickerid, "D", f_dailyPack(), barmerge.gaps_off, barmerge.lookahead_off)
+
+[bClose, benchW] = request.security(benchSym, "D", [close, f_weightedPerf(close, q1, q2, q3, q4)], barmerge.gaps_off, barmerge.lookahead_off)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// IBD-STYLE RS RATING (1–99) — approximation vs benchmark
+//
+// Official IBD RS is a cross-sectional percentile of every stock’s weighted
+// 12-month return. Pine cannot scan the full universe on a chart, so:
+//   1) same 40/20/20/20 quarterly weights as IBD
+//   2) relative score vs the benchmark
+//   3) calibrated map onto 1–99
+// Matching the benchmark ≈ mid-50s. Beating it by ~10% in the weighted blend ≈ 70.
+// Typical error vs published IBD RS is several points. Use it as a filter, not a quote.
+// ─────────────────────────────────────────────────────────────────────────────
+f_rsRating(rel100) =>
+    float x = rel100
+    float r = 1.0
+    if na(x)
+        r := na
+    else if x >= 200.0
+        r := 99.0
+    else if x >= 155.0
+        r := 92.0 + (x - 155.0) * 7.0 / 45.0
+    else if x >= 135.0
+        r := 85.0 + (x - 135.0) * 7.0 / 20.0
+    else if x >= 122.0
+        r := 80.0 + (x - 122.0) * 5.0 / 13.0
+    else if x >= 110.0
+        r := 70.0 + (x - 110.0) * 10.0 / 12.0
+    else if x >= 100.0
+        r := 55.0 + (x - 100.0) * 15.0 / 10.0
+    else if x >= 92.0
+        r := 40.0 + (x - 92.0) * 15.0 / 8.0
+    else if x >= 80.0
+        r := 25.0 + (x - 80.0) * 15.0 / 12.0
+    else if x >= 60.0
+        r := 10.0 + (x - 60.0) * 15.0 / 20.0
+    else if x >= 40.0
+        r := 3.0 + (x - 40.0) * 7.0 / 20.0
+    else
+        r := 1.0
+    int(math.round(math.max(1.0, math.min(99.0, r))))
+
+float rel100 = (1.0 + stockW) / (1.0 + benchW) * 100.0
+int   rsRating = f_rsRating(rel100)
+bool  rsOk = not na(rsRating) and rsRating >= rsMin and not na(stockW) and not na(benchW)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TREND + RANGE CONDITIONS
+// ─────────────────────────────────────────────────────────────────────────────
+bool above50  = dClose > sma50
+bool above150 = dClose > sma150
+bool above200 = dClose > sma200
+bool aboveAll = above50 and above150 and above200
+bool allRising = rising50 and rising150 and rising200
+bool stacked = sma50 > sma150 and sma150 > sma200
+bool maOk = aboveAll and allRising and (requireStack ? stacked : true)
+
+float pctBelowHigh = hi52 > 0 ? (hi52 - dClose) / hi52 * 100.0 : na
+float pctAboveLow  = lo52 > 0 ? (dClose - lo52) / lo52 * 100.0 : na
+bool nearHigh = not na(pctBelowHigh) and pctBelowHigh <= nearHighPct
+bool offLow   = not na(pctAboveLow)  and pctAboveLow  >= offLowPct
+
+bool setup = maOk and nearHigh and offLow and rsOk
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PLOTS
+// ─────────────────────────────────────────────────────────────────────────────
+plot(showMAs ? sma50  : na, "SMA 50",  color=col50,  linewidth=2)
+plot(showMAs ? sma150 : na, "SMA 150", color=col150, linewidth=2)
+plot(showMAs ? sma200 : na, "SMA 200", color=col200, linewidth=2)
+
+bgcolor(showBg and setup ? colOk : na, title="Full setup")
+
+plotshape(setup and not setup[1], title="Setup on", style=shape.triangleup,
+     location=location.belowbar, color=color.new(#00C853, 0), size=size.small, text="SETUP")
+
+// RS line scaled onto price so it is readable on the overlay
+float rsRaw = bClose != 0 ? dClose / bClose : na
+float rsSma = ta.sma(rsRaw, len200)
+float rsLine = not na(rsRaw) and not na(rsSma) and rsSma != 0 ? rsRaw / rsSma * sma200 : na
+plot(showRsLine ? rsLine : na, "RS Line (scaled)", color=color.new(#26C6DA, 0), linewidth=2)
+
+// Screener / data-window columns
+plot(setup ? 1 : 0, "SETUP_PASS", display=display.data_window)
+plot(rsRating, "RS_RATING", display=display.data_window)
+plot(pctBelowHigh, "PCT_BELOW_52W_HIGH", display=display.data_window)
+plot(pctAboveLow,  "PCT_ABOVE_52W_LOW",  display=display.data_window)
+plot(maOk ? 1 : 0, "MA_OK", display=display.data_window)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────────────────────────────────────
+f_pos() =>
+    switch tblPos
+        "Top Left"     => position.top_left
+        "Bottom Right" => position.bottom_right
+        "Bottom Left"  => position.bottom_left
+        => position.top_right
+
+f_cell(ok) => ok ? color.new(#00C853, 78) : color.new(#FF5252, 78)
+f_txt(ok)  => ok ? color.new(#1B5E20, 0) : color.new(#B71C1C, 0)
+f_rsCol() =>
+    na(rsRating) ? color.gray : rsRating >= 90 ? color.new(#00C853, 0) : rsRating >= 80 ? color.new(#64DD17, 0) : rsRating >= rsMin ? color.new(#FFD600, 0) : color.new(#FF5252, 0)
+
+var table dash = table.new(f_pos(), 2, 12, bgcolor=color.new(#111111, 18), border_width=1, border_color=color.new(#424242, 0))
+
+if barstate.islast and showTable
+    table.cell(dash, 0, 0, "Minervini + IBD RS", text_color=color.white, text_size=size.small, bgcolor=color.new(#1565C0, 20))
+    table.cell(dash, 1, 0, setup ? "PASS" : "WAIT", text_color=setup ? color.new(#00E676, 0) : color.new(#FF8A80, 0), text_size=size.small, bgcolor=color.new(#1565C0, 20))
+
+    table.cell(dash, 0, 1, "Price > 50/150/200", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 1, aboveAll ? "YES" : "NO", text_color=f_txt(aboveAll), bgcolor=f_cell(aboveAll), text_size=size.tiny)
+
+    table.cell(dash, 0, 2, "MAs rising", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 2, allRising ? "YES" : "NO", text_color=f_txt(allRising), bgcolor=f_cell(allRising), text_size=size.tiny)
+
+    table.cell(dash, 0, 3, "50 > 150 > 200", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 3, stacked ? "YES" : "NO", text_color=f_txt(stacked), bgcolor=f_cell(stacked), text_size=size.tiny)
+
+    table.cell(dash, 0, 4, "% below 52w high", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 4, str.tostring(pctBelowHigh, "#.00") + "%", text_color=f_txt(nearHigh), bgcolor=f_cell(nearHigh), text_size=size.tiny)
+
+    table.cell(dash, 0, 5, "% above 52w low", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 5, str.tostring(pctAboveLow, "#.00") + "%", text_color=f_txt(offLow), bgcolor=f_cell(offLow), text_size=size.tiny)
+
+    table.cell(dash, 0, 6, "RS Rating vs " + ticker.standard(benchSym), text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 6, na(rsRating) ? "n/a" : str.tostring(rsRating), text_color=f_rsCol(), bgcolor=f_cell(rsOk), text_size=size.tiny)
+
+    table.cell(dash, 0, 7, "Weighted RS score", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 7, str.tostring(rel100, "#.0"), text_color=color.white, text_size=size.tiny)
+
+    table.cell(dash, 0, 8, "SMA 50 / 150 / 200", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 8, str.tostring(sma50, format.mintick) + " / " + str.tostring(sma150, format.mintick) + " / " + str.tostring(sma200, format.mintick), text_color=color.white, text_size=size.tiny)
+
+    table.cell(dash, 0, 9, "52w high / low", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 9, str.tostring(hi52, format.mintick) + " / " + str.tostring(lo52, format.mintick), text_color=color.white, text_size=size.tiny)
+
+    table.cell(dash, 0, 10, "50 rise / 150 rise / 200 rise", text_color=color.silver, text_size=size.tiny)
+    table.cell(dash, 1, 10, (rising50 ? "Y" : "N") + " / " + (rising150 ? "Y" : "N") + " / " + (rising200 ? "Y" : "N"), text_color=color.white, text_size=size.tiny)
+
+    table.cell(dash, 0, 11, "Note", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 11, "RS is IBD-style vs benchmark, not official IBD percentile", text_color=color.gray, text_size=size.tiny)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ALERTS
+// ─────────────────────────────────────────────────────────────────────────────
+alertcondition(setup and not setup[1], title="Full setup triggered",
+     message="{{ticker}} passed Minervini MA/52w template and IBD-style RS filter")
+alertcondition(not setup and setup[1], title="Setup lost",
+     message="{{ticker}} no longer meets the full setup")
+alertcondition(rsOk and not rsOk[1], title="RS crossed threshold",
+     message="{{ticker}} IBD-style RS Rating crossed the minimum")

@@ -1,0 +1,210 @@
+{
+  "asOf": "2026-10-22",
+  "scannedAt": "2026-10-23T11:26:38+13:00",
+  "universeCount": 230,
+  "scannedCount": 230,
+  "failed": [],
+  "failedDetail": [],
+  "signals": [
+    {
+      "ticker": "VICR",
+      "signal": "mfi_os",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "mfi": 22.01,
+      "note": "💵 MFI Washout v6.1 fired 2026-10-22 (MFI 22.0)"
+    }
+  ],
+  "historyDays": 14,
+  "sessionDates": [
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22"
+  ],
+  "prints": [
+    {
+      "ticker": "INTC",
+      "signal": "mfi_os",
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "mfi": 23.7
+    },
+    {
+      "ticker": "VICR",
+      "signal": "mfi_os",
+      "asOf": "2026-10-20",
+      "timeframe": "1D",
+      "mfi": 24.12
+    },
+    {
+      "ticker": "VICR",
+      "signal": "mfi_os",
+      "asOf": "2026-10-22",
+      "timeframe": "1D",
+      "mfi": 22.01
+    },
+    {
+      "ticker": "STX",
+      "signal": "mfi_os",
+      "asOf": "2026-10-19",
+      "timeframe": "1D",
+      "mfi": 21.48
+    },
+    {
+      "ticker": "WDC",
+      "signal": "mfi_os",
+      "asOf": "2026-10-14",
+      "timeframe": "1D",
+      "mfi": 19.37
+    },
+    {
+      "ticker": "WDC",
+      "signal": "mfi_os",
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "mfi": 19.03
+    },
+    {
+      "ticker": "HUT",
+      "signal": "mfi_os",
+      "asOf": "2026-10-20",
+      "timeframe": "1D",
+      "mfi": 26.23
+    },
+    {
+      "ticker": "CORZ",
+      "signal": "mfi_os",
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "mfi": 30.92
+    },
+    {
+      "ticker": "IONQ",
+      "signal": "mfi_os",
+      "asOf": "2026-10-21",
+      "timeframe": "1D",
+      "mfi": 28.3
+    },
+    {
+      "ticker": "ASTS",
+      "signal": "mfi_os",
+      "asOf": "2026-10-12",
+      "timeframe": "1D",
+      "mfi": 24.96
+    },
+    {
+      "ticker": "KTOS",
+      "signal": "mfi_os",
+      "asOf": "2026-10-08",
+      "timeframe": "1D",
+      "mfi": 27.29
+    },
+    {
+      "ticker": "LEU",
+      "signal": "mfi_os",
+      "asOf": "2026-10-13",
+      "timeframe": "1D",
+      "mfi": 44.13
+    },
+    {
+      "ticker": "UUUU",
+      "signal": "mfi_os",
+      "asOf": "2026-10-08",
+      "timeframe": "1D",
+      "mfi": 35.65
+    },
+    {
+      "ticker": "UUUU",
+      "signal": "mfi_os",
+      "asOf": "2026-10-12",
+      "timeframe": "1D",
+      "mfi": 34.56
+    },
+    {
+      "ticker": "ALB",
+      "signal": "mfi_os",
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "mfi": 26.24
+    },
+    {
+      "ticker": "XAGUSD",
+      "signal": "mfi_os",
+      "asOf": "2026-10-09",
+      "timeframe": "1D",
+      "mfi": 14.96
+    },
+    {
+      "ticker": "AMKR",
+      "signal": "mfi_os",
+      "asOf": "2026-10-16",
+      "timeframe": "1D",
+      "mfi": 15.52
+    },
+    {
+      "ticker": "DE",
+      "signal": "mfi_os",
+      "asOf": "2026-10-19",
+      "timeframe": "1D",
+      "mfi": 38.14
+    },
+    {
+      "ticker": "SOXX",
+      "signal": "mfi_os",
+      "asOf": "2026-10-19",
+      "timeframe": "1D",
+      "mfi": 24.22
+    },
+    {
+      "ticker": "SOXX",
+      "signal": "mfi_os",
+      "asOf": "2026-10-21",
+      "timeframe": "1D",
+      "mfi": 24.16
+    },
+    {
+      "ticker": "NLR",
+      "signal": "mfi_os",
+      "asOf": "2026-10-13",
+      "timeframe": "1D",
+      "mfi": 37.48
+    }
+  ],
+  "engine": "MFI Washout v6.1",
+  "params": {
+    "mfiLen": 14,
+    "osLevel": 30,
+    "osLookback": 10,
+    "resetLevel": 45,
+    "useRelative": true,
+    "relPct": 25,
+    "requireHook": true,
+    "useDiv": false,
+    "divLook": 8,
+    "useVolFilter": true,
+    "volLen": 20,
+    "volClimaxMult": 1.3,
+    "climaxLookback": 6,
+    "requireContract": true,
+    "useDepth": true,
+    "washDepth": 25,
+    "useConfirm": true,
+    "confirmBars": 5,
+    "relRsiConfig": "src/lib/canaryTopsBottomsConfig.mjs"
+  },
+  "method": "yahoo-1d-mfi-washout-v6.1",
+  "note": "MFI Scan — MFI Washout v6.1 (owner Pine) 💵 bottomSignal on Yahoo 1d bars (full history), box = fires on the latest completed bar; prints = fires within 14 calendar days. Universe = fish ∪ ETF Watch (deduped). Never invented. · full-pack session 2026-10-22 · MFI Washout v6.1",
+  "sessionDate": "2026-10-22",
+  "packAsOf": "2026-10-22",
+  "held": false,
+  "heldSince": null,
+  "packScannedAt": "2026-10-23T11:24:59+13:00"
+}

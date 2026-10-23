@@ -1,7 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "coherant-canary",
-  "main": ".open-next/worker.js",
+  // t580u: custom entry wraps .open-next/worker.js (streams /media/* before Next).
+  "main": "worker-entry.mjs",
   "account_id": "fb5eacd7ec6aea8c62b14fc5a98896ad",
   "compatibility_date": "2026-09-08",
   "compatibility_flags": [
@@ -10,7 +11,13 @@
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // t583: members-only ticker chart JSON lives in public/_chartdata/. Direct requests must reach the
+    // Worker (worker-entry.mjs answers 404) instead of being served as public static assets; members
+    // get the files via /api/members/chart/[ticker] (middleware-guarded, ASSETS binding).
+    // 2026-10-09: "*" is a deep match (Cloudflare docs), so this also covers /_chartdata/canary/* (canary
+    // chart pop-up JSON). Wrangler rejects an explicit "/_chartdata/canary/*" entry as redundant.
+    "run_worker_first": ["/_chartdata/*"]
   },
   "services": [
     {
@@ -19,10 +26,36 @@
     }
   ],
   "routes": [
-    { "pattern": "coherantcanary.com", "custom_domain": true },
-    { "pattern": "www.coherantcanary.com", "custom_domain": true }
+    { "pattern": "canarydashboard.com", "custom_domain": true },
+    { "pattern": "www.canarydashboard.com", "custom_domain": true }
   ],
   "observability": {
     "enabled": true
+  },
+  // Members + email-list database (created 2026-09-26 in APAC, owner-approved). Holds `leads`
+  // (letter / founding interest / seminar / tuition / support) and, once accounts mode
+  // ships, users/subscriptions. No public read route. Schema: migrations/members/.
+  "d1_databases": [
+    {
+      "binding": "MEMBERS_DB",
+      "database_name": "canary-members",
+      "database_id": "7093abc8-1c56-4230-a432-df4d41479fee",
+      "migrations_dir": "migrations/members"
+    }
+  ],
+  // Owner area (/owner/*, /api/owner/*): Cloudflare Access app "Canary Dashboard — Owner area"
+  // (id 8f8b549f-2a84-4e3c-acfa-af264396ebbb). Public identifiers, not secrets. See docs/ops/owner-options.md.
+  "vars": {
+    "OWNER_ACCESS_TEAM_DOMAIN": "https://soft-silence-7009.cloudflareaccess.com",
+    "OWNER_ACCESS_AUD": "cbb5b177695fbafaaad8b199dc64e9b94e48aa93d7b66e5abf220d0863a87cf1",
+    // Owner-only support notification email (owner-approved 2026-09-28). Separate from
+    // EMAIL_SENDING (subscriber email), which stays OFF. "0" turns the notification off.
+    "SUPPORT_NOTIFY": "1",
+    // Go-live 2026-10-15 (owner approved): per-member accounts + live Stripe + transactional email (Resend).
+    // INDICATOR_CHECKOUT is intentionally NOT set (indicator sales on hold until packages are done).
+    "MEMBERS_AUTH_MODE": "accounts",
+    "MEMBERS_ALLOW_LIVE_STRIPE": "1",
+    "MEMBERS_SITE_ORIGIN": "https://canarydashboard.com",
+    "EMAIL_SENDING": "1"
   }
 }
