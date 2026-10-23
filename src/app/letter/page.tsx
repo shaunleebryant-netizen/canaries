@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const dynamic = "force-dynamic";
 
 export const metadata = {
@@ -58,9 +60,9 @@ export default async function LetterPage({ searchParams }: { searchParams: SP })
     <div className={box}>
       <h1 className="text-2xl font-semibold text-white">{title}</h1>
       <p className="mt-3 text-sm text-slate-400">{body}</p>
-      <a href="/" className="mt-8 inline-block text-sm text-canary-gold hover:underline">
+      <Link href="/" className="mt-8 inline-block text-sm text-canary-gold hover:underline">
         Back to Canary Dashboard
-      </a>
+      </Link>
     </div>
   );
 }

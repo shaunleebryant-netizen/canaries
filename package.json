@@ -7,7 +7,8 @@
     "prebuild": "node scripts/ensure-private-data.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "prepreview": "node scripts/ensure-private-data.mjs",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "predeploy": "node scripts/ensure-private-data.mjs",
@@ -38,21 +39,23 @@
     "export:drive": "node scripts/export-drive.mjs"
   },
   "dependencies": {
-    "@opennextjs/cloudflare": "^1.20.6",
+    "@opennextjs/cloudflare": "^1.20.13",
     "lightweight-charts": "^5.2.1",
-    "next": "^15.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "stripe": "^17.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.4.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2",
-    "wrangler": "4.86.0"
+    "wrangler": "4.152.0"
   }
 }
