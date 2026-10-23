@@ -49,7 +49,7 @@ function EmojiBody() {
       {group("bull")}
       <p className="text-[11px] font-semibold uppercase tracking-wider text-rose-300/90">Bearish marks</p>
       {group("bear")}
-      <p>Hover over a row's emojis to see each mark and how long it has been there.</p>
+      <p>Hover over a row&apos;s emojis to see each mark and how long it has been there.</p>
       <p className="text-xs text-slate-400">Education only, not buy or sell advice.</p>
     </>
   );
@@ -66,7 +66,7 @@ function GrowthBody() {
   return (
     <>
       <p>
-        The Canary Growth Score is a 0–100 rating of a company's business growth, built from its official SEC
+        The Canary Growth Score is a 0–100 rating of a company&apos;s business growth, built from its official SEC
         filings. It does not look at the share price chart.
       </p>
       <p>Each stock is scored on five parts. Each part is ranked against every other stock in our list (0 = lowest, 100 = highest), then the parts are blended with these weights:</p>
@@ -79,11 +79,11 @@ function GrowthBody() {
         ))}
       </ul>
       <p>
-        If a part isn't available in the filings, its weight is shared across the others. If less than 60% of the
+        If a part isn&apos;t available in the filings, its weight is shared across the others. If less than 60% of the
         weight is available, the score is shown in grey and not ranked. A red <strong className="text-rose-300">!</strong> marks
         Danger: heavy cash burn together with a weakening business (shrinking margins or slowing sales).
       </p>
-      <p>Tap any score in the table to see that stock's breakdown. The score is updated with each nightly update.</p>
+      <p>Tap any score in the table to see that stock&apos;s breakdown. The score is updated with each nightly update.</p>
       <p className="text-xs text-slate-400">Education only, not buy or sell advice.</p>
     </>
   );

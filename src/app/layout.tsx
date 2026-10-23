@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Script from "next/script";
 import "./globals.css";
 import { SiteFooter } from "@/components/Footer";
@@ -56,25 +57,25 @@ export default function RootLayout({
         <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
           <header className="border-b border-white/10 bg-slate-950/80 backdrop-blur">
             <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
-              <a href="/" className="flex items-center gap-2 font-semibold text-white">
+              <Link href="/" className="flex items-center gap-2 font-semibold text-white">
                 <span aria-hidden className="text-xl">
                   🐤
                 </span>
                 Canary Dashboard
-              </a>
+              </Link>
               <nav className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm text-slate-300">
-                <a href="/indicators" className="hover:text-canary-gold">
+                <Link href="/indicators" className="hover:text-canary-gold">
                   Indicators
-                </a>
-                <a href="/support" className="hover:text-canary-gold">
+                </Link>
+                <Link href="/support" className="hover:text-canary-gold">
                   Support
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/signup"
                   className="rounded-lg bg-canary-gold px-3.5 py-1.5 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
                 >
                   Dashboard
-                </a>
+                </Link>
               </nav>
             </div>
           </header>
