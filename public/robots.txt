@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /owner
+Disallow: /api/owner
+
+Sitemap: https://canarydashboard.com/sitemap.xml

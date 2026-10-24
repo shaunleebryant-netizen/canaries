@@ -1,201 +1,721 @@
 {
-  "asOf": "2026-09-21",
-  "purpose": "Fish alerts weekly Bottom Finder scan (smile/fish only)",
+  "asOf": "2026-10-12",
+  "purpose": "Main scan universe — Fish 🙂/🐟, Exhaustion 🥵/💀, and MFI Scan MFI zones (daily). Owner updates this list over time.",
   "groups": [
     {
-      "group": "Quantum",
+      "group": "Owner list 2026-09-23",
       "tickers": [
-        "IONQ",
-        "QBTS",
-        "RGTI",
-        "QUBT",
-        "QTUM"
-      ]
-    },
-    {
-      "group": "Robotics / autonomy / space",
-      "tickers": [
-        "TER",
-        "SYM",
-        "TSLA",
-        "RKLB",
-        "UBER",
-        "ASTS",
+        "AAPL",
+        "MSFT",
+        "CRM",
+        "NOW",
+        "SNPS",
+        "APH",
         "ROK",
-        "ZBRA"
-      ]
-    },
-    {
-      "group": "Semis & AI hardware",
-      "tickers": [
+        "ZBRA",
+        "CAT",
+        "HPE",
+        "ISRG",
+        "LLY",
+        "CTAS",
+        "GRMN",
+        "PYPL",
+        "EL",
+        "CAKE",
         "NVDA",
         "AMD",
-        "INTC",
-        "TSM",
         "AVGO",
+        "TSM",
         "MU",
+        "INTC",
         "MRVL",
-        "AMAT",
-        "ASML",
-        "SMH",
-        "CRDO",
-        "APH",
-        "KLAC",
-        "LRCX",
-        "SNPS",
-        "ALAB",
-        "QCOM",
         "ARM",
+        "QCOM",
+        "AMAT",
+        "LRCX",
+        "KLAC",
+        "ASML",
+        "ALAB",
+        "CRDO",
+        "CBRS",
         "MPWR",
+        "SITM",
+        "SMTC",
+        "RMBS",
+        "TER",
+        "ON",
+        "LSCC",
+        "NXPI",
         "COHR",
         "LITE",
-        "CIEN"
-      ]
-    },
-    {
-      "group": "Cloud / software",
-      "tickers": [
-        "MSFT",
-        "AAPL",
-        "GOOG",
+        "CIEN",
+        "AAOI",
+        "ANET",
+        "CLS",
+        "GLW",
+        "VICR",
+        "SNDK",
+        "STX",
+        "WDC",
+        "DELL",
+        "SMCI",
+        "NTAP",
+        "TSLA",
         "META",
         "AMZN",
         "ORCL",
-        "CRM",
-        "NOW",
-        "SNOW",
+        "GOOG",
+        "NFLX",
         "PLTR",
+        "APP",
+        "SHOP",
+        "MELI",
+        "SNOW",
         "NET",
         "MDB",
         "DDOG",
-        "QQQ",
-        "DELL"
-      ]
-    },
-    {
-      "group": "Cyber",
-      "tickers": [
-        "HACK",
-        "ZS",
         "CRWD",
-        "PANW"
-      ]
-    },
-    {
-      "group": "Nuclear / uranium / power",
-      "tickers": [
-        "SMR",
+        "ZS",
+        "PANW",
+        "FTNT",
+        "RBRK",
+        "S",
+        "PATH",
+        "OKTA",
+        "SOUN",
+        "CRWV",
+        "NBIS",
+        "IREN",
+        "APLD",
+        "HUT",
+        "RIOT",
+        "CORZ",
+        "CLSK",
+        "BMNR",
+        "COIN",
+        "IONQ",
+        "RKLB",
+        "ASTS",
+        "SPCX",
+        "AVAV",
+        "KTOS",
+        "ONDS",
+        "RDW",
+        "SYM",
         "OKLO",
         "LEU",
-        "URNM",
         "CCJ",
         "NXE",
-        "UEC",
+        "UUUU",
         "BWXT",
-        "VST",
-        "CEG",
         "GEV",
         "PWR",
-        "VRT"
-      ]
-    },
-    {
-      "group": "Solar / clean",
-      "tickers": [
-        "FSLR",
+        "VRT",
         "BE",
-        "TAN",
-        "ENPH"
-      ]
-    },
-    {
-      "group": "AI / genomics / surgical",
-      "tickers": [
+        "FSLR",
+        "ENPH",
+        "FIX",
+        "EME",
+        "HOOD",
+        "SOFI",
+        "AFRM",
+        "UPST",
+        "NU",
+        "XYZ",
+        "CRCL",
+        "ZETA",
+        "LMND",
         "TEM",
         "WGS",
         "GH",
-        "ISRG",
-        "ANET"
+        "HIMS",
+        "OSCR",
+        "VKTX",
+        "MRNA",
+        "UBER",
+        "RIVN",
+        "NIO",
+        "CVNA",
+        "SE",
+        "DKNG",
+        "DASH",
+        "CELH",
+        "SNAP",
+        "U",
+        "ALB",
+        "HL",
+        "FCX",
+        "PAAS",
+        "WPM",
+        "GRAB",
+        "BTCUSD",
+        "ETHUSD",
+        "XAUUSD",
+        "XAGUSD",
+        "GLD",
+        "SLV"
+      ]
+    },
+    {
+      "group": "Owner additions 2026-09-28 (FMS + O kept; pharma/biotech removed 2026-10-06)",
+      "tickers": [
+        "FMS",
+        "O"
+      ]
+    },
+    {
+      "group": "Owner additions 2026-10-02 (ACN / FRSH / NCNO)",
+      "tickers": [
+        "ACN",
+        "FRSH",
+        "NCNO"
+      ]
+    },
+    {
+      "group": "Owner additions 2026-10-10 (SIRI)",
+      "tickers": [
+        "SIRI"
       ]
     }
   ],
   "tickers": [
-    "IONQ",
-    "QBTS",
-    "RGTI",
-    "QUBT",
-    "QTUM",
-    "TER",
-    "SYM",
-    "TSLA",
-    "RKLB",
-    "UBER",
-    "ASTS",
+    "AAPL",
+    "MSFT",
+    "CRM",
+    "NOW",
+    "SNPS",
+    "APH",
     "ROK",
     "ZBRA",
+    "CAT",
+    "HPE",
+    "ISRG",
+    "LLY",
+    "CTAS",
+    "GRMN",
+    "PYPL",
+    "EL",
+    "CAKE",
     "NVDA",
     "AMD",
-    "INTC",
-    "TSM",
     "AVGO",
+    "TSM",
     "MU",
+    "INTC",
     "MRVL",
-    "AMAT",
-    "ASML",
-    "SMH",
-    "CRDO",
-    "APH",
-    "KLAC",
-    "LRCX",
-    "SNPS",
-    "ALAB",
-    "QCOM",
     "ARM",
+    "QCOM",
+    "AMAT",
+    "LRCX",
+    "KLAC",
+    "ASML",
+    "ALAB",
+    "CRDO",
+    "CBRS",
     "MPWR",
+    "SITM",
+    "SMTC",
+    "RMBS",
+    "TER",
+    "ON",
+    "LSCC",
+    "NXPI",
     "COHR",
     "LITE",
     "CIEN",
-    "MSFT",
-    "AAPL",
-    "GOOG",
+    "AAOI",
+    "ANET",
+    "CLS",
+    "GLW",
+    "VICR",
+    "SNDK",
+    "STX",
+    "WDC",
+    "DELL",
+    "SMCI",
+    "NTAP",
+    "TSLA",
     "META",
     "AMZN",
     "ORCL",
-    "CRM",
-    "NOW",
-    "SNOW",
+    "GOOG",
+    "NFLX",
     "PLTR",
+    "APP",
+    "SHOP",
+    "MELI",
+    "SNOW",
     "NET",
     "MDB",
     "DDOG",
-    "QQQ",
-    "DELL",
-    "HACK",
-    "ZS",
     "CRWD",
+    "ZS",
     "PANW",
-    "SMR",
+    "FTNT",
+    "RBRK",
+    "S",
+    "PATH",
+    "OKTA",
+    "SOUN",
+    "CRWV",
+    "NBIS",
+    "IREN",
+    "APLD",
+    "HUT",
+    "RIOT",
+    "CORZ",
+    "CLSK",
+    "BMNR",
+    "COIN",
+    "IONQ",
+    "RKLB",
+    "ASTS",
+    "SPCX",
+    "AVAV",
+    "KTOS",
+    "ONDS",
+    "RDW",
+    "SYM",
     "OKLO",
     "LEU",
-    "URNM",
     "CCJ",
     "NXE",
-    "UEC",
+    "UUUU",
     "BWXT",
-    "VST",
-    "CEG",
     "GEV",
     "PWR",
     "VRT",
-    "FSLR",
     "BE",
-    "TAN",
+    "FSLR",
     "ENPH",
+    "FIX",
+    "EME",
+    "HOOD",
+    "SOFI",
+    "AFRM",
+    "UPST",
+    "NU",
+    "XYZ",
+    "CRCL",
+    "ZETA",
+    "LMND",
     "TEM",
     "WGS",
     "GH",
-    "ISRG",
-    "ANET"
+    "HIMS",
+    "OSCR",
+    "VKTX",
+    "MRNA",
+    "UBER",
+    "RIVN",
+    "NIO",
+    "CVNA",
+    "SE",
+    "DKNG",
+    "DASH",
+    "CELH",
+    "SNAP",
+    "U",
+    "ALB",
+    "HL",
+    "FCX",
+    "PAAS",
+    "WPM",
+    "GRAB",
+    "BTCUSD",
+    "ETHUSD",
+    "XAUUSD",
+    "XAGUSD",
+    "GLD",
+    "SLV",
+    "ADI",
+    "TXN",
+    "MCHP",
+    "ENTG",
+    "ONTO",
+    "AMKR",
+    "GFS",
+    "ACLS",
+    "FORM",
+    "KEYS",
+    "CDNS",
+    "SWKS",
+    "FN",
+    "MSI",
+    "ADBE",
+    "INTU",
+    "WDAY",
+    "TEAM",
+    "HUBS",
+    "GTLB",
+    "ESTC",
+    "MNDY",
+    "TWLO",
+    "TENB",
+    "CHKP",
+    "QLYS",
+    "SPOT",
+    "ABNB",
+    "BKNG",
+    "PDD",
+    "RBLX",
+    "TTD",
+    "GE",
+    "BA",
+    "TDG",
+    "HEI",
+    "HUBB",
+    "STRL",
+    "MTZ",
+    "UNH",
+    "NVO",
+    "VRTX",
+    "BSX",
+    "SYK",
+    "PODD",
+    "DXCM",
+    "URI",
+    "DE",
+    "NEM",
+    "SOXX",
+    "IGV",
+    "CIBR",
+    "URA",
+    "NLR",
+    "XAR",
+    "FMS",
+    "O",
+    "ACN",
+    "FRSH",
+    "NCNO",
+    "SIRI"
   ],
-  "count": 76
+  "count": 210,
+  "note": "Single source of truth. Fish scanner and MFI Scan scanner both read data/fish-universe.json.",
+  "updatedNote": "owner 2026-09-25 (final): removed utilities / classic value / defense contractors / TMO per owner decision (Yahoo sector data); EL, CELH, OKLO added back. Backup data/fish-universe.prev-2026-09-25.json | owner 2026-09-28: added VTRS, JAZZ, MDGL, BBIO, PRAX, TGTX, ABVX, VERA, MLYS, BMRN, GERN, IONS, NBIX, SNDX, GRFS, UTHR, FMS, AXSM, O (all have Yahoo daily data). Backup data/fish-universe.prev-2026-09-28.json · owner 2026-10-02: added ACN, FRSH, NCNO for Fish/Sweaty/MFI/IBD/main paths. · owner 2026-10-06: removed the 17 pharma/biotech names added 2026-09-28 (VTRS, JAZZ, MDGL, BBIO, PRAX, TGTX, ABVX, VERA, MLYS, BMRN, GERN, IONS, NBIX, SNDX, GRFS, UTHR, AXSM); kept FMS (dialysis services/devices) and O (REIT). Backup data/fish-universe.prev-2026-10-06.json. Takes effect with the next full pack run + deploy. · owner 2026-10-10 (t631u): added SIRI (Sirius XM Holdings, communication services / media). Backup data/fish-universe.prev-2026-10-10.json. Takes effect with the next full pack run + deploy. · owner 2026-10-12 (t685u): removed 17 names after the universe review (weak signal follow-through / heavy cash burn / weak Growth Score / duplicate exposure): ACHR, AI, CIFR, CRSP, DKS, JOBY, LUNR, MARA, MP, MSTR, QBTS, QUBT, RGTI, SMR, UEC, WULF, XPEV; BABA kept. Backup data/fish-universe.prev-2026-10-12.json. Takes effect with the next full pack run + deploy. · owner 2026-10-12 (t688u): removed BABA (Alibaba Group Holding Limited) — \"remove qubt and baba\" (QUBT was already out in t685u). Backup data/fish-universe.prev-2026-10-12.json (pre-t685u, 228 names). Takes effect with the next full pack run + deploy.",
+  "removed2026_09_25": {
+    "utilities": [
+      {
+        "ticker": "NEE",
+        "sector": "Utilities",
+        "industry": "Utilities—Regulated Electric"
+      },
+      {
+        "ticker": "D",
+        "sector": "Utilities",
+        "industry": "Utilities—Regulated Electric"
+      },
+      {
+        "ticker": "PEG",
+        "sector": "Utilities",
+        "industry": "Utilities—Regulated Electric"
+      },
+      {
+        "ticker": "AES",
+        "sector": "Utilities",
+        "industry": "Utilities—Diversified"
+      },
+      {
+        "ticker": "VST",
+        "sector": "Utilities",
+        "industry": "Utilities—Independent Power Producers"
+      },
+      {
+        "ticker": "CEG",
+        "sector": "Utilities",
+        "industry": "Utilities—Independent Power Producers"
+      },
+      {
+        "ticker": "NRG",
+        "sector": "Utilities",
+        "industry": "Utilities—Independent Power Producers"
+      },
+      {
+        "ticker": "TLN",
+        "sector": "Utilities",
+        "industry": "Utilities—Independent Power Producers"
+      }
+    ],
+    "value": [
+      {
+        "ticker": "IBM",
+        "sector": "Technology",
+        "industry": "Information Technology Services"
+      },
+      {
+        "ticker": "CSCO",
+        "sector": "Technology",
+        "industry": "Communication Equipment"
+      },
+      {
+        "ticker": "HON",
+        "sector": "Industrials",
+        "industry": "Conglomerates"
+      },
+      {
+        "ticker": "EMR",
+        "sector": "Industrials",
+        "industry": "Specialty Industrial Machinery"
+      },
+      {
+        "ticker": "AMT",
+        "sector": "Real Estate",
+        "industry": "REIT—Specialty"
+      },
+      {
+        "ticker": "CCI",
+        "sector": "Real Estate",
+        "industry": "REIT—Specialty"
+      },
+      {
+        "ticker": "EQIX",
+        "sector": "Real Estate",
+        "industry": "REIT—Specialty"
+      },
+      {
+        "ticker": "DLR",
+        "sector": "Real Estate",
+        "industry": "REIT—Specialty"
+      },
+      {
+        "ticker": "IRM",
+        "sector": "Real Estate",
+        "industry": "REIT—Specialty"
+      },
+      {
+        "ticker": "PH",
+        "sector": "Industrials",
+        "industry": "Specialty Industrial Machinery"
+      },
+      {
+        "ticker": "CARR",
+        "sector": "Industrials",
+        "industry": "Building Products & Equipment"
+      },
+      {
+        "ticker": "JCI",
+        "sector": "Industrials",
+        "industry": "Building Products & Equipment"
+      },
+      {
+        "ticker": "TT",
+        "sector": "Industrials",
+        "industry": "Building Products & Equipment"
+      }
+    ],
+    "defense_contractors": [
+      {
+        "ticker": "LMT",
+        "sector": "Industrials",
+        "industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "NOC",
+        "sector": "Industrials",
+        "industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "GD",
+        "sector": "Industrials",
+        "industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "RTX",
+        "sector": "Industrials",
+        "industry": "Aerospace & Defense"
+      }
+    ],
+    "healthcare_defensive": [
+      {
+        "ticker": "TMO",
+        "sector": "Healthcare",
+        "industry": "Diagnostics & Research"
+      }
+    ],
+    "addedBack": [
+      "EL",
+      "CELH",
+      "OKLO"
+    ],
+    "no_yahoo_data": [
+      "CFLT",
+      "CYBR",
+      "JNPR",
+      "PSTG"
+    ]
+  },
+  "removed2026_10_06": {
+    "reason": "owner 2026-10-06: \"Remove all the Pharma companies that we added recently from the universe.\"",
+    "addedOn": "2026-09-28",
+    "tickers": [
+      {
+        "ticker": "VTRS",
+        "name": "Viatris Inc."
+      },
+      {
+        "ticker": "JAZZ",
+        "name": "Jazz Pharmaceuticals plc"
+      },
+      {
+        "ticker": "MDGL",
+        "name": "Madrigal Pharmaceuticals, Inc."
+      },
+      {
+        "ticker": "BBIO",
+        "name": "BridgeBio Pharma, Inc."
+      },
+      {
+        "ticker": "PRAX",
+        "name": "Praxis Precision Medicines, Inc."
+      },
+      {
+        "ticker": "TGTX",
+        "name": "TG Therapeutics, Inc."
+      },
+      {
+        "ticker": "ABVX",
+        "name": "Abivax SA"
+      },
+      {
+        "ticker": "VERA",
+        "name": "Vera Therapeutics, Inc."
+      },
+      {
+        "ticker": "MLYS",
+        "name": "Mineralys Therapeutics, Inc."
+      },
+      {
+        "ticker": "BMRN",
+        "name": "BioMarin Pharmaceutical Inc."
+      },
+      {
+        "ticker": "GERN",
+        "name": "Geron Corporation"
+      },
+      {
+        "ticker": "IONS",
+        "name": "Ionis Pharmaceuticals, Inc."
+      },
+      {
+        "ticker": "NBIX",
+        "name": "Neurocrine Biosciences, Inc."
+      },
+      {
+        "ticker": "SNDX",
+        "name": "Syndax Pharmaceuticals, Inc."
+      },
+      {
+        "ticker": "GRFS",
+        "name": "Grifols, S.A."
+      },
+      {
+        "ticker": "UTHR",
+        "name": "United Therapeutics Corporation"
+      },
+      {
+        "ticker": "AXSM",
+        "name": "Axsome Therapeutics, Inc."
+      }
+    ]
+  },
+  "removed2026_10_12": {
+    "reason": "owner 2026-10-12 (t685u): \"keep baba. remove the remaining 17.\" (universe review /workspace/exports/universe-review-2026-10-12.csv)",
+    "tickers": [
+      {
+        "ticker": "ACHR",
+        "name": "Archer Aviation Inc.",
+        "why": "0/3 worked, avg -2.8% at 10d; -59% 1y; no Growth Score (pre-revenue); same eVTOL bet as JOBY"
+      },
+      {
+        "ticker": "AI",
+        "name": "C3.ai, Inc.",
+        "why": "Growth Score 25.5 (rank 188/194); Danger; revenue -38%; ADV $50M"
+      },
+      {
+        "ticker": "CIFR",
+        "name": "Cipher Digital Inc.",
+        "why": "Growth Score 11.1 (rank 193/194); Danger: FCF margin -780%, runway 7 months; one of 9 miners"
+      },
+      {
+        "ticker": "CRSP",
+        "name": "CRISPR Therapeutics AG",
+        "why": "Danger: FCF margin -2773%, revenue -65%; ADV $86M; biotech already culled 6 Oct"
+      },
+      {
+        "ticker": "DKS",
+        "name": "DICK'S Sporting Goods, Inc.",
+        "why": "0/5 worked, avg -13.1% at 10d, -17.8% at 20d; -35% 1y; sporting-goods retailer, not a growth leader"
+      },
+      {
+        "ticker": "JOBY",
+        "name": "Joby Aviation, Inc.",
+        "why": "2/7 worked, avg -1.1% at 10d (-1.6% vs SPY); -67% 1y, 70% off high; op margin -759%, FCF margin -639%; Growth Score 71.4 inflated by tiny-base revenue"
+      },
+      {
+        "ticker": "LUNR",
+        "name": "Intuitive Machines, Inc.",
+        "why": "0/3 bullish marks worked; avg -16.2% at 10d, -27.8% at 20d; 71% off high; RKLB/ASTS cover space"
+      },
+      {
+        "ticker": "MARA",
+        "name": "MARA Holdings, Inc.",
+        "why": "Growth Score 25.1 (rank 189/194); Danger: runway 4 months, FCF margin -154%; -48% 1y"
+      },
+      {
+        "ticker": "MP",
+        "name": "MP Materials Corp.",
+        "why": "1/7 worked, avg -6.7% at 10d; Danger flag (FCF margin -165%); -41% 1y"
+      },
+      {
+        "ticker": "MSTR",
+        "name": "Strategy Inc",
+        "why": "1/6 worked, avg -9.1% at 10d; Growth Score 20.9 (rank 190/194); -49% 1y; duplicates BTCUSD"
+      },
+      {
+        "ticker": "QBTS",
+        "name": "D-Wave Quantum Inc.",
+        "why": "Growth Score 11.6 (rank 192/194); Danger; op margin -1373%; 4th quantum name"
+      },
+      {
+        "ticker": "QUBT",
+        "name": "Quantum Computing Inc.",
+        "why": "Smallest quantum name ($1.7B, ADV $64M); Danger; op margin -775%"
+      },
+      {
+        "ticker": "RGTI",
+        "name": "Rigetti Computing, Inc.",
+        "why": "Danger: FCF margin -656%, runway 4 months; -68% 1y; quantum duplicate"
+      },
+      {
+        "ticker": "SMR",
+        "name": "NuScale Power Corporation",
+        "why": "Growth Score 5.4, last of 194; Danger (FCF margin -7286%, revenue -81%); -82% 1y"
+      },
+      {
+        "ticker": "UEC",
+        "name": "Uranium Energy Corp.",
+        "why": "Growth Score 30.2 (rank 187/194); Danger, FCF margin -288%; CCJ is the uranium leader"
+      },
+      {
+        "ticker": "WULF",
+        "name": "TeraWulf Inc.",
+        "why": "1/5 worked, avg -7.6% at 10d; no Growth Score; 52% off high; one of 9 miners"
+      },
+      {
+        "ticker": "XPEV",
+        "name": "XPeng Inc.",
+        "why": "Biggest sample and among worst: 3/16 worked (19%), avg -2.6% 10d, -6.5% 20d; -53% 1y; ADV only $80M; NIO covers China EV"
+      }
+    ]
+  },
+  "removed2026_10_12_t688u": {
+    "reason": "owner 2026-10-12 t688u: \"remove qubt and baba\" (QUBT already removed in t685u; BABA had been kept in t685u)",
+    "tickers": [
+      {
+        "ticker": "BABA",
+        "name": "Alibaba Group Holding Limited",
+        "why": "owner decision (t688u)"
+      }
+    ]
+  }
 }

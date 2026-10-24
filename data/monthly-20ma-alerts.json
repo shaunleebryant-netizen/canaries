@@ -1,0 +1,1261 @@
+{
+  "asOf": "2026-10-23",
+  "month": "2026-10",
+  "scannedAt": "2026-10-24T11:32:28+13:00",
+  "universeCount": 230,
+  "scannedCount": 224,
+  "failed": [
+    "CBRS",
+    "SNDK",
+    "CRWV",
+    "BMNR",
+    "SPCX",
+    "CRCL"
+  ],
+  "failedDetail": [
+    {
+      "ticker": "CBRS",
+      "error": "CBRS: too few 1mo bars (5 < 21)"
+    },
+    {
+      "ticker": "SNDK",
+      "error": "SNDK: too few 1mo bars (20 < 21)"
+    },
+    {
+      "ticker": "CRWV",
+      "error": "CRWV: too few 1mo bars (19 < 21)"
+    },
+    {
+      "ticker": "BMNR",
+      "error": "BMNR: too few 1mo bars (16 < 21)"
+    },
+    {
+      "ticker": "SPCX",
+      "error": "SPCX: too few 1mo bars (4 < 21)"
+    },
+    {
+      "ticker": "CRCL",
+      "error": "CRCL: too few 1mo bars (16 < 21)"
+    }
+  ],
+  "method": "yahoo-1mo-sma20-cross-above",
+  "note": "Monthly 20MA — Yahoo 1mo closes vs SMA20 of monthly close. Cross above on the current (in-progress) month, or on the last completed month while the current month is still above. aboveSma20 = every scanned name currently close > sma20 (Multi-week Warriors filter). Universe = fish ∪ ETF Watch (deduped). Never invented. · full-pack session 2026-10-23 · monthly close cross above SMA20",
+  "signals": [
+    {
+      "ticker": "XLRE",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 42.57,
+      "sma20": 42.3125,
+      "pctAbove": 0.61,
+      "prevClose": 40.91,
+      "prevSma20": 42.3415
+    },
+    {
+      "ticker": "SPOT",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 584.22,
+      "sma20": 572.8265,
+      "pctAbove": 1.99,
+      "prevClose": 487.38,
+      "prevSma20": 574.016
+    },
+    {
+      "ticker": "NCNO",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 23.17,
+      "sma20": 22.6922,
+      "pctAbove": 2.11,
+      "prevClose": 18.13,
+      "prevSma20": 23.0992
+    },
+    {
+      "ticker": "ACN",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 249.37,
+      "sma20": 235.913,
+      "pctAbove": 5.7,
+      "prevClose": 183.37,
+      "prevSma20": 240.8695
+    },
+    {
+      "ticker": "NOW",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 158.96,
+      "sma20": 150.3742,
+      "pctAbove": 5.71,
+      "prevClose": 134.01,
+      "prevSma20": 151.7238
+    },
+    {
+      "ticker": "NU",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 15.16,
+      "sma20": 14.322,
+      "pctAbove": 5.85,
+      "prevClose": 12.66,
+      "prevSma20": 14.1015
+    },
+    {
+      "ticker": "WDAY",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 209.99,
+      "sma20": 196.3025,
+      "pctAbove": 6.97,
+      "prevClose": 190.46,
+      "prevSma20": 198.97
+    },
+    {
+      "ticker": "XLP",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 88.26,
+      "sma20": 82.212,
+      "pctAbove": 7.36,
+      "prevClose": 80.6,
+      "prevSma20": 81.953
+    },
+    {
+      "ticker": "CRM",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 248.57,
+      "sma20": 231.0155,
+      "pctAbove": 7.6,
+      "prevClose": 229.57,
+      "prevSma20": 233.4795
+    },
+    {
+      "ticker": "CTAS",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 224.1,
+      "sma20": 198.2535,
+      "pctAbove": 13.04,
+      "prevClose": 195.06,
+      "prevSma20": 197.4235
+    },
+    {
+      "ticker": "ZS",
+      "signal": "cross_above_sma20",
+      "cross": "this_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 255.15,
+      "sma20": 218.8532,
+      "pctAbove": 16.58,
+      "prevClose": 199.42,
+      "prevSma20": 215.9072
+    },
+    {
+      "ticker": "NXPI",
+      "signal": "cross_above_sma20",
+      "cross": "last_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 234.92,
+      "sma20": 227.6845,
+      "pctAbove": 3.18,
+      "prevClose": 237.53,
+      "prevSma20": 226.718
+    },
+    {
+      "ticker": "SWKS",
+      "signal": "cross_above_sma20",
+      "cross": "last_month",
+      "month": "2026-10",
+      "asOf": "2026-10-23",
+      "timeframe": "1M",
+      "close": 83.43,
+      "sma20": 69.1455,
+      "pctAbove": 20.66,
+      "prevClose": 85.48,
+      "prevSma20": 68.307
+    }
+  ],
+  "aboveSma20": [
+    {
+      "ticker": "AAOI",
+      "close": 67.51,
+      "sma20": 64.5795,
+      "pctAbove": 4.54,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "AAPL",
+      "close": 347.725,
+      "sma20": 265.6397,
+      "pctAbove": 30.9,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ABNB",
+      "close": 172.01,
+      "sma20": 137.063,
+      "pctAbove": 25.5,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ACLS",
+      "close": 106.58,
+      "sma20": 96.946,
+      "pctAbove": 9.94,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ACN",
+      "close": 249.37,
+      "sma20": 235.913,
+      "pctAbove": 5.7,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ADI",
+      "close": 391.07,
+      "sma20": 302.816,
+      "pctAbove": 29.14,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "AFRM",
+      "close": 70.08,
+      "sma20": 66.06,
+      "pctAbove": 6.09,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ALAB",
+      "close": 257.16,
+      "sma20": 197.623,
+      "pctAbove": 30.13,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "AMAT",
+      "close": 377.24,
+      "sma20": 319.1095,
+      "pctAbove": 18.22,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "AMD",
+      "close": 516.79,
+      "sma20": 290.4275,
+      "pctAbove": 77.94,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "AMZN",
+      "close": 248,
+      "sma20": 232.5065,
+      "pctAbove": 6.66,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ANET",
+      "close": 172.37,
+      "sma20": 141.283,
+      "pctAbove": 22,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "APH",
+      "close": 74.09,
+      "sma20": 65.2647,
+      "pctAbove": 13.52,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ARM",
+      "close": 210.33,
+      "sma20": 181.3423,
+      "pctAbove": 15.99,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ASML",
+      "close": 1571.8,
+      "sma20": 1220.372,
+      "pctAbove": 28.8,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "BE",
+      "close": 193.3,
+      "sma20": 138.977,
+      "pctAbove": 39.09,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CAKE",
+      "close": 108.37,
+      "sma20": 67.7635,
+      "pctAbove": 59.92,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CAT",
+      "close": 687,
+      "sma20": 624.2505,
+      "pctAbove": 10.05,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CIBR",
+      "close": 106.12,
+      "sma20": 78.169,
+      "pctAbove": 35.76,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CIEN",
+      "close": 320.26,
+      "sma20": 263.425,
+      "pctAbove": 21.58,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "COHR",
+      "close": 209.29,
+      "sma20": 195.1735,
+      "pctAbove": 7.23,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CRDO",
+      "close": 147.29,
+      "sma20": 145.7377,
+      "pctAbove": 1.07,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CRM",
+      "close": 248.57,
+      "sma20": 231.0155,
+      "pctAbove": 7.6,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CRWD",
+      "close": 257.57,
+      "sma20": 144.6514,
+      "pctAbove": 78.06,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "CTAS",
+      "close": 224.1,
+      "sma20": 198.2535,
+      "pctAbove": 13.04,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "DDOG",
+      "close": 269.65,
+      "sma20": 168.9595,
+      "pctAbove": 59.59,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "DE",
+      "close": 646.15,
+      "sma20": 542.6145,
+      "pctAbove": 19.08,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "DELL",
+      "close": 456.44,
+      "sma20": 228.9185,
+      "pctAbove": 99.39,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "DXCM",
+      "close": 77.94,
+      "sma20": 73.6435,
+      "pctAbove": 5.83,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "EL",
+      "close": 108.67,
+      "sma20": 88.557,
+      "pctAbove": 22.71,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ENTG",
+      "close": 134.52,
+      "sma20": 109.716,
+      "pctAbove": 22.61,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ESTC",
+      "close": 102.43,
+      "sma20": 76.1275,
+      "pctAbove": 34.55,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "FCX",
+      "close": 65.18,
+      "sma20": 53.1035,
+      "pctAbove": 22.74,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "FIX",
+      "close": 1160.86,
+      "sma20": 1126.656,
+      "pctAbove": 3.04,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "FORM",
+      "close": 98.51,
+      "sma20": 76.095,
+      "pctAbove": 29.46,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "FRSH",
+      "close": 15.49,
+      "sma20": 12.0478,
+      "pctAbove": 28.57,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "FTNT",
+      "close": 179.99,
+      "sma20": 111.339,
+      "pctAbove": 61.66,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "GEV",
+      "close": 815,
+      "sma20": 737.9345,
+      "pctAbove": 10.44,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "GH",
+      "close": 169.08,
+      "sma20": 99.6255,
+      "pctAbove": 69.72,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "GLW",
+      "close": 123.69,
+      "sma20": 111.017,
+      "pctAbove": 11.42,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "GOOG",
+      "close": 317.28,
+      "sma20": 281.582,
+      "pctAbove": 12.68,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "GRMN",
+      "close": 293.74,
+      "sma20": 235.1075,
+      "pctAbove": 24.94,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "GTLB",
+      "close": 56.28,
+      "sma20": 39.988,
+      "pctAbove": 40.74,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "HOOD",
+      "close": 95.07,
+      "sma20": 95.009,
+      "pctAbove": 0.06,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "HPE",
+      "close": 56.69,
+      "sma20": 30.5975,
+      "pctAbove": 85.28,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "HUBB",
+      "close": 448.1,
+      "sma20": 447.947,
+      "pctAbove": 0.03,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "HUT",
+      "close": 61.23,
+      "sma20": 54.3897,
+      "pctAbove": 12.58,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "IGV",
+      "close": 110.59,
+      "sma20": 100.4,
+      "pctAbove": 10.15,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "INTC",
+      "close": 86.96,
+      "sma20": 57.5905,
+      "pctAbove": 51,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "IWM",
+      "close": 275.75,
+      "sma20": 251.4775,
+      "pctAbove": 9.65,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "KEYS",
+      "close": 314.77,
+      "sma20": 243.368,
+      "pctAbove": 29.34,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "KLAC",
+      "close": 145.61,
+      "sma20": 137.831,
+      "pctAbove": 5.64,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "LITE",
+      "close": 756.17,
+      "sma20": 467.8305,
+      "pctAbove": 61.63,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "LLY",
+      "close": 1273.46,
+      "sma20": 973.7385,
+      "pctAbove": 30.78,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "LRCX",
+      "close": 230.1,
+      "sma20": 198.9765,
+      "pctAbove": 15.64,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "LSCC",
+      "close": 96.19,
+      "sma20": 87.7115,
+      "pctAbove": 9.67,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MCHP",
+      "close": 74.05,
+      "sma20": 69.646,
+      "pctAbove": 6.32,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MDB",
+      "close": 371.09,
+      "sma20": 304.9775,
+      "pctAbove": 21.68,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MPWR",
+      "close": 1140.12,
+      "sma20": 1048.8945,
+      "pctAbove": 8.7,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MRNA",
+      "close": 200.1,
+      "sma20": 58.629,
+      "pctAbove": 241.3,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MRVL",
+      "close": 228.51,
+      "sma20": 128.63,
+      "pctAbove": 77.65,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MSFT",
+      "close": 524.51,
+      "sma20": 460.683,
+      "pctAbove": 13.85,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MSI",
+      "close": 481.83,
+      "sma20": 433.385,
+      "pctAbove": 11.18,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "MU",
+      "close": 877.55,
+      "sma20": 452.732,
+      "pctAbove": 93.83,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NBIS",
+      "close": 158.74,
+      "sma20": 119.8658,
+      "pctAbove": 32.43,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NCNO",
+      "close": 23.17,
+      "sma20": 22.6922,
+      "pctAbove": 2.11,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NEM",
+      "close": 108.87,
+      "sma20": 90.659,
+      "pctAbove": 20.09,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NET",
+      "close": 325.73,
+      "sma20": 219.094,
+      "pctAbove": 48.67,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NOW",
+      "close": 158.96,
+      "sma20": 150.3742,
+      "pctAbove": 5.71,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NTAP",
+      "close": 215.48,
+      "sma20": 129.1025,
+      "pctAbove": 66.91,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NU",
+      "close": 15.16,
+      "sma20": 14.322,
+      "pctAbove": 5.85,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NVDA",
+      "close": 210.96,
+      "sma20": 181.4715,
+      "pctAbove": 16.25,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "NXPI",
+      "close": 234.92,
+      "sma20": 227.6845,
+      "pctAbove": 3.18,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "OKTA",
+      "close": 213.05,
+      "sma20": 113.3655,
+      "pctAbove": 87.93,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ON",
+      "close": 72.25,
+      "sma20": 64.6815,
+      "pctAbove": 11.7,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ONTO",
+      "close": 198.68,
+      "sma20": 189.459,
+      "pctAbove": 4.87,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "OSCR",
+      "close": 30.99,
+      "sma20": 19.651,
+      "pctAbove": 57.7,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "PANW",
+      "close": 380.55,
+      "sma20": 234.85,
+      "pctAbove": 62.04,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "PATH",
+      "close": 14.13,
+      "sma20": 12.821,
+      "pctAbove": 10.21,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "PLTR",
+      "close": 196.75,
+      "sma20": 152.5355,
+      "pctAbove": 28.99,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "PWR",
+      "close": 546.43,
+      "sma20": 500.5875,
+      "pctAbove": 9.16,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "QCOM",
+      "close": 175.91,
+      "sma20": 165.829,
+      "pctAbove": 6.08,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "QLYS",
+      "close": 216.7,
+      "sma20": 135.6,
+      "pctAbove": 59.81,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "QQQ",
+      "close": 704.4,
+      "sma20": 620.563,
+      "pctAbove": 13.51,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "RBRK",
+      "close": 128.74,
+      "sma20": 79.085,
+      "pctAbove": 62.79,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ROK",
+      "close": 426.11,
+      "sma20": 383.036,
+      "pctAbove": 11.25,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "RSP",
+      "close": 216.54,
+      "sma20": 195.624,
+      "pctAbove": 10.69,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "S",
+      "close": 24,
+      "sma20": 17.651,
+      "pctAbove": 35.97,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SHOP",
+      "close": 168.68,
+      "sma20": 131.236,
+      "pctAbove": 28.53,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SIRI",
+      "close": 27.63,
+      "sma20": 24.115,
+      "pctAbove": 14.58,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SITM",
+      "close": 460.22,
+      "sma20": 386.618,
+      "pctAbove": 19.04,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SMTC",
+      "close": 132,
+      "sma20": 88.595,
+      "pctAbove": 48.99,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SNOW",
+      "close": 325.43,
+      "sma20": 230.8215,
+      "pctAbove": 40.99,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SOXX",
+      "close": 478.2,
+      "sma20": 361.893,
+      "pctAbove": 32.14,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SP600",
+      "close": 1681.71,
+      "sma20": 1519.353,
+      "pctAbove": 10.69,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SPOT",
+      "close": 584.22,
+      "sma20": 572.8265,
+      "pctAbove": 1.99,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SPX",
+      "close": 7623.6802,
+      "sma20": 6820.3195,
+      "pctAbove": 11.78,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "STX",
+      "close": 630.49,
+      "sma20": 438.4875,
+      "pctAbove": 43.79,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "SWKS",
+      "close": 83.43,
+      "sma20": 69.1455,
+      "pctAbove": 20.66,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TEAM",
+      "close": 227.61,
+      "sma20": 153.9607,
+      "pctAbove": 47.84,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TEM",
+      "close": 67.615,
+      "sma20": 61.8612,
+      "pctAbove": 9.3,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TENB",
+      "close": 44.59,
+      "sma20": 29.8995,
+      "pctAbove": 49.13,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TER",
+      "close": 308.85,
+      "sma20": 236.6145,
+      "pctAbove": 30.53,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TSM",
+      "close": 418.51,
+      "sma20": 321.4775,
+      "pctAbove": 30.18,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TWLO",
+      "close": 261.79,
+      "sma20": 153.8845,
+      "pctAbove": 70.12,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "TXN",
+      "close": 284.69,
+      "sma20": 220.4385,
+      "pctAbove": 29.15,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "U",
+      "close": 40.79,
+      "sma20": 31.9305,
+      "pctAbove": 27.75,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "UNH",
+      "close": 418.09,
+      "sma20": 353.0715,
+      "pctAbove": 18.42,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "URI",
+      "close": 1098.88,
+      "sma20": 883.2745,
+      "pctAbove": 24.41,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "VICR",
+      "close": 176.04,
+      "sma20": 148.7315,
+      "pctAbove": 18.36,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "VRTX",
+      "close": 523.93,
+      "sma20": 464.346,
+      "pctAbove": 12.83,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "VUG",
+      "close": 86.76,
+      "sma20": 79.2178,
+      "pctAbove": 9.52,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "WDAY",
+      "close": 209.99,
+      "sma20": 196.3025,
+      "pctAbove": 6.97,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "WDC",
+      "close": 343.67,
+      "sma20": 258.156,
+      "pctAbove": 33.12,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "WPM",
+      "close": 120.89,
+      "sma20": 113.897,
+      "pctAbove": 6.14,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XAGUSD",
+      "close": 53.96,
+      "sma20": 50.8139,
+      "pctAbove": 6.19,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XAUUSD",
+      "close": 4010,
+      "sma20": 3805.76,
+      "pctAbove": 5.37,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLB",
+      "close": 51.31,
+      "sma20": 47.447,
+      "pctAbove": 8.14,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLE",
+      "close": 69.33,
+      "sma20": 51.4617,
+      "pctAbove": 34.72,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLF",
+      "close": 55.9,
+      "sma20": 52.9055,
+      "pctAbove": 5.66,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLG",
+      "close": 62.26,
+      "sma20": 57.2275,
+      "pctAbove": 8.79,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLI",
+      "close": 164.62,
+      "sma20": 159.9285,
+      "pctAbove": 2.93,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLK",
+      "close": 183.23,
+      "sma20": 149.4325,
+      "pctAbove": 22.62,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLP",
+      "close": 88.26,
+      "sma20": 82.212,
+      "pctAbove": 7.36,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLRE",
+      "close": 42.57,
+      "sma20": 42.3125,
+      "pctAbove": 0.61,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XLV",
+      "close": 179.28,
+      "sma20": 150.705,
+      "pctAbove": 18.96,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "XYZ",
+      "close": 76.46,
+      "sma20": 69.9635,
+      "pctAbove": 9.29,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ZBRA",
+      "close": 386.45,
+      "sma20": 282.87,
+      "pctAbove": 36.62,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ZETA",
+      "close": 33.98,
+      "sma20": 19.878,
+      "pctAbove": 70.94,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    },
+    {
+      "ticker": "ZS",
+      "close": 255.15,
+      "sma20": 218.8532,
+      "pctAbove": 16.58,
+      "asOf": "2026-10-23",
+      "month": "2026-10"
+    }
+  ],
+  "sessionDate": "2026-10-23",
+  "packAsOf": "2026-10-23",
+  "held": false,
+  "heldSince": null,
+  "packScannedAt": "2026-10-24T11:29:56+13:00"
+}

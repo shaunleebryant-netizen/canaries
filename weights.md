@@ -21,7 +21,7 @@ Score logic for flock seats unchanged except seat-3 read rules. Missing feeds â†
 | XLG | 0.0680 |
 | SP600 | 0.0680 |
 | RSP (price, not RSP/SPY) | 0.0680 |
-| VIX and VVIX | **0.0565** |
+| Spot VIX | **0.0565** |
 | FINRA margin debt | 0.0680 |
 | QQQ vs SMA20 | 0.0800 |
 | HYG / IEF vs SMA20 | 0.0700 |

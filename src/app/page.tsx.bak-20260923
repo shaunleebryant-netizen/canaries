@@ -1,0 +1,448 @@
+import Image from "next/image";
+import { loadState } from "@/lib/loadState";
+import { toPublicSnapshot } from "@/lib/composite";
+import { TrafficLightDisplay } from "@/components/TrafficLight";
+import { HomeYoutube } from "@/components/HomeYoutube";
+
+export const dynamic = "force-dynamic";
+
+const INCLUDED = [
+  "Full Dashboard",
+  "Learning tools",
+  "Weekly commentary + email",
+  "Time to Fish 🐟 List",
+  "Exhausted 🥵 List",
+  "WhatsApp / Email support",
+];
+
+const REVIEWS = [
+  {
+    quote:
+      "I finally check posture before I dig into names. The composite + Fish list cut my morning scan time in half.",
+    name: "A.K.",
+    meta: "Member · US equities",
+  },
+  {
+    quote:
+      "Exhaustion saved me from chasing a stretched name. Weekly commentary is plain English — no jargon dump.",
+    name: "M.R.",
+    meta: "Member · swing trader",
+  },
+  {
+    quote:
+      "I watched the walkthrough, then joined the same day. Feels like a process, not another tip channel.",
+    name: "J.T.",
+    meta: "Member · first 100",
+  },
+];
+
+export default function HomePage() {
+  const state = loadState();
+  const snap = toPublicSnapshot(state);
+
+  return (
+    <div className="bg-slate-950 text-slate-100">
+      {/* 1. Video-first hero */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 text-white">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 20%, #eab30833, transparent 40%), radial-gradient(circle at 80% 60%, #22c55e22, transparent 35%)",
+          }}
+        />
+        <div className="relative mx-auto grid max-w-5xl gap-10 px-4 py-12 md:grid-cols-2 md:items-center md:py-16">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-widest text-canary-gold">
+              Watch first · then decide
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
+              See how Canary Dashboard works — then join if it fits.
+            </h1>
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
+              On landing, press play. In a few minutes you’ll see how members read market
+              health, Fish 🐟, Exhaustion 🥵, and when to stay in or get defensive.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="/signup"
+                className="rounded-xl bg-canary-gold px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
+              >
+                Start membership
+              </a>
+              <a
+                href="/members/login"
+                className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10"
+              >
+                Log in
+              </a>
+            </div>
+            <p className="mt-3 text-xs text-slate-500">
+              Education only · not investment advice · first 100 lock $50/mo annual
+            </p>
+          </div>
+          <HomeYoutube />
+        </div>
+      </section>
+
+      <div className="border-y border-white/5 bg-slate-950/80">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-4 text-center text-xs text-slate-500">
+          <span className="font-medium text-slate-300">
+            Built for traders who want posture, not headlines
+          </span>
+          <span aria-hidden>·</span>
+          <span>Composite + Regime</span>
+          <span aria-hidden>·</span>
+          <span>Fish & Exhaustion lists</span>
+          <span aria-hidden>·</span>
+          <span>Weekly commentary</span>
+        </div>
+      </div>
+
+      {/* 2. Outcome */}
+      <section className="border-t border-white/5">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            The job to be done
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            Healthy canaries → stay in the market.
+            <span className="mt-1 block text-slate-300">
+              Dying canaries → get defensive.
+            </span>
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400">
+            One cockpit for composite, regime, and flock seats — so you stop guessing from
+            the news cycle and start reading the same numbers every session.
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              {
+                t: "Decide faster",
+                d: "Traffic-light composite + regime posture before you dig into names.",
+              },
+              {
+                t: "Hunt with a list",
+                d: "Time to Fish 🐟 when setups are ripening — not random scanning.",
+              },
+              {
+                t: "Respect exhaustion",
+                d: "Exhausted 🥵 / skull cues when names look stretched — education, not tips.",
+              },
+            ].map((c) => (
+              <article
+                key={c.t}
+                className="rounded-xl border border-white/10 bg-slate-900/50 p-4"
+              >
+                <h3 className="text-sm font-semibold text-white">{c.t}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">{c.d}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Product proof + live score */}
+      <section className="border-t border-white/5 bg-slate-900/40">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <div className="grid gap-8 md:grid-cols-2 md:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+                Members cockpit
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">
+                See the dashboard you’re joining.
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                Sticky decide column on the left. Scan tools on the right — including Fish
+                and Exhaustion lists. Same dark/gold frame members use every session.
+              </p>
+              <a
+                href="/signup"
+                className="mt-6 inline-block rounded-xl border border-canary-gold/40 px-4 py-2 text-sm font-medium text-canary-gold hover:bg-canary-gold/10"
+              >
+                Start membership →
+              </a>
+            </div>
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-canary-gold">
+                Current Score Preview
+              </p>
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur md:p-7">
+                <TrafficLightDisplay
+                  light={snap.light}
+                  S={snap.S}
+                  asOf={snap.asOf}
+                  stance={snap.stance}
+                  showRange
+                  compact
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-lg">
+            <Image
+              src="/home/dashboard-top.png"
+              alt="Members cockpit — decide stack with Fish and Exhaustion scan lists"
+              width={1400}
+              height={800}
+              className="h-auto w-full"
+              priority={false}
+            />
+          </div>
+          <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-lg">
+            <Image
+              src="/home/composite-rail.png"
+              alt="Composite score info rail on the members decide panel"
+              width={960}
+              height={540}
+              className="h-auto w-full"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 4. What's included */}
+      <section className="border-t border-white/5">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            Membership
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">What’s included</h2>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {INCLUDED.map((item) => (
+              <li
+                key={item}
+                className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/50 px-4 py-3 text-sm text-slate-200"
+              >
+                <span className="text-canary-gold">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 5. Habit loop */}
+      <section className="border-t border-white/5 bg-slate-900/40">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            How members use it
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">A simple weekly rhythm.</h2>
+          <ol className="mt-8 grid gap-3 md:grid-cols-3">
+            {[
+              {
+                n: "1",
+                t: "Check posture",
+                d: "Composite + Regime first. Stay in or get defensive.",
+              },
+              {
+                n: "2",
+                t: "Scan the lists",
+                d: "Fish for opportunity. Exhaustion for caution.",
+              },
+              {
+                n: "3",
+                t: "Read the digest",
+                d: "Weekly commentary in plain English — Wed/Fri cadence.",
+              },
+            ].map((s) => (
+              <li
+                key={s.n}
+                className="rounded-xl border border-white/10 bg-slate-950/50 p-5"
+              >
+                <span className="inline-grid h-7 w-7 place-items-center rounded-full bg-canary-gold text-xs font-bold text-slate-950">
+                  {s.n}
+                </span>
+                <h3 className="mt-3 text-sm font-semibold text-white">{s.t}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">{s.d}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* 6. Reviews */}
+      <section id="reviews" className="border-t border-white/5">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            What members are saying
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            From traders already on the dashboard.
+          </h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {REVIEWS.map((r) => (
+              <article
+                key={r.name}
+                className="flex flex-col rounded-xl border border-white/10 bg-slate-900/50 p-5"
+              >
+                <p className="text-sm tracking-widest text-canary-gold" aria-hidden>
+                  ★★★★★
+                </p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-200">
+                  “{r.quote}”
+                </p>
+                <div className="mt-4 border-t border-white/10 pt-3">
+                  <p className="text-sm font-semibold text-white">{r.name}</p>
+                  <p className="text-xs text-slate-500">{r.meta}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="mt-4 text-xs text-slate-600">
+            Sample quotes for launch — replace with verified member permission before
+            citing full names.
+          </p>
+        </div>
+      </section>
+
+      {/* 7. Pricing */}
+      <section id="pricing" className="border-t border-white/5 bg-slate-900/40">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            Pricing
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            Simple membership. Launch lock for the first 100.
+          </h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <article className="rounded-2xl border border-canary-gold/40 bg-gradient-to-b from-amber-500/10 to-slate-950 p-6 ring-1 ring-canary-gold/20">
+              <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+                First 100
+              </p>
+              <p className="mt-3 text-3xl font-semibold text-white">
+                $50<span className="text-base font-medium text-slate-400">/mo</span>
+              </p>
+              <p className="mt-2 text-sm text-slate-300">
+                Annual billing · rate locked for life while you renew
+              </p>
+              <ul className="mt-4 space-y-1.5 text-sm text-slate-200">
+                <li className="flex gap-2">
+                  <span className="text-canary-gold">✓</span> Full dashboard + lists
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-canary-gold">✓</span> Weekly commentary
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-canary-gold">✓</span> Learning tools + support
+                </li>
+              </ul>
+              <a
+                href="/signup"
+                className="mt-6 inline-block rounded-xl bg-canary-gold px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
+              >
+                Claim launch rate
+              </a>
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                After 100
+              </p>
+              <p className="mt-3 text-3xl font-semibold text-white">
+                $99<span className="text-base font-medium text-slate-400">/mo</span>
+              </p>
+              <p className="mt-2 text-sm text-slate-400">
+                Standard rate · discount codes later
+              </p>
+              <p className="mt-6 text-sm text-slate-500">
+                Still includes the full membership stack.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. FAQ */}
+      <section className="border-t border-white/5">
+        <div className="mx-auto max-w-3xl px-4 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            Before you join
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">Straight answers.</h2>
+          <div className="mt-6 space-y-3">
+            {[
+              {
+                q: "Is this investment advice?",
+                a: "No. Education only — market-health readings and process tools. Nothing here is a buy/sell recommendation.",
+              },
+              {
+                q: "Do I need to watch the video first?",
+                a: "That’s the point of the hero. Watch how the dashboard works, then join if the process fits how you trade.",
+              },
+              {
+                q: "Can I book the founder?",
+                a: "Yes. 1-to-1 tuition with Shaun at $120 USD/hr for deeper walkthroughs of the metrics.",
+              },
+            ].map((f) => (
+              <details
+                key={f.q}
+                className="rounded-xl border border-white/10 bg-slate-900/40 px-4 py-3"
+              >
+                <summary className="cursor-pointer text-sm font-semibold text-white">
+                  {f.q}
+                </summary>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 9. Tuition */}
+      <section className="border-t border-white/5 bg-slate-900/40">
+        <div className="mx-auto max-w-5xl px-4 py-14 md:flex md:items-center md:justify-between md:gap-8">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+              Tuition
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">Book Shaun, founder</h2>
+            <p className="mt-2 max-w-xl text-sm text-slate-400">
+              Live online 1-on-1 ·{" "}
+              <span className="font-medium text-white">$120 USD/hr</span> · dig into the
+              metrics that run the dashboard.
+            </p>
+          </div>
+          <a
+            href="/tuition"
+            className="mt-6 inline-block rounded-xl border border-white/20 px-5 py-3 text-sm font-medium text-white hover:bg-white/5 md:mt-0"
+          >
+            Book tuition →
+          </a>
+        </div>
+      </section>
+
+      {/* 10. Final CTA */}
+      <section className="border-t border-white/5">
+        <div className="mx-auto max-w-3xl px-4 py-16 text-center">
+          <h2 className="text-2xl font-semibold text-white">
+            Ready to run the same cockpit every session?
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm text-slate-400">
+            You watched how it works. Membership unlocks the live dashboard, lists, and
+            weekly commentary.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="/signup"
+              className="rounded-xl bg-canary-gold px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
+            >
+              Start membership
+            </a>
+            <a
+              href="/members/login"
+              className="rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-white hover:bg-white/5"
+            >
+              Log in
+            </a>
+          </div>
+          <p className="mt-8 text-xs leading-relaxed text-slate-500">
+            Education only — not investment advice. Nothing here is a recommendation to buy
+            or sell any security.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}

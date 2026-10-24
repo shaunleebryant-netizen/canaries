@@ -1,0 +1,179 @@
+//@version=6
+indicator("Bottom Finder v3.1 — MTF Filter", overlay=true, max_labels_count=500)
+
+// ═════════════════════════════════════════════════════════════
+// INPUTS (original + new filters)
+// ═════════════════════════════════════════════════════════════
+signalTF     = input.timeframe("D", "Signal timeframe (4H = 240)", group="General")
+htf          = input.timeframe("D", "Higher TF filter", group="General")
+useTinyEmoji = input.bool(true, "Use smaller emoji size?", group="General")
+
+emaFastLen   = input.int(14, "Fast EMA Length", minval=1, group="Regime")
+emaSlowLen   = input.int(55, "Slow EMA Length", minval=1, group="Regime")
+rsiLen       = input.int(14, "RSI Length", minval=1, group="RSI")
+
+rsiDeep      = input.float(29.0, "🙂 Deep RSI", step=0.5, group="Bottom")
+useTrendDirBottom = input.bool(true, "🙂 Deep: require fast EMA < slow EMA", group="Bottom")
+useHook      = input.bool(true, "Enable 🙂 hook", group="Bottom")
+rsiHook      = input.float(31.0, "🙂 Hook RSI cross level", step=0.5, group="Bottom")
+hookNeedLl   = input.bool(true, "🙂 Hook: lower low vs prior 8 bars", group="Bottom")
+useDivBot    = input.bool(true, "Enable 🙂 bullish RSI divergence", group="Bottom")
+divLook      = input.int(14, "Divergence lookback", minval=4, maxval=40, group="Bottom")
+
+// NEW QUALITY FILTERS
+useWeeklyFilter   = input.bool(true, "Require weekly still oversold or downtrend", group="Quality")
+weeklyRsiMax      = input.float(35.0, "Weekly RSI must be below this", step=1, group="Quality")
+minBottomScore    = input.int(2, "Min score to plot 🙂 (deep=3, div=2, hook=1)", minval=1, maxval=3, group="Quality")
+hideWeakBottoms   = input.bool(true, "Hide low-score 🙂 (keep them for fish logic)", group="Quality")
+useVolFilter      = input.bool(true, "Require 4H volume > 20-bar SMA", group="Quality")
+volMult           = input.float(1.1, "Volume multiplier", step=0.1, group="Quality")
+
+lookbackFish = input.int(60, "🐟 must follow 🙂 within N 4H bars", minval=1, maxval=400, group="Fish")
+fishExitLevel     = input.float(29.5, "🐟 RSI level", step=0.5, group="Fish")
+fishMinRiseAmount = input.float(5.0, "🐟 Min RSI rise from bottom", step=0.5, group="Fish")
+fishUseRsiMA      = input.bool(true, "🐟 Require RSI MA rising", group="Fish")
+fishRsiMALen      = input.int(9, "🐟 RSI MA length", minval=2, group="Fish")
+fishRequirePriceUp = input.bool(true, "🐟 Require close > bottom close", group="Fish")
+fishNeedStrongBar  = input.bool(true, "🐟 Require close in top half of 4H bar", group="Fish")
+fishCooldown       = input.int(10, "🐟 Cooldown 4H bars", minval=1, group="Fish")
+
+rsiWarn      = input.float(78.0, "🥵 4H RSI warning cross", step=0.5, group="Top")
+useTrendDirTop = input.bool(true, "🥵 Require fast EMA > slow EMA", group="Top")
+useHookTop   = input.bool(false, "Enable 🥵 hook", group="Top")
+useDivTop    = input.bool(true, "Enable 🥵 bearish RSI divergence", group="Top")
+
+detBars      = input.int(2, "💀 RSI down bars", minval=1, maxval=8, group="Skull")
+detUseRSIMA  = input.bool(true, "💀 RSI < RSI MA", group="Skull")
+detRsiMALen  = input.int(14, "💀 RSI MA length", minval=2, group="Skull")
+detMinDrop   = input.float(1.0, "💀 Min RSI drop per bar", step=0.1, group="Skull")
+requireRedCandle = input.bool(true, "💀 Require 4H close < prior close", group="Skull")
+
+emojiBottom  = input.string("🙂", "Bottom")
+emojiFish    = input.string("🐟", "Fish")
+emojiExhaust = input.string("🥵", "Exhaustion")
+emojiSkull   = input.string("💀", "Skull")
+
+// ═════════════════════════════════════════════════════════════
+// 4H ENGINE (now returns score too)
+// ═════════════════════════════════════════════════════════════
+f_signals() =>
+    emaF = ta.ema(close, emaFastLen)
+    emaS = ta.ema(close, emaSlowLen)
+    rsi  = ta.rsi(close, rsiLen)
+    rsiMA_fish = ta.sma(rsi, fishRsiMALen)
+    rsiMA_det  = ta.sma(rsi, detRsiMALen)
+    barLoc = (high - low) > 0 ? (close - low) / (high - low) : 0.5
+    volOK  = not useVolFilter or volume > ta.sma(volume, 20) * volMult
+
+    deep = (rsi < rsiDeep) and (useTrendDirBottom ? emaF < emaS : true) and volOK
+    hook = useHook and ta.crossover(rsi, rsiHook) and (useTrendDirBottom ? emaF < emaS : true) and volOK
+    if hook and hookNeedLl
+        hook := close < ta.lowest(close[1], 8)
+
+    ll = close < ta.lowest(close[1], divLook)
+    rsiAtPriorLow = ta.valuewhen(close == ta.lowest(close, divLook), rsi, 1)
+    bullDiv = useDivBot and ll and not na(rsiAtPriorLow) and rsi > rsiAtPriorLow and rsi < 40 and volOK
+
+    score = (deep ? 3 : 0) + (bullDiv ? 2 : 0) + (hook ? 1 : 0)
+    bottomSignal = (deep or hook or bullDiv) and score >= minBottomScore
+
+    var float bottomRSI   = na
+    var float bottomPrice = na
+    var int   lastBottom  = na
+    var int   lastFish    = na
+
+    if bottomSignal
+        lastBottom  := bar_index
+        bottomRSI   := rsi
+        bottomPrice := close
+
+    barsFromBottom = not na(lastBottom) ? bar_index - lastBottom : 999999
+    inWindow = barsFromBottom > 0 and barsFromBottom <= lookbackFish
+    coolOK   = not na(lastFish) ? (bar_index - lastFish) >= fishCooldown : true
+
+    fish = inWindow and coolOK and
+           rsi > fishExitLevel and
+           rsi > rsi[1] and
+           (not na(bottomRSI) ? rsi > bottomRSI + fishMinRiseAmount : false) and
+           (fishUseRsiMA ? rsiMA_fish > rsiMA_fish[1] : true) and
+           (fishRequirePriceUp ? close > bottomPrice : true) and
+           (fishNeedStrongBar ? barLoc >= 0.5 : true)
+
+    if fish
+        lastFish := bar_index
+
+    regimeUp = useTrendDirTop ? emaF > emaS : true
+    hotCross = ta.crossover(rsi, rsiWarn)
+    hotHook  = useHookTop and ta.crossunder(rsi, rsiWarn) and rsi[1] >= rsiWarn
+    hh = close > ta.highest(close[1], divLook)
+    rsiAtPriorHigh = ta.valuewhen(close == ta.highest(close, divLook), rsi, 1)
+    bearDiv = useDivTop and hh and not na(rsiAtPriorHigh) and rsi < rsiAtPriorHigh and rsi > 60
+    exhaustion = regimeUp and (hotCross or hotHook or bearDiv)
+
+    fallSeq = true
+    for i = 0 to detBars - 1
+        dropOK = detMinDrop <= 0 ? true : (rsi[i + 1] - rsi[i] >= detMinDrop)
+        fallSeq := fallSeq and (rsi[i] < rsi[i + 1]) and dropOK
+    det = fallSeq and (detUseRSIMA ? rsi < rsiMA_det : true)
+    priceFalling = requireRedCandle ? close < close[1] : true
+
+    var bool skullArmed = false
+    if exhaustion
+        skullArmed := true
+    skull = skullArmed and det and priceFalling
+    if skull
+        skullArmed := false
+
+    [bottomSignal, fish, exhaustion, skull, score, rsi, emaF < emaS]
+
+[bottom_4h, fish_4h, exhaust_4h, skull_4h, botScore, rsi4h, down4h] =
+     request.security(syminfo.tickerid, signalTF, f_signals(), barmerge.gaps_off, barmerge.lookahead_off)
+
+// Weekly filter
+[weeklyRsi, weeklyDown] = request.security(syminfo.tickerid, htf, [ta.rsi(close, rsiLen), ta.ema(close, emaFastLen) < ta.ema(close, emaSlowLen)], barmerge.gaps_off, barmerge.lookahead_off)
+
+weeklyOK = not useWeeklyFilter or weeklyRsi < weeklyRsiMax or weeklyDown
+
+plotBottom = bottom_4h and weeklyOK and (not hideWeakBottoms or botScore >= 3)
+plotFish   = fish_4h and weeklyOK   // still allow fish even if weekly just turned
+
+// ═════════════════════════════════════════════════════════════
+// PLOT
+// ═════════════════════════════════════════════════════════════
+plotchar(useTinyEmoji and plotBottom,  title="🙂 tiny",  char=emojiBottom,  location=location.belowbar, color=color.yellow, size=size.tiny)
+plotchar(not useTinyEmoji and plotBottom, title="🙂 small", char=emojiBottom,  location=location.belowbar, color=color.yellow, size=size.small)
+plotchar(useTinyEmoji and plotFish,    title="🐟 tiny",  char=emojiFish,    location=location.belowbar, color=color.green,  size=size.tiny)
+plotchar(not useTinyEmoji and plotFish,   title="🐟 small", char=emojiFish,    location=location.belowbar, color=color.green,  size=size.small)
+plotchar(useTinyEmoji and exhaust_4h, title="🥵 tiny",  char=emojiExhaust, location=location.abovebar, color=color.red,    size=size.tiny)
+plotchar(not useTinyEmoji and exhaust_4h, title="🥵 small", char=emojiExhaust, location=location.abovebar, color=color.red,    size=size.small)
+plotchar(useTinyEmoji and skull_4h,   title="💀 tiny",  char=emojiSkull,   location=location.abovebar, color=color.white,  size=size.tiny)
+plotchar(not useTinyEmoji and skull_4h,  title="💀 small", char=emojiSkull,   location=location.abovebar, color=color.white,  size=size.small)
+
+bgcolor(plotBottom ? color.new(color.yellow, 90) : na)
+bgcolor(plotFish ? color.new(color.green, 90) : na)
+bgcolor(exhaust_4h ? color.new(color.red, 90) : na)
+bgcolor(skull_4h ? color.new(color.gray, 85) : na)
+
+// Compact dashboard table
+var table t = table.new(position.top_right, 2, 6, bgcolor=color.new(color.black, 20), border_width=1)
+if barstate.islast
+    rec = plotFish ? "FISH — actionable" : plotBottom ? "WATCH — potential wash" : exhaust_4h or skull_4h ? "CAUTION — exhaustion" : "NEUTRAL"
+    table.cell(t, 0, 0, "4H RSI", text_color=color.gray)
+    table.cell(t, 1, 0, str.tostring(rsi4h, "#.0"), text_color=color.white)
+    table.cell(t, 0, 1, "Weekly RSI", text_color=color.gray)
+    table.cell(t, 1, 1, str.tostring(weeklyRsi, "#.0"), text_color=weeklyRsi < weeklyRsiMax ? color.lime : color.white)
+    table.cell(t, 0, 2, "4H trend", text_color=color.gray)
+    table.cell(t, 1, 2, down4h ? "DOWN" : "UP", text_color=down4h ? color.lime : color.red)
+    table.cell(t, 0, 3, "Weekly trend", text_color=color.gray)
+    table.cell(t, 1, 3, weeklyDown ? "DOWN" : "UP", text_color=weeklyDown ? color.lime : color.red)
+    table.cell(t, 0, 4, "Last score", text_color=color.gray)
+    table.cell(t, 1, 4, str.tostring(botScore), text_color=color.white)
+    table.cell(t, 0, 5, "Stance", text_color=color.gray)
+    table.cell(t, 1, 5, rec, text_color=plotFish ? color.lime : plotBottom ? color.yellow : color.orange)
+
+alertcondition(plotBottom, title="HQ 4H Bottom", message="High-quality 4H bottom 🙂")
+alertcondition(plotFish, title="HQ 4H Fish", message="Confirmed FISH 🐟")
+alertcondition(exhaust_4h, title="4H Exhaustion", message="4H exhaustion 🥵")
+alertcondition(skull_4h, title="4H Skull", message="4H skull 💀")
+
+// NOTE: v3.1 is current — this file mirrors fish-indicator-bottom-finder-v3.1.pine

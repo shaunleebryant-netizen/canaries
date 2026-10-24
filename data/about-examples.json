@@ -1,0 +1,156 @@
+{
+  "builtAt": "2026-10-10T03:46:09.515Z",
+  "asOf": "2026-10-09",
+  "record": {
+    "horizonSessions": 10,
+    "windowStart": "2026-04-13",
+    "asOf": "2026-10-09",
+    "method": "Every 🐟/🙂/💵 mark on a stock in data/signal-history.json (2026-04-13 to 2026-10-09) with 10 sessions of data after it; close 10 sessions later vs close on the mark day. A Fish and Smiley on the same stock and day count once in \"all marks\". History was backfilled by re-running today's rules, then extended nightly.",
+    "all": {
+      "n": 868,
+      "down10Pct": 9.1,
+      "worstPct": -30.6,
+      "hitPct": 59.2,
+      "avgPct": 3.4,
+      "medianPct": 1.78
+    },
+    "fish": {
+      "n": 402,
+      "down10Pct": 9.2,
+      "worstPct": -30.6,
+      "hitPct": 60.4,
+      "avgPct": 4.2,
+      "medianPct": 1.88
+    },
+    "smile": {
+      "n": 415,
+      "down10Pct": 8.4,
+      "worstPct": -30.6,
+      "hitPct": 58.8,
+      "avgPct": 2.85,
+      "medianPct": 1.89
+    },
+    "mfi": {
+      "n": 132,
+      "down10Pct": 9.1,
+      "worstPct": -18.7,
+      "hitPct": 64.4,
+      "avgPct": 3.71,
+      "medianPct": 3.04
+    },
+    "all20": {
+      "n": 780,
+      "down10Pct": 14.4,
+      "worstPct": -35.4,
+      "hitPct": 60.4,
+      "avgPct": 3.97,
+      "medianPct": 3.06
+    },
+    "mfi20": {
+      "n": 112,
+      "down10Pct": 12.5,
+      "worstPct": -26.3,
+      "hitPct": 64.3,
+      "avgPct": 4.54,
+      "medianPct": 4.14
+    }
+  },
+  "examples": [
+    {
+      "ticker": "NU",
+      "name": "Nu Holdings Ltd.",
+      "kind": "fish",
+      "markDate": "2026-09-28",
+      "sameDay": [
+        "fish",
+        "smile"
+      ],
+      "priceAtMark": 12.23,
+      "lastDate": "2026-10-09",
+      "lastClose": 16.12,
+      "pctNow": 31.8,
+      "sessionsNow": 9,
+      "peakDate": "2026-10-09",
+      "peakClose": 16.12,
+      "pctPeak": 31.8,
+      "sessionsPeak": 9,
+      "image": "/about/example-nu.webp"
+    },
+    {
+      "ticker": "SMTC",
+      "name": "Semtech Corporation",
+      "kind": "fish",
+      "markDate": "2026-07-29",
+      "sameDay": [
+        "fish"
+      ],
+      "priceAtMark": 103.55,
+      "lastDate": "2026-10-09",
+      "lastClose": 187.3,
+      "pctNow": 80.9,
+      "sessionsNow": 51,
+      "peakDate": "2026-10-06",
+      "peakClose": 197.2,
+      "pctPeak": 90.4,
+      "sessionsPeak": 48,
+      "image": "/about/example-smtc.webp"
+    },
+    {
+      "ticker": "ENTG",
+      "name": "Entegris, Inc.",
+      "kind": "mfi",
+      "markDate": "2026-07-30",
+      "sameDay": [
+        "mfi"
+      ],
+      "priceAtMark": 117.11,
+      "lastDate": "2026-10-09",
+      "lastClose": 165.79,
+      "pctNow": 41.6,
+      "sessionsNow": 50,
+      "peakDate": "2026-10-05",
+      "peakClose": 166.92,
+      "pctPeak": 42.5,
+      "sessionsPeak": 46,
+      "image": "/about/example-entg.webp"
+    },
+    {
+      "ticker": "SHOP",
+      "name": "Shopify Inc.",
+      "kind": "smile",
+      "markDate": "2026-09-09",
+      "sameDay": [
+        "smile"
+      ],
+      "priceAtMark": 126.79,
+      "lastDate": "2026-10-09",
+      "lastClose": 170.85,
+      "pctNow": 34.8,
+      "sessionsNow": 22,
+      "peakDate": "2026-10-09",
+      "peakClose": 170.85,
+      "pctPeak": 34.8,
+      "sessionsPeak": 22,
+      "image": "/about/example-shop.webp"
+    },
+    {
+      "ticker": "CIEN",
+      "name": "Ciena Corporation",
+      "kind": "fish",
+      "markDate": "2026-09-03",
+      "sameDay": [
+        "fish"
+      ],
+      "priceAtMark": 317.46,
+      "lastDate": "2026-10-09",
+      "lastClose": 449.77,
+      "pctNow": 41.7,
+      "sessionsNow": 25,
+      "peakDate": "2026-10-09",
+      "peakClose": 449.77,
+      "pctPeak": 41.7,
+      "sessionsPeak": 25,
+      "image": "/about/example-cien.webp"
+    }
+  ]
+}

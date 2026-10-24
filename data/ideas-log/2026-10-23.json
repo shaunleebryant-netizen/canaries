@@ -1,0 +1,309 @@
+{
+  "v": 1,
+  "date": "2026-10-23",
+  "loggedAt": "2026-10-24T16:27:13+13:00",
+  "light": "red",
+  "regime": "RISK_OFF",
+  "ideas": [
+    {
+      "t": "MU",
+      "side": "long",
+      "play": "Bounce",
+      "close": 877.55,
+      "entryZone": [
+        849.25,
+        899.58
+      ],
+      "wrongIf": 824.09,
+      "target": 1108,
+      "rr": 4.64,
+      "sector": "SMH",
+      "sectorRank": 22
+    },
+    {
+      "t": "LITE",
+      "side": "long",
+      "play": "Bounce",
+      "close": 756.17,
+      "entryZone": [
+        736.01,
+        807.73
+      ],
+      "wrongIf": 700.15,
+      "target": 1143,
+      "rr": 5.17,
+      "sector": "XLK",
+      "sectorRank": 15
+    },
+    {
+      "t": "BE",
+      "side": "long",
+      "play": "Bounce",
+      "close": 193.3,
+      "entryZone": [
+        189,
+        208.65
+      ],
+      "wrongIf": 179.18,
+      "target": 302.35,
+      "rr": 5.27,
+      "sector": "XLI",
+      "sectorRank": 14
+    },
+    {
+      "t": "STX",
+      "side": "long",
+      "play": "Bounce",
+      "close": 630.49,
+      "entryZone": [
+        621,
+        667.06
+      ],
+      "wrongIf": 597.97,
+      "target": 946.36,
+      "rr": 6.56,
+      "sector": "XLK",
+      "sectorRank": 15
+    },
+    {
+      "t": "LSCC",
+      "side": "long",
+      "play": "Bounce",
+      "close": 96.19,
+      "entryZone": [
+        94.31,
+        100.6
+      ],
+      "wrongIf": 91.16,
+      "target": 137.03,
+      "rr": 6.29,
+      "sector": "SMH",
+      "sectorRank": 22
+    },
+    {
+      "t": "WPM",
+      "side": "long",
+      "play": "Bounce",
+      "close": 120.89,
+      "entryZone": [
+        118.72,
+        123.43
+      ],
+      "wrongIf": 116.37,
+      "target": 139.74,
+      "rr": 3.97,
+      "sector": "GDX",
+      "sectorRank": 24
+    },
+    {
+      "t": "PWR",
+      "side": "long",
+      "play": "Bounce",
+      "close": 546.43,
+      "entryZone": [
+        527.07,
+        559.34
+      ],
+      "wrongIf": 510.94,
+      "target": 722.21,
+      "rr": 5.55,
+      "sector": "XLI",
+      "sectorRank": 14
+    },
+    {
+      "t": "AMKR",
+      "side": "long",
+      "play": "Bounce",
+      "close": 39.3,
+      "entryZone": [
+        38.52,
+        41.23
+      ],
+      "wrongIf": 37.17,
+      "target": 56.56,
+      "rr": 6.16,
+      "sector": "SMH",
+      "sectorRank": 22
+    },
+    {
+      "t": "RDW",
+      "side": "long",
+      "play": "Bounce",
+      "close": 8.36,
+      "entryZone": [
+        7.84,
+        8.41
+      ],
+      "wrongIf": 7.55,
+      "target": 11.72,
+      "rr": 6.23,
+      "sector": "ITA",
+      "sectorRank": 16
+    },
+    {
+      "t": "FORM",
+      "side": "long",
+      "play": "Bounce",
+      "close": 98.51,
+      "entryZone": [
+        93.01,
+        101.96
+      ],
+      "wrongIf": 88.53,
+      "target": 151.18,
+      "rr": 6,
+      "sector": "SMH",
+      "sectorRank": 22
+    },
+    {
+      "t": "ACLS",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 106.58,
+      "entryZone": [
+        103.52,
+        106.8
+      ],
+      "wrongIf": 113.35,
+      "target": 87.14,
+      "rr": 2.2,
+      "sector": "SMH",
+      "sectorRank": 22
+    },
+    {
+      "t": "COIN",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 164.45,
+      "entryZone": [
+        160.83,
+        165.8
+      ],
+      "wrongIf": 175.74,
+      "target": 135.97,
+      "rr": 2.2,
+      "sector": "XLF",
+      "sectorRank": 10
+    },
+    {
+      "t": "NEM",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 108.87,
+      "entryZone": [
+        107.9,
+        109.84
+      ],
+      "wrongIf": 113.73,
+      "target": 98.18,
+      "rr": 2.2,
+      "sector": "GDX",
+      "sectorRank": 24
+    },
+    {
+      "t": "IREN",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 24.91,
+      "entryZone": [
+        24.27,
+        25.59
+      ],
+      "wrongIf": 28.22,
+      "target": 17.7,
+      "rr": 2.2,
+      "sector": "IBIT",
+      "sectorRank": 13
+    },
+    {
+      "t": "RIOT",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 12.53,
+      "entryZone": [
+        12.57,
+        13.18
+      ],
+      "wrongIf": 14.4,
+      "target": 9.53,
+      "rr": 2.2,
+      "sector": "IBIT",
+      "sectorRank": 13
+    },
+    {
+      "t": "MCHP",
+      "side": "short",
+      "play": "Failed bounce",
+      "close": 74.05,
+      "entryZone": [
+        74.05,
+        75.19
+      ],
+      "wrongIf": 78.04,
+      "target": 69.76,
+      "rr": 1.42,
+      "sector": "SMH",
+      "sectorRank": 22
+    },
+    {
+      "t": "VKTX",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 24.4,
+      "entryZone": [
+        24.22,
+        24.94
+      ],
+      "wrongIf": 26.39,
+      "target": 20.59,
+      "rr": 2.2,
+      "sector": "IBB",
+      "sectorRank": 11
+    },
+    {
+      "t": "CIEN",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 320.26,
+      "entryZone": [
+        313.64,
+        328.88
+      ],
+      "wrongIf": 359.36,
+      "target": 237.43,
+      "rr": 2.2,
+      "sector": "XLK",
+      "sectorRank": 15
+    },
+    {
+      "t": "RIVN",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 11.83,
+      "entryZone": [
+        11.93,
+        12.16
+      ],
+      "wrongIf": 12.62,
+      "target": 10.77,
+      "rr": 2.2,
+      "sector": "XLY",
+      "sectorRank": 9
+    },
+    {
+      "t": "UBER",
+      "side": "short",
+      "play": "Breakdown",
+      "close": 66.7,
+      "entryZone": [
+        66.31,
+        67.22
+      ],
+      "wrongIf": 69.04,
+      "target": 62.36,
+      "rr": 1.93,
+      "sector": "XLY",
+      "sectorRank": 9
+    }
+  ]
+}

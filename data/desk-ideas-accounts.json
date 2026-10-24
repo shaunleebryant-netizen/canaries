@@ -1,0 +1,13 @@
+{
+  "updated": "2026-10-09",
+  "note": "Desk Ideas account list (owner decision 2026-10-09 6:36 PM NZ: amitisinvesting, JonahLupton, TraderJohnny_, MMMTwealth; 6:40 PM NZ added ZeeContrarian1 (handle confirmed via x get_users_by_username, id 1919667306); dropped dannycheng2022, stocksavvyshay, aleabitoreddit). Members dashboard only. PolymarketTrade and RyanDetrick were sampled 2026-10-09 and left out (no stock entry ideas). The ingest ignores any account not on this list.",
+  "accounts": [
+    "amitisinvesting",
+    "JonahLupton",
+    "TraderJohnny_",
+    "MMMTwealth",
+    "ZeeContrarian1"
+  ],
+  "windowDays": 7,
+  "keepDays": 14
+}

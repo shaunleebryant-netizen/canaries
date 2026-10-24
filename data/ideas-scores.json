@@ -1,0 +1,250 @@
+{
+  "v": 1,
+  "builtAt": "2026-10-24T16:27:14+13:00",
+  "since": "2026-10-23",
+  "logged": 20,
+  "minN": 20,
+  "scored": {
+    "d5": 0,
+    "d20": 0,
+    "d60": 0
+  },
+  "byPlay": [
+    {
+      "key": "Bounce",
+      "n": 0,
+      "win20": null,
+      "wrong20": null,
+      "tgt60": null,
+      "med20": null
+    },
+    {
+      "key": "Breakdown",
+      "n": 0,
+      "win20": null,
+      "wrong20": null,
+      "tgt60": null,
+      "med20": null
+    },
+    {
+      "key": "Failed bounce",
+      "n": 0,
+      "win20": null,
+      "wrong20": null,
+      "tgt60": null,
+      "med20": null
+    }
+  ],
+  "byLight": [
+    {
+      "key": "red",
+      "n": 0,
+      "win20": null,
+      "wrong20": null,
+      "tgt60": null,
+      "med20": null
+    }
+  ],
+  "rows": [
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "MU",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "LITE",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "BE",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "STX",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "LSCC",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "WPM",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "PWR",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "AMKR",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "RDW",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "FORM",
+      "side": "long",
+      "play": "Bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "ACLS",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "COIN",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "NEM",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "IREN",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "RIOT",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "MCHP",
+      "side": "short",
+      "play": "Failed bounce",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "VKTX",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "CIEN",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "RIVN",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    },
+    {
+      "date": "2026-10-23",
+      "light": "red",
+      "t": "UBER",
+      "side": "short",
+      "play": "Breakdown",
+      "d5": null,
+      "d20": null,
+      "d60": null
+    }
+  ]
+}

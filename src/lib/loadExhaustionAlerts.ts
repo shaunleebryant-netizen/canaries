@@ -1,17 +1,22 @@
 /**
- * Exhaustion alerts — 🥵 from Top Warning (RSI cross 80, EMA13>EMA55).
+ * Sweaty alerts (file: exhaustion-alerts.json) — 🥵 / 💀 from Canary RelRSI (daily).
  * Never invent signals; empty = no hits in latest scan window.
  */
 
 import exhaustionJson from "../../data/exhaustion-alerts.json";
 
-export type ExhaustionSignal = "exhaustion";
+export type ExhaustionSignal = "exhaustion" | "skull";
 
 export interface ExhaustionAlert {
   ticker: string;
+  /** Most recent of 🥵 / 💀 (display). */
   signal: ExhaustionSignal;
   asOf: string;
   note?: string;
+  /** Every kind present in the scan window (latest 🥵 and latest 💀 kept separately). */
+  signals?: ExhaustionSignal[];
+  exhaustionAsOf?: string;
+  skullAsOf?: string;
 }
 
 type ExhaustionFile =
@@ -30,7 +35,7 @@ function isAlert(row: unknown): row is ExhaustionAlert {
   const r = row as ExhaustionAlert;
   return (
     typeof r.ticker === "string" &&
-    r.signal === "exhaustion" &&
+    (r.signal === "exhaustion" || r.signal === "skull") &&
     typeof r.asOf === "string"
   );
 }

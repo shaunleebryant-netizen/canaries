@@ -1,0 +1,41 @@
+{
+  "asOf": "2026-10-23",
+  "sessionDate": "2026-10-23",
+  "generatedAt": "2026-10-24T11:32:28+13:00",
+  "headline": "Red: protect what you have first",
+  "paragraphs": [
+    "The traffic light is Red. Conditions look risky. Protecting capital comes first until things improve.",
+    "The overall backdrop is defensive (Risk-Off), and riskier speculative trades are off for now. The soft spots are the Nasdaq trend, growth vs safety sectors, credit markets and market breadth (how many stocks are rising).",
+    "Short-term fear is creeping up, so smaller position sizes may be wise.",
+    "Buying and selling volume are fairly balanced, so liquidity gives no clear message today.",
+    "Education only. No position changes are called out today."
+  ],
+  "whatToDo": [
+    "Red: protect capital first until things improve.",
+    "Backdrop defensive (Risk-Off); riskier speculative trades are off for now. Soft spots: the Nasdaq trend, growth vs safety sectors, credit markets and market breadth (how many stocks are rising).",
+    "Fear is creeping up, so consider sizing a little smaller.",
+    "Sectors: see the live strip, and favour the leaders over the laggards."
+  ],
+  "inputs": {
+    "S": -0.535,
+    "light": "red",
+    "regime": "RISK_OFF",
+    "spec": "OFF",
+    "volRatio": 0.9497,
+    "volBand": "CAUTION",
+    "volumeBreadth": {
+      "asOf": "2026-10-23",
+      "ratio": -0.24903345410284933,
+      "regime": "NO_REGIME"
+    },
+    "sectors": {
+      "best": null,
+      "worst": null
+    }
+  },
+  "note": "Generated from live pack JSON. Education only — does not change Decide S.",
+  "packAsOf": "2026-10-23",
+  "held": false,
+  "heldSince": null,
+  "packScannedAt": "2026-10-24T11:29:56+13:00"
+}

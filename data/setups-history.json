@@ -1,0 +1,909 @@
+{
+  "asOf": "2026-10-23",
+  "rulesVersion": 2,
+  "note": "Main Scanner added dates — ticker keeps its original added date while it stays qualified run-to-run; resets after dropping out. Written by refresh-full-pack.mjs.",
+  "bullish": {
+    "NET": {
+      "added": "2026-10-16",
+      "count": 4,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull",
+        "ibd"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SMTC": {
+      "added": "2026-10-15",
+      "count": 4,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "MU": {
+      "added": "2026-10-13",
+      "count": 4,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "DE": {
+      "added": "2026-10-09",
+      "count": 4,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "APLD": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "AMD": {
+      "added": "2026-10-22",
+      "count": 3,
+      "conditions": [
+        "smile",
+        "mfi_os",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "AMKR": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ASML": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "FCX": {
+      "added": "2026-10-22",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "LSCC": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "VICR": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SOXX": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "STX": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "APH": {
+      "added": "2026-10-16",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ENTG": {
+      "added": "2026-10-16",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "FORM": {
+      "added": "2026-10-16",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "GH": {
+      "added": "2026-10-16",
+      "count": 3,
+      "conditions": [
+        "smile",
+        "weekly_bull",
+        "ibd"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "IONQ": {
+      "added": "2026-10-13",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SMCI": {
+      "added": "2026-10-16",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ANET": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "DELL": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "KEYS": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "NVDA": {
+      "added": "2026-10-15",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "BE": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "HOOD": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "LITE": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "TSM": {
+      "added": "2026-10-14",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "WPM": {
+      "added": "2026-09-29",
+      "count": 3,
+      "conditions": [
+        "fish",
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CRDO": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "META": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "WGS": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "XLG": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ALAB": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ARM": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "AVGO": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "BWXT": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CAT": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CCJ": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "DXCM": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "GEV": {
+      "added": "2026-10-19",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "GLD": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "GLW": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "GOOG": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "HUT": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "mfi_os"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "NLR": {
+      "added": "2026-10-13",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "PAAS": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "RMBS": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SLV": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "EME": {
+      "added": "2026-10-20",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "GE": {
+      "added": "2026-10-20",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "PWR": {
+      "added": "2026-10-20",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "RDW": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "LMND": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "AAOI": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "AVAV": {
+      "added": "2026-10-13",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "COHR": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "FN": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "HPE": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "LEU": {
+      "added": "2026-10-13",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "QQQ": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "VUG": {
+      "added": "2026-10-16",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "AMAT": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CLS": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "FIX": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "INTC": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "KLAC": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ONTO": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "STRL": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "XLK": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "smile",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CVNA": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ENPH": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "LRCX": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "MTZ": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "NXE": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "RKLB": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SITM": {
+      "added": "2026-10-12",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SYM": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "VRT": {
+      "added": "2026-10-14",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "VRTX": {
+      "added": "2026-10-05",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "weekly_bull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "OKLO": {
+      "added": "2026-10-12",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ASTS": {
+      "added": "2026-10-09",
+      "count": 2,
+      "conditions": [
+        "fish",
+        "smile"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    }
+  },
+  "bearish": {
+    "ADBE": {
+      "added": "2026-10-22",
+      "count": 3,
+      "conditions": [
+        "sweaty",
+        "skull",
+        "weekly_bear"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "INTU": {
+      "added": "2026-10-20",
+      "count": 3,
+      "conditions": [
+        "sweaty",
+        "skull",
+        "weekly_bear"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SYK": {
+      "added": "2026-10-20",
+      "count": 3,
+      "conditions": [
+        "sweaty",
+        "skull",
+        "weekly_bear"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "HUBS": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "ISRG": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "NOW": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "PODD": {
+      "added": "2026-10-23",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "weekly_bear"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CHKP": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "FRSH": {
+      "added": "2026-10-20",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "MNDY": {
+      "added": "2026-10-20",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "WDAY": {
+      "added": "2026-10-22",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "CTAS": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "EL": {
+      "added": "2026-10-15",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "PLTR": {
+      "added": "2026-10-09",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    },
+    "SNAP": {
+      "added": "2026-10-09",
+      "count": 2,
+      "conditions": [
+        "sweaty",
+        "skull"
+      ],
+      "lastQualifiedAsOf": "2026-10-23"
+    }
+  },
+  "excludedFromBullish": []
+}

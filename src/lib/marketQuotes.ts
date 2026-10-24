@@ -62,53 +62,42 @@ const TICKER_SKELETON: ReadonlyArray<{
     id: "spx",
     label: "SPX",
     yahooSymbol: "^GSPC",
-    description: "S&P 500 — the main US large-company stock index.",
+    description: "S&P 500: the main index of big US companies.",
   },
   {
     id: "qqq",
     label: "QQQ",
     yahooSymbol: "QQQ",
-    description: "Nasdaq-100 ETF — big growth and tech names.",
-  },
-  {
-    id: "sp600",
-    label: "SP600",
-    yahooSymbol: "^SP600",
-    description:
-      "S&P SmallCap 600 index — smaller US companies (stricter quality filter than the Russell 2000).",
-  },
-  {
-    id: "rsp",
-    label: "RSP",
-    yahooSymbol: "RSP",
-    description: "Equal-weight S&P 500 — less mega-cap dominated than SPX.",
+    description: "Nasdaq 100 fund: the biggest tech and growth companies.",
   },
   {
     id: "vix",
     label: "VIX",
     yahooSymbol: "^VIX",
-    description: "CBOE Volatility Index — expected near-term stock-market fear.",
+    description: "VIX: the market's fear gauge. Higher means more nervous.",
   },
   {
     id: "wti",
     label: "WTI",
     yahooSymbol: "CL=F",
-    description: "West Texas Intermediate crude oil — US oil price benchmark.",
+    description: "US crude oil price.",
   },
   {
     id: "xau",
     label: "XAUUSD",
     yahooSymbol: "GC=F",
     description:
-      "Gold vs US dollar — often watched as a fear / inflation / dollar hedge.",
+      "Gold price in US dollars, often a safe haven in worried times.",
   },
   {
     id: "btc",
     label: "BTCUSD",
     yahooSymbol: "BTC-USD",
-    description: "Bitcoin vs US dollar — risk appetite outside traditional stocks.",
+    description: "Bitcoin price in US dollars, a read on appetite for risk.",
   },
 ];
+
+const STRIP_IDS = new Set(TICKER_SKELETON.map((t) => t.id));
 
 /** Empty/partial payload for SSR shell — no Yahoo on critical path. */
 export function emptyMarketQuotes(): MarketQuotesPayload {
@@ -144,7 +133,16 @@ export function loadMarketQuotesInitial(): MarketQuotesPayload {
   ) {
     return {
       asOf: typeof cached.asOf === "string" ? cached.asOf : "",
-      tickers: cached.tickers as TickerStripItem[],
+      // Bundled cache may still carry retired strip tickers (e.g. RSP) — show strip set only.
+      tickers: (cached.tickers as TickerStripItem[])
+        .filter((t) => STRIP_IDS.has(t?.id))
+        // Always use the current plain-English blurbs, not the cached copy.
+        .map((t) => ({
+          ...t,
+          description:
+            TICKER_SKELETON.find((k) => k.id === t.id)?.description ??
+            t.description,
+        })),
       sectors: Array.isArray(cached.sectors)
         ? (cached.sectors as SectorQuoteItem[])
         : emptyMarketQuotes().sectors,
@@ -174,10 +172,6 @@ export async function loadMarketQuotes(
 
   const failed: YahooFetchFail[] = [];
 
-  const sp600 = await fetchQuoteFallback([
-    { symbol: "^SP600", label: "SP600" },
-    { symbol: "IJR", label: "SP600" },
-  ]);
   const wti = await fetchQuoteFallback([
     { symbol: "CL=F", label: "WTI" },
     { symbol: "USO", label: "WTI" },
@@ -199,25 +193,19 @@ export async function loadMarketQuotes(
       id: "spx",
       label: "SPX",
       symbol: "^GSPC",
-      description: "S&P 500 — the main US large-company stock index.",
+      description: "S&P 500: the main index of big US companies.",
     },
     {
       id: "qqq",
       label: "QQQ",
       symbol: "QQQ",
-      description: "Nasdaq-100 ETF — big growth and tech names.",
-    },
-    {
-      id: "rsp",
-      label: "RSP",
-      symbol: "RSP",
-      description: "Equal-weight S&P 500 — less mega-cap dominated than SPX.",
+      description: "Nasdaq 100 fund: the biggest tech and growth companies.",
     },
     {
       id: "vix",
       label: "VIX",
       symbol: "^VIX",
-      description: "CBOE Volatility Index — expected near-term stock-market fear.",
+      description: "VIX: the market's fear gauge. Higher means more nervous.",
     },
   ];
 
@@ -274,50 +262,26 @@ export async function loadMarketQuotes(
     }
   }
 
-  // Order: SPX, QQQ, SP600, RSP, VIX, WTI, XAUUSD, BTCUSD
-  tickers.splice(2, 0); // no-op placeholder; we insert SP600 at index 2
-  const sp600Item: TickerStripItem =
-    "quote" in sp600
-      ? {
-          id: "sp600",
-          label: "SP600",
-          yahooSymbol: sp600.quote.symbol,
-          description:
-            "S&P SmallCap 600 index — smaller US companies (stricter quality filter than the Russell 2000).",
-          quote: { ...sp600.quote, label: "SP600" },
-        }
-      : {
-          id: "sp600",
-          label: "SP600",
-          yahooSymbol: "^SP600",
-          description:
-            "S&P SmallCap 600 index — smaller US companies (stricter quality filter than the Russell 2000).",
-          quote: null,
-          error: sp600.error,
-        };
-  if (!("quote" in sp600)) {
-    failed.push({ symbol: "^SP600/IJR", label: "SP600", error: sp600.error });
-  }
-  tickers.splice(2, 0, sp600Item);
+  // Order: SPX, QQQ, VIX, WTI, XAUUSD, BTCUSD (RSP removed 2026-09-25; SP600 removed from the strip 2026-09-26 — owner. SP600 stays in the scanners.)
 
   pushFallback(
     "wti",
     "WTI",
-    "West Texas Intermediate crude oil — US oil price benchmark.",
+    "US crude oil price.",
     wti,
     "CL=F"
   );
   pushFallback(
     "xau",
     "XAUUSD",
-    "Gold vs US dollar — often watched as a fear / inflation / dollar hedge.",
+    "Gold price in US dollars, often a safe haven in worried times.",
     xau,
     "GC=F"
   );
   pushFallback(
     "btc",
     "BTCUSD",
-    "Bitcoin vs US dollar — risk appetite outside traditional stocks.",
+    "Bitcoin price in US dollars, a read on appetite for risk.",
     btc,
     "BTC-USD"
   );

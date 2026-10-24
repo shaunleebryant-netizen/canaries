@@ -62,22 +62,23 @@ function isSick(c: CanaryReading): boolean {
 }
 
 /**
- * Veto: VIX/US10Y Danger Above 5 AND both NYSE A-D and % above 200-day sick
- * → cannot be green. Live packs may supply veto.triggered instead.
+ * Veto (owner lock 2026-09-19): VIX/VIX3M ≥ 1.00 AND both NYSE A-D and
+ * MMTH (% above 200-day) sick → cannot be green. Live packs supply
+ * veto.triggered (scripts/refresh-decide.mjs); this is the fallback.
  */
 export function vetoBlocksGreen(canaries: CanaryReading[]): boolean {
-  const vix = canaries.find((c) => c.id === "vix-us10y");
+  const vix = canaries.find((c) => c.id === "vix-vix3m");
   const nyse = canaries.find((c) => c.id === "nyse-ad");
   const breadth = canaries.find((c) => c.id === "pct-above-200dma");
   if (!vix || !nyse || !breadth) return false;
 
-  const dangerAbove5 =
-    vix.statusHint === "Danger Above 5" ||
-    (typeof vix.lastReading === "string" &&
-      !Number.isNaN(Number(vix.lastReading)) &&
-      Number(vix.lastReading) > 5);
+  const ratio =
+    typeof vix.evidence?.value === "number"
+      ? vix.evidence.value
+      : Number.parseFloat(String(vix.lastReading ?? ""));
+  const inDanger = Number.isFinite(ratio) && ratio >= 1.0;
 
-  return dangerAbove5 && isSick(nyse) && isSick(breadth);
+  return inDanger && isSick(nyse) && isSick(breadth);
 }
 
 export function trafficLightFor(

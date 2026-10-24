@@ -33,6 +33,7 @@ import { ROOT, MIRROR_DIR, mirrorData, nzNowIso, parseCommonArgs, writeJson } fr
 import {
   align,
   fmt,
+  jp30Continuous,
   loadTs,
   pointsScore,
   sign,
@@ -202,6 +203,24 @@ const RULES = {
   // AND under SMA20 → risk-off; otherwise 0. "Rising" = 9d change; ±2 when the
   // SMA20 5d slope agrees too.
   "es1-jp30": ({ esjp }) => {
+    const rollNote = esjp.rolls?.length
+      ? ` JP30 benchmark roll ${esjp.rolls.map((r) => `${r.date} (${fmt(r.from, 3)}→${fmt(r.to, 3)}${r.factor ? `, back-adjusted ×${fmt(r.factor, 4)}` : ""})`).slice(-1).join("")}.`
+      : "";
+    if (esjp.unverifiedSince) {
+      // No yield series to back-adjust a benchmark roll: score 0 until the new bond has enough sessions.
+      const st = { date: esjp.bars[esjp.bars.length - 1].date, value: esjp.es / esjp.jp, sma20: null, slope5: null, chg9: null };
+      return {
+        score: 0,
+        st,
+        status: "UNVERIFIED",
+        heldSince: esjp.unverifiedSince,
+        source: "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily — benchmark roll, no yield to adjust",
+        lastReading: `ES ${fmt(esjp.es)} / JP30 price ${fmt(esjp.jp, 3)} = ${fmt(st.value, 4)}`,
+        rationale: `JP30 benchmark bond changed on ${esjp.unverifiedSince} and TVC:JP30Y was unavailable to back-adjust; ${esjp.newBondBars} of 26 new-bond sessions → UNVERIFIED, score 0.`,
+        read: "Japan 30y benchmark just rolled to a new bond; this seat sits out until the new bond has enough history.",
+        vsSma20: null,
+      };
+    }
     const st = trendStats(esjp.bars);
     const side = sign(st.value - st.sma20);
     let score = 0;
@@ -209,9 +228,10 @@ const RULES = {
     return {
       score,
       st,
-      source: "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily",
+      source: `Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily${esjp.method === "yield-back-adjusted" ? ", roll back-adjusted via TVC:JP30Y" : ""}`,
       lastReading: `ES ${fmt(esjp.es)} / JP30 price ${fmt(esjp.jp, 3)} = ${fmt(st.value, 4)}`,
-      rationale: `Ratio ${trendText(st, 4)}: ${score === 0 ? "side of SMA20 and 9d direction disagree → 0" : `${side > 0 ? "rising and above" : "falling and under"} SMA20${Math.abs(score) === 2 ? " with SMA20 slope agreeing → ±2" : " → ±1"}`} → ${score > 0 ? "+" : ""}${score}.`,
+      extraEvidence: esjp.rolls?.length ? { jp30Rolls: esjp.rolls.slice(-3), jp30Method: esjp.method } : undefined,
+      rationale: `Ratio ${trendText(st, 4)}: ${score === 0 ? "side of SMA20 and 9d direction disagree → 0" : `${side > 0 ? "rising and above" : "falling and under"} SMA20${Math.abs(score) === 2 ? " with SMA20 slope agreeing → ±2" : " → ±1"}`} → ${score > 0 ? "+" : ""}${score}.${rollNote}`,
       read: score > 0 ? "US futures leadership remains intact versus Japan 30y bond price." : score < 0 ? "Money is sloshing toward Japan 30y bonds versus US futures." : "US futures versus Japan 30y bond price is mixed.",
     };
   },
@@ -236,8 +256,10 @@ const RULES = {
       score,
       st,
       flags,
-      source: "Yahoo ^VIX (+ ^VVIX companion) daily closes",
-      lastReading: `VIX ${fmt(v)}${vv ? ` · VVIX ${fmt(vv.close)}` : ""}`,
+      // Owner 2026-10-10: VVIX dropped from the member-facing wording (it never changed the score);
+      // the VVIX close is still kept in evidence.extra for reference only.
+      source: "Yahoo ^VIX daily closes",
+      lastReading: `VIX ${fmt(v)}`,
       rationale: `VIX ${fmt(v)} ${lvl > 0 ? "<" : ">"} 19 → ${lvl > 0 ? "risk-on +1" : "risk-off −1"}; inverse points ${p > 0 ? "+" : ""}${p} (${trendText(st)})${Math.abs(score) === 2 ? " agrees → ±2" : ""} → ${score > 0 ? "+" : ""}${score}.${flags.length ? ` Flag ${flags.join(", ")}.` : " Not CONTRARIAN_COMPLACENT (VIX ≥ 15)."}`,
       read: lvl > 0 ? "Spot vol is still risk-on by level." : "Spot vol is risk-off by level (VIX above 19).",
       extraEvidence: vv ? { vvix: vv.close, vvixDate: vv.date } : undefined,
@@ -334,15 +356,16 @@ function sparkFor(id, S) {
   });
   switch (id) {
     case "cyclical-defensive": return S.cycdef && take(S.cycdef.bars, "(XLK+XLY)/(XLP+XLU)");
-    case "xlf-kre": return S.xlfkre && take(S.xlfkre.bars, "XLF/KRE");
+    // Owner 2026-10-10: KRE price (same default line as the Banks chart pop-up), not the XLF/KRE ratio.
+    case "xlf-kre": return S.kre && take(S.kre.bars, "KRE");
     case "vix-vix3m": return S.vixratio && take(S.vixratio.bars, "^VIX/^VIX3M");
     case "nyse-ad": return S.nshf && take(smaSeries(S.nshf.bars), "INDEX:NSHF SMA20 (TradingView guest)");
     case "pct-above-200dma": return S.mmth && take(S.mmth.bars, "INDEX:MMTH (TradingView guest)");
-    case "es1-jp30": return S.esjp && take(S.esjp.bars, "ES=F / TVC:JP30 bond price");
+    case "es1-jp30": return S.esjp && take(S.esjp.bars, "ES=F / TVC:JP30 bond price (benchmark rolls back-adjusted via TVC:JP30Y)");
     case "sp-top-50": return S.xlg && take(S.xlg.bars, "XLG");
     case "sp600": return S.sp600 && take(S.sp600.bars, "^SP600");
     case "rsp": return S.rsp && take(S.rsp.bars, "RSP");
-    case "vix-vvix": return S.vix && take(S.vix.bars, "^VIX (seat sparkline; VVIX is companion note)");
+    case "vix-vvix": return S.vix && take(S.vix.bars, "^VIX");
     case "qqq-sma20": return S.qqq && take(S.qqq.bars, "QQQ");
     case "hyg-ief-sma20": return S.hygief && take(S.hygief.bars, "HYG/IEF");
     default: return null;
@@ -353,10 +376,11 @@ async function fetchAll(sessionDate) {
   const ysyms = ["XLK", "XLY", "XLP", "XLU", "XLF", "KRE", "^VIX", "^VIX3M", "XLG", "^SP600", "RSP", "^VVIX", "QQQ", "HYG", "IEF", "ES=F"];
   const y = {};
   await Promise.all(ysyms.map(async (s) => (y[s] = await yahooDaily(s, { sessionDate }))));
-  const tv = tvDaily(["INDEX:NSHF", "INDEX:MMTH", "TVC:JP30"], { bars: 120, sessionDate });
+  const tv = tvDaily(["INDEX:NSHF", "INDEX:MMTH", "TVC:JP30", "TVC:JP30Y"], { bars: 120, sessionDate });
   const errors = {};
   const ok = (x) => x && !x.error;
-  for (const [k, v] of Object.entries({ ...y, ...tv })) if (!ok(v)) errors[k] = v.error;
+  // TVC:JP30Y only back-adjusts JP30 benchmark rolls; its absence is handled in jp30Continuous.
+  for (const [k, v] of Object.entries({ ...y, ...tv })) if (!ok(v) && k !== "TVC:JP30Y") errors[k] = v.error;
 
   const S = {};
   const ratio = (syms, f) => (syms.every((s) => ok(y[s])) ? { bars: align(syms.map((s) => y[s].bars), f) } : null);
@@ -380,10 +404,11 @@ async function fetchAll(sessionDate) {
   S.nshf = ok(tv["INDEX:NSHF"]) ? tv["INDEX:NSHF"] : null;
   S.mmth = ok(tv["INDEX:MMTH"]) ? tv["INDEX:MMTH"] : null;
   if (ok(y["ES=F"]) && ok(tv["TVC:JP30"])) {
-    S.esjp = { bars: align([y["ES=F"].bars, tv["TVC:JP30"].bars], ([a, b]) => a / b) };
+    const jp = jp30Continuous(tv["TVC:JP30"].bars, ok(tv["TVC:JP30Y"]) ? tv["TVC:JP30Y"].bars : null);
+    S.esjp = { bars: align([y["ES=F"].bars, jp.bars], ([a, b]) => a / b), rolls: jp.rolls, method: jp.method, unverifiedSince: jp.unverifiedSince, newBondBars: jp.newBondBars };
     const d = S.esjp.bars[S.esjp.bars.length - 1]?.date;
     S.esjp.es = y["ES=F"].bars.find((b) => b.date === d)?.close;
-    S.esjp.jp = tv["TVC:JP30"].bars.find((b) => b.date === d)?.close;
+    S.esjp.jp = tv["TVC:JP30"].bars.find((b) => b.date === d)?.close; // real (unadjusted) quote
   } else S.esjp = null;
   return { S, errors };
 }
@@ -462,7 +487,7 @@ async function main() {
     }
     const need = NEEDS[id];
     const row = { ...prevRow, weight: w, weightNominal: w, weightEffective: w };
-    const canScore = need && need.every((k) => S[k] && (S[k].bars?.length ?? 0) >= 30);
+    const canScore = need && need.every((k) => S[k] && ((S[k].bars?.length ?? 0) >= 30 || S[k].unverifiedSince));
     let res = null;
     if (canScore) {
       try {
@@ -474,10 +499,10 @@ async function main() {
     }
     if (res && res.st?.date && res.st.date >= sessionDate) {
       row.score = res.score;
-      row.status = "VERIFIED";
-      row.verified = true;
+      row.status = res.status || "VERIFIED";
+      row.verified = row.status === "VERIFIED";
       row.fresh = true;
-      row.heldSince = null;
+      row.heldSince = res.heldSince ?? null;
       row.asOf = res.st.date;
       row.lastReading = res.lastReading;
       row.rationale = res.rationale;

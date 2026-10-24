@@ -1,0 +1,155 @@
+{
+  "asOf": "2026-10-09",
+  "purpose": "Countries box — Canary RelRSI daily (same engine and config as Sector ETFs) on single-country, non-leveraged ETFs.",
+  "count": 20,
+  "note": "Owner 2026-10-09: trimmed to the top 20 countries ('very noisy'), ranked by 3-month average daily dollar volume (Yahoo close × volume, 63 sessions to 2026-10-08; Yahoo's AUM field needs a session crumb that this box can't get). China stays MCHI (not FXI). Previous 2026-10-06 list of 39 in removed2026_10_09. No leveraged or inverse funds.",
+  "rankedBy": {
+    "metric": "avg daily dollar volume, 63 sessions",
+    "asOf": "2026-10-08",
+    "source": "Yahoo v8 chart (close × volume)"
+  },
+  "tickers": [
+    "EWY",
+    "EWZ",
+    "EWT",
+    "EWJ",
+    "INDA",
+    "MCHI",
+    "EWC",
+    "EWW",
+    "EWA",
+    "EWH",
+    "EWU",
+    "EWG",
+    "EWS",
+    "EWL",
+    "EWP",
+    "EWI",
+    "KSA",
+    "ECH",
+    "EPOL",
+    "EWN"
+  ],
+  "names": {
+    "EWY": "South Korea",
+    "EWZ": "Brazil",
+    "EWT": "Taiwan",
+    "EWJ": "Japan",
+    "INDA": "India",
+    "MCHI": "China",
+    "EWC": "Canada",
+    "EWW": "Mexico",
+    "EWA": "Australia",
+    "EWH": "Hong Kong",
+    "EWU": "United Kingdom",
+    "EWG": "Germany",
+    "EWS": "Singapore",
+    "EWL": "Switzerland",
+    "EWP": "Spain",
+    "EWI": "Italy",
+    "KSA": "Saudi Arabia",
+    "ECH": "Chile",
+    "EPOL": "Poland",
+    "EWN": "Netherlands"
+  },
+  "removed2026_10_09": {
+    "reason": "owner 2026-10-09: trim Countries to the top 20 by liquidity ('very noisy')",
+    "tickers": [
+      {
+        "ticker": "EIDO",
+        "name": "Indonesia",
+        "avgDollarVolumeM": 14.07
+      },
+      {
+        "ticker": "EWQ",
+        "name": "France",
+        "avgDollarVolumeM": 13.9
+      },
+      {
+        "ticker": "EWD",
+        "name": "Sweden",
+        "avgDollarVolumeM": 12.25
+      },
+      {
+        "ticker": "ARGT",
+        "name": "Argentina",
+        "avgDollarVolumeM": 12.21
+      },
+      {
+        "ticker": "VNM",
+        "name": "Vietnam",
+        "avgDollarVolumeM": 10.43
+      },
+      {
+        "ticker": "EZA",
+        "name": "South Africa",
+        "avgDollarVolumeM": 10.27
+      },
+      {
+        "ticker": "EWM",
+        "name": "Malaysia",
+        "avgDollarVolumeM": 5.84
+      },
+      {
+        "ticker": "TUR",
+        "name": "Turkey",
+        "avgDollarVolumeM": 5.68
+      },
+      {
+        "ticker": "GREK",
+        "name": "Greece",
+        "avgDollarVolumeM": 5.38
+      },
+      {
+        "ticker": "EIS",
+        "name": "Israel",
+        "avgDollarVolumeM": 4.62
+      },
+      {
+        "ticker": "THD",
+        "name": "Thailand",
+        "avgDollarVolumeM": 4.18
+      },
+      {
+        "ticker": "EPHE",
+        "name": "Philippines",
+        "avgDollarVolumeM": 3.98
+      },
+      {
+        "ticker": "ENZL",
+        "name": "New Zealand",
+        "avgDollarVolumeM": 3.91
+      },
+      {
+        "ticker": "EWO",
+        "name": "Austria",
+        "avgDollarVolumeM": 2.94
+      },
+      {
+        "ticker": "ENOR",
+        "name": "Norway",
+        "avgDollarVolumeM": 2.89
+      },
+      {
+        "ticker": "EFNL",
+        "name": "Finland",
+        "avgDollarVolumeM": 1.78
+      },
+      {
+        "ticker": "EDEN",
+        "name": "Denmark",
+        "avgDollarVolumeM": 1.11
+      },
+      {
+        "ticker": "EWK",
+        "name": "Belgium",
+        "avgDollarVolumeM": 1.04
+      },
+      {
+        "ticker": "EIRL",
+        "name": "Ireland",
+        "avgDollarVolumeM": 0.33
+      }
+    ]
+  }
+}

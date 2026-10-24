@@ -1,0 +1,41 @@
+{
+  "asOf": "2026-09-24",
+  "purpose": "ETF Watch universe \u2014 Bottom Finder v3.1 on Select Sector SPDRs + key ETFs/indexes/metals/uranium. Prints tickers with \ud83d\ude42/\ud83d\udc1f and/or \ud83e\udd75/\ud83d\udc80 in the recent window (Fish + Sweaty combined for this curated set).",
+  "count": 27,
+  "note": "XL_* sector SPDRs + SPX, VTV, VUG, FXI, KWEB, EWS, QQQ, SP600, RSP, IWM, XLG + GLD, SLV, XAUUSD, XAGUSD, URA, URNM. No crypto (see crypto-watch). Yahoo maps: SPX\u2192^GSPC, SP600\u2192^SP600, XAUUSD\u2192GC=F/XAUUSD=X, XAGUSD\u2192SI=F/XAGUSD=X.",
+  "tickers": [
+    "XLC",
+    "XLY",
+    "XLP",
+    "XLE",
+    "XLF",
+    "XLV",
+    "XLI",
+    "XLB",
+    "XLK",
+    "XLU",
+    "XLRE",
+    "SPX",
+    "VUG",
+    "FXI",
+    "KWEB",
+    "EWS",
+    "QQQ",
+    "SP600",
+    "RSP",
+    "IWM",
+    "XLG",
+    "GLD",
+    "SLV",
+    "XAUUSD",
+    "XAGUSD",
+    "URA",
+    "URNM"
+  ],
+  "removed2026_09_25": [
+    {
+      "ticker": "VTV",
+      "reason": "value ETF \u2014 owner 2026-09-25"
+    }
+  ]
+}

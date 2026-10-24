@@ -1,0 +1,1487 @@
+{
+  "sessionDate": "2026-10-23",
+  "packScannedAt": "2026-10-24T11:29:56+13:00",
+  "scripted": [
+    {
+      "box": "Vol curve",
+      "file": "data/vol-curve-stub.json",
+      "action": "Yahoo VIX 19.45 / VIX3M 20.48 → 0.9497 CAUTION @ 2026-10-23",
+      "asOf": "2026-10-23"
+    },
+    {
+      "box": "Decide/composite (state.json)",
+      "file": "data/state.json",
+      "action": "scripted points score S=-0.535 RED (prev S=-0.535 RED)",
+      "held": [
+        "finra-margin (held since 2026-10-17)"
+      ]
+    },
+    {
+      "box": "Market Regime v2",
+      "file": "data/regime-history.json",
+      "action": "R=-3 RISK_OFF (shown RISK_OFF) · Spec OFF"
+    },
+    {
+      "box": "Canary sparklines",
+      "file": "data/canary-sparklines.json",
+      "action": "10-session lines from the Decide series"
+    },
+    {
+      "box": "Liquidity (volume breadth)",
+      "file": "data/volume-breadth-stub.json",
+      "action": "refreshed asOf=2026-10-23 regime=NO_REGIME via tradingview-guest",
+      "asOf": "2026-10-23"
+    },
+    {
+      "box": "Vanna & Charm",
+      "file": "data/vanna-charm-pack.json",
+      "action": "calendar ON_HOLIDAY"
+    },
+    {
+      "box": "Fish",
+      "file": "data/fish-alerts.json",
+      "count": 115,
+      "method": "yahoo-1d-canary-relrsi-daily-2026-10-02"
+    },
+    {
+      "box": "Sweaty",
+      "file": "data/exhaustion-alerts.json",
+      "count": 50,
+      "method": "yahoo-1d-canary-relrsi-daily-2026-10-02"
+    },
+    {
+      "box": "ETF Watch",
+      "file": "data/etf-watch-alerts.json",
+      "count": 19,
+      "method": "yahoo-1d-canary-relrsi-daily-2026-10-02"
+    },
+    {
+      "box": "Countries",
+      "file": "data/etf-country-alerts.json",
+      "count": 20,
+      "method": "yahoo-1d-canary-relrsi-daily-2026-10-02"
+    },
+    {
+      "box": "Crypto Watch",
+      "file": "data/crypto-watch-alerts.json",
+      "count": 9,
+      "method": "yahoo-1d-canary-relrsi-daily-2026-10-02"
+    },
+    {
+      "box": "MFI Scan",
+      "file": "data/money-flow-alerts.json",
+      "count": 8,
+      "method": "yahoo-1d-mfi-washout-v6.1"
+    },
+    {
+      "box": "IBD Setups",
+      "file": "data/ibd-setups-alerts.json",
+      "count": 28,
+      "method": "yahoo-1d-minervini-ibd-rs-vs-spy"
+    },
+    {
+      "box": "Weekly Market State (Weekly State + Bullish & Strong)",
+      "file": "data/market-state.json",
+      "count": "bull 94 / bear 98 / down 37",
+      "method": "yahoo-1wk-market-state-ema9-12-16-21-ohlc4",
+      "asOf": "2026-10-23",
+      "failed": 1
+    },
+    {
+      "box": "Monthly 20MA",
+      "file": "data/monthly-20ma-alerts.json",
+      "count": 13,
+      "method": "yahoo-1mo-sma20-cross-above",
+      "asOf": "2026-10-23",
+      "failed": 6
+    },
+    {
+      "box": "Bullish Setups",
+      "file": "data/setups-history.json (derived)",
+      "count": 81,
+      "action": "≥2 conditions incl. ≥1 timing print (🐟 Fish / 😊 Smiley / 🤑 MFI≤20 within 14 calendar days of sessionDate); 🟢 weekly bull, 📈 Monthly 20MA cross and IBD setup count toward the total but cannot qualify alone; tickers that also meet Bearish Setups are left out"
+    },
+    {
+      "box": "Bearish Setups",
+      "file": "data/setups-history.json (derived)",
+      "count": 15,
+      "action": "≥2 conditions incl. ≥1 timing print (😡 MFI≥80 / 🥵 Sweaty / 💀 Skull within 14 calendar days of sessionDate); 🔴 weekly bear counts toward the total"
+    },
+    {
+      "box": "Commentary",
+      "file": "data/commentary.json",
+      "action": "headline: Red: protect what you have first"
+    },
+    {
+      "box": "Signal History",
+      "file": "data/signal-history.json",
+      "count": 1672,
+      "action": "+0 marks, −0 pruned · 2026-04-27 → 2026-10-23"
+    },
+    {
+      "box": "Ticker charts",
+      "file": "public/_chartdata/",
+      "count": 269,
+      "action": "269 ticker chart files"
+    },
+    {
+      "box": "Canary charts",
+      "file": "public/_chartdata/canary/",
+      "count": 12,
+      "action": "12 canary chart files"
+    },
+    {
+      "box": "Insider Buying",
+      "file": "data/insider-buying.json",
+      "count": 3,
+      "action": "3 qualifying · 3540 Form 4s checked"
+    },
+    {
+      "box": "Past insider buys (3 months)",
+      "file": "data/insider-history.json",
+      "count": 38,
+      "action": "38 buys since 2026-07-25 · % since re-priced"
+    },
+    {
+      "box": "Fundamentals",
+      "file": "data/fundamentals.json",
+      "count": 198,
+      "action": "P/E 150 · EPS g 127 · EV/EBITDA 120 · SEC 0 req · 7.6s"
+    },
+    {
+      "box": "Growth Score",
+      "file": "data/growth-score.json",
+      "count": 178,
+      "action": "189 scored · 178 ranked · Danger 12"
+    },
+    {
+      "box": "X Rumours",
+      "file": "data/x-rumours.json",
+      "count": 26,
+      "action": "26 rows refreshed (move since, expiry, SEC re-check); agent X step still to run"
+    },
+    {
+      "box": "Sector Screener",
+      "file": "data/sector-screener.json",
+      "count": 11,
+      "action": "11/11 sectors, close 2026-10-23"
+    }
+  ],
+  "decide": {
+    "S": -0.535,
+    "light": "red",
+    "oldS": -0.535,
+    "oldLight": "red",
+    "regime": {
+      "R": -3,
+      "raw": "RISK_OFF",
+      "shown": "RISK_OFF",
+      "spec": "OFF",
+      "pending": null,
+      "pendingCount": 0
+    },
+    "inputs": [
+      {
+        "id": "cyclical-defensive",
+        "old": -2,
+        "new": -2,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo (XLK+XLY)/(XLP+XLU) daily closes",
+        "reading": "2.2652 < SMA20 2.4364"
+      },
+      {
+        "id": "xlf-kre",
+        "old": 1,
+        "new": 1,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo XLF, KRE daily closes",
+        "reading": "XLF 55.90 > SMA20 54.69 · KRE 72.46 > SMA20 70.03"
+      },
+      {
+        "id": "vix-vix3m",
+        "old": 0,
+        "new": 0,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo ^VIX ÷ ^VIX3M daily closes",
+        "reading": "0.9497 (VIX 19.45 / VIX3M 20.48) · CAUTION"
+      },
+      {
+        "id": "nyse-ad",
+        "old": -1,
+        "new": -1,
+        "fresh": true,
+        "heldSince": null,
+        "source": "TradingView guest INDEX:NSHF daily (SMA20 vs 0)",
+        "reading": "NSHF SMA20 -94.85 < 0 (raw close -704)"
+      },
+      {
+        "id": "pct-above-200dma",
+        "old": -1,
+        "new": -1,
+        "fresh": true,
+        "heldSince": null,
+        "source": "TradingView guest INDEX:MMTH daily",
+        "reading": "43.88"
+      },
+      {
+        "id": "es1-jp30",
+        "old": -2,
+        "new": -2,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo ES=F ÷ TradingView guest TVC:JP30 (bond price) daily, roll back-adjusted via TVC:JP30Y",
+        "reading": "ES 7672.50 / JP30 price 105.362 = 72.8204"
+      },
+      {
+        "id": "sp-top-50",
+        "old": -2,
+        "new": -2,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo XLG daily closes",
+        "reading": "XLG 62.26 < SMA20 63.9475"
+      },
+      {
+        "id": "sp600",
+        "old": 1,
+        "new": 1,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo ^SP600 index daily closes (not SPSM)",
+        "reading": "^SP600 1681.71 > SMA20 1670.8865"
+      },
+      {
+        "id": "rsp",
+        "old": 2,
+        "new": 2,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo RSP daily closes",
+        "reading": "RSP 216.54 > SMA20 212.6640"
+      },
+      {
+        "id": "vix-vvix",
+        "old": -2,
+        "new": -2,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo ^VIX daily closes",
+        "reading": "VIX 19.45"
+      },
+      {
+        "id": "finra-margin",
+        "old": 1,
+        "new": 1,
+        "fresh": false,
+        "heldSince": "2026-10-17",
+        "source": "FINRA margin statistics (Sep-26, latest official; page checked 2026-10-17)",
+        "reading": "Sep-26 1,480,054 ($mm); MoM up vs Aug-26 1,453,832 (latest official FINRA release)"
+      },
+      {
+        "id": "qqq-sma20",
+        "old": -1,
+        "new": -1,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo QQQ daily closes",
+        "reading": "QQQ 704.40 < SMA20 735.2350"
+      },
+      {
+        "id": "hyg-ief-sma20",
+        "old": -1,
+        "new": -1,
+        "fresh": true,
+        "heldSince": null,
+        "source": "Yahoo HYG ÷ IEF daily closes",
+        "reading": "ratio 0.8462 < SMA20 0.8590"
+      }
+    ]
+  },
+  "needsFill": [
+    {
+      "id": "finra-margin",
+      "heldSince": "2026-10-17",
+      "reason": "manual input (monthly FINRA) — Scorekeeper fill"
+    }
+  ],
+  "volCurve": {
+    "asOf": "2026-10-23",
+    "vix": 19.45,
+    "vix3m": 20.48,
+    "ratio": 0.9497,
+    "band": "CAUTION",
+    "held": false,
+    "heldSince": null
+  },
+  "archived": {
+    "date": "2026-09-25",
+    "folder": "archive/regime-engine-2026-09-25/",
+    "files": [
+      "data/regime-state.json",
+      "data/regime-stub.json",
+      "scripts/compute-regime.ts",
+      "src/lib/regime/scoreRegime.ts"
+    ]
+  },
+  "mainScanner": {
+    "asOf": "2026-10-23",
+    "bullishSetups": [
+      {
+        "ticker": "NET",
+        "count": 4,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull",
+          "ibd"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "SMTC",
+        "count": 4,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os",
+          "weekly_bull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "MU",
+        "count": 4,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os",
+          "weekly_bull"
+        ],
+        "added": "2026-10-13"
+      },
+      {
+        "ticker": "DE",
+        "count": 4,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os",
+          "weekly_bull"
+        ],
+        "added": "2026-10-09"
+      },
+      {
+        "ticker": "AMD",
+        "count": 3,
+        "conditions": [
+          "smile",
+          "mfi_os",
+          "weekly_bull"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "FCX",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "APH",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "ENTG",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "FORM",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "GH",
+        "count": 3,
+        "conditions": [
+          "smile",
+          "weekly_bull",
+          "ibd"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "SMCI",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "AMKR",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "ANET",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "DELL",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "KEYS",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "LSCC",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "NVDA",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "STX",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "VICR",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "APLD",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "ASML",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "BE",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "HOOD",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "LITE",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "SOXX",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "TSM",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "IONQ",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "mfi_os"
+        ],
+        "added": "2026-10-13"
+      },
+      {
+        "ticker": "WPM",
+        "count": 3,
+        "conditions": [
+          "fish",
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-09-29"
+      },
+      {
+        "ticker": "CRDO",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "META",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "WGS",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "XLG",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "ALAB",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "ARM",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "BWXT",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "DXCM",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "GLD",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "GOOG",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "EME",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "GE",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "PWR",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "GEV",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-19"
+      },
+      {
+        "ticker": "AAOI",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "AVGO",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "COHR",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "FN",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "GLW",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "HPE",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "QQQ",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "RMBS",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "VUG",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-16"
+      },
+      {
+        "ticker": "AMAT",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "FIX",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "KLAC",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "ONTO",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "STRL",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "XLK",
+        "count": 2,
+        "conditions": [
+          "smile",
+          "weekly_bull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "CAT",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "CCJ",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "CLS",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "CVNA",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "ENPH",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "HUT",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "mfi_os"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "INTC",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "LMND",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "LRCX",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "MTZ",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "NXE",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "PAAS",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "RDW",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "RKLB",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "SLV",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "SYM",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "VRT",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-14"
+      },
+      {
+        "ticker": "AVAV",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-13"
+      },
+      {
+        "ticker": "LEU",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-13"
+      },
+      {
+        "ticker": "NLR",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-13"
+      },
+      {
+        "ticker": "OKLO",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-12"
+      },
+      {
+        "ticker": "SITM",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-12"
+      },
+      {
+        "ticker": "ASTS",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "smile"
+        ],
+        "added": "2026-10-09"
+      },
+      {
+        "ticker": "VRTX",
+        "count": 2,
+        "conditions": [
+          "fish",
+          "weekly_bull"
+        ],
+        "added": "2026-10-05"
+      }
+    ],
+    "bearishSetups": [
+      {
+        "ticker": "ADBE",
+        "count": 3,
+        "conditions": [
+          "sweaty",
+          "skull",
+          "weekly_bear"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "INTU",
+        "count": 3,
+        "conditions": [
+          "sweaty",
+          "skull",
+          "weekly_bear"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "SYK",
+        "count": 3,
+        "conditions": [
+          "sweaty",
+          "skull",
+          "weekly_bear"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "HUBS",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "ISRG",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "NOW",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "PODD",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "weekly_bear"
+        ],
+        "added": "2026-10-23"
+      },
+      {
+        "ticker": "CHKP",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "WDAY",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-22"
+      },
+      {
+        "ticker": "FRSH",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "MNDY",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-20"
+      },
+      {
+        "ticker": "CTAS",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "EL",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-15"
+      },
+      {
+        "ticker": "PLTR",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-09"
+      },
+      {
+        "ticker": "SNAP",
+        "count": 2,
+        "conditions": [
+          "sweaty",
+          "skull"
+        ],
+        "added": "2026-10-09"
+      }
+    ],
+    "excludedFromBullish": []
+  },
+  "signalHistory": {
+    "ok": true,
+    "asOf": "2026-10-23",
+    "windowStart": "2026-04-27",
+    "rows": 1672,
+    "lastRun": {
+      "mode": "update",
+      "added": 0,
+      "pruned": 0,
+      "leftUniverse": 36,
+      "addFrom": "2026-10-12",
+      "mfiRebuilt": false,
+      "mfiDropped": 0,
+      "at": "2026-10-24T11:32:56+13:00"
+    }
+  },
+  "tickerCharts": {
+    "ok": true,
+    "tickers": 269,
+    "builtAt": "2026-10-24T11:33:17+13:00"
+  },
+  "canaryCharts": {
+    "ok": true,
+    "canaries": 12,
+    "asOf": "2026-10-23"
+  },
+  "insiderBuying": {
+    "ok": true,
+    "asOf": "2026-10-23",
+    "qualifying": 3,
+    "tickers": [
+      "APLD",
+      "ORCL",
+      "HEI"
+    ],
+    "filingsChecked": 3540,
+    "requests": 0,
+    "history": {
+      "ok": true,
+      "asOf": "2026-10-23",
+      "buys": 38,
+      "priced": 38,
+      "repricedOnly": false
+    }
+  },
+  "fundamentals": {
+    "ok": true,
+    "asOf": "2026-10-23",
+    "counts": {
+      "tickers": 269,
+      "stocks": 198,
+      "pe": {
+        "value": 150,
+        "nm": 44,
+        "stale": 2,
+        "missing": 2
+      },
+      "epsGrowth": {
+        "value": 127,
+        "nm": 66,
+        "stale": 2,
+        "missing": 3
+      },
+      "evEbitda": {
+        "value": 120,
+        "nm": 58,
+        "stale": 3,
+        "missing": 17
+      }
+    },
+    "fetch": {
+      "secRequests": 0,
+      "submissionsFetched": 0,
+      "factsFetched": 0,
+      "factsFromCache": 198,
+      "yahooRequests": 0,
+      "failures": [],
+      "errors": [],
+      "seconds": 7.6
+    },
+    "growthScore": {
+      "asOf": "2026-10-23",
+      "counts": {
+        "stocks": 198,
+        "scored": 189,
+        "ranked": 178,
+        "partial": 11,
+        "full": 159,
+        "danger": 12
+      }
+    }
+  },
+  "xRumours": {
+    "ok": true,
+    "asOf": "2026-10-23",
+    "rows": 26,
+    "counts": {
+      "shown": 26,
+      "reported": 7,
+      "confirmed": 18,
+      "denied": 1,
+      "filteredTonight": 4
+    },
+    "secRequests": 0,
+    "xReadsLastAgentRun": 10
+  },
+  "sectorScreener": {
+    "ok": true,
+    "asOf": "2026-10-23",
+    "sectors": 11,
+    "failed": []
+  },
+  "countryScreener": {
+    "ok": true,
+    "skipped": "removed by owner t697u 2026-10-14"
+  },
+  "indicatorBuyers": {
+    "ok": true,
+    "dir": "/workspace/backups/indicator-buyers",
+    "latest": "/workspace/backups/indicator-buyers/latest.csv"
+  },
+  "privateOwnerPage": {
+    "optionsScanner": {
+      "ok": false,
+      "paused": true,
+      "reason": "Options scan paused (data source under review)",
+      "lastScanSession": "2026-09-25"
+    }
+  },
+  "gaps": [],
+  "steps": [
+    {
+      "box": "Vol curve",
+      "ok": true,
+      "via": "refresh-vol-curve.mjs"
+    },
+    {
+      "box": "Decide/composite (state.json)",
+      "ok": true,
+      "via": "refresh-decide.mjs"
+    },
+    {
+      "box": "Liquidity (volume breadth)",
+      "ok": true,
+      "via": "refresh-volume-breadth.mjs"
+    },
+    {
+      "box": "Fish + Sweaty",
+      "ok": true,
+      "via": "scan-fish-v3.mjs"
+    },
+    {
+      "box": "ETF Watch",
+      "ok": true,
+      "via": "scripts/scan-etf-watch.mjs"
+    },
+    {
+      "box": "Countries",
+      "ok": true,
+      "via": "scripts/scan-etf-country.mjs"
+    },
+    {
+      "box": "Crypto Watch",
+      "ok": true,
+      "via": "scripts/scan-crypto-watch.mjs"
+    },
+    {
+      "box": "MFI Scan",
+      "ok": true,
+      "via": "scan-mfi-washout.mjs"
+    },
+    {
+      "box": "IBD Setups",
+      "ok": true,
+      "via": "scan-ibd-setups.mjs"
+    },
+    {
+      "box": "Weekly Market State (Weekly State + Bullish & Strong)",
+      "ok": true,
+      "via": "scripts/scan-market-state.mjs"
+    },
+    {
+      "box": "Monthly 20MA",
+      "ok": true,
+      "via": "scripts/scan-monthly-20ma.mjs"
+    },
+    {
+      "box": "Main Scanner (Bullish Setups + Bearish Setups)",
+      "ok": true,
+      "via": "refresh-setups-history.mjs"
+    },
+    {
+      "box": "Commentary",
+      "ok": true,
+      "via": "refresh-commentary.mjs"
+    },
+    {
+      "box": "Signal History (members History tab)",
+      "ok": true,
+      "via": "update-signal-history.mjs",
+      "optional": true
+    },
+    {
+      "box": "Ticker charts (members lightbox)",
+      "ok": true,
+      "via": "build-ticker-charts.mjs",
+      "optional": true
+    },
+    {
+      "box": "Canary charts (members pop-up)",
+      "ok": true,
+      "via": "build-canary-charts.mjs",
+      "optional": true
+    },
+    {
+      "box": "Insider Buying (members sub scanner)",
+      "ok": true,
+      "via": "scan-insider-buying.mjs",
+      "optional": true
+    },
+    {
+      "box": "Fundamentals (Main Scanner columns)",
+      "ok": true,
+      "via": "build-fundamentals.mjs",
+      "optional": true
+    },
+    {
+      "box": "X Rumours (refresh move/expiry/SEC; X step is the agent's)",
+      "ok": true,
+      "via": "x-rumours-ingest.mjs --refresh-only",
+      "optional": true
+    },
+    {
+      "box": "Sector Screener (members ETFs tab)",
+      "ok": true,
+      "via": "build-sector-screener.mjs",
+      "optional": true
+    },
+    {
+      "box": "Indicator buyers backup (private CSV)",
+      "ok": true,
+      "via": "export-indicator-buyers.mjs",
+      "optional": true
+    }
+  ],
+  "mirrors": "/home/box/canaries",
+  "ownerLocks": [
+    "Never partial box refreshes — one shared as-of",
+    "Never invent scores/prints",
+    "Ship/deploy still needs owner yes (this command is local prepare + mirror)"
+  ]
+}

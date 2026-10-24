@@ -17,3 +17,7 @@ next-env.d.ts
 .wrangler
 dev.vars
 .dev.vars
+/exports
+
+# PRIVATE owner data (Cboe delayed options: personal use only) — never commit/publish
+/data/private/

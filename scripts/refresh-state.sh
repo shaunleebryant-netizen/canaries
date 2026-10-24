@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# LEGACY (retired from the full pack 2026-09-25): Decide is now scored nightly by
+# scripts/refresh-decide.mjs. Use this only to restore a Scorekeeper state.json by hand.
 # Refresh site flock data from Scout/Scorekeeper source of truth.
 # Run after each rescore. Local only — does not deploy.
 set -euo pipefail
