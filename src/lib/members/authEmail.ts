@@ -3,6 +3,9 @@
  * Draft source: /workspace/exports/members-auth/emails/
  * From / Reply-To: shaun@canarydashboard.com (owner 2026-10-02).
  * All sends go through getEmailSender() so EMAIL_SENDING stays the gate (off by default).
+ *
+ * welcomeEmailMessage is the verify-path note (choose a plan / finish checkout).
+ * membershipThankYouMessage is the post-payment note — do not reuse the verify copy.
  */
 import {
   AUTH_EMAIL_FROM,
@@ -55,6 +58,58 @@ export function welcomeEmailMessage(to: string, accountUrl: string, membersUrl: 
       `Questions? Reply to this email — it goes to shaun@canarydashboard.com.\n\n` +
       `Canary Dashboard · education only, not investment advice.`,
   });
+}
+
+/** Canonical members home. MEMBERS_SITE_ORIGIN overrides the public site in local tests. */
+export function membersDashboardUrl(): string {
+  const origin = (process.env.MEMBERS_SITE_ORIGIN || "https://canarydashboard.com").trim().replace(/\/$/, "");
+  return `${origin}/members`;
+}
+
+/**
+ * Thank-you after a paid membership checkout (founding or standard).
+ * Not the verify-path welcome. Does not claim TradingView scripts are already granted.
+ */
+export function membershipThankYouMessage(to: string, plan: string, membersUrl = membersDashboardUrl()): EmailMessage {
+  const founding = plan === "launch_annual" || plan === "launch_monthly";
+  const subject = founding
+    ? "You're in: Canary Dashboard founding member"
+    : "You're in: Canary Dashboard membership";
+
+  let intro = "Thanks for purchasing your Canary Dashboard membership.";
+  let rate: string | null = null;
+  if (plan === "launch_annual") {
+    intro = "Thanks for signing up as a Canary Dashboard founding member.";
+    rate = "Your founding rate is locked for life while you keep renewing.";
+  } else if (plan === "launch_monthly") {
+    intro = "Thanks for signing up as a Canary Dashboard founding member.";
+    rate = "Your founding rate stays in place while you keep renewing.";
+  } else if (plan === "standard_annual") {
+    intro = "Thanks for purchasing Canary Dashboard membership, billed annually.";
+  } else if (plan === "standard_monthly") {
+    intro = "Thanks for purchasing Canary Dashboard membership, billed monthly.";
+  }
+
+  const lines = [
+    "Hi,",
+    "",
+    intro,
+    ...(rate ? ["", rate] : []),
+    "",
+    "Your members dashboard:",
+    membersUrl,
+    "",
+    "Member indicators are included with your membership. They are invite-only on TradingView. Reply to this email with your TradingView username and I will grant access. That step is still manual, so nothing has been added to your TradingView account yet.",
+    "",
+    "Questions? Reply to this email — it goes to shaun@canarydashboard.com.",
+    "",
+    "Shaun",
+    "Canary Dashboard",
+    "",
+    "Canary Dashboard · education only, not investment advice.",
+  ];
+
+  return authEnvelope({ to, subject, text: lines.join("\n") });
 }
 
 export function passwordResetEmailMessage(to: string, resetUrl: string): EmailMessage {
