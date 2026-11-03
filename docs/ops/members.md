@@ -77,6 +77,7 @@ within ~7 days, then mark the subscription **unpaid** or **cancel** it, so Strip
   - `POST /api/account/portal` → Stripe Customer Portal (turn off auto-renew, update card, invoices).
   - `POST /api/stripe/webhook` → verifies `Stripe-Signature` (`constructEventAsync`), idempotent on event id, handles
     `checkout.session.completed`, `customer.subscription.created|updated|deleted`, `invoice.payment_failed`.
+    A membership `checkout.session.completed` with `payment_status=paid` (or an `active`/`trialing` subscription on that same event) also sends one thank-you through `membershipThankYouMessage` / `sendAuthEmail` when `EMAIL_SENDING=1`. The checkout session id is claimed in `member_events` (`membership_thank_you`) before the send so retries do not send a second copy. Indicator checkouts stay on `youreInEmail`. TradingView grants stay manual.
 - **Access rule** (`src/lib/members/access.ts`): status `active|trialing` **and** now < `current_period_end`.
   Auto-renew off (`cancel_at_period_end`) keeps access until period end; `subscription.deleted` → no access;
   failed renewal (`past_due`) → 7-day grace, then locked; `unpaid` → locked. No refunds on annual.
@@ -146,6 +147,7 @@ Stripe Dashboard → Settings → Billing → Customer portal), and use `stripe 
 ## LIVE since 15/10/2026 (owner approved go-live)
 
 - Worker vars: `MEMBERS_AUTH_MODE=accounts`, `MEMBERS_ALLOW_LIVE_STRIPE=1`, `MEMBERS_SITE_ORIGIN`, `EMAIL_SENDING=1` (Resend). `INDICATOR_CHECKOUT` is NOT set (indicator sales on hold).
+- Before the membership thank-you ships: keep `EMAIL_SENDING=1` and `RESEND_API_KEY` (From `shaun@canarydashboard.com`). No new migration. Prove it with a new test-mode membership checkout (founding and standard), not a replay of a `checkout.session.completed` already stored in `stripe_events`. Expect one email; a second delivery of that session must not send again. An indicator checkout must still send only the existing "You're in" indicator mail. The membership mail says the free invite-only CanarySignals scripts are being granted to the checkout email, and asks for a different TradingView login only if that email is not the one they use. The grant itself stays manual (no TradingView API).
 - Worker secrets: `STRIPE_SECRET_KEY` (live), `STRIPE_WEBHOOK_SECRET` (endpoint `we_1UQeua51XxEMe5QTZDoq1pOC` -> /api/stripe/webhook, 5 events), `SESSION_SECRET`, `ADMIN_EMAILS=shaun@canarydashboard.com`, `RESEND_API_KEY`, `EMAIL_TOKEN_SECRET`.
 - Live price IDs are the defaults in `src/lib/members/plans.ts` (`LIVE_PRICE_IDS`; env vars override). Founding monthly US$75/mo (`launch_monthly`) counts toward the 100 cap.
 - Production is ALWAYS accounts mode (`membersAuthMode()`); the shared `canary-dev` password only exists in local `next dev` previews (default stub there; `/api/members/session` 404s in production). Local previews are unchanged: `npx next dev` with the `canary_members=canary-dev` cookie.

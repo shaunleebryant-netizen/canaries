@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
-import { type D1Database, getUserByCustomer, getUserById, nowSec } from "./db";
-import { planForPriceId } from "./plans";
+import { membershipThankYouMessage, sendAuthEmail } from "./authEmail";
+import { type D1Database, getUserByCustomer, getUserById, logMemberEvent, nowSec } from "./db";
+import { planForPriceId, isPlanId } from "./plans";
 import { handleIndicatorPaid } from "./indicatorDelivery";
 
 type SubLike = {
@@ -63,6 +64,37 @@ export async function upsertSubscription(db: D1Database, sub: SubLike, userIdHin
   return { ok: true as const, userId };
 }
 
+const THANK_YOU_EVENT = "membership_thank_you";
+
+/**
+ * One thank-you per checkout session. Claimed in member_events before send so a Stripe
+ * retry (or a second event id for the same session) cannot send another copy.
+ * EMAIL_SENDING gates the send, same as other mail. Sending off stores no claim; the
+ * Stripe event is still recorded, so that same event will not send later.
+ * The mail says CanarySignals scripts are being granted to the checkout email.
+ * The TradingView grant itself stays manual, outside this send.
+ */
+async function sendMembershipThankYou(
+  db: D1Database,
+  userId: string,
+  sessionId: string,
+  plan: string,
+): Promise<string> {
+  if (process.env.EMAIL_SENDING !== "1") return "thank-you skipped (EMAIL_SENDING off)";
+  const prior = await db
+    .prepare("SELECT id FROM member_events WHERE type = ? AND detail = ?")
+    .bind(THANK_YOU_EVENT, sessionId)
+    .first();
+  if (prior) return "thank-you already recorded";
+  const user = await getUserById(db, userId);
+  const to = user?.email?.trim();
+  if (!to) return "thank-you skipped (no email)";
+  await logMemberEvent(db, userId, THANK_YOU_EVENT, sessionId);
+  const result = await sendAuthEmail(membershipThankYouMessage(to, plan));
+  if (result.sent) return "thank-you sent";
+  return `thank-you not sent (${(result.reason ?? "unknown").slice(0, 80)})`;
+}
+
 /**
  * Apply a VERIFIED Stripe event to D1. Idempotent on event id.
  * `fetchSubscription` retrieves the full subscription for checkout.session.completed
@@ -104,11 +136,29 @@ export async function processStripeEvent(
           .bind(customer, nowSec(), userId)
           .run();
       }
+      let activatedStatus: string | null = null;
+      let priceId: string | null = null;
       if (userId && subscriptionId && fetchSubscription) {
         const full = await fetchSubscription(subscriptionId);
-        if (full) await upsertSubscription(db, full, userId);
+        if (full) {
+          activatedStatus = full.status;
+          priceId = full.items?.data?.[0]?.price?.id ?? null;
+          await upsertSubscription(db, full, userId);
+        }
       }
-      summary = userId ? `checkout completed (${s.metadata?.plan ?? "plan?"})` : "checkout completed: no matching user";
+      // Card checkouts are payment_status=paid. If the money is not marked paid yet,
+      // send only when the subscription on this same event is already active or trialing.
+      // Indicator checkouts return above and keep their own email.
+      const succeeded =
+        s.mode === "subscription" &&
+        (s.payment_status === "paid" || activatedStatus === "active" || activatedStatus === "trialing");
+      const planHint = s.metadata?.plan;
+      const plan = isPlanId(planHint) ? planHint : planForPriceId(priceId);
+      let thankYou = "";
+      if (succeeded && userId && s.id) {
+        thankYou = "; " + (await sendMembershipThankYou(db, userId, s.id, plan));
+      }
+      summary = userId ? `checkout completed (${planHint ?? "plan?"})${thankYou}` : "checkout completed: no matching user";
       break;
     }
     case "customer.subscription.created":
