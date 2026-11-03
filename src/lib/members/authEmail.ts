@@ -68,7 +68,11 @@ export function membersDashboardUrl(): string {
 
 /**
  * Thank-you after a paid membership checkout (founding or standard).
- * Not the verify-path welcome. Does not claim TradingView scripts are already granted.
+ * Not the verify-path welcome.
+ * Default: the checkout email is the TradingView identity. The mail says the free
+ * invite-only CanarySignals scripts are being granted to that email. It asks for a
+ * different TradingView username or email only if that login is not theirs.
+ * The grant itself stays manual, outside this message. Do not claim it is already done.
  */
 export function membershipThankYouMessage(to: string, plan: string, membersUrl = membersDashboardUrl()): EmailMessage {
   const founding = plan === "launch_annual" || plan === "launch_monthly";
@@ -99,7 +103,11 @@ export function membershipThankYouMessage(to: string, plan: string, membersUrl =
     "Your members dashboard:",
     membersUrl,
     "",
-    "Member indicators are included with your membership. They are invite-only on TradingView. Reply to this email with your TradingView username and I will grant access. That step is still manual, so nothing has been added to your TradingView account yet.",
+    `Your free invite-only CanarySignals scripts are being granted to the email you used at checkout (${to}).`,
+    "",
+    "In TradingView, open Indicators and check the Invite-only scripts tab. Add each CanarySignals script to your chart, then click the star so it stays in your Favourites.",
+    "",
+    "If that email is not the login you use on TradingView, reply with the username or email you use there and I will re-grant access within a few hours.",
     "",
     "Questions? Reply to this email — it goes to shaun@canarydashboard.com.",
     "",

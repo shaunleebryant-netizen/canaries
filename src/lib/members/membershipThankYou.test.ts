@@ -10,6 +10,20 @@ import { processStripeEvent } from "./webhook";
 
 const MEMBERS = "https://canarydashboard.com/members";
 
+function assertScriptsGrantedToCheckoutEmail(text: string, email: string) {
+  const escaped = email.replace(/[.]/g, "\\.");
+  assert.match(
+    text,
+    new RegExp(`free invite-only CanarySignals scripts are being granted to the email you used at checkout \\(${escaped}\\)`),
+  );
+  assert.match(text, /Invite-only scripts/);
+  assert.match(text, /Favourites/);
+  assert.match(text, /If that email is not the login you use on TradingView/);
+  assert.match(text, /username or email you use there/);
+  assert.match(text, /re-grant access within a few hours/);
+  assert.doesNotMatch(text, /nothing has been added|still manual|already granted|automatically/i);
+}
+
 describe("membership thank-you copy", () => {
   it("founding annual mirrors the manual welcome and does not reuse the verify-path welcome", () => {
     const msg = membershipThankYouMessage("buyer@example.com", "launch_annual", MEMBERS);
@@ -20,14 +34,12 @@ describe("membership thank-you copy", () => {
     assert.match(msg.text, /Thanks for signing up as a Canary Dashboard founding member/);
     assert.match(msg.text, /founding rate is locked for life while you keep renewing/);
     assert.match(msg.text, new RegExp(MEMBERS.replace(/[.]/g, "\\.")));
-    assert.match(msg.text, /TradingView username/);
-    assert.match(msg.text, /still manual/);
-    assert.match(msg.text, /nothing has been added to your TradingView account yet/);
-    assert.match(msg.text, /Reply to this email/);
+    assertScriptsGrantedToCheckoutEmail(msg.text, "buyer@example.com");
     assert.match(msg.text, /Shaun\nCanary Dashboard/);
     assert.match(msg.text, /education only, not investment advice/);
     assert.doesNotMatch(msg.text, /choose a plan|finish checkout/i);
-    assert.doesNotMatch(msg.text, /tip|performance|profit|guaranteed|returns|signal/i);
+    assert.doesNotMatch(msg.text, /\b(tip|performance|profit|guaranteed|returns)\b/i);
+    assert.doesNotMatch(msg.text, /\bsignals?\b/i);
 
     const welcome = welcomeEmailMessage("buyer@example.com", "https://canarydashboard.com/account", MEMBERS);
     assert.match(welcome.text, /choose a plan and finish checkout/);
@@ -52,7 +64,7 @@ describe("membership thank-you copy", () => {
     assert.doesNotMatch(monthly.text, /founding|locked for life/);
     for (const msg of [annual, monthly]) {
       assert.match(msg.text, new RegExp(MEMBERS.replace(/[.]/g, "\\.")));
-      assert.match(msg.text, /TradingView username/);
+      assertScriptsGrantedToCheckoutEmail(msg.text, "buyer@example.com");
       assert.match(msg.text, /education only, not investment advice/);
     }
   });
@@ -239,7 +251,8 @@ describe("membership checkout.session.completed sends one thank-you", () => {
     assert.match(thankYous()[0], /founding member/);
     assert.match(thankYous()[0], /locked for life while you keep renewing/);
     assert.match(thankYous()[0], /https:\/\/canarydashboard\.com\/members/);
-    assert.match(thankYous()[0], /nothing has been added to your TradingView account yet/);
+    assert.match(thankYous()[0], /being granted to the email you used at checkout \(buyer@example\.com\)/);
+    assert.match(thankYous()[0], /Invite-only scripts/);
     assert.equal(db.dump.memberEvents.length, 1);
     assert.equal(db.dump.memberEvents[0].detail, "cs_test_1");
 

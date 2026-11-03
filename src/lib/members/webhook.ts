@@ -71,7 +71,8 @@ const THANK_YOU_EVENT = "membership_thank_you";
  * retry (or a second event id for the same session) cannot send another copy.
  * EMAIL_SENDING gates the send, same as other mail. Sending off stores no claim; the
  * Stripe event is still recorded, so that same event will not send later.
- * TradingView access stays manual — this only asks for a username.
+ * The mail says CanarySignals scripts are being granted to the checkout email.
+ * The TradingView grant itself stays manual, outside this send.
  */
 async function sendMembershipThankYou(
   db: D1Database,
