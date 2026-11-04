@@ -37,6 +37,7 @@ import { TickerChartProvider } from "@/components/TickerChartLightbox";
 import { LiveTickers } from "@/components/LiveTickers";
 import { LocalTime } from "@/components/LocalTime";
 import { BookingModalButton } from "@/components/BookingModalButton";
+import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { DecideLayout } from "@/components/DecideLayout";
 import { DecideHeading, ScanHeading } from "@/components/DecideTheme";
 import { DECIDE_THEME, MEMBERS_CRYPTO_HERO_CHARTS, MEMBERS_DESK_IDEAS, MEMBERS_GROWTH_SCORE, MEMBERS_HISTORY_TAB, MEMBERS_SECTOR_SCREENER, MEMBERS_X_RUMOURS, SCANNER_DECLUTTER } from "@/lib/featureFlags";
@@ -725,6 +726,12 @@ export async function MembersDashboard({
 
   return (
     <div className="mx-auto max-w-7xl px-3 py-6 text-slate-100 sm:px-4 lg:py-8">
+      {regimeKey(payload.light, payload.S) === "red" ? (
+        <RedCompositeNotice
+          light={typeof payload.light === "string" ? payload.light : null}
+          packDay={state.sessionDate ?? String(payload.asOf ?? "").slice(0, 10)}
+        />
+      ) : null}
       {/* Page title — heads the whole members page */}
       <header className="mb-4">
         <h1 className="text-xl font-semibold text-white sm:text-2xl">

@@ -12,7 +12,7 @@
  * Steps: 1 Vol curve (Yahoo) · 2 Decide scripted points score (+ Regime v2,
  * sparklines) · 4 Liquidity · 5 Vanna/Charm · 6 Fish/Sweaty · 6b ETF/Countries/Crypto ·
  * 7 MFI · 7b IBD · 7c Weekly state + Monthly 20MA · 8 Main Scanner ·
- * 8b Commentary (reads the new S) · 9 private owner Options Scanner (never blocks the pack;
+ * 8b Commentary (reads the new S) · 8j header ticker tape (optional) · 9 private owner Options Scanner (never blocks the pack;
  *   PAUSED by default since 2026-09-28, see scripts/lib/options-scan-switch.mjs: zero Cboe requests).
  * Held data is never stamped with the pack as-of (held:true + heldSince).
  *
@@ -110,6 +110,21 @@ function runNode(relScript, args = []) {
   });
   if (r.stdout) process.stdout.write(r.stdout);
   if (r.stderr) process.stderr.write(r.stderr);
+  return r.status ?? 1;
+}
+
+function runPy(relScript, args = []) {
+  const script = join(ROOT, relScript);
+  const py = process.env.PYTHON || "python3";
+  console.log(`\n>>> ${py} ${relScript} ${args.join(" ")}`.trim());
+  const r = spawnSync(py, [script, ...args], {
+    cwd: ROOT,
+    encoding: "utf8",
+    timeout: 120_000,
+  });
+  if (r.stdout) process.stdout.write(r.stdout);
+  if (r.stderr) process.stderr.write(r.stderr);
+  if (r.error) console.warn(`  ${relScript} failed to start:`, r.error.message);
   return r.status ?? 1;
 }
 
@@ -849,6 +864,39 @@ async function main() {
     if (code !== 0) console.warn(`  WARNING (non-fatal): indicator buyers backup failed (exit ${code}); pack continues.`);
   }
 
+  // --- 8j) Sitewide header ticker tape. After fish / exhaustion / cci-fairy alerts exist
+  //     for the session (those scans run above; a missing cci-fairy file is skipped).
+  //     NON-FATAL: a failure keeps the previous data/ticker-tape.json and is logged as a warning.
+  let tickerTapeReport = null;
+  {
+    let code = 1;
+    try {
+      code = runPy("scripts/build-ticker-tape.py");
+    } catch (e) {
+      console.warn("  ticker tape step threw:", e instanceof Error ? e.message : e);
+    }
+    steps.push({ box: "Header ticker tape", ok: code === 0, via: "build-ticker-tape.py", optional: true });
+    if (code === 0) {
+      try {
+        const doc = readJson(join(DATA, "ticker-tape.json"));
+        const counts = {};
+        for (const g of doc.groups || []) counts[g.label || g.emoji] = (g.tickers || []).length;
+        tickerTapeReport = { ok: true, asOf: doc.asOf ?? null, sessionDate: doc.sessionDate ?? null, light: doc.light ?? null, S: doc.S ?? null, counts };
+        scripted.push({
+          box: "Header ticker tape",
+          file: "data/ticker-tape.json",
+          action: `asOf ${doc.asOf ?? "?"} · light ${doc.light ?? "?"} · ${Object.entries(counts).map(([k, n]) => `${k} ${n}`).join(", ") || "no groups"}`,
+        });
+        mirror("ticker-tape.json");
+      } catch (e) {
+        tickerTapeReport = { ok: false, warning: `read failed: ${e instanceof Error ? e.message : e}` };
+      }
+    } else {
+      tickerTapeReport = { ok: false, warning: `build-ticker-tape.py exit ${code} — previous ticker-tape.json kept` };
+      console.warn(`  WARNING (non-fatal): header ticker tape not rebuilt (exit ${code}); previous file kept, pack continues.`);
+    }
+  }
+
   // --- 9) Private owner Options Scanner (/owner). Cboe delayed data is personal-use only,
   //     so it never appears on public/member pages. A failure here NEVER blocks the public pack:
   //     scan-options-scanner.mjs keeps the last reading (held:true, heldSince) and we only note it.
@@ -919,6 +967,7 @@ async function main() {
     sectorScreener: sectorScreenerReport,
     countryScreener: countryScreenerReport,
     indicatorBuyers: indicatorBuyersReport,
+    tickerTape: tickerTapeReport,
     privateOwnerPage: { optionsScanner: privateOptions },
     gaps,
     steps,

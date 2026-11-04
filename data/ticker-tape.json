@@ -1,0 +1,57 @@
+{
+  "asOf": "2026-10-23",
+  "sessionDate": "2026-10-23",
+  "S": -0.535,
+  "light": "red",
+  "warning": "Canary Composite Score is red (Risk-Off). New long entries are outside this dashboard's risk guidance. Education only.",
+  "groups": [
+    {
+      "emoji": "🙂",
+      "label": "Smile",
+      "tone": "bull",
+      "tickers": [
+        "WGS",
+        "META",
+        "ALAB",
+        "GOOG",
+        "BWXT"
+      ]
+    },
+    {
+      "emoji": "🐟",
+      "label": "Fish",
+      "tone": "bull",
+      "tickers": [
+        "NVDA",
+        "CRDO",
+        "STX",
+        "WDC",
+        "APLD"
+      ]
+    },
+    {
+      "emoji": "🥵",
+      "label": "Sweaty",
+      "tone": "bear",
+      "tickers": [
+        "ZS",
+        "MSI",
+        "PODD",
+        "ISRG",
+        "HUBS"
+      ]
+    },
+    {
+      "emoji": "💀",
+      "label": "Skull",
+      "tone": "bear",
+      "tickers": [
+        "NOW",
+        "ISRG",
+        "HUBS",
+        "ADBE",
+        "INTU"
+      ]
+    }
+  ]
+}

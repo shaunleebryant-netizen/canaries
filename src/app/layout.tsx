@@ -3,6 +3,7 @@ import Link from "next/link";
 import Script from "next/script";
 import "./globals.css";
 import { SiteFooter } from "@/components/Footer";
+import { TickerTape } from "@/components/TickerTape";
 
 const SITE_TITLE = "Canary Dashboard: US Market Health Dashboard & Stock Scanners";
 const SITE_DESCRIPTION =
@@ -79,6 +80,7 @@ export default function RootLayout({
               </nav>
             </div>
           </header>
+          <TickerTape />
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </div>

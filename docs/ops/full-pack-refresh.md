@@ -45,6 +45,7 @@ Exit `1` if hard gaps remain (default). Manifest: `data/full-pack-manifest.json`
 | Vanna & Charm | Yes (calendar) | Writes `vanna-charm-pack.json`; UI also computes live |
 | Fish | Yes | `scripts/scan-fish-v3.mjs` — **Canary Tops & Bottoms daily** (owner Pine `data/canary-tops-bottoms-daily.pine`; engine `src/lib/canaryTopsBottoms.mjs`; inputs `src/lib/canaryTopsBottomsConfig.mjs`; method `yahoo-1d-canary-tops-bottoms-daily-2026-09-29`) |
 | Sweaty | Yes | Same scan → `exhaustion-alerts.json` (🥵/💀) |
+| Header ticker tape | Yes (step 8j) — **optional, never blocks the pack** | `scripts/build-ticker-tape.py` after fish / exhaustion / cci-fairy files exist → `data/ticker-tape.json` (N=5 per emoji group: 🙂 🐟 🥵 💀 🧚). Missing alert files are skipped. Composite `light`, `S`, and `sessionDate` are copied from `state.json`; a red light adds the education warning the header and members Close notice read. Failure keeps the previous file and is a manifest warning, not a gap. |
 | ETF Watch | Yes | `scripts/scan-etf-watch.mjs` → `etf-watch-alerts.json` (🙂/🐟 and/or 🥵/💀 on ETF/index/metals/uranium) |
 | Crypto Watch | Yes | `scripts/scan-crypto-watch.mjs` → `crypto-watch-alerts.json` (🙂/🐟 and/or 🥵/💀 on crypto spot + related) |
 | MFI Scan | Yes | `scripts/scan-mfi-washout.mjs` — **MFI Washout v6.1** 💵 bottomSignal on Yahoo 1d (canonical since 2026-10-08 run); universe = **fish ∪ ETF Watch** (deduped) |

@@ -59,6 +59,7 @@ export const BLOOD_S = -1.4;
 export function regimeLabel(light: string | null | undefined, S: number | null | undefined): { text: string; cls: string; note?: string } {
   const l = String(light ?? "").toLowerCase();
   if (typeof S === "number" && S >= EUPHORIC_S) return { text: "Euphoric", cls: "text-lime-300 drop-shadow-[0_0_6px_rgba(190,242,100,0.55)]", note: "Composite at a contrarian high: crowd is all-in, stay alert to a turn." };
+  // Red-light tape + members Close notice still apply when light is red, including S ≤ −1.4. This note is unchanged.
   if (typeof S === "number" && S <= BLOOD_S) return { text: "Blood in the Streets", cls: "text-red-700", note: "Composite at a contrarian low: may be time to start buying quality stocks." };
   if (l === "green") return { text: "Risk-On! Bullish", cls: "text-emerald-400" };
   if (l === "amber" || l === "yellow") return { text: "Half Account, Cautious", cls: "text-amber-400" };
