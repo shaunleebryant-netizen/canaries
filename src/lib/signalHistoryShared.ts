@@ -5,6 +5,10 @@
 export type HistoryKind = "fish" | "smile" | "mfi";
 export type HistoryGroup = "stock" | "sector" | "country" | "crypto";
 
+/** Later session closes after the mark date: +5, +10, +20 of that symbol's own sessions. */
+export const FWD_HORIZONS = [5, 10, 20] as const;
+export type ForwardCloses = [number | null, number | null, number | null];
+
 /** One row per ticker per session; several marks on the same day share a row (client shape). */
 export interface SignalHistoryRow {
   id: string;
@@ -14,6 +18,8 @@ export interface SignalHistoryRow {
   group: HistoryGroup;
   kinds: HistoryKind[];
   priceAtSignal: number;
+  /** Closes +5 / +10 / +20 sessions after the mark. null = those sessions are not in the file yet. */
+  fwd: ForwardCloses;
   priceNow: number | null;
   priceNowAsOf: string | null;
   /** Ticker has since left the scanner universe (kept for history, flagged). */
@@ -22,8 +28,9 @@ export interface SignalHistoryRow {
 
 /**
  * Compact wire payload (keeps the members page RSC payload small, ~1.9k rows):
- *   rows: [date, ticker, kinds ("f"|"s"|"m" letters), priceAtSignal]
+ *   rows: [date, ticker, kinds ("f"|"s"|"m" letters), priceAtSignal, close+5, close+10, close+20]
  *   tickers: { [t]: [name, group, priceNow, priceNowAsOf, removed 0|1] }
+ * close+N is null when that many of the symbol's later sessions are not stored yet.
  * Expanded on the client by expandSignalHistory().
  */
 export interface SignalHistoryPayload {
@@ -31,15 +38,17 @@ export interface SignalHistoryPayload {
   windowStart: string | null;
   sessions: number;
   markCount: number;
-  rows: [string, string, string, number][];
+  rows: [string, string, string, number, number | null, number | null, number | null][];
   tickers: Record<string, [string | null, HistoryGroup, number | null, string | null, 0 | 1]>;
 }
 
 const LETTER_KIND: Record<string, HistoryKind> = { f: "fish", s: "smile", m: "mfi" };
 
 /** Client-side expansion of the compact payload. */
+const numOrNull = (v: unknown): number | null => (typeof v === "number" && Number.isFinite(v) ? v : null);
+
 export function expandSignalHistory(p: SignalHistoryPayload): SignalHistoryRow[] {
-  return p.rows.map(([date, ticker, kinds, price]) => {
+  return p.rows.map(([date, ticker, kinds, price, c5, c10, c20]) => {
     const m = p.tickers[ticker] ?? [null, "stock", null, null, 0];
     return {
       id: `${date}|${ticker}`,
@@ -49,6 +58,7 @@ export function expandSignalHistory(p: SignalHistoryPayload): SignalHistoryRow[]
       group: m[1],
       kinds: [...kinds].map((c) => LETTER_KIND[c]).filter(Boolean),
       priceAtSignal: price,
+      fwd: [numOrNull(c5), numOrNull(c10), numOrNull(c20)],
       priceNow: m[2],
       priceNowAsOf: m[3],
       removed: m[4] === 1,

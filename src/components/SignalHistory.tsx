@@ -1,26 +1,26 @@
 "use client";
 
 /**
- * Members Signal History — 5th "History" tab on /members (owner approved 2026-10-07; MEMBERS_HISTORY_TAB).
- * Past 🐟 / 🙂 / 💵 marks by date, so members can find names that have dropped out of the boxes.
- * Filters: mark type, universe, date range, search. 12 rows, then Show more. No "in a box" column (owner t567u).
- * Education only: % since is a plain price change, never a trade result or a returns claim.
+ * Members Backtest tab — historical look-back of past 🐟 / 🙂 / 💵 marks.
+ * Each row shows the mark-day close and the % change to that symbol's close
+ * 5, 10 and 20 sessions later. Not a trade record, track record, P&L, or win rate.
+ * Filters: mark type, universe, date range, search. 12 rows, then Show more.
  */
 import { useMemo, useState } from "react";
 import { TickerLink } from "@/components/TickerChartLightbox";
 import {
   expandSignalHistory,
+  FWD_HORIZONS,
   type HistoryGroup,
   type HistoryKind,
   type SignalHistoryPayload,
-  type SignalHistoryRow,
 } from "@/lib/signalHistoryShared";
 
 const PAGE = 12;
 
 const KINDS: { id: HistoryKind; emoji: string; label: string; title: string }[] = [
   { id: "fish", emoji: "🐟", label: "Fish", title: "Fish: a sold-off name starting to find its feet" },
-  { id: "smile", emoji: "🙂", label: "Washout", title: "Washout: selling looks worn out" },
+  { id: "smile", emoji: "🙂", label: "Smiley", title: "Smiley (Washout): selling looks worn out" },
   { id: "mfi", emoji: "💵", label: "MFI", title: "MFI washout: selling washed out, money flow turning up" },
 ];
 const KIND_BY_ID = Object.fromEntries(KINDS.map((k) => [k.id, k])) as Record<HistoryKind, (typeof KINDS)[number]>;
@@ -61,9 +61,10 @@ function fmtPrice(p: number | null): string {
   return p.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
 }
 
-function pctSince(r: SignalHistoryRow): number | null {
-  if (r.priceNow == null || !r.priceAtSignal) return null;
-  return ((r.priceNow - r.priceAtSignal) / r.priceAtSignal) * 100;
+/** % from the mark-day close to a later session close. null when that session is not stored. */
+function fwdPct(price: number, close: number | null): number | null {
+  if (close == null || !Number.isFinite(close) || !price) return null;
+  return ((close - price) / price) * 100;
 }
 
 function fmtPct(v: number | null): string {
@@ -115,7 +116,6 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
   const [from, setFrom] = useState(minDate);
   const [to, setTo] = useState(asOf);
   const [q, setQ] = useState("");
-  const [showPct, setShowPct] = useState(true);
   const [limit, setLimit] = useState(PAGE);
 
   const reset = () => setLimit(PAGE);
@@ -156,8 +156,9 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <div className="min-w-0">
           {/* Owner t572u: tab + heading renamed "Backtest" (heading sits above the card on /members). */}
-          <p className="text-xs text-slate-400">
-            Past 🐟 🙂 💵 marks by date, including names no longer shown in the scanner boxes.
+          <p className="text-[11px] leading-relaxed text-slate-500">
+            Each row is a past 🐟 Fish, 🙂 Smiley, or 💵 MFI mark, including names no longer in the scanner boxes.
+            Sweaty (🥵) and skull (💀) are separate scanner marks and are not in this history.
           </p>
         </div>
         <p className="text-[10px] uppercase tracking-wide text-slate-500">
@@ -258,15 +259,9 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
             aria-label="Search ticker or company"
             className="w-full min-w-0 rounded-md border border-white/10 bg-slate-950/70 px-2.5 py-1.5 text-slate-100 placeholder:text-slate-600 focus:border-sky-400/50 focus:outline-none sm:w-auto sm:flex-1 sm:max-w-xs"
           />
-          <label className="flex cursor-pointer items-center gap-1.5 text-slate-400">
-            <input
-              type="checkbox"
-              checked={showPct}
-              onChange={(e) => setShowPct(e.target.checked)}
-              className="accent-sky-400"
-            />
-            Show % since
-          </label>
+          <p className="text-[11px] leading-relaxed text-slate-500 sm:max-w-md">
+            +5, +10 and +20 are that symbol&apos;s own later session closes. A dash means those sessions are not in the file yet.
+          </p>
         </div>
       </div>
 
@@ -290,10 +285,11 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
                   <th className="border-b border-white/10 px-2 py-1.5 font-medium">Company</th>
                   <th className="border-b border-white/10 px-2 py-1.5 font-medium">Mark</th>
                   <th className="border-b border-white/10 px-2 py-1.5 text-right font-medium">Price at mark</th>
-                  <th className="border-b border-white/10 px-2 py-1.5 text-right font-medium">Price now</th>
-                  {showPct ? (
-                    <th className="border-b border-white/10 px-2 py-1.5 text-right font-medium">% since</th>
-                  ) : null}
+                  {FWD_HORIZONS.map((n) => (
+                    <th key={n} className="border-b border-white/10 px-2 py-1.5 text-right font-medium" title={`% change to the close ${n} sessions after the mark date`}>
+                      +{n}d
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
@@ -323,14 +319,23 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
                       <td className={`px-2 py-1.5 text-right tabular-nums text-slate-300 ${firstOfDay ? "border-t border-white/10" : ""}`}>
                         {fmtPrice(r.priceAtSignal)}
                       </td>
-                      <td className={`px-2 py-1.5 text-right tabular-nums text-slate-300 ${firstOfDay ? "border-t border-white/10" : ""}`}>
-                        {fmtPrice(r.priceNow)}
-                      </td>
-                      {showPct ? (
-                        <td className={`px-2 py-1.5 text-right tabular-nums ${pctTone(pctSince(r))} ${firstOfDay ? "border-t border-white/10" : ""}`}>
-                          {fmtPct(pctSince(r))}
-                        </td>
-                      ) : null}
+                      {FWD_HORIZONS.map((n, hi) => {
+                        const close = r.fwd[hi];
+                        const v = fwdPct(r.priceAtSignal, close);
+                        const title =
+                          close == null
+                            ? `${n} sessions after this mark are not in the file yet`
+                            : `Close ${fmtPrice(close)}, ${n} sessions later`;
+                        return (
+                          <td
+                            key={n}
+                            title={title}
+                            className={`px-2 py-1.5 text-right tabular-nums ${pctTone(v)} ${firstOfDay ? "border-t border-white/10" : ""}`}
+                          >
+                            {fmtPct(v)}
+                          </td>
+                        );
+                      })}
                     </tr>
                   );
                 })}
@@ -356,9 +361,18 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
                       <span className="min-w-0 flex-1 truncate text-slate-400">{r.name ?? ""}</span>
                       {r.removed ? <LeftUniverse /> : null}
                     </div>
-                    <div className="mt-1 tabular-nums text-slate-400">
-                      {fmtPrice(r.priceAtSignal)} <span className="text-slate-600">→</span> {fmtPrice(r.priceNow)}
-                      {showPct ? <span className={`ml-1.5 ${pctTone(pctSince(r))}`}>{fmtPct(pctSince(r))}</span> : null}
+                    <div className="mt-1 text-slate-400">
+                      <span className="tabular-nums">At mark {fmtPrice(r.priceAtSignal)}</span>
+                    </div>
+                    <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 tabular-nums">
+                      {FWD_HORIZONS.map((n, hi) => {
+                        const v = fwdPct(r.priceAtSignal, r.fwd[hi]);
+                        return (
+                          <span key={n} className="text-slate-500">
+                            +{n}d <span className={pctTone(v)}>{fmtPct(v)}</span>
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </li>
@@ -384,13 +398,13 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
       )}
 
       <p className="mt-3 border-t border-white/5 pt-2 text-[10px] leading-relaxed text-slate-500">
-        This backtest is a simple look-back at past marks, not a tested trading strategy or a
-        record of results. Price at mark = close on the mark day. Price now = last completed close
-        {data.asOf ? ` (${fmtDate(data.asOf, false)})` : ""}.
-        {showPct
-          ? " % since is the plain price change between those two closes. It is not a trade result, ignores everything in between, and past marks do not predict future moves."
-          : ""}{" "}
-        Education only, not advice.
+        Education only. This is a historical look-back of past emoji marks and what price did afterward.
+        It is not a trade record, a track record, a simulated P&amp;L, a strategy backtest, or a performance
+        claim. There is no win rate, average return, or equity curve here. Price at mark is the close on
+        the mark date. +5, +10 and +20 are the percent change from that close to the same symbol&apos;s close
+        5, 10 and 20 sessions later. A dash means those sessions have not been stored yet. A mark can be
+        followed by a lower price as well as a higher one. Past marks do not predict future moves, and
+        nothing here is advice to buy or sell.
       </p>
     </section>
   );

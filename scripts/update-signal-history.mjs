@@ -20,7 +20,12 @@
  * "In a box now" is joined at render time from the same pack's box files (src/lib/loadSignalHistory.ts).
  * Refuses to write (exit 1) if too many fetches fail — the pack logs a warning and keeps the old file.
  *
- * row = { d, t, k: "fish"|"smile"|"mfi", g: "stock"|"sector"|"country"|"crypto", p: close on the mark bar }
+ * row = { d, t, k: "fish"|"smile"|"mfi", g: "stock"|"sector"|"country"|"crypto", p: close on the mark bar,
+ *         fwd?: [close +5 sessions, close +10, close +20] }
+ *   fwd[i] is that symbol's own later daily close, or null when those sessions are not in the
+ *   series yet. The members UI shows % vs `p`. Not a win rate, average, or P&L.
+ *   Before this field existed there was no stored forward tuple (the tab showed "price now" / "% since"
+ *   to the latest close only). Horizons are 5 / 10 / 20, not 3 / 5 / 10.
  * tickers[t] = { name, g, last, lastAsOf, removed?, removedSince? }
  * PRIVATE members data. Thresholds are not stored.
  *
@@ -28,6 +33,10 @@
  *        [--sessions 126] [--backfill] [--dry-run] [--limit N] [--out path] [--rebuild-mfi]
  *        [--backfill-tickers SIRI,XYZ]  — newly added tickers only: fetch just these and add their marks
  *        over the WHOLE window (other tickers' rows/meta untouched). Owner t631u 2026-10-10 (SIRI).
+ *        [--fill-fwd-from-charts] — fill `fwd` on the existing file from public/_chartdata
+ *        (the pack's own daily closes) without rebuilding marks. Add --yahoo-gaps to fetch
+ *        Yahoo daily bars only for tickers that still have no fwd after the chart files.
+ *        A normal pack run recomputes `fwd` from the Yahoo bars this script already downloads.
  */
 import { existsSync, readFileSync, renameSync, writeFileSync, copyFileSync } from "node:fs";
 import { join } from "node:path";
@@ -39,6 +48,7 @@ import { mfiWashoutV61 } from "./lib/mfi-washout-v6.1.mjs";
 const MFI_ENGINE = process.env.MFI_ENGINE === "v6" ? "v6" : "v6.1";
 const mfiSignals = (bars) => (MFI_ENGINE === "v6" ? mfiWashoutV6(bars) : mfiWashoutV61(bars)).bottomSignal;
 import { ROOT, MIRROR_DIR, YAHOO_UA, sleep, pool, nzNowIso } from "./lib/scan-common.mjs";
+import { FWD_HORIZONS, barsFromChartFile, forwardCloses } from "./lib/forward-closes.mjs";
 
 // Cached formatter per zone. (scan-common's ymdInTz builds a new Intl.DateTimeFormat per call, which
 // across ~3.5M bars blew the box's memory — OOM 2026-10-07.)
@@ -78,6 +88,8 @@ function parseArgs(argv) {
     else if (a === "--backfill-tickers") o.backfillTickers = argv[++i].split(",").map((x) => x.trim().toUpperCase()).filter(Boolean);
     else if (a === "--out") o.out = argv[++i]; // testing: read/write another file, no mirror
     else if (a === "--rebuild-mfi") o.rebuildMfi = true;
+    else if (a === "--fill-fwd-from-charts") o.fillFwdFromCharts = true;
+    else if (a === "--yahoo-gaps") o.yahooGaps = true;
   }
   return o;
 }
@@ -152,9 +164,110 @@ function loadExisting() {
   }
 }
 
+function chartPath(ticker) {
+  return join(ROOT, "public/_chartdata", `${String(ticker).toUpperCase().replace(/[^A-Z0-9.-]/g, "_")}.json`);
+}
+
+/** Yahoo daily bars for tickers the chart files could not price. Does not add marks. */
+async function fillFwdYahooGaps(rows) {
+  const need = [...new Set(rows.filter((r) => !r.fwd).map((r) => r.t))];
+  if (!need.length) return 0;
+  console.log(`yahoo gaps: ${need.length} tickers with no chart fwd`);
+  const results = await pool(need, 4, async (t) => {
+    let err = "no candidates";
+    for (const sym of SYMBOL_CANDIDATES[t] || [t]) {
+      const got = await fetchBars(sym, null);
+      if (got.error) {
+        err = `${sym}: ${got.error}`;
+        continue;
+      }
+      return { ok: true, t, bars: got.bars };
+    }
+    return { ok: false, t, err };
+  }, 160);
+  const byT = new Map(results.filter((r) => r.ok).map((r) => [r.t, r.bars]));
+  let set = 0;
+  for (const row of rows) {
+    if (row.fwd) continue;
+    const series = byT.get(row.t);
+    if (!series) continue;
+    const fwd = forwardCloses(series, row.d);
+    if (!fwd) continue;
+    row.fwd = fwd;
+    set++;
+  }
+  const failed = results.filter((r) => !r.ok);
+  if (failed.length) console.log("yahoo gap failed:", failed.map((f) => `${f.t} (${f.err})`).join(" | "));
+  console.log(`yahoo gaps filled ${set} rows`);
+  return set;
+}
+
+/** Seed fwd from the pack's chart files, optionally Yahoo for the rest. Does not add or delete marks. */
+async function fillFwdFromCharts(a) {
+  const existing = loadExisting();
+  if (!existing) {
+    console.error("no signal-history.json to fill (refusing to invent rows).");
+    process.exit(1);
+  }
+  const cache = new Map();
+  let set = 0;
+  let missed = 0;
+  for (const row of existing.rows ?? []) {
+    let series = cache.get(row.t);
+    if (series === undefined) {
+      const p = chartPath(row.t);
+      if (!existsSync(p)) series = null;
+      else {
+        try {
+          series = barsFromChartFile(JSON.parse(readFileSync(p, "utf8")));
+        } catch {
+          series = null;
+        }
+      }
+      cache.set(row.t, series);
+    }
+    if (!series) {
+      missed++;
+      continue;
+    }
+    const fwd = forwardCloses(series, row.d);
+    if (!fwd) {
+      missed++;
+      continue;
+    }
+    row.fwd = fwd;
+    set++;
+  }
+  if (a.yahooGaps) await fillFwdYahooGaps(existing.rows ?? []);
+  existing.fwdHorizons = FWD_HORIZONS;
+  existing.fwdNote =
+    "fwd is [close +5, +10, +20] of that symbol's own later daily sessions after the mark date. null = those sessions are not in the series yet. Seeded from public/_chartdata" +
+    (a.yahooGaps ? " and Yahoo daily bars for tickers with no chart file" : "") +
+    ". The pack refresh recomputes the same field from the Yahoo bars it already downloads. Not a return series.";
+  console.log(
+    `fill fwd from charts · ${set} rows updated · ${missed} rows left without a matching chart bar` +
+      ` · ${[...cache.values()].filter(Boolean).length}/${cache.size} tickers had chart files`
+  );
+  if (a.dryRun) return;
+  const tmp = `${OUT}.tmp`;
+  writeFileSync(tmp, JSON.stringify(existing) + "\n");
+  renameSync(tmp, OUT);
+  if (!a.out && existsSync(MIRROR_DIR)) {
+    try {
+      copyFileSync(OUT, join(MIRROR_DIR, "signal-history.json"));
+    } catch (e) {
+      console.warn("mirror skip signal-history.json:", e instanceof Error ? e.message : e);
+    }
+  }
+}
+
 async function main() {
   const a = parseArgs(process.argv);
   if (a.out) OUT = a.out;
+  if (a.fillFwdFromCharts) {
+    await fillFwdFromCharts(a);
+    return;
+  }
   const existing = a.backfill ? null : loadExisting();
   const mode = existing ? "update" : "backfill";
 
@@ -287,6 +400,19 @@ async function main() {
     x.d !== y.d ? (x.d < y.d ? 1 : -1) : x.k.localeCompare(y.k) || x.t.localeCompare(y.t)
   );
 
+  // Refresh +5/+10/+20 closes from the Yahoo bars this run already downloaded.
+  // A missing mark date keeps any fwd already stored (for example a chart-file seed).
+  const seriesByTicker = new Map(results.filter((r) => r.ok && r.bars?.length).map((r) => [r.job.t, r.bars]));
+  let fwdSet = 0;
+  for (const row of rows) {
+    const series = seriesByTicker.get(row.t);
+    if (!series) continue;
+    const fwd = forwardCloses(series, row.d);
+    if (!fwd) continue;
+    row.fwd = fwd;
+    fwdSet++;
+  }
+
   // Ticker meta: refresh price now; tag left-universe tickers instead of deleting them.
   const used = new Set(rows.map((r) => r.t));
   const tickers = {};
@@ -325,17 +451,20 @@ async function main() {
     updatedAt: nzNowIso(),
     method: `fish/smile ${CANARY_TOPS_BOTTOMS_VERSION} · mfi MFI Washout ${MFI_ENGINE} · Yahoo 1d · ${mode}`,
     mfiEngine: MFI_ENGINE,
+    fwdHorizons: FWD_HORIZONS,
+    fwdNote:
+      "fwd on each row is [close +5 sessions, +10, +20] after the mark date, from that symbol's completed Yahoo daily closes. null = those sessions are not in the series yet. The members tab shows the % versus price-at-mark. Not a win rate, average, or P&L.",
     note:
-      "Members-only signal history (🐟 / 🙂 / 💵). Backfilled by re-running the current engines, then each post-close run adds new marks. Never invented.",
+      "Members-only signal history (🐟 / 🙂 / 💵). Backfilled by re-running the current engines, then each post-close run adds new marks. Never invented. Forward closes are observed later sessions, not a track record.",
     counts: rows.reduce((o, r) => ((o[r.k] = (o[r.k] || 0) + 1), o), {}),
     failed,
-    lastRun: { mode, added, pruned, leftUniverse: leftUniverse.length, addFrom, mfiRebuilt: rebuildMfi, mfiDropped, at: nzNowIso() },
+    lastRun: { mode, added, pruned, leftUniverse: leftUniverse.length, addFrom, mfiRebuilt: rebuildMfi, mfiDropped, fwdSet, at: nzNowIso() },
     rows,
     tickers,
   };
   console.log(
     `window ${windowStart} → ${asOf} (${windowSessions.length} sessions) · rows ${before} → ${rows.length}` +
-      ` (+${added} added, −${pruned} pruned${rebuildMfi ? `, 💵 rebuilt with ${MFI_ENGINE}: −${mfiDropped} old 💵 rows` : ""}) · left universe ${leftUniverse.length} · failed ${failed.length}`
+      ` (+${added} added, −${pruned} pruned${rebuildMfi ? `, 💵 rebuilt with ${MFI_ENGINE}: −${mfiDropped} old 💵 rows` : ""}) · fwd ${fwdSet} · left universe ${leftUniverse.length} · failed ${failed.length}`
   );
   if (failed.length) console.log("failed:", failed.map((f) => `${f.ticker} (${f.error})`).join(" | "));
   if (a.dryRun) return;

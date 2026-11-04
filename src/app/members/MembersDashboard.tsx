@@ -70,9 +70,7 @@ import { SignalHistory } from "@/components/SignalHistory";
 import { FoldBox } from "@/components/FoldBox";
 import type { PessRow } from "@/components/PessimismBoard";
 import { IdeasSection, type IdeasData } from "@/components/ideas/IdeasSection";
-import { TrackRecord, type ScoreSummary } from "@/components/ideas/TrackRecord";
 import ideasJson from "../../../data/ideas.json";
-import ideaScores from "../../../data/ideas-scores.json";
 import pessimismJson from "../../../data/pessimism-board.json";
 import prevStateJson from "../../../data/state.prev.json";
 import setupsHistoryJson from "../../../data/setups-history.json";
@@ -347,7 +345,7 @@ export async function MembersDashboard({
                             theme={theme}
                             id="signal-history-tab-label"
                             title="Backtest"
-                            subtitle="Past Fish, Washout and MFI marks by date, and price since"
+                            subtitle="Check our past indicator marks by date with the next 5, 10 and 20 day % change."
                           />
                         ) : (
                           <h2
@@ -357,7 +355,6 @@ export async function MembersDashboard({
                             Backtest
                           </h2>
                         )}
-                        <div className="mb-6"><TrackRecord s={ideaScores as unknown as ScoreSummary} /></div>
                         <SignalHistory data={signalHistory} />
                       </section>
                     ) : undefined

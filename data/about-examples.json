@@ -1,60 +1,6 @@
 {
   "builtAt": "2026-10-10T03:46:09.515Z",
   "asOf": "2026-10-09",
-  "record": {
-    "horizonSessions": 10,
-    "windowStart": "2026-04-13",
-    "asOf": "2026-10-09",
-    "method": "Every 🐟/🙂/💵 mark on a stock in data/signal-history.json (2026-04-13 to 2026-10-09) with 10 sessions of data after it; close 10 sessions later vs close on the mark day. A Fish and Smiley on the same stock and day count once in \"all marks\". History was backfilled by re-running today's rules, then extended nightly.",
-    "all": {
-      "n": 868,
-      "down10Pct": 9.1,
-      "worstPct": -30.6,
-      "hitPct": 59.2,
-      "avgPct": 3.4,
-      "medianPct": 1.78
-    },
-    "fish": {
-      "n": 402,
-      "down10Pct": 9.2,
-      "worstPct": -30.6,
-      "hitPct": 60.4,
-      "avgPct": 4.2,
-      "medianPct": 1.88
-    },
-    "smile": {
-      "n": 415,
-      "down10Pct": 8.4,
-      "worstPct": -30.6,
-      "hitPct": 58.8,
-      "avgPct": 2.85,
-      "medianPct": 1.89
-    },
-    "mfi": {
-      "n": 132,
-      "down10Pct": 9.1,
-      "worstPct": -18.7,
-      "hitPct": 64.4,
-      "avgPct": 3.71,
-      "medianPct": 3.04
-    },
-    "all20": {
-      "n": 780,
-      "down10Pct": 14.4,
-      "worstPct": -35.4,
-      "hitPct": 60.4,
-      "avgPct": 3.97,
-      "medianPct": 3.06
-    },
-    "mfi20": {
-      "n": 112,
-      "down10Pct": 12.5,
-      "worstPct": -26.3,
-      "hitPct": 64.3,
-      "avgPct": 4.54,
-      "medianPct": 4.14
-    }
-  },
   "examples": [
     {
       "ticker": "NU",

@@ -121,8 +121,8 @@ export const ABOUT_PAGE: boolean = process.env.NEXT_PUBLIC_ABOUT_PAGE !== "0";
  * MEMBERS_HISTORY_TAB (owner approved 2026-10-07, ships with the 2026-10-08 post-close run; default ON):
  * 5th "History" tab on /members (after Canaries, Stocks, ETFs, Crypto) — past 🐟 / 🙂 / 💵 marks by
  * date from data/signal-history.json (scripts/update-signal-history.mjs, run by the post-close pack).
- * "% since" shows by default with the education-only footnote (owner choice). No "In a box now"
- * column or filter (owner t567u).
+ * Each row shows the % change to the close 5, 10 and 20 sessions later. No win rate, median, or
+ * track-record summary. No "In a box now" column or filter (owner t567u).
  * Hide by building with NEXT_PUBLIC_MEMBERS_HISTORY_TAB=0 (inlined at build time).
  * The old /members/history-preview route now redirects to /members?tab=history.
  */
