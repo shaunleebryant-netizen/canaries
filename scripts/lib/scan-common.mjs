@@ -179,6 +179,10 @@ export async function fetchPeriodBars(symbol, { interval, range, minBars }) {
     yahooSymbol: meta.symbol ?? symbol,
     exchangeTz: tz,
     lastTradeDay,
+    // Extra fields for callers that must drop an in-progress week (Bullish Engulfing).
+    // Existing scanners ignore them.
+    currentTradingPeriod: meta.currentTradingPeriod ?? null,
+    regularMarketTime: meta.regularMarketTime ?? null,
   };
 }
 

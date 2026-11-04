@@ -13,7 +13,7 @@ function BullishBody() {
         Bullish Setups is our main list of stocks that look ready to move up.
         Every ticker here meets several bullish conditions from the Sub
         Scanners further down the page, and at least one of them is a fresh
-        timing signal, such as a recent 🐟 fish, 😊 smiley or a 💵 MFI washout from the last five trading days.
+        timing signal, such as a recent 🐟 fish, 😊 smiley, a 💵 MFI washout from the last five trading days, or a 🕯️ bullish engulfing candle (daily in the last five sessions, or weekly in the last three completed weeks — either one is a single mark).
       </p>
       <p>
         The other conditions come from the slower boxes: a bullish weekly
@@ -24,7 +24,7 @@ function BullishBody() {
       </p>
       <p>
         The number beside each ticker is how many conditions it meets, and the
-        names with the most sit at the top. The The &ldquo;since&rdquo; date isldquo;AlertThe &ldquo;since&rdquo; date isrdquo; date is
+        names with the most sit at the top. The Alert date is
         the day it first made the list, and it keeps that date for as long as
         it stays on. Stocks that also show up in Bearish Setups are left out.
       </p>

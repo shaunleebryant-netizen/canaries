@@ -41,6 +41,7 @@ export function ScannerEmojiLegend() {
     { emoji: "🐟", label: "Fish — a sold-off name starting to find its feet" },
     { emoji: "🙂", label: "Washout — selling looks worn out" },
     { emoji: "💵", label: "MFI washout — selling washed out, money flow turning up" },
+    { emoji: "🕯️", label: "Bullish engulfing — green body covers the prior red body" },
     { emoji: "🟢", label: "Weekly green — trend turned or staying bullish" },
   ];
   const bearish: Mark[] = [
@@ -350,7 +351,7 @@ export function ScannerDeclutterShell({
                 </span>
                 Sub Scanners
                 <span className="text-[11px] font-normal text-slate-500">
-                  Time to fish · Sweaty stocks · MFI · IBD · Baby Bulls · Multi-week Warriors
+                  Time to fish · Sweaty stocks · MFI · Engulfing · IBD · Baby Bulls · Multi-week Warriors
                 </span>
               </span>
               <span className="text-[11px] font-normal text-slate-500">

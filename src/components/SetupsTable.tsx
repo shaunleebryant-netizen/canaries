@@ -49,7 +49,7 @@ const COLS: Col[] = [
   { key: "rg", label: "Rev", label2: "Growth", menu: "Rev Growth", group: "Canary Score", growth: true, tip: "Revenue over the last 12 months vs the 12 months before (SEC filings, as filed). Education only." },
   // Owner t698u 2026-10-14: "Growth" → "Canary Score", number only (no meter); tap still opens the breakdown.
   { key: "gs", label: "Canary", label2: "Score", menu: "Canary Score", locked: true, growth: true, tip: "Canary Growth Score 0–100 vs industry peers: growth quality 33%, margin quality 22%, valuation 18%, financial strength 17%, stickiness 10%. Hover or tap a score for the breakdown; ! = Danger. Education only." },
-  { key: "emo", label: "Emojis", left: true, group: "Setups", tip: "The signals behind each setup: 🐟 Fish, 😊 smiley, 💵 MFI washout, 🟢/🔴 weekly trend, 📈 monthly trend, IBD, 🥵 Sweaty, 💀 skull. Education only." },
+  { key: "emo", label: "Emojis", left: true, group: "Setups", tip: "The signals behind each setup: 🐟 Fish, 😊 smiley, 💵 MFI washout, 🕯️ bullish engulfing, 🟢/🔴 weekly trend, 📈 monthly trend, IBD, 🥵 Sweaty, 💀 skull. Education only." },
   // Owner 2026-10-14: "Since" renamed "Alert"; order Stock · Rev Growth · Canary Score · Emojis · Alert.
   { key: "since", label: "Alert", menu: "Alert", text: true, group: "Setups", tip: "Alert date: when the stock joined this list (DD/MM). Education only." },
   // Owner 2026-10-10: Score (signal-count badge) column removed; rows still arrive in the ranked order.

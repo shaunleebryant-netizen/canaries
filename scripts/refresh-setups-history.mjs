@@ -47,6 +47,17 @@ export function loadMainScannerInput(sessionDate) {
     ibd: rows(readJson("ibd-setups-alerts.json")),
     marketStates: rows(marketState, "states"),
     monthly20: rows(readJson("monthly-20ma-alerts.json")),
+    // 🕯️ daily last 5 sessions OR weekly last 3 weeks, counted once. Empty file is fine.
+    engulfing: (() => {
+      const doc = readJson("engulfing-alerts.json", {});
+      const list = (key) => (Array.isArray(doc[key]) ? doc[key] : []);
+      return {
+        daily: list("daily"),
+        weekly: list("weekly"),
+        dailySessions: list("dailySessions"),
+        weeklySessions: list("weeklySessions"),
+      };
+    })(),
   };
 }
 
