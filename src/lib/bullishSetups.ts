@@ -1,7 +1,9 @@
 /**
  * Bullish Setups (Main Scanner; formerly "Interesting Setups").
  * Tickers with ≥2 distinct bullish conditions across the Sub Scanners:
- * 🐟 Fish · 😊 Smiley (Fish box or ETF Watch) · 💵 MFI Washout v6.1 (last 5 trading days) — other prints within 14
+ * 🐟 Fish · 😊 Smiley (Fish box or ETF Watch) · 💵 MFI Washout v6.1 (last 5 trading days) ·
+ * 🕯️ Bullish engulfing (daily in the last 5 sessions, or weekly in the last 3 completed
+ * weeks — either timeframe, counted once) — other prints within 14
  * calendar days of the pack as-of; 🟢 weekly bull (green, counted once);
  * 📈 Monthly 20MA cross; IBD setup. Logic: setupsCore.mjs.
  */

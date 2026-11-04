@@ -11,7 +11,7 @@
  *
  * Steps: 1 Vol curve (Yahoo) · 2 Decide scripted points score (+ Regime v2,
  * sparklines) · 4 Liquidity · 5 Vanna/Charm · 6 Fish/Sweaty · 6b ETF/Countries/Crypto ·
- * 7 MFI · 7b IBD · 7c Weekly state + Monthly 20MA · 8 Main Scanner ·
+ * 7 MFI · 7b IBD · 7b2 Bullish Engulfing · 7c Weekly state + Monthly 20MA · 8 Main Scanner ·
  * 8b Commentary (reads the new S) · 9 private owner Options Scanner (never blocks the pack;
  *   PAUSED by default since 2026-09-28, see scripts/lib/options-scan-switch.mjs: zero Cboe requests).
  * Held data is never stamped with the pack as-of (held:true + heldSince).
@@ -433,6 +433,39 @@ async function main() {
       gaps.push({
         box: "IBD Setups",
         reason: `scan-ibd-setups.mjs exit ${code}`,
+      });
+    }
+  }
+
+  // --- 7b2) Bullish Engulfing (daily + weekly, bodies only). Before Main Scanner
+  //          so the 🕯️ condition sees this file. A failed scan records a gap and
+  //          leaves the previous file in place.
+  {
+    const code = runNode("scripts/scan-engulfing.mjs", ["--session-date", sessionDate]);
+    steps.push({ box: "Bullish Engulfing", ok: code === 0, via: "scan-engulfing.mjs" });
+    if (code === 0) {
+      const name = "engulfing-alerts.json";
+      const doc = readJson(join(DATA, name));
+      writeJson(
+        join(DATA, name),
+        stampPackMeta(doc, sessionDate, scannedAt, {
+          method: doc.method || "yahoo-1d-1wk-bullish-engulfing-bodies",
+          note:
+            (doc.note || "") +
+            ` · full-pack session ${sessionDate} · bodies-only bullish engulfing`,
+        })
+      );
+      mirror(name);
+      scripted.push({
+        box: "Bullish Engulfing",
+        file: "data/" + name,
+        count: (doc.daily || []).length + (doc.weekly || []).length,
+        method: doc.method,
+      });
+    } else {
+      gaps.push({
+        box: "Bullish Engulfing",
+        reason: `scan-engulfing.mjs exit ${code}`,
       });
     }
   }

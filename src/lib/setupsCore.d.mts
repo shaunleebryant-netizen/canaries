@@ -5,11 +5,14 @@ export declare const SETUPS_MIN_CONDITIONS: number;
 export declare const SETUPS_RULES_VERSION: number;
 export declare const BULLISH_TIMING_IDS: string[];
 export declare const BEARISH_TIMING_IDS: string[];
+export declare const ENGULF_DAILY_SESSIONS: number;
+export declare const ENGULF_WEEKLY_WEEKS: number;
 
 export type BullishConditionId =
   | "fish"
   | "smile"
   | "mfi_os"
+  | "engulf"
   | "weekly_bull"
   | "monthly_20ma"
   | "ibd";
@@ -46,6 +49,13 @@ export interface MainScannerInput {
   ibd?: unknown[];
   marketStates?: unknown[];
   monthly20?: unknown[];
+  /** Bullish engulfing hits + the completed-session calendars they were scanned against. */
+  engulfing?: {
+    daily?: { ticker?: string; asOf?: string }[];
+    weekly?: { ticker?: string; asOf?: string }[];
+    dailySessions?: string[];
+    weeklySessions?: string[];
+  };
 }
 
 export declare function daysBefore(asOf: string, d: string): number;

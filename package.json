@@ -23,6 +23,8 @@
     "scan:mfi": "node scripts/scan-mfi-washout.mjs",
     "scan:money-flow": "node scripts/scan-mfi-washout.mjs",
     "scan:ibd-setups": "node scripts/scan-ibd-setups.mjs",
+    "scan:engulfing": "node scripts/scan-engulfing.mjs",
+    "test:engulfing": "node scripts/test-engulfing.mjs",
     "scan:market-state": "node scripts/scan-market-state.mjs",
     "scan:monthly-20ma": "node scripts/scan-monthly-20ma.mjs",
     "refresh:full-pack": "node scripts/refresh-full-pack.mjs",

@@ -16,6 +16,9 @@
  *   smile   😊  smile print within 14d — equity Fish box (smile/both) or ETF Watch smile
  *   mfi_os  💵  MFI Washout v6.1 bottomSignal print within the last 5 TRADING days (owner 2026-10-06;
  *               not the 14-calendar-day window). Calendar = money-flow-alerts.json sessionDates.
+ *   engulf  🕯️  bodies-only bullish engulfing. ONE condition if a daily hit falls in the last
+ *               5 completed sessions OR a weekly hit falls in the last 3 completed weeks
+ *               (engulfing-alerts.json calendars). A timing print, same gate as Fish / MFI.
  *   weekly_bull 🟢 current weekly Market State = bull (green); dots = min(weeks,3); ONE condition
  *   monthly_20ma 📈 in Monthly 20MA output (this month or last)
  *   ibd     IBD  in IBD Setups box
@@ -47,8 +50,11 @@ export const MFI_WINDOW_TRADING_DAYS = 5;
 export const SETUPS_MIN_CONDITIONS = 2;
 /** Bump when qualification rules change — prior history is discarded (dates reset). */
 export const SETUPS_RULES_VERSION = 2;
-/** Timing prints: at least one must be present (within the 14-day window). */
-export const BULLISH_TIMING_IDS = ["fish", "smile", "mfi_os"];
+/** Timing prints: at least one must be present (within its own window). */
+export const BULLISH_TIMING_IDS = ["fish", "smile", "mfi_os", "engulf"];
+/** Bullish engulfing lookback: last N completed daily sessions, or last N completed weeks. Either qualifies once. */
+export const ENGULF_DAILY_SESSIONS = 5;
+export const ENGULF_WEEKLY_WEEKS = 3;
 export const BEARISH_TIMING_IDS = ["mfi_ob", "sweaty", "skull"];
 
 const KIND_NOTE_TAGS = {
@@ -208,6 +214,7 @@ export function computeMainScanner(input) {
     ibd = [],
     marketStates = [],
     monthly20 = [],
+    engulfing = {},
   } = input;
 
   /** ticker -> { conditions: Map(id -> cond) } */
@@ -278,6 +285,41 @@ export function computeMainScanner(input) {
       });
     }
   }
+  // Bullish engulfing: daily in the last 5 sessions OR weekly in the last 3 weeks = one timing print.
+  const engulfRows = (side) => (Array.isArray(engulfing[side]) ? engulfing[side] : []);
+  const engulfDates = (sessions, rows, n) => {
+    const listed = [...new Set((sessions || []).filter((d) => typeof d === "string" && d.slice(0, 10) <= asOf))]
+      .map((d) => d.slice(0, 10))
+      .sort();
+    if (listed.length) return new Set(listed.slice(-n));
+    const fromRows = [...new Set(rows.map((r) => (typeof r?.asOf === "string" ? r.asOf.slice(0, 10) : "")).filter((d) => d && d <= asOf))].sort();
+    return new Set(fromRows.slice(-n));
+  };
+  const dailyEngulfDates = engulfDates(engulfing.dailySessions, engulfRows("daily"), ENGULF_DAILY_SESSIONS);
+  const weeklyEngulfDates = engulfDates(engulfing.weeklySessions, engulfRows("weekly"), ENGULF_WEEKLY_WEEKS);
+  const engulfByTicker = new Map();
+  const noteEngulf = (row, kind, allowed) => {
+    const d = typeof row?.asOf === "string" ? row.asOf.slice(0, 10) : "";
+    if (!d || !allowed.has(d) || d > asOf) return;
+    const key = norm(row.ticker);
+    if (!key) return;
+    const prev = engulfByTicker.get(key) ?? {};
+    if (!prev[kind] || d < prev[kind]) engulfByTicker.set(key, { ...prev, [kind]: d });
+  };
+  for (const r of engulfRows("daily")) noteEngulf(r, "daily", dailyEngulfDates);
+  for (const r of engulfRows("weekly")) noteEngulf(r, "weekly", weeklyEngulfDates);
+  for (const [ticker, hit] of engulfByTicker) {
+    const parts = [];
+    if (hit.daily) parts.push(`daily @ ${hit.daily}`);
+    if (hit.weekly) parts.push(`weekly @ ${hit.weekly}`);
+    const since = [hit.daily, hit.weekly].filter(Boolean).sort()[0];
+    add(bull, ticker, {
+      id: "engulf",
+      since,
+      source: hit.daily && hit.weekly ? "daily+weekly" : hit.daily ? "daily" : "weekly",
+      detail: `🕯️ bullish engulfing (${parts.join(", ")})`,
+    });
+  }
   // IBD Setups box (current scan).
   for (const r of ibd) {
     add(bull, r.ticker, {
@@ -315,7 +357,7 @@ export function computeMainScanner(input) {
     });
   }
 
-  const BULL_ORDER = ["fish", "smile", "mfi_os", "weekly_bull", "monthly_20ma", "ibd"];
+  const BULL_ORDER = ["fish", "smile", "mfi_os", "engulf", "weekly_bull", "monthly_20ma", "ibd"];
   const BEAR_ORDER = ["mfi_ob", "sweaty", "skull", "weekly_bear"];
   const finish = (side, order, timingIds) => {
     const out = [];

@@ -14,6 +14,7 @@ import { TickerUniverseButton } from "@/components/TickerUniverseButton";
 import { loadTickerUniverse } from "@/lib/tickerUniverse";
 import { CryptoWatch } from "@/components/CryptoWatch";
 import { MoneyFlowAlerts } from "@/components/MoneyFlowAlerts";
+import { EngulfingScanner } from "@/components/EngulfingScanner";
 import { BullishSetups } from "@/components/BullishSetups";
 import { IbdSetups } from "@/components/IbdSetups";
 import { InsiderBuying } from "@/components/InsiderBuying";
@@ -54,6 +55,7 @@ import { loadEtfWatchAlerts } from "@/lib/loadEtfWatchAlerts";
 import { COUNTRY_NAMES, loadEtfCountryAlerts, loadEtfCountryHeldSince } from "@/lib/loadEtfCountryAlerts";
 import { loadCryptoWatchAlerts } from "@/lib/loadCryptoWatchAlerts";
 import { loadMoneyFlowAlerts, loadMoneyFlowPrints, loadMoneyFlowSessionDates } from "@/lib/loadMoneyFlowAlerts";
+import { engulfingForSetups, loadEngulfing } from "@/lib/loadEngulfing";
 import { loadIbdSetupsAlerts } from "@/lib/loadIbdSetupsAlerts";
 import { computeMainScannerSetups, loadPackAsOf } from "@/lib/mainScanner";
 import {
@@ -137,6 +139,14 @@ export async function MembersDashboard({
   const etfCountryHeldSince = loadEtfCountryHeldSince();
   const cryptoWatchAlerts = loadCryptoWatchAlerts();
   const moneyFlowAlerts = loadMoneyFlowAlerts();
+  const engulfing = loadEngulfing();
+  const engulfFish = fishAlerts
+    .filter((a) => a.signal === "fish" || a.signal === "both")
+    .map((a) => a.ticker);
+  const mfiRecent = new Set(loadMoneyFlowSessionDates().slice(-5));
+  const engulfMfi = [...loadMoneyFlowPrints(), ...moneyFlowAlerts]
+    .filter((a) => a.signal === "mfi_os" && (mfiRecent.size === 0 || mfiRecent.has(a.asOf)))
+    .map((a) => a.ticker);
   const ibdSetupsAlerts = loadIbdSetupsAlerts();
   // Insider Buying sub scanner (owner approved 2026-10-09, t595u): SEC Form 4. Members only;
   // not a Main Scanner / Bullish Setups condition.
@@ -168,6 +178,7 @@ export async function MembersDashboard({
     ibd: ibdSetupsAlerts,
     marketStates,
     monthly20,
+    engulfing: engulfingForSetups(engulfing),
   });
   // Owner 2026-10-10 (MEMBERS_SETUPS_COLUMNS): P/E · EPS g y/y · EV/EBITDA for the Main Scanner rows only.
   const setupFundamentals = pickFundamentals([
@@ -281,6 +292,8 @@ export async function MembersDashboard({
   const prevState = prevStateJson as unknown as { composite?: { S?: number; light?: string } };
   const newSetups = Object.values(sh.bullish).filter((r) => r.added === sh.asOf).length;
   const sigs = (x: unknown): { ticker?: string; asOf?: string }[] => (Array.isArray(x) ? x : ((x as { signals?: [] })?.signals ?? [])) as { ticker?: string; asOf?: string }[];
+  const uniqTickers = (rows: { ticker: string }[]) => new Set(rows.map((r) => r.ticker)).size;
+  const engulfSummary = `🕯️ Bullish Engulfing: ${uniqTickers(engulfing.daily)} daily · ${uniqTickers(engulfing.weekly)} weekly${engulfing.daily[0] ? ` · top ${engulfing.daily[0].ticker}` : ""}`;
   const sum = (label: string, x: unknown, emoji = "") => {
     const a = sigs(x);
     const fresh = a.filter((r) => r.asOf === packSession).length;
@@ -445,6 +458,18 @@ export async function MembersDashboard({
                         <FoldBox id="mfi" summary={sum("MFI washout", moneyFlowAlerts, "💵")}><ScannerShowMore>
                           <MoneyFlowAlerts alerts={moneyFlowAlerts} prints={loadMoneyFlowPrints()} sessionDates={loadMoneyFlowSessionDates()} />
                         </ScannerShowMore></FoldBox>
+                        <div className="min-w-0 md:col-span-2">
+                        <FoldBox id="engulfing" summary={engulfSummary}><ScannerShowMore>
+                          <EngulfingScanner
+                            daily={engulfing.daily}
+                            weekly={engulfing.weekly}
+                            asOf={engulfing.asOf}
+                            weeklyAsOf={engulfing.weeklyAsOf}
+                            fishTickers={engulfFish}
+                            mfiTickers={engulfMfi}
+                          />
+                        </ScannerShowMore></FoldBox>
+                        </div>
                         <FoldBox id="ibd" summary={sum("IBD setups", ibdSetupsAlerts)}><ScannerShowMore>
                           <IbdSetups alerts={ibdSetupsAlerts} />
                         </ScannerShowMore></FoldBox>
@@ -593,12 +618,22 @@ export async function MembersDashboard({
                     </h2>
                   )}
                   <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                    {/* Order (owner 2026-09-29 12:17 PM NZ):
-                        Time to fish, Sweaty stocks, MFI / IBD, Baby Bulls, Multi-week Warriors.
-                        All six share max-h-[min(320px,40vh)] so each row lines up. */}
+                    {/* Order: Time to fish, Sweaty, MFI, Bullish Engulfing, IBD, Baby Bulls, Multi-week Warriors.
+                        Boxes share max-h-[min(320px,40vh)] so each row lines up.
+                        Fairy Godmother is not in this snapshot, so Engulfing sits after MFI and before IBD. */}
                     <FishAlerts alerts={fishAlerts} />
                     <ExhaustionAlerts alerts={exhaustionAlerts} />
                     <MoneyFlowAlerts alerts={moneyFlowAlerts} prints={loadMoneyFlowPrints()} sessionDates={loadMoneyFlowSessionDates()} />
+                    <div className="min-w-0 md:col-span-2">
+                    <EngulfingScanner
+                      daily={engulfing.daily}
+                      weekly={engulfing.weekly}
+                      asOf={engulfing.asOf}
+                      weeklyAsOf={engulfing.weeklyAsOf}
+                      fishTickers={engulfFish}
+                      mfiTickers={engulfMfi}
+                    />
+                    </div>
                     <IbdSetups alerts={ibdSetupsAlerts} />
                     <WeeklyStateTurns
                       bulls={weeklyTurns.bulls}

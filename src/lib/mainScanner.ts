@@ -13,6 +13,7 @@ import type { EtfWatchAlert } from "@/lib/loadEtfWatchAlerts";
 import type { MoneyFlowAlert } from "@/lib/loadMoneyFlowAlerts";
 import type { ExhaustionAlert } from "@/lib/loadExhaustionAlerts";
 import type { IbdSetupAlert } from "@/lib/loadIbdSetupsAlerts";
+import type { EngulfingSetupsInput } from "@/lib/loadEngulfing";
 import type { MarketStateRow, Monthly20Signal } from "@/lib/marketState";
 import type { BullishSetup } from "@/lib/bullishSetups";
 import type { BearishSetup } from "@/lib/bearishSetups";
@@ -34,6 +35,7 @@ export function computeMainScannerSetups(input: {
   ibd: IbdSetupAlert[];
   marketStates: MarketStateRow[];
   monthly20: Monthly20Signal[];
+  engulfing?: EngulfingSetupsInput;
 }): {
   asOf: string;
   bullish: BullishSetup[];
