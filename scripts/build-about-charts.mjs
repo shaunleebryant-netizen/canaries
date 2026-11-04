@@ -3,10 +3,11 @@
  *   marks  ← data/signal-history.json (stocks only)
  *   prices ← public/_chartdata/<T>.json (daily bars from the nightly pack)
  * Writes public/about/example-<t>.webp (dashboard chart style: dark, green/red candles,
- * amber mark line, emoji markers) and data/about-examples.json (captions + hit-rate stats).
+ * amber mark line, emoji markers) and data/about-examples.json (hand-picked captions only).
  * Needs a local Chrome + playwright-core (PLAYWRIGHT_CORE, default /tmp/pw/node_modules/playwright-core/index.mjs).
  * Re-run after a pack to refresh "now" figures:  node scripts/build-about-charts.mjs
- * Education only. Examples are picked by hand to illustrate; the stats line shows the whole record.
+ * Education only. Examples are picked by hand. Do not write hit rates, averages, or medians
+ * into the public JSON — the members Backtest tab is the per-mark look-back, and it is not a track record.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -42,45 +43,7 @@ function bars(t) {
   })));
 }
 
-/* ---------- whole-record stats (stocks only, every mark, N sessions later) ---------- */
-function stats(kind, N) {
-  let n = 0, up = 0, sum = 0;
-  const rets = [];
-  const seen = new Set();
-  for (const r of hist.rows) {
-    if (r.g !== "stock") continue;
-    if (kind !== "any" && r.k !== kind) continue;
-    if (kind === "any") {
-      const id = `${r.t}|${r.d}`; // a fish + smile on the same day count once
-      if (seen.has(id)) continue;
-      seen.add(id);
-    }
-    const b = bars(r.t);
-    if (!b) continue;
-    const i = b.findIndex((x) => x.time === r.d);
-    if (i < 0 || i + N >= b.length) continue;
-    const ret = b[i + N].close / b[i].close - 1;
-    n++; if (ret > 0) up++; sum += ret; rets.push(ret);
-  }
-  rets.sort((a, c) => a - c);
-  const down10 = rets.filter((x) => x <= -0.1).length;
-  return { n, down10Pct: +((down10 / n) * 100).toFixed(1), worstPct: +(rets[0] * 100).toFixed(1), hitPct: +((up / n) * 100).toFixed(1), avgPct: +((sum / n) * 100).toFixed(2), medianPct: +(rets[Math.floor(n / 2)] * 100).toFixed(2) };
-}
-const N = 10;
-const record = {
-  horizonSessions: N,
-  windowStart: hist.windowStart,
-  asOf: hist.asOf,
-  method: `Every 🐟/🙂/💵 mark on a stock in data/signal-history.json (${hist.windowStart} to ${hist.asOf}) with ${N} sessions of data after it; close ${N} sessions later vs close on the mark day. A Fish and Smiley on the same stock and day count once in "all marks". History was backfilled by re-running today's rules, then extended nightly.`,
-  all: stats("any", N),
-  fish: stats("fish", N),
-  smile: stats("smile", N),
-  mfi: stats("mfi", N),
-  all20: stats("any", 20),
-  mfi20: stats("mfi", 20),
-};
-
-/* ---------- per-example captions ---------- */
+/* ---------- per-example captions (no aggregate hit rate / average / median) ---------- */
 const examples = EXAMPLES.map((e) => {
   const b = bars(e.t);
   const i = b.findIndex((x) => x.time === e.mark);
@@ -171,6 +134,6 @@ function dmy(iso) {
 
 fs.writeFileSync(
   path.join(ROOT, "data/about-examples.json"),
-  JSON.stringify({ builtAt: new Date().toISOString(), asOf: hist.asOf, record, examples: examples.map(({ marks, from, ...x }) => x) }, null, 2) + "\n",
+  JSON.stringify({ builtAt: new Date().toISOString(), asOf: hist.asOf, examples: examples.map(({ marks, from, ...x }) => x) }, null, 2) + "\n",
 );
-console.log(JSON.stringify(record, null, 1));
+console.log(`wrote ${examples.length} hand-picked examples (no aggregate record)`);

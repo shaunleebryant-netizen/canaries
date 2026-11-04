@@ -95,7 +95,7 @@ export function IdeasSection({ data }: { data: IdeasData; setupTickers?: string[
         <span className="text-[11px] text-slate-400">Based on current macro regime today · {dmy(data.asOf).slice(0, 5)} close</span>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">{shortsFirst ? [S, L] : [L, S]}</div>
-      <p className="mt-2 text-[11px] text-slate-500">Historical results: see <a href="/members?tab=backtest" className="text-canary-gold/80 underline decoration-canary-gold/30 underline-offset-2 hover:text-canary-gold">Backtest tab</a>.</p>
+      <p className="mt-2 text-[11px] text-slate-500">Past marks with the next 5, 10 and 20 day % change — a look-back, not a trade record. See the <a href="/members?tab=backtest" className="text-canary-gold/80 underline decoration-canary-gold/30 underline-offset-2 hover:text-canary-gold">Backtest tab</a>.</p>
     </section>
   );
 }

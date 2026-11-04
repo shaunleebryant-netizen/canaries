@@ -52,7 +52,6 @@ function Bullet({ children }: { children: React.ReactNode }) {
 
 /* ---------- Owner 2026-10-10: expanded About (method, recent examples, founding members) ---------- */
 
-type Stat = { n: number; hitPct: number; avgPct: number; medianPct: number; down10Pct: number; worstPct: number };
 type Example = {
   ticker: string;
   name: string;
@@ -70,11 +69,7 @@ type Example = {
   sessionsPeak: number;
   image: string;
 };
-const ABOUT = aboutExamples as unknown as {
-  asOf: string;
-  record: { horizonSessions: number; windowStart: string; asOf: string; all: Stat; fish: Stat; smile: Stat; mfi: Stat };
-  examples: Example[];
-};
+const EXAMPLES = (aboutExamples as unknown as { examples: Example[] }).examples;
 
 const MARK: Record<Example["kind"], { emoji: string; label: string }> = {
   fish: { emoji: "🐟", label: "Fish" },
@@ -174,16 +169,15 @@ function HowItWorks() {
 }
 
 function RecentExamples() {
-  const { record, examples } = ABOUT;
-  const r = record;
+  const examples = EXAMPLES;
   return (
     <section id="examples" className="space-y-5">
       <SectionKicker>Recent examples</SectionKicker>
       <h3 className="text-2xl font-semibold text-white">What a good mark can look like</h3>
       <p>
         These are real marks from our own signal history, drawn on daily charts with the exact mark-day close. I picked
-        them because they show the idea clearly, so they&apos;re among the best, not typical. The numbers below the
-        charts show the full record.
+        them because they show the idea clearly, so they are among the best, not typical. Each caption is what price
+        did after that one mark — a look-back, not a trade record.
       </p>
       <div className="grid gap-6 md:grid-cols-2">
         {examples.map((e, i) => {
@@ -229,29 +223,20 @@ function RecentExamples() {
         id="record"
         className="scroll-mt-20 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 text-sm leading-relaxed text-slate-300"
       >
-        <p className="font-semibold text-white">Not every mark works</p>
+        <p className="font-semibold text-white">A look-back, not a track record</p>
         <p className="mt-2">
-          Across every 🐟, 🙂 and 💵 mark on stocks in our signal history from {niceDate(r.windowStart)} to{" "}
-          {niceDate(r.asOf)}, <strong className="text-white">{Math.round(r.all.hitPct)}%</strong> closed higher{" "}
-          {r.horizonSessions} sessions later ({r.all.n.toLocaleString("en-US")} marks). The average move was{" "}
-          {signed(r.all.avgPct)} and the median {signed(r.all.medianPct)}. By mark: 💵 MFI Washout{" "}
-          {Math.round(r.mfi.hitPct)}% higher, average {signed(r.mfi.avgPct)} ({r.mfi.n} marks); 🐟 Fish{" "}
-          {Math.round(r.fish.hitPct)}%, {signed(r.fish.avgPct)} ({r.fish.n}); 🙂 Smiley {Math.round(r.smile.hitPct)}%,{" "}
-          {signed(r.smile.avgPct)} ({r.smile.n}).
+          The charts above are a few hand-picked marks. They are not typical, and they are not a win rate, an average
+          return, or a strategy result. Members can open the Backtest tab and look through past 🐟, 🙂 and 💵 marks by
+          date, with the percent change over the next 5, 10 and 20 sessions. That table stays off this page.
         </p>
         <p className="mt-2">
-          That means about 4 in 10 marks were lower {r.horizonSessions} sessions later. About{" "}
-          {Math.round(r.all.down10Pct)}% fell 10% or more, and the worst fell {Math.abs(r.all.worstPct).toFixed(0)}%. This
-          history was rebuilt by running today&apos;s rules over past prices, then extended each night, and it covers a
-          mostly rising market. Members can check every mark and the move since in the{" "}
           <a href="/members?tab=backtest" className="text-canary-gold underline">
-            Backtest tab
+            Members&apos; Backtest tab
           </a>
-          .
         </p>
         <p className="mt-2 text-xs text-slate-400">
-          Education only. Past examples and past results don&apos;t guarantee future results. Nothing here is a
-          recommendation to buy or sell any security.
+          Education only. Past marks do not predict future moves. Nothing here is a recommendation to buy or sell any
+          security.
         </p>
       </div>
     </section>

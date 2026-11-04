@@ -48,10 +48,10 @@ function exampleShot(ticker: string): Shot | null {
   const price = (n: number) => `$${n.toFixed(2)}`;
   return {
     src: e.image,
-    alt: `${e.name} (${e.ticker}) daily chart: ${marks.replace(/[^\w +]/gu, "").trim()} on ${niceDate(e.markDate)} at ${price(e.priceAtMark)}, then ${move} to ${price(e.lastClose)} by ${niceDate(e.lastDate)}`,
+    alt: `${e.name} (${e.ticker}) daily chart: ${marks.replace(/[^\w +]/gu, "").trim()} marked ${niceDate(e.markDate)} at ${price(e.priceAtMark)}. Close ${price(e.lastClose)} (${niceDate(e.lastDate)}): ${move} in ${e.sessionsNow} sessions`,
     w: 1920,
     h: 1080,
-    caption: `${e.name} (${e.ticker}) · ${marks} ${niceDate(e.markDate)} at ${price(e.priceAtMark)} · ${move} to ${price(e.lastClose)} in ${e.sessionsNow} sessions (${niceDate(e.lastDate)})`,
+    caption: `${e.ticker} · Marked ${niceDate(e.markDate)} at ${price(e.priceAtMark)}. Close ${price(e.lastClose)} (${niceDate(e.lastDate)}): ${move} in ${e.sessionsNow} sessions`,
     bullish: true,
   };
 }
@@ -179,13 +179,13 @@ const FISH_CHARTS_V3: Shot[] = FISH_CHARTS.filter((s) => !s.src.includes("10x-ge
   s.bullish ? s : { ...s, caption: `${s.caption?.split(" · ")[0]}, daily` },
 );
 
-/** Owner 2026-10-10: under the hand-picked examples, link to the full hit-rate record on /about. */
+/** Under the hand-picked examples. Tease only — the full mark table stays on the members Backtest tab. */
 function ExamplesNote() {
   return (
     <p className="mt-3 text-xs text-slate-500">
-      Hand-picked examples · not typical ·{" "}
-      <a href="/about#record" className="text-canary-gold underline-offset-2 hover:underline">
-        see the full record
+      Past marks by date with the price change since — a look-back, not a trade record. Hand-picked, not typical.{" "}
+      <a href="/about#examples" className="text-canary-gold underline-offset-2 hover:underline">
+        How to read a mark
       </a>
       . Education only.
     </p>

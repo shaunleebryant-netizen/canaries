@@ -575,9 +575,10 @@ async function main() {
     }
   }
 
-  // --- 8c) Members Signal History (History tab; owner approved 2026-10-07). Adds this session's
+  // --- 8c) Members Signal History (Backtest tab; owner approved 2026-10-07). Adds this session's
   //     🐟 / 🙂 / 💵 marks to data/signal-history.json (idempotent), refreshes price now, tags
-  //     left-universe tickers, prunes to the 6-month window. NON-FATAL: a failure keeps the previous
+  //     left-universe tickers, prunes to the 6-month window, and refreshes fwd closes at +5/+10/+20
+  //     sessions from the Yahoo bars just downloaded. NON-FATAL: a failure keeps the previous
   //     file and is logged as a warning, never a gap (the pack and deploy carry on).
   let signalHistoryReport = null;
   {

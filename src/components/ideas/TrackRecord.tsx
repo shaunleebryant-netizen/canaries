@@ -1,3 +1,7 @@
+/**
+ * Ideas score summary (win rate, median move). Not mounted.
+ * The members Backtest tab is a per-mark look-back and must not render this table.
+ */
 const dmy = (ymd: string) => ymd.split("-").reverse().join("/");
 
 export type ScoreSummary = { since: string | null; logged: number; scored: Record<string, number>; byPlay: Row[]; byLight: Row[] };

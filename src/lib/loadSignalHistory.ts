@@ -2,14 +2,26 @@
  * Members-only Signal History (owner approved 2026-10-07; live History tab). Reads data/signal-history.json
  * (scripts/update-signal-history.mjs, run by the post-close pack) (no "in a box" join — owner t567u).
  * Bullish marks only: 🐟 fish · 🙂 smile (washout) · 💵 MFI washout. Never invent rows.
+ * Each raw row may carry fwd: [close +5, +10, +20] sessions after the mark (null if not elapsed).
  * PRIVATE: members pages only. Do not import from a public route.
  */
 import historyJson from "../../data/signal-history.json";
-import type { HistoryGroup, HistoryKind, SignalHistoryPayload } from "@/lib/signalHistoryShared";
+import type { ForwardCloses, HistoryGroup, HistoryKind, SignalHistoryPayload } from "@/lib/signalHistoryShared";
 
 export type { HistoryGroup, HistoryKind, SignalHistoryPayload, SignalHistoryRow } from "@/lib/signalHistoryShared";
 
-type RawRow = { d: string; t: string; k: string; g: string; p: number };
+type RawRow = { d: string; t: string; k: string; g: string; p: number; fwd?: (number | null)[] | null };
+
+type WireRow = [string, string, string, number, number | null, number | null, number | null];
+
+function parseFwd(v: unknown): ForwardCloses | null {
+  if (!Array.isArray(v) || v.length < 3) return null;
+  return [0, 1, 2].map((i) => (typeof v[i] === "number" && Number.isFinite(v[i]) ? (v[i] as number) : null)) as ForwardCloses;
+}
+
+function fwdFilled(f: ForwardCloses): number {
+  return f.filter((n) => n != null).length;
+}
 type RawTicker = { name?: string | null; g?: string; last?: number; lastAsOf?: string; removed?: boolean };
 type RawFile = {
   asOf?: string;
@@ -25,7 +37,7 @@ const GROUPS: HistoryGroup[] = ["stock", "sector", "country", "crypto"];
 export function loadSignalHistory(countryNames: Record<string, string> = {}): SignalHistoryPayload {
   const raw = historyJson as unknown as RawFile;
   const meta = raw.tickers ?? {};
-  const byKey = new Map<string, [string, string, string, number]>();
+  const byKey = new Map<string, WireRow>();
   const groupOf = new Map<string, HistoryGroup>();
   let markCount = 0;
   for (const r of raw.rows ?? []) {
@@ -35,9 +47,18 @@ export function loadSignalHistory(countryNames: Record<string, string> = {}): Si
     markCount++;
     if (!groupOf.has(r.t)) groupOf.set(r.t, (GROUPS.includes(r.g as HistoryGroup) ? r.g : "stock") as HistoryGroup);
     const key = `${r.d}|${r.t}`;
+    const fwd = parseFwd(r.fwd) ?? [null, null, null];
     const row = byKey.get(key);
-    if (!row) byKey.set(key, [r.d, r.t, KIND_LETTER[k], r.p]);
-    else if (!row[2].includes(KIND_LETTER[k])) row[2] += KIND_LETTER[k];
+    if (!row) byKey.set(key, [r.d, r.t, KIND_LETTER[k], r.p, fwd[0], fwd[1], fwd[2]]);
+    else {
+      if (!row[2].includes(KIND_LETTER[k])) row[2] += KIND_LETTER[k];
+      const prev: ForwardCloses = [row[4], row[5], row[6]];
+      if (fwdFilled(fwd) > fwdFilled(prev)) {
+        row[4] = fwd[0];
+        row[5] = fwd[1];
+        row[6] = fwd[2];
+      }
+    }
   }
   const rows = [...byKey.values()];
   rows.forEach((r) => (r[2] = [...r[2]].sort((a, b) => "fsm".indexOf(a) - "fsm".indexOf(b)).join("")));
