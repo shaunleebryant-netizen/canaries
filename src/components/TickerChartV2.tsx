@@ -10,6 +10,8 @@
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { INTERVAL_VIEW, loadTradingViewScript, StarToggle, type ChartInterval } from "@/components/TickerChartLightbox";
+import { TickerLightboxStats } from "@/components/TickerLightboxStats";
+import type { UniverseLightboxPack } from "@/lib/tickerLightboxStats";
 import { toTradingViewSymbol } from "@/lib/tradingViewSymbol";
 
 export type MarkKind = "fish" | "smile" | "mfi" | "m20" | "sweat" | "skull";
@@ -279,6 +281,7 @@ export function TickerChartDialogV2({
   titleId,
   name,
   star,
+  lightbox,
 }: {
   ticker: string;
   interval?: ChartInterval;
@@ -286,6 +289,8 @@ export function TickerChartDialogV2({
   titleId: string;
   name?: string;
   star?: { inUniverse: (t: string) => boolean; has: (t: string) => boolean; toggle: (t: string) => void };
+  /** Fish-universe company figures. Omitted for off-universe charts. */
+  lightbox?: UniverseLightboxPack | null;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -363,6 +368,7 @@ export function TickerChartDialogV2({
                 Open on TradingView ↗
               </a>
             </p>
+            <TickerLightboxStats ticker={ticker} pack={lightbox} />
           </div>
           <button
             ref={closeRef}
