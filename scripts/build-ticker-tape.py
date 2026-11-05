@@ -4,7 +4,7 @@
 Reads the latest fish, exhaustion, and (if present) cci-fairy alert JSON.
 Keeps N=5 tickers per emoji group. A missing file is skipped. Composite
 light / S / sessionDate are copied from data/state.json so the client does
-not need a live API. When the light is red, a warning string is included.
+not need a live API. When the light is red or amber, a warning string is included.
 
 Does not invent prints. On failure it exits non-zero without replacing
 ticker-tape.json, so the previous file stays.
@@ -23,10 +23,14 @@ from pathlib import Path
 
 N = 5
 
-# Education only. Same sentence as src/lib/redCompositeNotice.ts.
+# Education only. Same sentences as src/lib/redCompositeNotice.ts.
 RED_WARNING = (
     "Canary Composite Score is red (Risk-Off). "
     "New long entries are outside this dashboard's risk guidance. Education only."
+)
+AMBER_WARNING = (
+    "Canary Composite Score is amber (cautious). "
+    "Remain cautious. Trade with at most half the account. Education only."
 )
 
 # (emoji, label, tone, source)
@@ -176,9 +180,11 @@ def composite_from_state(state: dict) -> dict:
         out["S"] = S
     if light in {"green", "amber", "yellow", "red"}:
         out["light"] = "amber" if light == "yellow" else light
-    # Band is the pack's own light (red when S < −0.3). Do not recompute over a present light.
+    # Band is the pack's own light. Do not recompute over a present light.
     if out.get("light") == "red":
         out["warning"] = RED_WARNING
+    elif out.get("light") == "amber":
+        out["warning"] = AMBER_WARNING
     return out
 
 
@@ -326,6 +332,19 @@ def self_test() -> None:
         green = build(root)
         assert green["light"] == "green"
         assert "warning" not in green
+
+        state["composite"]["light"] = "Amber"
+        state["composite"]["S"] = 0.12
+        (data / "state.json").write_text(json.dumps(state), encoding="utf-8")
+        amber = build(root)
+        assert amber["light"] == "amber"
+        assert amber["warning"] == AMBER_WARNING
+
+        state["composite"]["light"] = "yellow"
+        (data / "state.json").write_text(json.dumps(state), encoding="utf-8")
+        yellow = build(root)
+        assert yellow["light"] == "amber"
+        assert yellow["warning"] == AMBER_WARNING
 
         # Missing alerts must not write.
         empty = root / "empty"
