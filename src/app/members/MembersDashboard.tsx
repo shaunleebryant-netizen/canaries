@@ -34,6 +34,7 @@ import { BearishSetups } from "@/components/BearishSetups";
 import { WeeklyStateTurns, BullishStrong } from "@/components/WeeklyMarketState";
 // Monthly20Ma box hidden (owner 2026-09-25); component kept in src/components/Monthly20Ma.tsx.
 import { TickerChartProvider } from "@/components/TickerChartLightbox";
+import { loadUniverseLightbox } from "@/lib/loadUniverseLightbox";
 import { LiveTickers } from "@/components/LiveTickers";
 import { LocalTime } from "@/components/LocalTime";
 import { BookingModalButton } from "@/components/BookingModalButton";
@@ -113,6 +114,9 @@ export type MembersDesign = { decideCollapse: boolean; chartV2: boolean; myStock
  * The members dashboard body (moved from page.tsx, t581u 2026-10-08, unchanged when both design
  * options are off). Rendered by /members with the feature flags.
  */
+const SCANNERS_SUBTITLE =
+  "Proprietary scanners. Click each header for a short explanation, or click any stock to open its chart with indicator marks and information. Not every stock is in our ticker universe — we curate the list. To check one that isn’t here, open it on TradingView and load the invite-only scripts we granted you.";
+
 export async function MembersDashboard({
   searchParams,
   design,
@@ -300,7 +304,7 @@ export async function MembersDashboard({
           {/* Owner 2026-10-06: public-safe ticker universe pop-up (tickers only, no signals).
               Owner 2026-10-10: on the tabbed layout it sits on the tab-bar row (toolbarEnd), no own row. */}
           {SCANNER_DECLUTTER ? null : <div className="flex justify-end">{universeButton}</div>}
-          <TickerChartProvider v2={design.chartV2} myStocks={design.myStocks} universe={design.myStocks ? loadTickerUniverse() : undefined} names={designNames}>
+          <TickerChartProvider v2={design.chartV2} myStocks={design.myStocks} universe={design.myStocks ? loadTickerUniverse() : undefined} names={designNames} lightbox={loadUniverseLightbox()}>
             {/* Scanners: SCANNER_DECLUTTER mock (default off) or the live layout. */}
             {SCANNER_DECLUTTER ? (
               <div data-scan-theme={scanTheme}>
@@ -425,7 +429,7 @@ export async function MembersDashboard({
                           theme={theme}
                           id="sub-scanners-label"
                           title="Sub Scanners"
-                          subtitle="Canary scanners for different trades"
+                          subtitle={SCANNERS_SUBTITLE}
                         />
                       ) : (
                         <h2
@@ -582,7 +586,7 @@ export async function MembersDashboard({
                       theme={theme}
                       id="sub-scanners-label"
                       title="Sub Scanners"
-                      subtitle="Canary scanners for different trades"
+                      subtitle={SCANNERS_SUBTITLE}
                     />
                   ) : (
                     <h2

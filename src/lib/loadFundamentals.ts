@@ -13,9 +13,22 @@ export interface FundRow {
   p: number | null;
   pe: number | null;
   pw: FundWhy;
-  /** EPS growth y/y as a fraction (0.25 = +25%). */
+  /** EPS growth y/y as a fraction (0.25 = +25%). Universe table `eg` when that field is absent. */
   g: number | null;
   gw: FundWhy;
+  /**
+   * EPS growth y/y the universe table reads as `eg` (fraction). When set, it wins over `g`.
+   * Same empty reasons as `gw` via `egw`.
+   */
+  eg?: number | null;
+  egw?: FundWhy;
+  /** EPS growth q/q as a fraction. Universe table column `eq`. */
+  eq?: number | null;
+  eqw?: FundWhy;
+  /** Yahoo average analyst price target. Shown only when `ao` > 5. */
+  tm?: number | null;
+  /** Published analyst opinions behind `tm`. */
+  ao?: number | null;
   ev: number | null;
   evw: FundWhy;
   /** 1 = annual-only filer (internal; not shown to members). */
