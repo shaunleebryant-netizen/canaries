@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import tapeJson from "../../data/ticker-tape.json";
-import { isRedCompositeLight, RED_COMPOSITE_WARNING } from "@/lib/redCompositeNotice";
+import {
+  AMBER_COMPOSITE_WARNING,
+  isAmberCompositeLight,
+  isRedCompositeLight,
+  RED_COMPOSITE_WARNING,
+} from "@/lib/redCompositeNotice";
 
 type Tone = "bull" | "bear";
 
@@ -26,8 +31,9 @@ const tape = tapeJson as TickerTapeFile;
 
 /**
  * Sitewide header tape. Groups are baked from data/ticker-tape.json (rebuilt
- * each pack). An optional endpoint can replace groups after mount. The red
- * composite warning is a fixed strip — it does not scroll with the marks.
+ * each pack). An optional endpoint can replace groups after mount. A red or
+ * amber composite warning is a fixed strip — it does not scroll with the marks.
+ * Amber is the strip only; red still has its own members popup elsewhere.
  */
 export function TickerTape({ endpoint }: { endpoint?: string }) {
   const [groups, setGroups] = useState<TickerTapeGroup[]>(tape.groups ?? []);
@@ -50,8 +56,9 @@ export function TickerTape({ endpoint }: { endpoint?: string }) {
   }, [endpoint]);
 
   const visible = groups.filter((g) => Array.isArray(g.tickers) && g.tickers.length > 0);
-  const showWarning = isRedCompositeLight(light);
-  if (!visible.length && !showWarning) return null;
+  const showRedWarning = isRedCompositeLight(light);
+  const showAmberWarning = isAmberCompositeLight(light);
+  if (!visible.length && !showRedWarning && !showAmberWarning) return null;
 
   const row = (key: string) => (
     <div className="flex shrink-0 items-center" aria-hidden={key === "b"}>
@@ -68,12 +75,19 @@ export function TickerTape({ endpoint }: { endpoint?: string }) {
 
   return (
     <div className="border-b border-white/10 bg-slate-900/90">
-      {showWarning ? (
+      {showRedWarning ? (
         <p
           role="status"
           className="border-b border-rose-500/40 bg-rose-950 px-4 py-1.5 text-center text-xs font-semibold leading-snug text-rose-100"
         >
           {RED_COMPOSITE_WARNING}
+        </p>
+      ) : showAmberWarning ? (
+        <p
+          role="status"
+          className="border-b border-canary-amber/40 bg-amber-950 px-4 py-1.5 text-center text-xs font-semibold leading-snug text-amber-100"
+        >
+          {AMBER_COMPOSITE_WARNING}
         </p>
       ) : null}
       {visible.length ? (
