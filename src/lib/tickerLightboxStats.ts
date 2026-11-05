@@ -1,11 +1,10 @@
 /**
  * Header figures for the members ticker lightbox.
- * Canary Score and YoY EPS use the same pack files as the scanners
- * (data/growth-score.json, data/fundamentals.json). Visible EPS marks match
- * SetupsTable: "+" / "−" and a whole percent, "n/m", "n/a", or "—".
- * QoQ diluted EPS and the Yahoo average analyst target are not in those files.
- * The formatters still apply the pack's empty marks, and the "fewer than 6 analysts"
- * rule when an opinion count is present. Education only. Not a recommendation.
+ * Canary Score: data/growth-score.json.
+ * YoY / QoQ EPS and the Yahoo average target: data/fundamentals.json, the same
+ * fields the universe table uses (`eg` or `g`, `eq`, `tm` when `ao` > 5).
+ * Visible EPS marks match that table: "+" / "−" and a whole percent, "n/m", "n/a", or "—".
+ * Education only. Not a recommendation.
  */
 import type { GrowthRow } from "@/lib/loadGrowthScore";
 import type { FundWhy } from "@/lib/loadFundamentals";
@@ -21,18 +20,21 @@ export const LIGHTBOX_STAT_LABELS = {
 export const MIN_ANALYST_OPINIONS = 6;
 
 export interface LightboxFundSnap {
-  /** YoY diluted EPS growth as a fraction (0.25 = +25%). Same field as fundamentals `g`. */
+  /** YoY diluted EPS growth as a fraction. Used when `eg` is absent. */
   g: number | null;
   gw: FundWhy;
   n?: string;
   fe?: string;
-  /** QoQ diluted EPS growth. Omitted: not in the current fundamentals pack. */
-  qoq?: number | null;
-  qoqWhy?: FundWhy;
-  /** Yahoo average analyst price target. Omitted: not in the current pack. */
-  target?: number | null;
-  /** Published opinions behind `target`. Null or omitted = unknown, not a low count. */
-  opinions?: number | null;
+  /** Universe table YoY (`eg`). Wins over `g` when the pack sets it. */
+  eg?: number | null;
+  egw?: FundWhy;
+  /** Universe table QoQ (`eq`), fraction. */
+  eq?: number | null;
+  eqw?: FundWhy;
+  /** Yahoo average analyst price target (`tm`). */
+  tm?: number | null;
+  /** Opinion count (`ao`). Omitted = unknown. Shown as a price only when > 5. */
+  ao?: number | null;
 }
 
 export interface UniverseLightboxPack {
@@ -126,13 +128,31 @@ export function formatAnalystTarget(target: number | null, opinions: number | nu
   };
 }
 
-export function lightboxFigures(fund: LightboxFundSnap | undefined): { yoy: StatText; qoq: StatText; analyst: StatText } {
-  const qoqValue = fund?.qoq ?? null;
-  const qoqWhy: FundWhy | undefined = qoqValue != null ? (fund?.qoqWhy ?? null) : (fund?.qoqWhy ?? "missing");
-  const opinions = fund && "opinions" in fund ? (fund.opinions ?? null) : null;
+/** Copy the universe-table fields off a fundamentals row. Extra pack keys are kept. */
+export function lightboxFundFromRow(row: LightboxFundSnap): LightboxFundSnap {
   return {
-    yoy: formatEpsGrowth(fund?.g ?? null, fund ? fund.gw : "missing", "yoy", { note: fund?.n, periodEnd: fund?.fe }),
+    g: row.g,
+    gw: row.gw,
+    ...(row.n ? { n: row.n } : {}),
+    ...(row.fe ? { fe: row.fe } : {}),
+    ...(row.eg !== undefined ? { eg: row.eg } : {}),
+    ...(row.egw !== undefined ? { egw: row.egw } : {}),
+    ...(row.eq !== undefined ? { eq: row.eq } : {}),
+    ...(row.eqw !== undefined ? { eqw: row.eqw } : {}),
+    ...(row.tm !== undefined ? { tm: row.tm } : {}),
+    ...(row.ao !== undefined ? { ao: row.ao } : {}),
+  };
+}
+
+export function lightboxFigures(fund: LightboxFundSnap | undefined): { yoy: StatText; qoq: StatText; analyst: StatText } {
+  const yoyValue = fund?.eg != null ? fund.eg : (fund?.g ?? null);
+  const yoyWhy: FundWhy | undefined = fund?.eg != null ? (fund.egw !== undefined ? fund.egw : fund.gw) : fund ? fund.gw : "missing";
+  const qoqValue = fund?.eq ?? null;
+  const qoqWhy: FundWhy | undefined = qoqValue != null ? (fund?.eqw ?? null) : (fund?.eqw ?? "missing");
+  const opinions = fund && "ao" in fund ? (fund.ao ?? null) : null;
+  return {
+    yoy: formatEpsGrowth(yoyValue, yoyWhy, "yoy", { note: fund?.n, periodEnd: fund?.fe }),
     qoq: formatEpsGrowth(qoqValue, qoqWhy, "qoq"),
-    analyst: formatAnalystTarget(fund?.target ?? null, opinions),
+    analyst: formatAnalystTarget(fund?.tm ?? null, opinions),
   };
 }

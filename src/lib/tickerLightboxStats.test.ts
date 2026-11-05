@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { loadUniverseLightbox } from "./loadUniverseLightbox";
-import { formatAnalystTarget, formatEpsGrowth, lightboxFigures } from "./tickerLightboxStats";
+import { formatAnalystTarget, formatEpsGrowth, lightboxFigures, lightboxFundFromRow } from "./tickerLightboxStats";
 
 describe("EPS marks match the setups table", () => {
   it("formats a positive fraction as a whole percent with a plus", () => {
@@ -70,15 +70,38 @@ describe("universe lightbox pack", () => {
     assert.equal(pack.growthScored, (growth.ranked ?? []).filter((t) => growth.tickers[t]?.gs != null).length);
   });
 
-  it("leaves QoQ and the analyst target empty when the pack has no such fields", () => {
-    const figs = lightboxFigures(loadUniverseLightbox().fundamentals.AAPL);
-    assert.equal(figs.qoq.text, "—");
-    assert.equal(figs.analyst.text, "—");
+  it("reads QoQ and the average target from the universe table fields", () => {
+    const figs = lightboxFigures({
+      g: 0.323,
+      gw: null,
+      eq: 0.082,
+      eqw: null,
+      tm: 333.28,
+      ao: 38,
+    });
+    assert.equal(figs.yoy.text, "+32%");
+    assert.equal(figs.qoq.text, "+8%");
+    assert.equal(figs.analyst.text, "333.28");
   });
 
-  it("still applies a low opinion count when a snap carries one", () => {
-    const figs = lightboxFigures({ g: null, gw: "missing", target: 12, opinions: 3 });
+  it("prefers eg over g for YoY, matching the universe table", () => {
+    const figs = lightboxFigures({ g: 0.323, gw: null, eg: 0.11, egw: null });
+    assert.equal(figs.yoy.text, "+11%");
+  });
+
+  it("hides the target when ao is 5 or fewer and uses n/m for a null QoQ", () => {
+    const figs = lightboxFigures({ g: null, gw: "missing", eq: null, eqw: "nm", tm: 40, ao: 5 });
+    assert.equal(figs.qoq.text, "n/m");
     assert.equal(figs.analyst.text, "fewer than 6 analysts");
+  });
+
+  it("leaves QoQ and the target empty only when those fields are absent", () => {
+    const row = loadUniverseLightbox().fundamentals.AAPL;
+    assert.equal(row.eq, undefined);
+    assert.equal(row.ao, undefined);
+    const figs = lightboxFigures(row);
+    assert.equal(figs.qoq.text, "—");
+    assert.equal(figs.analyst.text, "—");
   });
 
   it("omits metals, crypto and names outside the fish universe", () => {
@@ -88,10 +111,22 @@ describe("universe lightbox pack", () => {
     }
   });
 
-  it("includes a newly added universe name and shows dashes where the pack has no row", () => {
-    const pack = loadUniverseLightbox();
-    assert.ok(pack.companies.includes("GME"));
-    assert.equal(pack.fundamentals.GME, undefined);
-    assert.equal(lightboxFigures(undefined).yoy.text, "—");
+  it("copies eg, eq, tm, and ao through the loader mapping", () => {
+    const snap = lightboxFundFromRow({
+      g: 0.2,
+      gw: null,
+      eg: 0.2,
+      eq: -0.046,
+      eqw: null,
+      tm: 1200.4,
+      ao: 8,
+      n: "note",
+      fe: "2026-06-27",
+    });
+    assert.equal(snap.eq, -0.046);
+    assert.equal(snap.ao, 8);
+    assert.equal(lightboxFigures(snap).qoq.text, "−5%");
+    assert.equal(lightboxFigures(snap).analyst.text, "1200");
+    assert.match(lightboxFigures(snap).yoy.title, /27\/06\/2026/);
   });
 });
