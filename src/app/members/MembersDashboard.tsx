@@ -35,6 +35,7 @@ import { WeeklyStateTurns, BullishStrong } from "@/components/WeeklyMarketState"
 // Monthly20Ma box hidden (owner 2026-09-25); component kept in src/components/Monthly20Ma.tsx.
 import { TickerChartProvider } from "@/components/TickerChartLightbox";
 import { LiveTickers } from "@/components/LiveTickers";
+import { quoteStripChartNames } from "@/lib/quoteStripChart";
 import { LocalTime } from "@/components/LocalTime";
 import { BookingModalButton } from "@/components/BookingModalButton";
 import { DecideLayout } from "@/components/DecideLayout";
@@ -743,9 +744,12 @@ export async function MembersDashboard({
 
       {/* Owner t755u: Today strip removed; the Decide heading now names the regime. */}
 
-      {/* Live quotes strip — top of page, above Decide / Scan */}
+      {/* Live quotes strip — top of page, above Decide / Scan.
+          Own lightbox (the scanner provider sits inside the scan column). */}
       <div className="mb-5">
-        <LiveTickers initial={marketQuotes} />
+        <TickerChartProvider v2={design.chartV2} names={quoteStripChartNames()}>
+          <LiveTickers initial={marketQuotes} />
+        </TickerChartProvider>
       </div>
 
       {/* Cockpit B: compact DECIDE (sticky) | SCAN */}
