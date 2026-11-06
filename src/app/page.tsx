@@ -2,7 +2,7 @@ import Image from "next/image";
 import { loadState } from "@/lib/loadState";
 import { toPublicSnapshot } from "@/lib/composite";
 import { TrafficLightDisplay } from "@/components/TrafficLight";
-import { HomeVideo } from "@/components/HomeVideo";
+import { HomeFoundingBox } from "@/components/HomeVideo";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { HomeScannerTour } from "@/components/HomeScannerTour";
 import { ABOUT_PAGE, HOME_SCANNER_TOUR, HOME_TUITION_SECTION, HOME_V3 } from "@/lib/featureFlags";
@@ -558,7 +558,7 @@ export default async function HomePage() {
             </div>
             {/* Owner 2026-10-07 12:44 AM NZ: "Launch promo is currently ON" line removed from the hero (copy only). */}
           </div>
-          <HomeVideo />
+          <HomeFoundingBox />
         </div>
       </section>
 
