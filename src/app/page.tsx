@@ -2,7 +2,8 @@ import Image from "next/image";
 import { loadState } from "@/lib/loadState";
 import { toPublicSnapshot } from "@/lib/composite";
 import { TrafficLightDisplay } from "@/components/TrafficLight";
-import { HomeVideo } from "@/components/HomeVideo";
+import { HomeFoundingOffer } from "@/components/HomeFoundingOffer";
+import { PLANS } from "@/lib/members/plans";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { HomeScannerTour } from "@/components/HomeScannerTour";
 import { ABOUT_PAGE, HOME_SCANNER_TOUR, HOME_TUITION_SECTION, HOME_V3 } from "@/lib/featureFlags";
@@ -180,7 +181,7 @@ const FAQ_V3 = [
   },
   {
     q: "What does membership cost?",
-    a: "The first 100 members pay $600/yr (US$50/mo, billed annually), locked in for life while they renew. After the first 100, membership is $1,069/yr.",
+    a: `The first 100 members pay ${PLANS.launch_annual.display} (US$${PLANS.launch_annual.amount / 100 / 12}/mo, billed annually), locked in for life while they renew. Monthly billing is ${PLANS.launch_monthly.display}. After the first 100, membership is $1,069/yr.`,
   },
   {
     q: "Can I cancel?",
@@ -452,11 +453,12 @@ export default async function HomePage() {
               <>
                 <p className="mt-6 flex items-baseline justify-center gap-1">
                   <span className="bg-gradient-to-r from-sky-300 to-amber-300 bg-clip-text text-6xl font-extrabold tracking-tight text-transparent sm:text-7xl">
-                    $50
+                    ${PLANS.launch_annual.amount / 100 / 12}
                   </span>
                   <span className="text-xl font-semibold text-slate-300">/mo</span>
                 </p>
-                <p className="mt-1 text-sm text-slate-300">billed annually ($600/yr)</p>
+                <p className="mt-1 text-sm text-slate-300">billed annually ({PLANS.launch_annual.display})</p>
+                <p className="mt-2 text-xs text-slate-500">Or {PLANS.launch_monthly.display}, billed monthly.</p>
                 <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-400/10 px-4 py-1.5 text-sm font-semibold text-sky-200 ring-1 ring-sky-400/40">
                   <span aria-hidden>🔒</span> Locked in for life
                 </p>
@@ -558,7 +560,7 @@ export default async function HomePage() {
             </div>
             {/* Owner 2026-10-07 12:44 AM NZ: "Launch promo is currently ON" line removed from the hero (copy only). */}
           </div>
-          <HomeVideo />
+          <HomeFoundingOffer />
         </div>
       </section>
 
