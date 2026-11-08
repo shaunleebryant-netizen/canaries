@@ -222,26 +222,25 @@ export function HomeXaiPreview() {
               ))}
             </ul>
             <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+              <div className="rounded-xl border border-canary-gold/30 p-3">
+                <p className="font-semibold text-white">Paid membership</p>
+                <p className="mt-2 text-slate-300">The founding benefits above, including the full dashboard.</p>
+              </div>
               <div className="rounded-xl border border-white/10 p-3">
                 <p className="font-semibold text-white">Free account</p>
                 <ul className="mt-2 space-y-1 text-slate-400">
                   <li>Limited free access</li>
                   <li>ETF tab and ETF charts</li>
-                  <li>Read-only Decide overview</li>
-                  <li>Optional notes, off unless you tick the box. No charge.</li>
+                  <li>Current market regime &amp; composite score</li>
                 </ul>
-              </div>
-              <div className="rounded-xl border border-canary-gold/30 p-3">
-                <p className="font-semibold text-white">Paid membership</p>
-                <p className="mt-2 text-slate-300">The founding benefits above, including the full dashboard.</p>
               </div>
             </div>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a href="/account/signup" className="w-full rounded-xl bg-canary-gold px-8 py-4 text-center text-base font-bold text-slate-950 shadow-[0_0_30px_-5px_rgba(245,158,11,0.7)] transition hover:bg-amber-400 sm:w-auto">
-                Create a free account
-              </a>
-              <a href="/signup" className="w-full rounded-xl border border-white/20 px-6 py-4 text-center text-sm font-medium text-white hover:bg-white/5 sm:w-auto">
+              <a href="/signup" className="w-full rounded-xl bg-canary-gold px-8 py-4 text-center text-base font-bold text-slate-950 shadow-[0_0_30px_-5px_rgba(245,158,11,0.7)] transition hover:bg-amber-400 sm:w-auto">
                 Founding annual · US$35/mo
+              </a>
+              <a href="/account/signup" className="w-full rounded-xl border border-white/20 px-6 py-4 text-center text-sm font-medium text-white hover:bg-white/5 sm:w-auto">
+                Create a free account
               </a>
             </div>
           </div>
