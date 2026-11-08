@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import tapeJson from "../../data/ticker-tape.json";
 import {
   AMBER_COMPOSITE_WARNING,
@@ -29,6 +30,9 @@ type TickerTapeFile = {
 
 const tape = tapeJson as TickerTapeFile;
 
+/** Mount point for the members dashboard quote scroller. Marks stay on every other page. */
+export const DASHBOARD_QUOTE_TAPE_ID = "dashboard-quote-tape";
+
 /**
  * Sitewide header tape. Groups are baked from data/ticker-tape.json (rebuilt
  * each pack). An optional endpoint can replace groups after mount. A red or
@@ -36,6 +40,8 @@ const tape = tapeJson as TickerTapeFile;
  * Amber is the strip only; red still has its own members popup elsewhere.
  */
 export function TickerTape({ endpoint }: { endpoint?: string }) {
+  const pathname = usePathname();
+  const quotes = pathname === "/members";
   const [groups, setGroups] = useState<TickerTapeGroup[]>(tape.groups ?? []);
   const [light, setLight] = useState<string | null | undefined>(tape.light);
 
@@ -58,7 +64,7 @@ export function TickerTape({ endpoint }: { endpoint?: string }) {
   const visible = groups.filter((g) => Array.isArray(g.tickers) && g.tickers.length > 0);
   const showRedWarning = isRedCompositeLight(light);
   const showAmberWarning = isAmberCompositeLight(light);
-  if (!visible.length && !showRedWarning && !showAmberWarning) return null;
+  if (!quotes && !visible.length && !showRedWarning && !showAmberWarning) return null;
 
   const row = (key: string) => (
     <div className="flex shrink-0 items-center" aria-hidden={key === "b"}>
@@ -90,7 +96,9 @@ export function TickerTape({ endpoint }: { endpoint?: string }) {
           {AMBER_COMPOSITE_WARNING}
         </p>
       ) : null}
-      {visible.length ? (
+      {quotes ? (
+        <div id={DASHBOARD_QUOTE_TAPE_ID} className="min-h-8" />
+      ) : visible.length ? (
         <div className="ticker-tape overflow-hidden py-1.5 font-mono text-xs tracking-wide">
           <div className="ticker-track flex w-max">
             {row("a")}
