@@ -44,7 +44,6 @@ import { BookingModalButton } from "@/components/BookingModalButton";
 import { LearnCanariesButton } from "@/components/LearnCanariesButton";
 import { CompositeHistoryChart } from "@/components/CompositeHistoryChart";
 import { ExplainTitle } from "@/components/ExplainTitle";
-import { LockedUniverseButton } from "@/components/LimitedAccessNotice";
 import { ScannerSearch } from "@/components/ScannerSearch";
 import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
@@ -341,7 +340,12 @@ export async function MembersDashboard({
                   initialTab={initialTab}
                   stocksTop={paid ? <>{/* Owner t765u: Ideas box removed from Stocks. */}{/* Owner t773u: drop outer FoldBox — GrowthScoreRanking already collapses. */}{MEMBERS_GROWTH_SCORE && growthRanking.length ? (<GrowthScoreRanking rows={growthRanking} asOf={loadGrowthAsOf()} />) : null}</> : null}
                   stocksBottom={null /* Owner t757u: Track record moved to Backtest. */}
-                  toolbarEnd={paid ? universeButton : <LockedUniverseButton />}
+                  toolbarEnd={paid ? universeButton : (
+                    <TickerUniverseButton
+                      locked
+                      className="whitespace-nowrap rounded-lg border border-[#eab308]/40 px-3 py-1.5 text-xs font-medium text-[#eab308] hover:bg-[#eab308]/10"
+                    />
+                  )}
                   insiders={paid ? (
                     <section aria-labelledby="insiders-tab-label" className="space-y-3">
                       {themed ? (
