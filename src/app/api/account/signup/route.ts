@@ -82,7 +82,7 @@ export async function POST(request: Request) {
   // Soft session: /account OK; /members blocked until email_verified_at (see guard).
   const res = NextResponse.json({
     ok: true,
-    next: autoVerify ? "/account" : "/account/verify?pending=1",
+    next: autoVerify ? "/members" : "/account/verify?pending=1",
     ...(testModeVerifyLink ? { testModeVerifyLink } : {}),
   });
   await createSessionCookie(db, res, id, request.headers.get("user-agent"));

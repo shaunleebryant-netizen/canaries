@@ -5,8 +5,15 @@ import { resolveViewer } from "@/lib/members/previewAccess";
 export async function DashboardNavLink({ className }: { className: string }) {
   const viewer = await resolveViewer();
   return (
-    <Link href={viewer.signedIn ? "/members" : "/signup"} className={className}>
-      Dashboard
-    </Link>
+    <>
+      {viewer.signedIn ? (
+        <Link href="/account" className="hover:text-canary-gold">
+          Account
+        </Link>
+      ) : null}
+      <Link href={viewer.signedIn ? "/members" : "/signup"} className={className}>
+        Dashboard
+      </Link>
+    </>
   );
 }

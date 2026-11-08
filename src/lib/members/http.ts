@@ -20,7 +20,7 @@ export const jsonError = (error: string, status = 400) => NextResponse.json({ ok
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Only allow same-site relative redirects. */
-export function safeNext(n: string | undefined, fallback = "/account"): string {
+/** Only allow same-site relative redirects. Default after sign-in is the dashboard. */
+export function safeNext(n: string | undefined, fallback = "/members"): string {
   return n && n.startsWith("/") && !n.startsWith("//") ? n : fallback;
 }
