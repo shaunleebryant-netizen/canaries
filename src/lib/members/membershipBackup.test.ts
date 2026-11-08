@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { applyBackupAttempt, marketingOptIn, successQueryGrantsAccess } from "./membershipBackup";
+import { applyBackupAttempt, backupOutcomeAfterSheetPush, marketingOptIn, successQueryGrantsAccess } from "./membershipBackup";
 
 test("a success URL does not grant access", () => {
   assert.equal(successQueryGrantsAccess("success"), false);
@@ -13,6 +13,20 @@ test("marketing consent is stored only for boolean true", () => {
   assert.equal(marketingOptIn("true"), false);
   assert.equal(marketingOptIn(1), false);
   assert.equal(marketingOptIn(undefined), false);
+});
+
+test("the Canary Members sheet push is the only completed backup", () => {
+  const missing = backupOutcomeAfterSheetPush({ pushed: false, credentialMissing: true, attempts: 0 });
+  assert.equal(missing.complete, false);
+  assert.equal(missing.status, "pending");
+  assert.equal(missing.attempts, 0);
+  assert.equal(missing.unresolved, "GOOGLE_SERVICE_ACCOUNT_JSON");
+  const failedPush = backupOutcomeAfterSheetPush({ pushed: false, credentialMissing: false, attempts: 0 });
+  assert.equal(failedPush.status, "pending");
+  assert.equal(failedPush.attempts, 1);
+  assert.equal(failedPush.complete, false);
+  const again = backupOutcomeAfterSheetPush({ pushed: true, credentialMissing: false, attempts: failedPush.attempts });
+  assert.deepEqual(again, { status: "synced", attempts: 2, complete: true, unresolved: null });
 });
 
 test("backup retry stays pending, then fails, and success is the only synced state", () => {
