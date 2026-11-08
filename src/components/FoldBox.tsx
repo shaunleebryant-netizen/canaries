@@ -4,17 +4,26 @@ import { useEffect, useState, type ReactNode } from "react";
 
 const KEY = (id: string) => `canary.fold.${id}`;
 
-export function FoldBox({ id, summary, defaultOpen = false, children }: { id: string; summary: ReactNode; defaultOpen?: boolean; children: ReactNode }) {
+/** Saved choice applies only when the box remembers. Stocks scanners pass persist false so a visit starts open. */
+export function initialFoldOpen(defaultOpen: boolean, stored: string | null, persist: boolean): boolean {
+  if (!persist) return defaultOpen;
+  if (stored === "0" || stored === "1") return stored === "1";
+  return defaultOpen;
+}
+
+export function FoldBox({ id, summary, defaultOpen = false, persist = true, children }: { id: string; summary: ReactNode; defaultOpen?: boolean; persist?: boolean; children: ReactNode }) {
   const [open, setOpen] = useState(defaultOpen);
   useEffect(() => {
+    if (!persist) return;
     try {
       const v = localStorage.getItem(KEY(id));
-      if (v === "1" || v === "0") setOpen(v === "1");
+      setOpen(initialFoldOpen(defaultOpen, v, true));
     } catch { /* ignore */ }
-  }, [id]);
+  }, [id, persist, defaultOpen]);
   const toggle = () => {
     const next = !open;
     setOpen(next);
+    if (!persist) return;
     try { localStorage.setItem(KEY(id), next ? "1" : "0"); } catch { /* ignore */ }
   };
   return (
