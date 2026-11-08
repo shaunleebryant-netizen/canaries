@@ -1,8 +1,8 @@
 /**
  * Durable backup queue for membership changes. Access does not wait on this.
- * The backup destination is the existing Canary Members Google Sheet, written only by
- * scripts/export-members-sheet.mjs --remote --push. pending is not a completed backup.
- * A missing service-account file does not mark rows synced.
+ * The release backup is a verified file in the private Canary Dashboard Backups Drive folder.
+ * scripts/membership-drive-backup.mjs marks rows only after that verification.
+ * A sheet push and a finished export do not mark rows synced.
  */
 export type BackupStatus = "pending" | "synced" | "failed";
 
@@ -15,21 +15,13 @@ export function successQueryGrantsAccess(_query: string | undefined): boolean {
   return false;
 }
 
-/** Sheet push is the only success. A missing key leaves every covered row pending. A failed push stays retryable. */
+/** A sheet push never completes the Drive backup. The row stays pending for the next verified snapshot. */
 export function backupOutcomeAfterSheetPush(input: {
   pushed: boolean;
-  credentialMissing: boolean;
   attempts: number;
-}): { status: BackupStatus; attempts: number; complete: boolean; unresolved: string | null } {
-  if (input.credentialMissing || !input.pushed) {
-    return {
-      status: "pending",
-      attempts: input.credentialMissing ? input.attempts : input.attempts + 1,
-      complete: false,
-      unresolved: input.credentialMissing ? "GOOGLE_SERVICE_ACCOUNT_JSON" : null,
-    };
-  }
-  return { status: "synced", attempts: input.attempts + 1, complete: true, unresolved: null };
+}): { status: BackupStatus; attempts: number; complete: boolean } {
+  void input.pushed;
+  return { status: "pending", attempts: input.attempts, complete: false };
 }
 
 /** Ids read before the sheet snapshot. Later rows, and rows already synced, are excluded. */

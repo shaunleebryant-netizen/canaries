@@ -14,6 +14,10 @@
 - Workers logs 2026-09-19..26 (max window): 0 POSTs to `/api/newsletter`, `/api/support`, `/api/tuition`;
   0 `*-stub]` log lines. Anything submitted before 2026-09-19 cannot be recovered.
 
+## Release backup
+
+The release drain is a verified file in the private Canary Dashboard Backups Drive folder. The commands and the restore limits are in `docs/ops/membership-drive-backup.md`. A service-account key is not required, and there is no backup callback URL. The sheet below is an optional copy. Updating it does not acknowledge the outbox.
+
 ## Daily sheet
 - Sheet: "Canary Members" (native Google Sheet) in Drive folder "Canary Dashboard Backups",
   id `12kYo2BehTgE-7EyNHLze8KNCkkf0v9h61ARO0iFHiJ4`. Tabs: Signups, Members, Payments, Cancellations, Log.
@@ -55,9 +59,16 @@
   exports/resend-dns-records.json to the Cloudflare zone.
 
 ## Daily sheet routine
-    cd /workspace/repos/canaries
-    GOOGLE_SERVICE_ACCOUNT_JSON=/path/sa.json OUT_DIR=/workspace/exports/members-sheet \
-      node scripts/export-members-sheet.mjs --remote --push
+
+Optional. This does not acknowledge the outbox. The release backup is `docs/ops/membership-drive-backup.md`.
+
+```
+cd /workspace/repos/canaries
+GOOGLE_SERVICE_ACCOUNT_JSON=/path/sa.json OUT_DIR=/workspace/exports/members-sheet \
+  node scripts/export-members-sheet.mjs --remote --push
+```
+
 Needs: wrangler logged in (reads remote D1) and a Google service account key with Editor access
 to the sheet (share the sheet with the service account's client_email). Without the key the
-export still runs and writes CSVs; the push step exits 2 and the sheet is not touched.
+export still runs and writes CSVs; the push step exits 2 and the sheet is not touched. The outbox
+stays pending either way.

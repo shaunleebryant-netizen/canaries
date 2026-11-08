@@ -36,8 +36,8 @@ export async function enqueueMembershipBackup(
 }
 
 /**
- * Does not write the Canary Members sheet and does not mark rows synced.
- * The sheet is updated only by scripts/export-members-sheet.mjs --remote --push.
+ * Does not upload to Drive and does not mark rows synced.
+ * scripts/membership-drive-backup.mjs ack is the only acknowledgement.
  */
 export async function flushMembershipBackups(db: D1Database, limit = 20): Promise<{ synced: number; pending: number; failed: number }> {
   void db;
