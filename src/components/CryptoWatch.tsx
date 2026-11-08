@@ -32,7 +32,8 @@ export function CryptoWatch({ alerts }: { alerts: CryptoWatchAlert[] }) {
       </div>
       <p className="mt-1 shrink-0 text-[10px] leading-snug text-slate-500">
         Top coins by market cap, with the same marks as the
-        Fish and Sweaty boxes.
+        Fish and Sweaty boxes. Fish and Smiley are withheld when the Composite
+        on that mark&apos;s date is red or not recorded. Sweaty and Skull stay visible.
       </p>
 
       {alerts.length === 0 ? (

@@ -49,7 +49,7 @@ import { ScannerSearch } from "@/components/ScannerSearch";
 import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
 import { loadSpxClosesForDates, loadSpxSessionDates } from "@/lib/loadSpxCloses";
-import { datedPrintsForScanner, etfForScanner, exhaustionForScanner, fishForScanner, lastTradingSessions } from "@/lib/scannerWindow";
+import { cryptoForScanner, datedPrintsForScanner, etfForScanner, exhaustionForScanner, fishForScanner, lastTradingSessions } from "@/lib/scannerWindow";
 import { resolveViewer } from "@/lib/members/previewAccess";
 import { DecideLayout } from "@/components/DecideLayout";
 import { DecideHeading, ScanHeading } from "@/components/DecideTheme";
@@ -161,7 +161,7 @@ export async function MembersDashboard({
   // Owner 2026-10-06: ETF box split into Sector ETFs + Countries (Countries does not feed Main Scanner).
   const etfCountryAlerts = loadEtfCountryAlerts();
   const etfCountryHeldSince = loadEtfCountryHeldSince();
-  const cryptoWatchAlerts = loadCryptoWatchAlerts();
+  const cryptoWatchAlerts = cryptoForScanner(loadCryptoWatchAlerts(), printArchive, printSessions).rows;
   const moneyFlowAlerts = loadMoneyFlowAlerts();
   const ibdSetupsAlerts = loadIbdSetupsAlerts();
   const cciFairy = loadCciFairy(); // Owner t795u: ★ condition (Main Scanner bullish).

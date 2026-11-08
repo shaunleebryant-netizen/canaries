@@ -15,6 +15,13 @@ export interface CryptoWatchAlert {
   asOf: string;
   note?: string;
   timeframe?: string;
+  /** Mark dates. The row asOf is not a mark date. */
+  smileAsOf?: string;
+  fishAsOf?: string;
+  mfiAsOf?: string;
+  fairyAsOf?: string;
+  exhaustionAsOf?: string;
+  skullAsOf?: string;
 }
 
 type CryptoWatchFile =
