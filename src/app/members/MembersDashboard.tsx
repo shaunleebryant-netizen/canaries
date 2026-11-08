@@ -46,8 +46,10 @@ import { CompositeHistoryChart } from "@/components/CompositeHistoryChart";
 import { ExplainTitle } from "@/components/ExplainTitle";
 import { LockedUniverseButton } from "@/components/LimitedAccessNotice";
 import { StockMarkSearch } from "@/components/StockMarkSearch";
+import { ScannerSearch } from "@/components/ScannerSearch";
 import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
+import { loadSpxClosesForDates } from "@/lib/loadSpxCloses";
 import { resolveViewer } from "@/lib/members/previewAccess";
 import { DecideLayout } from "@/components/DecideLayout";
 import { DecideHeading, ScanHeading } from "@/components/DecideTheme";
@@ -424,7 +426,19 @@ export async function MembersDashboard({
                           Scanners
                         </h2>
                       )}
-                      {signalHistory ? <StockMarkSearch data={signalHistory} granted={viewer.indicatorGrant} /> : null}
+                      <ScannerSearch
+                        groups={[
+                          { id: "fish", label: "Fish", rows: fishAlerts },
+                          { id: "mfi", label: "MFI", rows: moneyFlowAlerts },
+                          { id: "fairy", label: "Fairy Godmother", rows: cciFairy.signals },
+                          { id: "ibd", label: "IBD", rows: ibdSetupsAlerts },
+                          { id: "baby-bulls", label: "Baby Bulls", rows: [...weeklyTurns.bulls, ...weeklyTurns.bears] },
+                          { id: "warriors", label: "Warriors", rows: bullishStrong },
+                          { id: "sweaty", label: "Sweaty", rows: exhaustionAlerts },
+                          { id: "bearish", label: "Bearish", rows: mainScanner.bearish },
+                        ]}
+                        universe={loadTickerUniverse().find((g) => g.id === "stocks")?.items ?? []}
+                      />
                       {/* Owner t852u: three fixed rows. Bullish Setups, New Highs, New Lows removed from Stocks. */}
                       <div className="space-y-3">
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -478,6 +492,7 @@ export async function MembersDashboard({
                         ) : null}
                       </div>
                       </div>
+                      {signalHistory ? <StockMarkSearch data={signalHistory} granted={viewer.indicatorGrant} /> : null}
                       {/* Owner 2026-10-10: Insider Buying moved to the Insiders tab; X Rumours keeps its
                           full-width row here, where Insider Buying used to be. */}
                       {/* Owner t752u: X Rumours removed from Stocks for now. */}
@@ -814,7 +829,11 @@ export async function MembersDashboard({
                 ))}
               </ul>
             </div>
-            <CompositeHistoryChart points={compositeArchive.points} source={compositeArchive.source} />
+            <CompositeHistoryChart
+              points={compositeArchive.points}
+              conflicts={compositeArchive.conflicts}
+              benchmark={loadSpxClosesForDates(compositeArchive.points.map((p) => p.date))}
+            />
             {heldInputs.some((c) => c.id !== "finra-margin") ? (
               <ul className="mt-2 space-y-0.5 border-t border-white/5 pt-1.5 text-[10px] text-slate-500">
                 {heldInputs.filter((c) => c.id !== "finra-margin").map((c) => (
