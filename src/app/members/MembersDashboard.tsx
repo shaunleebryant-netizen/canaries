@@ -42,7 +42,6 @@ import { quoteStripChartNames } from "@/lib/quoteStripChart";
 import { LocalTime } from "@/components/LocalTime";
 import { BookingModalButton } from "@/components/BookingModalButton";
 import { LearnCanariesButton } from "@/components/LearnCanariesButton";
-import { CanaryMarkGroups } from "@/components/CanaryMarkGroups";
 import { CompositeHistoryChart } from "@/components/CompositeHistoryChart";
 import { ExplainTitle } from "@/components/ExplainTitle";
 import { LockedUniverseButton } from "@/components/LimitedAccessNotice";
@@ -397,9 +396,8 @@ export async function MembersDashboard({
                     paid ? (
                     <>
                       <CanaryBookingNote />
-                      <CanaryMarkGroups />
                       <CanaryTable
-                        rows={canaries.filter((c) => c.id !== "finra-margin")}
+                        rows={canaries}
                         emptyNotes={sparkPayload.emptyNotes}
                       />
                     </>
@@ -672,7 +670,7 @@ export async function MembersDashboard({
           {!SCANNER_DECLUTTER ? (
             <>
               <CanaryBookingNote />
-              <CanaryTable rows={canaries.filter((c) => c.id !== "finra-margin")} emptyNotes={sparkPayload.emptyNotes} />
+              <CanaryTable rows={canaries} emptyNotes={sparkPayload.emptyNotes} />
             </>
           ) : null}
 
