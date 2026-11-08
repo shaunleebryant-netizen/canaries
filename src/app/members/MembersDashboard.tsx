@@ -54,7 +54,7 @@ import { resolveViewer } from "@/lib/members/previewAccess";
 import { DecideLayout } from "@/components/DecideLayout";
 import { DecideHeading, ScanHeading } from "@/components/DecideTheme";
 import { DECIDE_THEME, MEMBERS_CRYPTO_HERO_CHARTS, MEMBERS_DESK_IDEAS, MEMBERS_GROWTH_SCORE, MEMBERS_HISTORY_TAB, MEMBERS_SECTOR_SCREENER, MEMBERS_X_RUMOURS, SCANNER_DECLUTTER } from "@/lib/featureFlags";
-import { SectorScreener } from "@/components/SectorScreener";
+import { SectorEtfBoard } from "@/components/SectorEtfBoard";
 import {
   ScannerDeclutterShell,
   ScannerShowMore,
@@ -531,7 +531,7 @@ export async function MembersDashboard({
                           ETFs
                         </h2>
                       )}
-                      {MEMBERS_SECTOR_SCREENER ? <SectorScreener etfAlerts={etfShown} /> : null}
+                      {MEMBERS_SECTOR_SCREENER ? <SectorEtfBoard /> : null}
                       {/* Owner t697u 2026-10-14: Countries box + Country Screener removed from the ETFs tab. */}
                       <FoldBox id="etf" summary={sum("Sector ETFs", etfShown)}><ScannerShowMore>
                         <EtfWatch alerts={etfShown} />
