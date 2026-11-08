@@ -15,6 +15,9 @@ import dynamic from "next/dynamic";
 import { toTradingViewSymbol } from "@/lib/tradingViewSymbol";
 import { useMyStocks } from "@/lib/myStocksStore";
 import type { UniverseGroup } from "@/lib/tickerUniverse";
+import { TickerLightboxStats } from "@/components/TickerLightboxStats";
+import type { UniverseLightboxPack } from "@/lib/tickerLightboxStats";
+import { isFreeEtfChart } from "@/lib/etfChartAccess";
 
 /** v2 candlestick + marks dialog (owner t581u PREVIEW); own chunk, only loaded when v2 is on. */
 const TickerChartDialogV2 = dynamic(() => import("@/components/TickerChartV2").then((m) => m.TickerChartDialogV2), {
@@ -104,6 +107,7 @@ function TickerChartDialog({
   onClose,
   titleId,
   closeRef,
+  lightbox,
 }: {
   ticker: string | null;
   interval?: ChartInterval;
@@ -111,6 +115,7 @@ function TickerChartDialog({
   onClose: () => void;
   titleId: string;
   closeRef: React.RefObject<HTMLButtonElement | null>;
+  lightbox?: UniverseLightboxPack | null;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const chartHostRef = useRef<HTMLDivElement>(null);
@@ -297,6 +302,7 @@ function TickerChartDialog({
             <p className="mt-0.5 truncate text-[10px] text-slate-500">
               TradingView · {tvSymbol} · no trade actions from this dashboard
             </p>
+            <TickerLightboxStats ticker={ticker} pack={lightbox} />
           </div>
           <button
             ref={closeRef}
@@ -324,8 +330,7 @@ function TickerChartDialog({
         </div>
 
         <p className="shrink-0 border-t border-white/10 px-4 py-2.5 text-[11px] leading-snug text-slate-500 sm:px-5">
-          Education only — chart for study context. Not buy/sell advice. No
-          order buttons from Canary.
+          Not financial advice
         </p>
       </div>
     </div>
@@ -342,6 +347,8 @@ export function TickerChartProvider({
   myStocks = false,
   universe,
   names,
+  lightbox,
+  chartAccess = "paid",
 }: {
   children: ReactNode;
   /** MEMBERS_TICKER_CHART_V2 / design preview: candlestick + marks dialog. */
@@ -351,6 +358,10 @@ export function TickerChartProvider({
   /** Our scanner universe (stars and My Stocks only accept these tickers). */
   universe?: UniverseGroup[];
   names?: Record<string, string>;
+  /** Canary Score and EPS for fish-universe companies. Off-universe charts omit the row. */
+  lightbox?: UniverseLightboxPack | null;
+  /** Free accounts may open Sector ETF charts only. The API enforces the same rule. */
+  chartAccess?: "paid" | "free-etf";
 }) {
   const allowed = useMemo(
     () => (universe ? new Set(universe.flatMap((g) => g.items.map((i) => i.ticker.toUpperCase()))) : undefined),
@@ -364,11 +375,13 @@ export function TickerChartProvider({
   const lastTriggerRef = useRef<HTMLElement | null>(null);
 
   const openTicker = useCallback((next: string, iv: ChartInterval = "D") => {
+    const symbol = next.trim().toUpperCase();
+    if (chartAccess === "free-etf" && !isFreeEtfChart(symbol)) return;
     setChartInterval(iv);
     lastTriggerRef.current =
       (document.activeElement as HTMLElement | null) ?? null;
-    setTicker(next.trim().toUpperCase());
-  }, []);
+    setTicker(symbol);
+  }, [chartAccess]);
 
   const onClose = useCallback(() => {
     setTicker(null);
@@ -402,6 +415,8 @@ export function TickerChartProvider({
             titleId={titleId}
             name={names?.[ticker]}
             star={myStocksValue}
+            lightbox={chartAccess === "paid" ? lightbox : null}
+            chartAccess={chartAccess}
           />
         ) : null
       ) : (
@@ -412,6 +427,7 @@ export function TickerChartProvider({
           onClose={onClose}
           titleId={titleId}
           closeRef={closeRef}
+          lightbox={lightbox}
         />
       )}
     </TickerChartContext.Provider>

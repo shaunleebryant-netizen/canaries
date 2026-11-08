@@ -4,6 +4,7 @@ import { HeldNote } from "./HeldNote";
 import { MEMBERS_CANARY_CHARTS } from "@/lib/featureFlags";
 import { CanaryChartButtonLazy as CanaryChartButton } from "./CanaryChartButtonLazy";
 import { CANARY_COPY, howCalculated, plainLastReading, plainRead, plainSource } from "@/lib/canaryCopy";
+import { groupCanaryRows } from "@/lib/canaryGroups";
 
 type Row = MembersPayload["canaries"][0];
 
@@ -26,50 +27,13 @@ function scoreClass(row: Row) {
   return "text-canary-amber";
 }
 
-export function CanaryTable({
-  rows,
+function CanaryRow({
+  c,
   emptyNotes,
 }: {
-  rows: MembersPayload["canaries"];
-  /** Per-seat note when no clean Yahoo series (never invent). */
+  c: Row;
   emptyNotes?: Record<string, string>;
 }) {
-  return (
-    <div
-      id="canary-table"
-      className="scroll-mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/70 shadow-sm"
-    >
-      <div className="border-b border-white/10 px-4 py-3">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-canary-gold">
-          Canary readings
-        </h2>
-        <p className="mt-1 text-xs leading-snug text-slate-400">
-          Each row is one of our canaries, an early-warning signal for the
-          market. Every night each one is checked against its own recent trend
-          and marked Healthy, Neutral or Warning. Each canary then feeds into
-          the overall score with its own weighting, since some matter more
-          than others, and that score sets the traffic light. The small chart shows the last couple of weeks. How calculated
-          shows the market expression behind each canary. If a row says
-          &ldquo;held since&rdquo; a date, it wasn&apos;t updated today and we
-          are showing its last good reading.
-        </p>
-        <p className="mt-1 text-[11px] uppercase tracking-wide text-slate-500">
-          Education only
-        </p>
-      </div>
-      <table className="min-w-full text-left text-sm">
-        <thead className="border-b border-white/10 bg-slate-950/60 text-xs uppercase tracking-wide text-slate-400">
-          <tr>
-            <th className="px-3 py-3 font-medium">Recent</th>
-            <th className="px-4 py-3 font-medium">Canary</th>
-            <th className="px-4 py-3 font-medium">How calculated</th>
-            <th className="px-4 py-3 font-medium">Last reading</th>
-            <th className="px-4 py-3 font-medium">Signal</th>
-            <th className="px-4 py-3 font-medium">What it says</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((c) => {
             const unverified =
               c.status === "UNVERIFIED" ||
               c.score === "UNVERIFIED" ||
@@ -82,7 +46,6 @@ export function CanaryTable({
             const derived = howCalculated(c.name, c.description);
             return (
               <tr
-                key={c.id}
                 className={`border-b border-white/5 last:border-0 ${
                   unverified ? "bg-slate-950/40" : ""
                 }`}
@@ -187,9 +150,73 @@ export function CanaryTable({
                 </td>
               </tr>
             );
-          })}
-        </tbody>
-      </table>
+}
+
+const COLUMNS = ["Recent", "Canary", "How calculated", "Last reading", "Signal", "What it says"] as const;
+
+export function CanaryTable({
+  rows,
+  emptyNotes,
+}: {
+  rows: MembersPayload["canaries"];
+  /** Per-seat note when no clean Yahoo series (never invent). */
+  emptyNotes?: Record<string, string>;
+}) {
+  const { sections, rest } = groupCanaryRows(rows);
+  const blocks = [
+    ...sections,
+    ...(rest.length
+      ? [{ id: "rest" as const, title: "Other readings", subtitle: "Not in the three market groups.", rows: rest }]
+      : []),
+  ];
+  return (
+    <div id="canary-table" className="scroll-mt-4 space-y-4">
+      <div className="rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 shadow-sm">
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-canary-gold">
+          Canary readings
+        </h2>
+        <p className="mt-1 text-xs leading-snug text-slate-400">
+          Each row is one of our canaries, an early-warning signal for the
+          market. Every night each one is checked against its own recent trend
+          and marked Healthy, Neutral or Warning. Each canary then feeds into
+          the overall score with its own weighting, since some matter more
+          than others, and that score sets the traffic light. The small chart shows the last couple of weeks. How calculated
+          shows the market expression behind each canary. If a row says
+          &ldquo;held since&rdquo; a date, it wasn&apos;t updated today and we
+          are showing its last good reading.
+        </p>
+        <p className="mt-1 text-[11px] uppercase tracking-wide text-slate-500">
+          Education only
+        </p>
+      </div>
+      {blocks.map((block) => (
+        <section key={block.id} aria-labelledby={`canary-group-${block.id}`} className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70 shadow-sm">
+          <div className="border-b border-white/10 px-4 py-3">
+            <h3 id={`canary-group-${block.id}`} className="text-sm font-semibold text-white sm:text-base">
+              {block.title}
+            </h3>
+            <p className="mt-0.5 text-xs leading-snug text-slate-400">{block.subtitle}</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="border-b border-white/10 bg-slate-950/60 text-xs uppercase tracking-wide text-slate-400">
+                <tr>
+                  {COLUMNS.map((label) => (
+                    <th key={label} className="px-3 py-2 font-medium sm:px-4 sm:py-3">
+                      {label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {block.rows.map((c) => (
+                  <CanaryRow key={c.id} c={c} emptyNotes={emptyNotes} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

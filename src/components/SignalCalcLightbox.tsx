@@ -33,7 +33,7 @@ function FishBody() {
         beaten-down names worth a closer look. Tap a ticker to see its chart.
       </p>
       <p className="border-l-2 border-canary-amber/70 pl-3 italic text-amber-100/90">
-        &ldquo;While peak optimism is hard to catch, peak pessimism is a lot easier.&rdquo;
+        &ldquo;Peak optimism is hard to catch, peak pessimism is often easier.&rdquo;
       </p>
       {EDU}
     </>

@@ -18,6 +18,12 @@ export interface FundRow {
   gw: FundWhy;
   ev: number | null;
   evw: FundWhy;
+  /** EPS growth q/q (latest quarter vs prior quarter, fraction); Q4 derived as FY − 9M. */
+  qq?: number | null;
+  qqw?: FundWhy;
+  /** Analyst average price target (Yahoo) and number of opinions. Show tm only when ao > 5. */
+  tm?: number | null;
+  ao?: number | null;
   /** 1 = annual-only filer (internal; not shown to members). */
   a?: number;
   /** Latest fiscal period end used. */
@@ -45,4 +51,9 @@ export function pickFundamentals(tickers: string[]): Record<string, FundRow> {
   const out: Record<string, FundRow> = {};
   for (const t of tickers) if (all[t]) out[t] = all[t];
   return out;
+}
+
+/** Every fundamentals row (server only; used by the Ticker Universe table). */
+export function loadAllFundamentals(): Record<string, FundRow> {
+  return raw?.tickers ?? {};
 }

@@ -6,7 +6,9 @@ import { getMembersDb, nowSec, type D1Database } from "@/lib/members/db";
 import { emailSendingEnabled, getEmailSender } from "@/lib/email/sender";
 
 export type LeadSource = "letter" | "seminar" | "tuition" | "support";
-export type LeadTag = "letter" | "founding_interest" | "seminar" | "tuition" | "support";
+export type LeadTag = "letter" | "founding_interest" | "seminar" | "tuition" | "support" | "launch_updates"
+  // Subscribe lightbox topics (2026-11-02)
+  | "weekly_setups" | "events" | "product_updates" | "member_alerts" | "course_openings";
 
 export type LeadRow = {
   id: string;

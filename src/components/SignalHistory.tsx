@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import { TickerLink } from "@/components/TickerChartLightbox";
 import {
   expandSignalHistory,
+  formatHorizonPct,
   type HistoryGroup,
   type HistoryKind,
   type SignalHistoryPayload,
@@ -22,6 +23,7 @@ const KINDS: { id: HistoryKind; emoji: string; label: string; title: string }[] 
   { id: "fish", emoji: "🐟", label: "Fish", title: "Fish: a sold-off name starting to find its feet" },
   { id: "smile", emoji: "🙂", label: "Washout", title: "Washout: selling looks worn out" },
   { id: "mfi", emoji: "💵", label: "MFI", title: "MFI washout: selling washed out, money flow turning up" },
+  { id: "fairy", emoji: "🧚", label: "Bottom Zone", title: "Bottom Zone: WVF extreme + RSI(14) under 35 + up close (study mark)" },
 ];
 const KIND_BY_ID = Object.fromEntries(KINDS.map((k) => [k.id, k])) as Record<HistoryKind, (typeof KINDS)[number]>;
 
@@ -66,9 +68,15 @@ function pctSince(r: SignalHistoryRow): number | null {
   return ((r.priceNow - r.priceAtSignal) / r.priceAtSignal) * 100;
 }
 
+/** Preview (owner pt800u): close-to-close % from the mark close to the close N sessions later. */
+const HORIZONS = [3, 5, 10] as const;
+function pctFwd(r: SignalHistoryRow, h: 0 | 1 | 2): number | null {
+  const c = r.fwd[h];
+  if (c == null || !r.priceAtSignal) return null;
+  return ((c - r.priceAtSignal) / r.priceAtSignal) * 100;
+}
 function fmtPct(v: number | null): string {
-  if (v == null || !Number.isFinite(v)) return "—";
-  return `${v >= 0 ? "+" : ""}${v.toFixed(1)}%`;
+  return formatHorizonPct(v);
 }
 
 /** Owner t570u: green when up, red when down, neutral grey when it rounds to 0.0%. */
@@ -109,14 +117,16 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
   const allRows = useMemo(() => expandSignalHistory(data), [data]);
   const asOf = data.asOf ?? allRows[0]?.date ?? "";
   const minDate = data.windowStart ?? allRows[allRows.length - 1]?.date ?? "";
-  const [kinds, setKinds] = useState<HistoryKind[]>(["fish", "smile", "mfi"]);
-  const [group, setGroup] = useState<HistoryGroup | "all">("all");
+  const [kinds, setKinds] = useState<HistoryKind[]>(["fish", "smile", "mfi", "fairy"]);
+  const [group, setGroup] = useState<HistoryGroup | "all">("stock");
   const [preset, setPreset] = useState<Preset>("all");
   const [from, setFrom] = useState(minDate);
   const [to, setTo] = useState(asOf);
   const [q, setQ] = useState("");
-  const [showPct, setShowPct] = useState(true);
+  const [horizons, setHorizons] = useState<number[]>([5]);
+  const [showSince, setShowSince] = useState(false);
   const [limit, setLimit] = useState(PAGE);
+  const [colourLimit, setColourLimit] = useState(false);
 
   const reset = () => setLimit(PAGE);
 
@@ -129,9 +139,13 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
       if (to && r.date > to) return false;
       if (needle && !r.ticker.toLowerCase().includes(needle) && !(r.name ?? "").toLowerCase().includes(needle))
         return false;
+      if (colourLimit) {
+        const colour = data.compositeByDate?.[r.date];
+        if (colour !== "amber" && colour !== "green") return false;
+      }
       return true;
     });
-  }, [allRows, kinds, group, from, to, q]);
+  }, [allRows, kinds, group, from, to, q, colourLimit, data.compositeByDate]);
 
   const shown = filtered.slice(0, limit);
   const uniqueTickers = useMemo(() => new Set(filtered.map((r) => r.ticker)).size, [filtered]);
@@ -157,7 +171,7 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
         <div className="min-w-0">
           {/* Owner t572u: tab + heading renamed "Backtest" (heading sits above the card on /members). */}
           <p className="text-xs text-slate-400">
-            Past 🐟 🙂 💵 marks by date, including names no longer shown in the scanner boxes.
+            Past 🐟 🙂 💵 🧚 marks by date, including names no longer shown in the scanner boxes.
           </p>
         </div>
         <p className="text-[10px] uppercase tracking-wide text-slate-500">
@@ -165,7 +179,22 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
         </p>
       </div>
 
-      {/* Filters */}
+      <div className="mt-3">
+        <input
+          type="search"
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            reset();
+          }}
+          placeholder="Search ticker or company"
+          aria-label="Search ticker or company"
+          className="w-full rounded-md border border-white/10 bg-slate-950/70 px-2.5 py-1.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-sky-400/50 focus:outline-none"
+        />
+        <p className="mt-2 text-[11px] leading-snug text-slate-400">Only stocks in our curated list are included.</p>
+      </div>
+
+      {/* Filters sit under search. */}
       <div className="mt-3 flex flex-col gap-2 rounded-lg border border-white/10 bg-slate-950/50 p-2 text-xs lg:flex-row lg:flex-wrap lg:items-center lg:gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <div role="group" aria-label="Mark type" className="inline-flex rounded-lg border border-white/10 bg-slate-950/70 p-0.5">
@@ -247,28 +276,51 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
           </label>
         </div>
         <div className="flex w-full flex-wrap items-center gap-x-4 gap-y-2">
-          <input
-            type="search"
-            value={q}
-            onChange={(e) => {
-              setQ(e.target.value);
-              reset();
-            }}
-            placeholder="Search ticker or company"
-            aria-label="Search ticker or company"
-            className="w-full min-w-0 rounded-md border border-white/10 bg-slate-950/70 px-2.5 py-1.5 text-slate-100 placeholder:text-slate-600 focus:border-sky-400/50 focus:outline-none sm:w-auto sm:flex-1 sm:max-w-xs"
-          />
-          <label className="flex cursor-pointer items-center gap-1.5 text-slate-400">
-            <input
-              type="checkbox"
-              checked={showPct}
-              onChange={(e) => setShowPct(e.target.checked)}
-              className="accent-sky-400"
-            />
-            Show % since
-          </label>
+          <fieldset className="flex flex-wrap items-center gap-3">
+            <legend className="sr-only">Horizons</legend>
+            {HORIZONS.map((h) => (
+              <label key={h} className="flex cursor-pointer items-center gap-1.5 text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={horizons.includes(h)}
+                  onChange={() => {
+                    setHorizons((cur) => (cur.includes(h) ? cur.filter((x) => x !== h) : [...cur, h].sort((a, b) => a - b)));
+                    reset();
+                  }}
+                  className="accent-sky-400"
+                />
+                +{h} sessions (%)
+              </label>
+            ))}
+            <label className="flex cursor-pointer items-center gap-1.5 text-slate-300">
+              <input
+                type="checkbox"
+                checked={showSince}
+                onChange={(e) => setShowSince(e.target.checked)}
+                className="accent-sky-400"
+              />
+              % since
+            </label>
+          </fieldset>
         </div>
       </div>
+
+      <label className="mt-2 flex items-start gap-2 text-[11px] leading-snug text-slate-400">
+        <input
+          type="checkbox"
+          checked={colourLimit}
+          onChange={(e) => {
+            setColourLimit(e.target.checked);
+            reset();
+          }}
+          className="mt-0.5 accent-sky-400"
+        />
+        <span>
+          Optional: only Fish, Smiley, Fairy and MFI from an amber or green close in the pack log
+          {data.gate?.archiveFrom ? ` (${data.gate.archiveFrom} to ${data.gate.archiveTo})` : ""}. Off by default.
+          This is not a performance result. Red or missing scores stay in the list until this is ticked.
+        </span>
+      </label>
 
       <p className="mt-2 text-[11px] text-slate-500">
         {filtered.length.toLocaleString()} marks · {uniqueTickers} tickers · newest first
@@ -277,6 +329,12 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
       {filtered.length === 0 ? (
         <p className="mt-3 rounded-lg border border-white/5 bg-slate-950/40 px-3 py-6 text-center text-xs text-slate-400">
           No marks match these filters.
+          {q.trim() ? (
+            <span className="mx-auto mt-2 block max-w-md leading-relaxed text-slate-500">
+              Can&apos;t find your stock? We only scan about 200 stocks that meet our conditions, a bit like picking
+              the players for a soccer team, so some stocks won&apos;t be in our ticker universe.
+            </span>
+          ) : null}
         </p>
       ) : (
         <>
@@ -290,8 +348,11 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
                   <th className="border-b border-white/10 px-2 py-1.5 font-medium">Company</th>
                   <th className="border-b border-white/10 px-2 py-1.5 font-medium">Mark</th>
                   <th className="border-b border-white/10 px-2 py-1.5 text-right font-medium">Price at mark</th>
+                  {horizons.map((h) => (
+                    <th key={h} className="border-b border-white/10 px-2 py-1.5 text-right font-medium">+{h} sessions</th>
+                  ))}
                   <th className="border-b border-white/10 px-2 py-1.5 text-right font-medium">Price now</th>
-                  {showPct ? (
+                  {showSince ? (
                     <th className="border-b border-white/10 px-2 py-1.5 text-right font-medium">% since</th>
                   ) : null}
                 </tr>
@@ -323,10 +384,18 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
                       <td className={`px-2 py-1.5 text-right tabular-nums text-slate-300 ${firstOfDay ? "border-t border-white/10" : ""}`}>
                         {fmtPrice(r.priceAtSignal)}
                       </td>
+                      {horizons.map((h) => {
+                        const v = pctFwd(r, HORIZONS.indexOf(h as 3 | 5 | 10) as 0 | 1 | 2);
+                        return (
+                          <td key={h} className={`px-2 py-1.5 text-right tabular-nums ${pctTone(v)} ${firstOfDay ? "border-t border-white/10" : ""}`}>
+                            {fmtPct(v)}
+                          </td>
+                        );
+                      })}
                       <td className={`px-2 py-1.5 text-right tabular-nums text-slate-300 ${firstOfDay ? "border-t border-white/10" : ""}`}>
                         {fmtPrice(r.priceNow)}
                       </td>
-                      {showPct ? (
+                      {showSince ? (
                         <td className={`px-2 py-1.5 text-right tabular-nums ${pctTone(pctSince(r))} ${firstOfDay ? "border-t border-white/10" : ""}`}>
                           {fmtPct(pctSince(r))}
                         </td>
@@ -356,9 +425,19 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
                       <span className="min-w-0 flex-1 truncate text-slate-400">{r.name ?? ""}</span>
                       {r.removed ? <LeftUniverse /> : null}
                     </div>
+                    <div className="mt-1 flex gap-3 tabular-nums text-[11px]">
+                      {horizons.map((h) => {
+                        const v = pctFwd(r, HORIZONS.indexOf(h as 3 | 5 | 10) as 0 | 1 | 2);
+                        return (
+                          <span key={h} className="text-slate-500">
+                            +{h} <span className={pctTone(v)}>{fmtPct(v)}</span>
+                          </span>
+                        );
+                      })}
+                    </div>
                     <div className="mt-1 tabular-nums text-slate-400">
                       {fmtPrice(r.priceAtSignal)} <span className="text-slate-600">→</span> {fmtPrice(r.priceNow)}
-                      {showPct ? <span className={`ml-1.5 ${pctTone(pctSince(r))}`}>{fmtPct(pctSince(r))}</span> : null}
+                      {showSince ? <span className={`ml-1.5 ${pctTone(pctSince(r))}`}>{fmtPct(pctSince(r))}</span> : null}
                     </div>
                   </div>
                 </li>
@@ -386,8 +465,10 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
       <p className="mt-3 border-t border-white/5 pt-2 text-[10px] leading-relaxed text-slate-500">
         This backtest is a simple look-back at past marks, not a tested trading strategy or a
         record of results. Price at mark = close on the mark day. Price now = last completed close
-        {data.asOf ? ` (${fmtDate(data.asOf, false)})` : ""}.
-        {showPct
+        {data.asOf ? ` (${fmtDate(data.asOf, false)})` : ""}. A checked horizon is the close-to-close percent
+        from the mark-day close to the close that many trading sessions later. Pending means that
+        later close is not in the file yet, and it is not shown as zero.
+        {showSince
           ? " % since is the plain price change between those two closes. It is not a trade result, ignores everything in between, and past marks do not predict future moves."
           : ""}{" "}
         Education only, not advice.

@@ -48,7 +48,8 @@ export default function BookingsPage() {
   return (
     <div className="bg-slate-950 text-slate-100">
       <section className="relative overflow-hidden border-b border-white/5 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950">
-        <div className="relative mx-auto max-w-5xl px-4 py-14 md:py-16">
+        <div className="relative mx-auto grid max-w-5xl items-center gap-10 px-4 py-14 md:grid-cols-[1fr_auto] md:py-16">
+          <div>
           <p className="text-sm font-medium uppercase tracking-widest text-amber-400">With Shaun Lee Bryant</p>
           <h1 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
             Bookings
@@ -63,6 +64,16 @@ export default function BookingsPage() {
             >
               Make a booking request
             </a>
+          </div>
+          </div>
+          <div className="mx-auto w-full max-w-[260px] md:w-[280px] md:max-w-none">
+            <img
+              src="/home/shaun-tuition-portrait.jpg"
+              alt="Shaun Lee Bryant in a black suit and bow tie"
+              width={640}
+              height={800}
+              className="aspect-[4/5] w-full rounded-3xl border border-white/10 object-cover object-top shadow-2xl shadow-black/40"
+            />
           </div>
         </div>
       </section>

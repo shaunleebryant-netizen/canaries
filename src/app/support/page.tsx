@@ -8,7 +8,8 @@ export const metadata = {
 
 export default function SupportPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-14">
+    <div className="relative isolate overflow-hidden bg-slate-950">
+    <div className="relative mx-auto max-w-5xl px-4 py-14 md:py-20">
       <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
         Support
       </p>
@@ -30,8 +31,11 @@ export default function SupportPage() {
             Prefer a form? Leave your details and we’ll get back to you.
           </p>
         </div>
-        <SupportForm />
+        <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-5 backdrop-blur-sm">
+          <SupportForm />
+        </div>
       </div>
+    </div>
     </div>
   );
 }

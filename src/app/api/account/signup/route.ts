@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import { hashPassword, randomToken } from "@/lib/members/crypto";
 import { getMembersDb, getUserByEmail, logMemberEvent, nowSec } from "@/lib/members/db";
 import { accountsOr404 } from "@/lib/members/guard";
-import { EMAIL_RE, jsonError, readBody } from "@/lib/members/http";
+import { EMAIL_RE, jsonError } from "@/lib/members/http";
 import { createSessionCookie } from "@/lib/members/session";
 import { adminEmails } from "@/lib/members/config";
 import { issueVerifyEmail, shouldAutoVerifyEmail } from "@/lib/members/verify";
+import { marketingOptIn } from "@/lib/members/membershipBackup";
 
 export const dynamic = "force-dynamic";
 
@@ -29,9 +30,10 @@ function emailTypoHint(email: string): string | null {
 export async function POST(request: Request) {
   const off = accountsOr404();
   if (off) return off;
-  const b = await readBody(request);
-  const email = (b.email || "").trim().toLowerCase();
-  const password = b.password || "";
+  const raw = (await request.json().catch(() => null)) as Record<string, unknown> | null;
+  const email = String(raw?.email || "").trim().toLowerCase();
+  const password = String(raw?.password || "");
+  const optedIn = marketingOptIn(raw?.marketing);
   if (!EMAIL_RE.test(email) || email.length > 254) return jsonError("Enter a valid email.");
   const hint = emailTypoHint(email);
   if (hint) return jsonError(`That email looks like it has a typo. Did you mean ${hint}?`);
@@ -59,6 +61,16 @@ export async function POST(request: Request) {
     )
     .run();
   await logMemberEvent(db, id, "signup", autoVerify ? "auto_verified_admin" : "pending_verify");
+  if (optedIn) {
+    try {
+      await db
+        .prepare("INSERT INTO marketing_consent (email, opted_in, updated_at) VALUES (?, 1, ?) ON CONFLICT(email) DO UPDATE SET opted_in = 1, updated_at = excluded.updated_at")
+        .bind(email, now)
+        .run();
+    } catch {
+      /* migration 0012 not applied yet: signup still succeeds and no consent is stored */
+    }
+  }
 
   const user = (await getUserByEmail(db, email))!;
   let testModeVerifyLink: string | undefined;

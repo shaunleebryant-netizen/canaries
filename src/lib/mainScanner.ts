@@ -34,6 +34,7 @@ export function computeMainScannerSetups(input: {
   ibd: IbdSetupAlert[];
   marketStates: MarketStateRow[];
   monthly20: Monthly20Signal[];
+  cciFairy?: { ticker: string; asOf: string; rsiMin3?: number; wvf?: number }[];
 }): {
   asOf: string;
   bullish: BullishSetup[];

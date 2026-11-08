@@ -14,6 +14,7 @@ const MARKS: { e: ReactNode; name: string; text: string; tone: "bull" | "bear" }
   { e: "🐟", name: "Fish", text: "a sold-off stock starting to find its feet.", tone: "bull" },
   { e: "😊", name: "Smiley", text: "selling looks worn out (a washout).", tone: "bull" },
   { e: "💵", name: "MFI washout", text: "selling washed out and money flow turning back up.", tone: "bull" },
+  { e: "🧚", name: "Bottom Zone", text: "Williams Vix Fix stretched above its band, RSI(14) under 35 and an up close.", tone: "bull" },
   { e: "🟢", name: "Weekly green", text: "the weekly trend has turned or is staying bullish.", tone: "bull" },
   { e: "📈", name: "Monthly trend", text: "the monthly trend has turned up.", tone: "bull" },
   {

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import type { UniverseGroup } from "@/lib/tickerUniverse";
+import type { UniverseGroup, UniverseStockRow } from "@/lib/tickerUniverse";
+import { UniverseStockTable } from "@/components/UniverseStockTable";
 
 /**
  * "Ticker Universe" button + accessible modal (owner 2026-10-06).
@@ -10,10 +11,13 @@ import type { UniverseGroup } from "@/lib/tickerUniverse";
  */
 export function TickerUniverseButton({
   groups,
+  stocks,
   label = "Ticker Universe",
   className = "inline-block rounded-xl border border-canary-gold/40 px-4 py-2 text-sm font-medium text-canary-gold hover:bg-canary-gold/10",
 }: {
   groups: UniverseGroup[];
+  /** Owner t1010u: when given, the Stocks group renders as a filterable / sortable table. */
+  stocks?: UniverseStockRow[];
   label?: string;
   className?: string;
 }) {
@@ -23,6 +27,13 @@ export function TickerUniverseButton({
   const closeRef = useRef<HTMLButtonElement>(null);
   const titleId = useId();
   const total = groups.reduce((n, g) => n + g.items.length, 0);
+  const [query, setQuery] = useState("");
+  const [tab, setTab] = useState<string>(stocks?.length ? "stocks" : "all");
+  const q = query.trim().toUpperCase();
+  const shownGroups = groups
+    .filter((g) => tab === "all" || g.id === tab)
+    .map((g) => ({ ...g, items: q ? g.items.filter((i) => i.ticker.toUpperCase().includes(q) || (i.name ?? "").toUpperCase().includes(q)) : g.items }));
+  const table = !!stocks?.length && tab === "stocks";
 
   useEffect(() => setMounted(true), []);
 
@@ -72,7 +83,7 @@ export function TickerUniverseButton({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby={titleId}
-                className="relative flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl"
+                className={`relative flex max-h-[88vh] w-full ${stocks?.length ? "max-w-6xl" : "max-w-3xl"} flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -91,7 +102,7 @@ export function TickerUniverseButton({
                       <a href="/indicators" className="font-medium text-amber-500 underline-offset-2 hover:text-amber-400 hover:underline">
                         our indicators
                       </a>{" "}
-                      there (one bundle, US$99 one-off for both; free for members).
+                      there (US$99 one-time payment; free for members).
                     </p>
                   </div>
                   <button
@@ -104,8 +115,33 @@ export function TickerUniverseButton({
                     ×
                   </button>
                 </div>
+                <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-white/10 px-5 py-2.5">
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search ticker or name"
+                    aria-label="Search the ticker universe"
+                    className="w-44 rounded-md border border-white/15 bg-slate-900 px-2 py-1 text-xs text-white placeholder:text-slate-500 focus:border-canary-gold/60 focus:outline-none"
+                  />
+                  {[{ id: "all", label: "All", n: total }, ...groups.map((g) => ({ id: g.id, label: g.label, n: g.items.length }))].map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      aria-pressed={tab === c.id}
+                      onClick={() => setTab(c.id)}
+                      className={`rounded-full border px-2.5 py-0.5 text-[11px] transition ${tab === c.id ? "border-canary-gold/70 bg-canary-gold/15 text-canary-gold" : "border-white/15 text-slate-300 hover:border-canary-gold/50"}`}
+                    >
+                      {c.label} <span className="text-slate-500">{c.n}</span>
+                    </button>
+                  ))}
+                </div>
                 <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4" data-testid="ticker-universe-list">
-                  {groups.map((g) => (
+                  {table ? <UniverseStockTable rows={stocks!} query={query} /> : null}
+                  {!table && shownGroups.every((g) => !g.items.length) ? (
+                    <p className="text-xs text-slate-400">No match. If you can&apos;t find a stock, it may not have made our list (see above).</p>
+                  ) : null}
+                  {table ? null : shownGroups.filter((g) => g.items.length).map((g) => (
                     <section key={g.id} className="mb-6 last:mb-0" aria-labelledby={`${titleId}-${g.id}`}>
                       <h3
                         id={`${titleId}-${g.id}`}

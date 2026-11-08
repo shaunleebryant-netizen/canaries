@@ -1,8 +1,14 @@
+import HeaderCanary from "@/components/HeaderCanary";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import "./globals.css";
 import { SiteFooter } from "@/components/Footer";
+import { TickerTape } from "@/components/TickerTape";
+import { DashboardNavLink } from "@/components/DashboardNavLink";
+import { PreviewBanner } from "@/components/PreviewBanner";
+
+const COMING_SOON = process.env.NEXT_PUBLIC_COMING_SOON === "1";
 
 const SITE_TITLE = "Canary Dashboard: US Market Health Dashboard & Stock Scanners";
 const SITE_DESCRIPTION =
@@ -55,7 +61,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen antialiased">
         <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
-          <header className="border-b border-white/10 bg-slate-950/80 backdrop-blur">
+          {COMING_SOON ? null : (
+          <header className="relative border-b border-white/10 bg-slate-950/80 backdrop-blur">
             <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
               <Link href="/" className="flex items-center gap-2 font-semibold text-white">
                 <span aria-hidden className="text-xl">
@@ -70,17 +77,19 @@ export default function RootLayout({
                 <Link href="/support" className="hover:text-canary-gold">
                   Support
                 </Link>
-                <Link
-                  href="/signup"
-                  className="rounded-lg bg-canary-gold px-3.5 py-1.5 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
-                >
-                  Dashboard
-                </Link>
+                {/* Owner 2026-11-02 (t969u): Subscribe removed from header; hero box + footer carry it. */}
+                <DashboardNavLink className="rounded-lg bg-canary-gold px-3.5 py-1.5 text-sm font-semibold text-slate-950 hover:bg-yellow-400" />
               </nav>
             </div>
+            <HeaderCanary />
+            <HeaderCanary variant="blue" />
+            <HeaderCanary variant="pink" />
           </header>
+          )}
+          {COMING_SOON ? null : <PreviewBanner />}
+          {COMING_SOON ? null : <TickerTape />}
           <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <SiteFooter comingSoon={COMING_SOON} />
         </div>
         {/* Cloudflare Web Analytics (RUM) — site canarydashboard.com, site tag a5ddddf4b6474efc996d0d5e3daa8250.
             Token is public (not a secret). Manual beacon because zone auto-install does not inject into Worker responses. */}

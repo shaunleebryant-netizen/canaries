@@ -1,15 +1,18 @@
 /**
  * Members-only Signal History (owner approved 2026-10-07; live History tab). Reads data/signal-history.json
  * (scripts/update-signal-history.mjs, run by the post-close pack) (no "in a box" join — owner t567u).
- * Bullish marks only: 🐟 fish · 🙂 smile (washout) · 💵 MFI washout. Never invent rows.
+ * Bullish marks only: 🐟 fish · 🙂 smile (washout) · 💵 MFI washout · 🧚 Bottom Zone. Never invent rows.
  * PRIVATE: members pages only. Do not import from a public route.
  */
 import historyJson from "../../data/signal-history.json";
+import { archiveSpan } from "@/lib/compositeArchive";
+import { emptyGateCounts, tally, timingDecision } from "@/lib/compositeGate";
+import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
 import type { HistoryGroup, HistoryKind, SignalHistoryPayload } from "@/lib/signalHistoryShared";
 
 export type { HistoryGroup, HistoryKind, SignalHistoryPayload, SignalHistoryRow } from "@/lib/signalHistoryShared";
 
-type RawRow = { d: string; t: string; k: string; g: string; p: number };
+type RawRow = { d: string; t: string; k: string; g: string; p: number; fw?: (number | null)[] };
 type RawTicker = { name?: string | null; g?: string; last?: number; lastAsOf?: string; removed?: boolean };
 type RawFile = {
   asOf?: string;
@@ -19,28 +22,32 @@ type RawFile = {
   tickers?: Record<string, RawTicker>;
 };
 
-const KIND_LETTER: Record<HistoryKind, string> = { fish: "f", smile: "s", mfi: "m" };
+const KIND_LETTER: Record<HistoryKind, string> = { fish: "f", smile: "s", mfi: "m", fairy: "c" };
 const GROUPS: HistoryGroup[] = ["stock", "sector", "country", "crypto"];
 
 export function loadSignalHistory(countryNames: Record<string, string> = {}): SignalHistoryPayload {
   const raw = historyJson as unknown as RawFile;
   const meta = raw.tickers ?? {};
-  const byKey = new Map<string, [string, string, string, number]>();
+  const byKey = new Map<string, SignalHistoryPayload["rows"][number]>();
   const groupOf = new Map<string, HistoryGroup>();
+  const archive = loadCompositeArchive();
+  const span = archiveSpan(archive);
+  const gate = { ...emptyGateCounts(), archiveFrom: span.from, archiveTo: span.to };
   let markCount = 0;
   for (const r of raw.rows ?? []) {
     if (!r || typeof r.d !== "string" || typeof r.t !== "string") continue;
     const k = r.k as HistoryKind;
     if (!KIND_LETTER[k] || !Number.isFinite(r.p)) continue;
+    tally(gate, timingDecision(k, r.d.slice(0, 10), archive));
     markCount++;
     if (!groupOf.has(r.t)) groupOf.set(r.t, (GROUPS.includes(r.g as HistoryGroup) ? r.g : "stock") as HistoryGroup);
     const key = `${r.d}|${r.t}`;
     const row = byKey.get(key);
-    if (!row) byKey.set(key, [r.d, r.t, KIND_LETTER[k], r.p]);
+    if (!row) byKey.set(key, [r.d, r.t, KIND_LETTER[k], r.p, Array.isArray(r.fw) ? [r.fw[0] ?? null, r.fw[1] ?? null, r.fw[2] ?? null] : [null, null, null]]);
     else if (!row[2].includes(KIND_LETTER[k])) row[2] += KIND_LETTER[k];
   }
   const rows = [...byKey.values()];
-  rows.forEach((r) => (r[2] = [...r[2]].sort((a, b) => "fsm".indexOf(a) - "fsm".indexOf(b)).join("")));
+  rows.forEach((r) => (r[2] = [...r[2]].sort((a, b) => "fsmc".indexOf(a) - "fsmc".indexOf(b)).join("")));
   rows.sort((a, b) => (a[0] !== b[0] ? (a[0] < b[0] ? 1 : -1) : a[1].localeCompare(b[1])));
   const tickers: SignalHistoryPayload["tickers"] = {};
   for (const [t, g] of groupOf) {
@@ -59,6 +66,8 @@ export function loadSignalHistory(countryNames: Record<string, string> = {}): Si
     windowStart: raw.windowStart ?? null,
     sessions: raw.sessions ?? 0,
     markCount,
+    gate,
+    compositeByDate: Object.fromEntries(archive.points.map((p) => [p.date, p.light])),
     rows,
     tickers,
   };

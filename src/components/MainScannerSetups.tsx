@@ -13,6 +13,7 @@ export const CONDITION_META: Record<
     label: (c) => `Recent smiley print${c.source ? ` (${c.source})` : ""}`,
   },
   mfi_os: { icon: () => "💵", label: () => "Recent MFI washout" },
+  cci_fairy: { icon: () => "🧚", label: () => "Recent Bottom Zone 🧚 print" },
   weekly_bull: {
     // Owner 2026-10-10: show ONE dot; the streak (×dots, weeks) stays in the hover label.
     icon: () => "🟢",

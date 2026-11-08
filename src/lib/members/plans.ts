@@ -1,6 +1,6 @@
 /**
  * Dashboard membership plans (owner update 2026-09-25). All USD. Annual is the default/priority plan.
- *   Founding (first 100): $600/yr billed annually, rate locked for life while renewing.
+ *   Founding (first 100): $420/yr billed annually, rate locked for life while renewing.
  *   After 100: Standard annual $1,069/yr (default, highlighted) or Standard monthly $99/mo.
  * Price IDs come ONLY from env (never hard-coded). Stripe lookup_keys are used by
  * scripts/stripe-sandbox-setup.mjs. Public page copy is NOT changed yet — see
@@ -17,8 +17,8 @@ export const FOUNDING_PLAN_IDS: PlanId[] = ["launch_annual", "launch_monthly"];
  * unaffected. Env vars always win. Indicator one-off (US$99) = STRIPE_PRICE_TV_INDICATORS.
  */
 export const LIVE_PRICE_IDS: Record<string, string> = {
-  STRIPE_PRICE_DASHBOARD: "price_1UQLwh51XxEMe5QTH3ZxrvWG", // Founding annual US$600/yr
-  STRIPE_PRICE_DASHBOARD_FOUNDING_MONTHLY: "price_1UQLxc51XxEMe5QT9RKaFgI8", // Founding monthly US$75/mo
+  STRIPE_PRICE_DASHBOARD: "price_1UVMPZ51XxEMe5QT6tIerEC5", // Founding annual US$420/yr
+  STRIPE_PRICE_DASHBOARD_FOUNDING_MONTHLY: "price_1UVMQE51XxEMe5QTc3iIa87Q", // Founding monthly US$70/mo
   STRIPE_PRICE_DASHBOARD_STANDARD_ANNUAL: "price_1UQLzO51XxEMe5QTCMWLb9uT", // Standard annual US$1,069/yr
   STRIPE_PRICE_DASHBOARD_STANDARD: "price_1UQLyS51XxEMe5QTgWtvmwFw", // Standard monthly US$99/mo
   STRIPE_PRICE_TV_INDICATORS: "price_1UQM1P51XxEMe5QTiaKn49wZ", // Indicators one-off US$99 (prod_VREUbizg8tJcUN)
@@ -53,10 +53,10 @@ export const PLANS: Record<PlanId, Plan> = {
     label: "Founding member — first 100",
     priceEnv: "STRIPE_PRICE_DASHBOARD",
     lookupKey: "canary_founding_annual_usd",
-    display: "$600/yr",
+    display: "$420/yr",
     sub: "Billed annually (USD) · rate locked for life while you renew",
     note: "Turn off auto-renew at any time and keep your access to the end of the paid year.",
-    amount: 60000,
+    amount: 42000,
     interval: "year",
     highlight: true,
   },
@@ -65,10 +65,10 @@ export const PLANS: Record<PlanId, Plan> = {
     label: "Founding member — monthly",
     priceEnv: "STRIPE_PRICE_DASHBOARD_FOUNDING_MONTHLY",
     lookupKey: "canary_founding_monthly_usd",
-    display: "$75/mo",
+    display: "$70/mo",
     sub: "Billed monthly (USD) · founding rate while you renew",
     note: "Turning off auto-renew keeps access to the end of the paid month.",
-    amount: 7500,
+    amount: 7000,
     interval: "month",
     highlight: false,
   },

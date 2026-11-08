@@ -35,3 +35,43 @@ export function loadTickerUniverse(): UniverseGroup[] {
     { id: "crypto", label: "Crypto", items: itemsOf(cryptoUniverse as U) },
   ];
 }
+
+/* ---------- Stock table rows (owner t1010u): Canary Score + fundamentals, server-built ---------- */
+import type { GrowthRow } from "@/lib/loadGrowthScore";
+import { pickGrowth } from "@/lib/loadGrowthScore";
+import { loadAllFundamentals } from "@/lib/loadFundamentals";
+
+export interface UniverseStockRow extends GrowthRow {
+  t: string;
+  name?: string;
+  /** P/E (TTM). */
+  pe?: number | null;
+  /** EPS growth y/y (TTM) and q/q, fractions. */
+  eg?: number | null;
+  eq?: number | null;
+  /** Analyst average target (only when more than 5 opinions) and implied gap vs last close. */
+  tm?: number | null;
+  ao?: number | null;
+  tu?: number | null;
+}
+
+export function loadUniverseStockRows(): UniverseStockRow[] {
+  const items = itemsOf(fishUniverse as U);
+  const gs = pickGrowth(items.map((i) => i.ticker));
+  const fu = loadAllFundamentals();
+  return items.map(({ ticker: t, name }) => {
+    const f = fu[t];
+    const showT = f?.tm != null && (f.ao ?? 0) > 5;
+    return {
+      ...(gs[t] ?? { gs: null }),
+      t,
+      ...(name ? { name } : {}),
+      pe: f?.pe ?? null,
+      eg: f?.g ?? null,
+      eq: f?.qq ?? null,
+      tm: showT ? f!.tm! : null,
+      ao: f?.ao ?? null,
+      tu: showT && f!.p ? f!.tm! / f!.p - 1 : null,
+    };
+  });
+}

@@ -3,6 +3,7 @@ import { getMembersDb, nowSec } from "@/lib/members/db";
 import { siteOrigin } from "@/lib/members/config";
 import { readBody } from "@/lib/members/http";
 import { getStripe } from "@/lib/members/stripe";
+import { findIndicators } from "@/lib/indicatorCatalog";
 import { indicatorCheckoutEnabled, indicatorPriceId } from "@/lib/members/indicatorDelivery";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,9 @@ export async function POST(request: Request) {
     mode: "payment",
     customer_email: order.email,
     client_reference_id: orderId,
-    line_items: [{ price, quantity: 1 }],
+    // Owner 2026-11-02: multi-indicator orders. All indicators are US$99 and share one Stripe Price
+    // (STRIPE_PRICE_TV_INDICATORS), so quantity = number of indicators. Legacy bundle = 1.
+    line_items: [{ price, quantity: Math.max(1, findIndicators(order.script_id).length) }],
     metadata: { kind: "indicator", order_id: orderId, script_id: order.script_id },
     payment_intent_data: { metadata: { kind: "indicator", order_id: orderId } },
     success_url: `${origin}/indicators/checkout?order=${orderId}&paid=1`,

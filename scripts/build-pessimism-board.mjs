@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Pessimism Board (PREVIEW) — "While peak optimism is hard to catch, peak pessimism is a lot easier."
+ * Pessimism Board (PREVIEW) — "Peak optimism is hard to catch, peak pessimism is often easier."
  * Writes data/pessimism-board.json. Rules: see docs/pessimism-board.md. Education only.
  * Inputs: data/growth-score.json (stocks + Rev Growth + Canary Score), fish/money-flow alerts,
  * Yahoo 1y daily closes (same chart endpoint the scans use), cut at the pack as-of.

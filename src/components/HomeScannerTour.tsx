@@ -35,7 +35,7 @@ type AboutEx = {
   image: string;
 };
 const EXAMPLES = (aboutExamples as unknown as { examples: AboutEx[] }).examples;
-const MARK_LABEL: Record<string, string> = { fish: "🐟 Fish", smile: "🙂 Smiley", mfi: "💵 MFI Washout" };
+const MARK_LABEL: Record<string, string> = { fish: "🐟 Fish", smile: "🙂 Smiley", mfi: "💵 MFI Washout", sweat: "🥵 Getting Sweaty", skull: "💀 Rolling over", fairy: "🧚 Fairy Godmother" };
 function niceDate(iso: string): string {
   const [y, m, d] = iso.split("-");
   return `${Number(d)} ${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][Number(m) - 1]} ${y}`;
@@ -245,14 +245,14 @@ export function HomeScannerTour({ v3 = false }: { v3?: boolean } = {}) {
             </div>
             {/* Owner 2026-10-16 (PREVIEW): pull quote under the Fish / Sweaty copy. */}
             <blockquote className="mt-6 border-l-2 border-canary-amber/70 pl-4 text-base italic leading-relaxed text-amber-100/90 sm:text-lg">
-              &ldquo;While peak optimism is hard to catch, peak pessimism is a lot easier.&rdquo;
+              &ldquo;Peak optimism is hard to catch, peak pessimism is often easier.&rdquo;
             </blockquote>
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
               <IndicatorLink href="/indicators#fish-sweaty">
                 Get the indicator →
               </IndicatorLink>
               <span className="mt-2 text-xs text-slate-500">
-                The Time to Fish or Getting Sweaty indicator for TradingView.
+                The Canary RelRSI 🙂🐟 and 🥵 indicator for TradingView.
               </span>
             </div>
           </div>

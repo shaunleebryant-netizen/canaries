@@ -5,14 +5,30 @@
  * Daily candlesticks (~12 months, opens on ~6) with our marks on the bars, from the members-only
  * /api/members/chart/[ticker] JSON (precomputed by scripts/build-ticker-charts.mjs with the same
  * engine ports as the boxes). Chart: TradingView Lightweight Charts™ (Apache-2.0; attribution logo
- * on the chart + notice in the footer, as the licence asks). The old TradingView widget stays as a tab.
+ * on the chart + notice in the footer, as the licence asks). The lightbox shows this chart only.
  * Education only.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { INTERVAL_VIEW, loadTradingViewScript, StarToggle, type ChartInterval } from "@/components/TickerChartLightbox";
+import type { IPrimitivePaneView } from "lightweight-charts";
+import { StarToggle, type ChartInterval } from "@/components/TickerChartLightbox";
+import { TickerLightboxStats } from "@/components/TickerLightboxStats";
+import type { UniverseLightboxPack } from "@/lib/tickerLightboxStats";
+import {
+  CHART_LAYERS_STORAGE_KEY,
+  DEFAULT_CHART_LAYERS,
+  MARK_ORDER,
+  FREE_ETF_LOCKED,
+  clampChartLayers,
+  hoverReadoutMarks,
+  latestVisibleMarks,
+  readStoredChartLayers,
+  type ChartLayerId,
+  type ChartLayers,
+  type MarkKind,
+} from "@/lib/chartLayers";
 import { toTradingViewSymbol } from "@/lib/tradingViewSymbol";
 
-export type MarkKind = "fish" | "smile" | "mfi" | "m20" | "sweat" | "skull";
+export type { MarkKind } from "@/lib/chartLayers";
 export type ChartDoc = {
   v: number;
   t: string;
@@ -29,10 +45,10 @@ export const MARKS: Record<MarkKind, { emoji: string; label: string; side: "bull
   smile: { emoji: "🙂", label: "Smiley", side: "bull" },
   mfi: { emoji: "💵", label: "MFI washout", side: "bull" },
   m20: { emoji: "📈", label: "Monthly trend turned up", side: "bull" },
+  fairy: { emoji: "🧚", label: "Bottom Zone", side: "bull" },
   sweat: { emoji: "🥵", label: "Sweaty", side: "bear" },
   skull: { emoji: "💀", label: "Skull", side: "bear" },
 };
-const ORDER: MarkKind[] = ["fish", "smile", "mfi", "m20", "sweat", "skull"];
 
 const ymdOf = (d0: number, off: number) => new Date((d0 + off) * 86400000).toISOString().slice(0, 10);
 const fmtPx = (x: number) => (x >= 1000 ? x.toFixed(0) : x >= 1 ? x.toFixed(2) : x.toPrecision(3));
@@ -65,11 +81,14 @@ export function useChartDoc(ticker: string) {
 
 export function CandleChart({
   doc,
+  layers,
   topMargin = 0.1,
   spanWide = 128,
   spanNarrow = 66,
 }: {
   doc: ChartDoc;
+  /** Omitted on the crypto hero: every event mark on, Vanna calendar off. */
+  layers?: ChartLayers;
   topMargin?: number;
   /** Bars visible on open: wide hosts / hosts under 520px. Defaults = ~6 / ~3 months of stock trading days. */
   spanWide?: number;
@@ -77,6 +96,11 @@ export function CandleChart({
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
+  const activeLayers = layers ?? DEFAULT_CHART_LAYERS;
+  const layersRef = useRef(activeLayers);
+  const requestRef = useRef<(() => void) | null>(null);
+  const paintTipRef = useRef<(t: string | null) => void>(() => {});
+  const hoverTimeRef = useRef<string | null>(null);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -143,34 +167,49 @@ export function CandleChart({
         t,
         high: barAt.get(t)?.[2] ?? 0,
         low: barAt.get(t)?.[3] ?? 0,
-        bull: ks.filter((k) => MARKS[k].side === "bull").sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)),
-        bear: ks.filter((k) => MARKS[k].side === "bear").sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)),
+        ks,
       }));
-      candles.attachPrimitive({
-        paneViews: () => [
-          {
-            zOrder: () => "top" as const,
-            renderer: () => ({
-              draw: (target) => {
-                target.useMediaCoordinateSpace(({ context: ctx }) => {
-                  const spacing = chart.timeScale().options().barSpacing;
-                  const size = spacing >= 7 ? 14 : spacing >= 4 ? 12 : 10;
-                  ctx.font = `${size}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
-                  ctx.textAlign = "center";
-                  ctx.textBaseline = "middle";
-                  for (const it of items) {
-                    const x = chart.timeScale().timeToCoordinate(it.t);
-                    if (x == null) continue;
-                    const yLow = candles.priceToCoordinate(it.low);
-                    const yHigh = candles.priceToCoordinate(it.high);
-                    if (yLow != null) it.bull.forEach((k, j) => ctx.fillText(MARKS[k].emoji, x, yLow + size * 0.85 + j * (size + 2)));
-                    if (yHigh != null) it.bear.forEach((k, j) => ctx.fillText(MARKS[k].emoji, x, yHigh - size * 0.85 - j * (size + 2)));
-                  }
-                });
-              },
-            }),
+      const emojiFont = (px: number) =>
+        `${px}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+      const markView: IPrimitivePaneView = {
+        zOrder: () => "top" as const,
+        renderer: () => ({
+          draw: (target) => {
+            target.useMediaCoordinateSpace(({ context: ctx, mediaSize }) => {
+              const layersNow = layersRef.current;
+              const spacing = chart.timeScale().options().barSpacing;
+              const size = spacing >= 7 ? 14 : spacing >= 4 ? 12 : 10;
+              ctx.font = emojiFont(size);
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              for (const it of items) {
+                const bull = it.ks
+                  .filter((k) => layersNow[k] && MARKS[k].side === "bull")
+                  .sort((a, b) => MARK_ORDER.indexOf(a) - MARK_ORDER.indexOf(b));
+                const bear = it.ks
+                  .filter((k) => layersNow[k] && MARKS[k].side === "bear")
+                  .sort((a, b) => MARK_ORDER.indexOf(a) - MARK_ORDER.indexOf(b));
+                if (!bull.length && !bear.length) continue;
+                const x = chart.timeScale().timeToCoordinate(it.t);
+                if (x == null) continue;
+                const yLow = candles.priceToCoordinate(it.low);
+                const yHigh = candles.priceToCoordinate(it.high);
+                if (yLow != null) bull.forEach((k, j) => ctx.fillText(MARKS[k].emoji, x, yLow + size * 0.85 + j * (size + 2)));
+                if (yHigh != null) bear.forEach((k, j) => ctx.fillText(MARKS[k].emoji, x, yHigh - size * 0.85 - j * (size + 2)));
+              }
+            });
           },
-        ],
+        }),
+      };
+      const paneViews = [markView];
+      candles.attachPrimitive({
+        attached(param) {
+          requestRef.current = param.requestUpdate;
+        },
+        detached() {
+          requestRef.current = null;
+        },
+        paneViews: () => paneViews,
       });
       const n = doc.b.length;
       // ~6 months on desktop, ~3 on phones (scroll back for the full year).
@@ -178,13 +217,9 @@ export function CandleChart({
       chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - span), to: n + 2 });
 
       // Hover readout: date, OHLC, change, marks on that bar (DOM text, no React re-render).
-      const marksByTime = new Map<string, string[]>();
-      for (const [off, k] of doc.m) {
-        const t = ymdOf(doc.d0, off);
-        marksByTime.set(t, [...(marksByTime.get(t) ?? []), `${MARKS[k]?.emoji ?? ""} ${MARKS[k]?.label ?? k}`]);
-      }
       const idxByTime = new Map(times.map((t, i) => [t, i]));
       const show = (t: string | null) => {
+        hoverTimeRef.current = t;
         const tip = tipRef.current;
         if (!tip) return;
         const i = t != null ? idxByTime.get(t) : n - 1;
@@ -192,12 +227,13 @@ export function CandleChart({
         const [, o, h, l, c] = doc.b[i];
         const prev = i > 0 ? doc.b[i - 1][4] : null;
         const chg = prev ? ((c - prev) / prev) * 100 : null;
-        const mk = marksByTime.get(times[i]);
+        const mk = hoverReadoutMarks(byTime.get(times[i]) ?? [], times[i], layersRef.current, MARKS);
         tip.textContent =
           `${times[i]}  O ${fmtPx(o)}  H ${fmtPx(h)}  L ${fmtPx(l)}  C ${fmtPx(c)}` +
           (chg != null ? `  ${chg >= 0 ? "+" : ""}${chg.toFixed(2)}%` : "") +
-          (mk ? `  ·  ${mk.join(", ")}` : "");
+          (mk.length ? `  ·  ${mk.join(", ")}` : "");
       };
+      paintTipRef.current = show;
       show(null);
       chart.subscribeCrosshairMove((p) => show(p.time != null ? String(p.time) : null));
       cleanup = () => chart.remove();
@@ -205,8 +241,16 @@ export function CandleChart({
     return () => {
       disposed = true;
       cleanup();
+      requestRef.current = null;
     };
   }, [doc, topMargin, spanWide, spanNarrow]);
+
+  // Redraw marks without rebuilding the chart, so the visible range stays put.
+  useEffect(() => {
+    layersRef.current = activeLayers;
+    requestRef.current?.();
+    paintTipRef.current(hoverTimeRef.current);
+  }, [activeLayers]);
 
   return (
     <div className="absolute inset-0">
@@ -220,65 +264,54 @@ export function CandleChart({
   );
 }
 
-function TradingViewTab({ ticker, interval }: { ticker: string; interval: ChartInterval }) {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const [err, setErr] = useState<string | null>(null);
-  useEffect(() => {
-    const host = hostRef.current;
-    if (!host) return;
-    const id = `tv2_${Math.random().toString(36).slice(2)}`;
-    host.innerHTML = `<div id="${id}" style="width:100%;height:100%"></div>`;
-    let widget: { remove?: () => void } | null = null;
-    let live = true;
-    loadTradingViewScript()
-      .then(() => {
-        const TV = window.TradingView;
-        if (!live || !TV?.MediumWidget) {
-          if (live) setErr("TradingView chart unavailable.");
-          return;
-        }
-        const view = INTERVAL_VIEW[interval] ?? INTERVAL_VIEW.D;
-        widget = new TV.MediumWidget({
-          container_id: id,
-          symbols: [[ticker, `${toTradingViewSymbol(ticker)}|${view.range}`]],
-          chartOnly: false,
-          width: "100%",
-          height: "100%",
-          locale: "en",
-          colorTheme: "dark",
-          autosize: true,
-          isTransparent: true,
-          dateRange: view.range,
-          showFloatingTooltip: true,
-          showVolume: false,
-        });
-      })
-      .catch(() => live && setErr("Could not load TradingView."));
-    return () => {
-      live = false;
-      try {
-        widget?.remove?.();
-      } catch {
-        /* ignore */
-      }
-      host.innerHTML = "";
-    };
-  }, [ticker, interval]);
+function LayerChip({
+  pressed,
+  emoji,
+  label,
+  tone,
+  disabled,
+  onClick,
+}: {
+  pressed: boolean;
+  emoji: string;
+  label: string;
+  tone: "bull" | "bear";
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  const active =
+    tone === "bull"
+      ? "border-emerald-400/50 bg-emerald-500/20 text-emerald-50"
+      : "border-rose-400/50 bg-rose-500/20 text-rose-50";
   return (
-    <>
-      {err ? <p className="absolute inset-0 flex items-center justify-center text-xs text-slate-400">{err}</p> : null}
-      <div ref={hostRef} className="absolute inset-0" />
-    </>
+    <button
+      type="button"
+      aria-pressed={pressed}
+      disabled={disabled}
+      onClick={onClick}
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-canary-gold/70 ${
+        disabled
+          ? "cursor-not-allowed border-white/10 bg-transparent text-slate-500"
+          : pressed
+            ? active
+            : "border-white/15 bg-transparent text-slate-500 hover:text-slate-300"
+      }`}
+    >
+      <span aria-hidden>{emoji}</span>
+      {label}
+      {disabled ? <span className="text-[10px] font-normal text-amber-200/80">Upgrade</span> : null}
+    </button>
   );
 }
 
 export function TickerChartDialogV2({
   ticker,
-  interval = "D",
   onClose,
   titleId,
   name,
   star,
+  lightbox,
+  chartAccess = "paid",
 }: {
   ticker: string;
   interval?: ChartInterval;
@@ -286,16 +319,29 @@ export function TickerChartDialogV2({
   titleId: string;
   name?: string;
   star?: { inUniverse: (t: string) => boolean; has: (t: string) => boolean; toggle: (t: string) => void };
+  /** Fish-universe company figures. Omitted for off-universe charts. */
+  lightbox?: UniverseLightboxPack | null;
+  /** Free ETF charts cannot turn Fish, MFI, Fairy, Sweaty or Skull on. */
+  chartAccess?: "paid" | "free-etf";
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const { doc, error, loading } = useChartDoc(ticker);
-  // Weekly / monthly links (Baby Bulls etc.) keep opening on the TradingView view.
-  const [tab, setTab] = useState<"marks" | "tv">(interval === "D" ? "marks" : "tv");
+  // Lives on the dialog, so changing ticker keeps the choices. localStorage keeps them across opens.
+  const [layers, setLayers] = useState<ChartLayers>(() =>
+    clampChartLayers(readStoredChartLayers(typeof window === "undefined" ? null : window.localStorage), chartAccess)
+  );
   useEffect(() => {
-    if (error === "nodata") setTab("tv");
-  }, [error]);
-
+    try {
+      window.localStorage.setItem(CHART_LAYERS_STORAGE_KEY, JSON.stringify(layers));
+    } catch {
+      /* private mode / quota */
+    }
+  }, [layers]);
+  const toggleLayer = (id: ChartLayerId) => {
+    if (chartAccess === "free-etf" && FREE_ETF_LOCKED.includes(id)) return;
+    setLayers((prev) => clampChartLayers({ ...prev, [id]: !prev[id] }, chartAccess));
+  };
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -324,12 +370,11 @@ export function TickerChartDialogV2({
     };
   }, [onClose]);
 
+  const shownLayers = clampChartLayers(layers, chartAccess);
   const latest = useMemo(() => {
     if (!doc) return [] as { k: MarkKind; date: string }[];
-    const last = new Map<MarkKind, string>();
-    for (const [off, k] of doc.m) last.set(k, ymdOf(doc.d0, off));
-    return ORDER.filter((k) => last.has(k)).map((k) => ({ k, date: last.get(k)! }));
-  }, [doc]);
+    return latestVisibleMarks(doc.m, shownLayers).map(({ kind, off }) => ({ k: kind, date: ymdOf(doc.d0, off) }));
+  }, [doc, shownLayers]);
 
   const title = doc?.name || name;
   const tvSymbol = toTradingViewSymbol(ticker);
@@ -355,14 +400,13 @@ export function TickerChartDialogV2({
               {title ? <span className="truncate text-sm font-normal text-slate-300">{title}</span> : null}
             </h2>
             <p className="mt-0.5 truncate text-[11px] text-slate-500">
-              {tab === "marks"
-                ? `Daily candles · ~12 months${doc ? ` · to ${doc.asOf}` : ""} · education only`
-                : `${(INTERVAL_VIEW[interval] ?? INTERVAL_VIEW.D).label} · TradingView · ${tvSymbol}`}
+              {`Daily candles · ~12 months${doc ? ` · to ${doc.asOf}` : ""} · education only`}
               {" · "}
               <a href={tvUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 underline decoration-white/20 underline-offset-2 hover:text-canary-gold">
                 Open on TradingView ↗
               </a>
             </p>
+            {chartAccess === "paid" ? <TickerLightboxStats ticker={ticker} pack={lightbox} /> : null}
           </div>
           <button
             ref={closeRef}
@@ -375,30 +419,8 @@ export function TickerChartDialogV2({
           </button>
         </div>
 
+        {latest.length ? (
         <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-white/5 px-4 py-2 sm:px-5">
-          <div role="tablist" aria-label="Chart view" className="inline-flex rounded-lg border border-white/10 bg-slate-900/70 p-0.5 text-xs">
-            {(
-              [
-                ["marks", "Canary marks"],
-                ["tv", "TradingView"],
-              ] as const
-            ).map(([id, label]) => (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={tab === id}
-                onClick={() => setTab(id)}
-                disabled={id === "marks" && error === "nodata"}
-                className={`rounded-md px-2.5 py-1 font-medium transition disabled:opacity-40 ${
-                  tab === id ? "bg-sky-500/20 text-sky-100" : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          {tab === "marks" && latest.length ? (
             <ul className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-slate-400" aria-label="Latest marks">
               <li className="text-slate-500">Latest:</li>
               {latest.map(({ k, date }) => (
@@ -407,46 +429,52 @@ export function TickerChartDialogV2({
                 </li>
               ))}
             </ul>
-          ) : null}
         </div>
+        ) : null}
 
         <div className="relative h-[min(56vh,520px)] min-h-[300px] shrink-0 bg-slate-950">
-          {tab === "marks" ? (
-            doc ? (
-              <CandleChart doc={doc} />
-            ) : (
-              <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-xs text-slate-400">
-                {loading ? "Loading chart…" : error === "nodata" ? "No Canary chart for this ticker yet." : "Could not load the chart."}
-              </p>
-            )
+          {doc ? (
+            <CandleChart doc={doc} layers={shownLayers} />
           ) : (
-            <TradingViewTab ticker={ticker} interval={interval} />
+            <p className="absolute inset-0 flex items-center justify-center px-6 text-center text-sm text-slate-300">
+              {loading
+                ? "Loading chart…"
+                : error === "nodata"
+                  ? "No Canary chart for this ticker yet. Open on TradingView stays available above."
+                  : "Could not load the chart."}
+            </p>
           )}
         </div>
 
-        {tab === "marks" ? (
-          <div className="shrink-0 border-t border-white/10 px-4 py-2 sm:px-5" aria-label="Mark key">
-            <ul className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-400">
-              {ORDER.map((k) => (
-                <li key={k} className="whitespace-nowrap">
-                  <span aria-hidden>{MARKS[k].emoji}</span>{" "}
-                  <span className={MARKS[k].side === "bull" ? "text-emerald-300/80" : "text-rose-300/80"}>{MARKS[k].label}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-1 text-[10px] leading-snug text-slate-500">
-              Bullish marks sit under the bars, bearish above. Same marks as the dashboard boxes.
-              {doc && !doc.engines?.mfi ? " 💵 is not scanned for this ticker." : ""}
-            </p>
+        {doc ? (
+          <div className="shrink-0 border-t border-white/10 px-4 py-2 sm:px-5">
+            <p className="mb-1.5 text-[10px] leading-snug text-slate-400">Click to toggle</p>
+            <div role="group" aria-label="Mark layers" className="flex flex-wrap gap-1.5">
+              {MARK_ORDER.map((k) => {
+                const locked = chartAccess === "free-etf" && FREE_ETF_LOCKED.includes(k);
+                return (
+                  <LayerChip
+                    key={k}
+                    pressed={shownLayers[k]}
+                    emoji={MARKS[k].emoji}
+                    label={MARKS[k].label}
+                    tone={MARKS[k].side}
+                    disabled={locked}
+                    onClick={() => toggleLayer(k)}
+                  />
+                );
+              })}
+            </div>
+            {chartAccess === "free-etf" ? (
+              <p className="mt-1.5 text-[10px] leading-snug text-amber-100/80">
+                Free charts include Smiley and monthly trend. Other layers are a paid membership.
+              </p>
+            ) : null}
           </div>
         ) : null}
 
         <p className="shrink-0 border-t border-white/10 px-4 py-2 text-[10px] leading-snug text-slate-500 sm:px-5">
-          Education only. Not buy or sell advice. No order buttons from Canary. Charts by{" "}
-          <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer" className="underline decoration-white/20 underline-offset-2 hover:text-slate-300">
-            TradingView Lightweight Charts™
-          </a>{" "}
-          · Copyright © 2025 TradingView, Inc.
+          Not financial advice
         </p>
       </div>
     </div>

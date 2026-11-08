@@ -19,14 +19,14 @@ export type MyStockRow = {
 };
 export type MyStocksUniverseItem = { t: string; n?: string; g: string };
 
-const PRINT_IDS = new Set(["fish", "smile", "mfi_os", "sweaty", "skull", "monthly_20ma", "ibd"]);
+const PRINT_IDS = new Set(["fish", "smile", "mfi_os", "cci_fairy", "sweaty", "skull", "monthly_20ma", "ibd"]);
 const BOX_KIND: Record<string, { id: string; side: "bull" | "bear" }> = {
   fish: { id: "fish", side: "bull" },
   smile: { id: "smile", side: "bull" },
   exhaustion: { id: "sweaty", side: "bear" },
   skull: { id: "skull", side: "bear" },
 };
-const BULL_ORDER = ["fish", "smile", "mfi_os", "weekly_bull", "monthly_20ma", "ibd"];
+const BULL_ORDER = ["fish", "smile", "mfi_os", "cci_fairy", "weekly_bull", "monthly_20ma", "ibd"];
 const BEAR_ORDER = ["mfi_ob", "sweaty", "skull", "weekly_bear"];
 
 export function tickerNames(): Record<string, string> {

@@ -36,6 +36,7 @@ import { CANARY_TOPS_BOTTOMS, CANARY_TOPS_BOTTOMS_VERSION } from "../src/lib/can
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const UNIVERSE_PATH = join(ROOT, "data/fish-universe.json");
+const CLOSES_CACHE = join(ROOT, ".cache/daily-closes");
 const FISH_OUT = join(ROOT, "data/fish-alerts.json");
 const EXH_OUT = join(ROOT, "data/exhaustion-alerts.json");
 const MIRROR_DIR = "/home/box/canaries";
@@ -281,6 +282,12 @@ async function scanTicker(ticker) {
       continue;
     }
     const bars = daily.bars;
+    // Owner t778u: share completed daily closes with scan-new-highs-lows.mjs (no second Yahoo pass).
+    try {
+      mkdirSync(CLOSES_CACHE, { recursive: true });
+      writeFileSync(join(CLOSES_CACHE, `${ticker.replace(/[^A-Za-z0-9._-]/g, "_")}.json`),
+        JSON.stringify({ ticker, yahoo: daily.yahooSymbol, fetchedAt: new Date().toISOString(), d: bars.map((b) => b.asOf), c: bars.map((b) => b.close) }));
+    } catch { /* cache is best-effort */ }
     if (bars.length < 70) {
       lastErr = `${sym}: too few daily bars (${bars.length})`;
       continue;

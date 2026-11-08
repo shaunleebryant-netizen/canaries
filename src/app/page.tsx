@@ -1,3 +1,5 @@
+import { ComingSoon } from "@/components/ComingSoon";
+import { HomeXaiPreview, HOME_FAQ } from "@/components/preview/HomeXaiPreview";
 import Image from "next/image";
 import { loadState } from "@/lib/loadState";
 import { toPublicSnapshot } from "@/lib/composite";
@@ -68,16 +70,16 @@ const INCLUDED = [
  * on /indicators; others show "Coming soon". */
 const INDICATORS: { name: string; blurb: string; url?: string; cta?: string }[] = [
   {
-    name: "Canary RelRSI (Fish and Sweaty)",
+    name: "Canary RelRSI 🙂🐟 and 🥵",
     blurb:
       "Puts the same 🙂 🐟 and 🥵 💀 marks from our scanners on your own daily charts, so you can spot sold-off stocks finding their feet and stretched ones getting tired.",
-    url: "/indicators#bundle",
+    url: "/indicators#fish-sweaty",
   },
   {
     name: "MFI Washout",
     blurb:
       "Puts the 💵 mark from our MFI Scan on your own daily charts, showing when money flow turns back up after the selling looks washed out.",
-    url: "/indicators#bundle",
+    url: "/indicators#mfi-washout",
   },
   {
     name: "Market State",
@@ -139,11 +141,11 @@ const FAQ = [
   },
   {
     q: "What is the first-100 launch lock?",
-    a: "The first 100 members pay $600/yr (US$50/mo, billed annually), locked for life while they renew. After the first 100, standard membership is $1,069/yr. You can turn off auto-renew at any time and keep your access until the end of the paid year.",
+    a: "The first 100 members pay $420/yr (US$35/mo, billed annually), locked for life while they renew. After the first 100, standard membership is $1,069/yr. You can turn off auto-renew at any time and keep your access until the end of the paid year.",
   },
   {
     q: "Is Stripe checkout live yet?",
-    a: "Signup is live as a clear pricing path; Stripe wiring is still being finished. If you want in during launch, start at /signup or email shaun@canarydashboard.com.",
+    a: "Yes. Membership and TradingView indicators both take card payments on Stripe. Start at /signup for membership, or /indicators to buy a script.",
   },
   {
     q: "Can I book the founder?",
@@ -180,7 +182,7 @@ const FAQ_V3 = [
   },
   {
     q: "What does membership cost?",
-    a: "The first 100 members pay $600/yr (US$50/mo, billed annually), locked in for life while they renew. After the first 100, membership is $1,069/yr.",
+    a: "The first 100 members pay $420/yr (US$35/mo, billed annually), locked in for life while they renew. After the first 100, membership is $1,069/yr.",
   },
   {
     q: "Can I cancel?",
@@ -201,6 +203,23 @@ async function foundingSpotsOpen(): Promise<boolean> {
 }
 
 export default async function HomePage() {
+  // Owner t766u (25/10/2026): coming-soon is the landing page until launch (aim mid-November 2026).
+  // Set NEXT_PUBLIC_COMING_SOON=1 at build time to re-enable coming-soon.
+  // Owner t774u (25/10/2026): ship ITC-style homepage; coming-soon off.
+  if (process.env.NEXT_PUBLIC_COMING_SOON === "1") return <ComingSoon />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd(HOME_FAQ)).replace(/</g, "\\u003c") }}
+      />
+      <HomeXaiPreview />
+    </>
+  );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for reference (old HOME_V3)
+async function LegacyHomePage() {
   const launchOpen = await foundingSpotsOpen();
   const faqBase = HOME_V3 ? FAQ_V3 : FAQ;
   const faq = launchOpen
@@ -345,7 +364,7 @@ export default async function HomePage() {
     <div className="mx-auto max-w-3xl px-4 py-16 text-center">
       <h2 className="text-2xl font-semibold text-white">Ready to join us?</h2>
       <p className="mx-auto mt-3 max-w-lg text-sm text-slate-400">
-        You are still within the launch price of $600/yr ($50/mo, locked for life). Get started today
+        You are still within the launch price of $420/yr ($35/mo, locked for life). Get started today
         or contact shaun@canarydashboard.com with questions.
       </p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -399,7 +418,7 @@ export default async function HomePage() {
                   href={ind.url}
                   className="mt-5 inline-block self-start rounded-xl border border-sky-400/50 px-4 py-2 text-sm font-medium text-sky-200 hover:bg-sky-400/10"
                 >
-                  {ind.cta ?? "See the bundle · US$99 →"}
+                  {ind.cta ?? "See details · US$99 →"}
                 </a>
               ) : (
                 <span
@@ -414,9 +433,7 @@ export default async function HomePage() {
           ))}
         </div>
         <p className="mt-4 text-sm font-medium text-canary-amber">
-          Canary RelRSI and MFI Washout come together as one bundle: US$99 one-off for both. Free for
-          Canary Dashboard members, and you keep them even if you cancel. Vanna and Charm Flows is
-          sold separately for US$99, free for members.
+          Each indicator is US$99 one-time payment. Free for Canary Dashboard members.
         </p>
         <p className="mt-2 text-xs text-slate-500">
           Questions about access? Email{" "}
@@ -452,11 +469,11 @@ export default async function HomePage() {
               <>
                 <p className="mt-6 flex items-baseline justify-center gap-1">
                   <span className="bg-gradient-to-r from-sky-300 to-amber-300 bg-clip-text text-6xl font-extrabold tracking-tight text-transparent sm:text-7xl">
-                    $50
+                    $35
                   </span>
                   <span className="text-xl font-semibold text-slate-300">/mo</span>
                 </p>
-                <p className="mt-1 text-sm text-slate-300">billed annually ($600/yr)</p>
+                <p className="mt-1 text-sm text-slate-300">billed annually ($420/yr)</p>
                 <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-400/10 px-4 py-1.5 text-sm font-semibold text-sky-200 ring-1 ring-sky-400/40">
                   <span aria-hidden>🔒</span> Locked in for life
                 </p>
@@ -488,17 +505,43 @@ export default async function HomePage() {
             </ul>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href="/signup"
+                href="/signup/free"
                 className="w-full rounded-xl bg-canary-gold px-8 py-4 text-base font-bold text-slate-950 shadow-[0_0_30px_-5px_rgba(245,158,11,0.7)] transition hover:bg-amber-400 sm:w-auto"
               >
-                {launchOpen ? "Claim your founding spot →" : "Start membership →"}
+                Create a free account
               </a>
               <a
-                href="/account/login"
+                href="/signup"
                 className="w-full rounded-xl border border-white/20 px-6 py-4 text-sm font-medium text-white hover:bg-white/5 sm:w-auto"
               >
-                Log in
+                {launchOpen ? "Founding annual · US$35/mo" : "Start membership →"}
               </a>
+            </div>
+            <p className="mt-3 text-sm text-slate-300">Limited free access</p>
+            {launchOpen ? (
+              <p className="mt-2 text-xs text-slate-400">
+                Founding annual is US$35/mo, billed annually at US$420/yr.{" "}
+                <a href="/account/signup" className="underline">Founding monthly is US$70/mo</a>, the secondary option. Prices are the existing plans. This preview does not charge a card.
+              </p>
+            ) : null}
+            <div className="mx-auto mt-6 grid max-w-lg gap-3 text-left text-xs sm:grid-cols-2">
+              <div className="rounded-xl border border-white/10 p-3">
+                <p className="font-semibold text-white">Free account</p>
+                <ul className="mt-2 space-y-1 text-slate-400">
+                  <li>Limited free access</li>
+                  <li>ETF tab and ETF charts</li>
+                  <li>Read-only Decide overview</li>
+                  <li>Optional email updates, off unless you tick the box</li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-canary-gold/30 p-3">
+                <p className="font-semibold text-white">Paid membership</p>
+                <ul className="mt-2 space-y-1 text-slate-300">
+                  {INCLUDED.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <p className="mt-6 text-xs text-slate-500">
               Questions? Email shaun@canarydashboard.com.
@@ -541,21 +584,20 @@ export default async function HomePage() {
               curated list of tickers and sectors in favourable conditions.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {/* Owner 2026-10-06 6:27 PM NZ: hero primary button → "Go to Dashboard" (/members).
-                  Other "Start membership" buttons further down stay as they are. */}
               <a
-                href="/members"
+                href="/signup/free"
                 className="rounded-xl bg-canary-gold px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
               >
-                Go to Dashboard
+                Create a free account
               </a>
               <a
-                href="/account/login"
+                href="/signup"
                 className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10"
               >
-                Log in
+                Paid membership
               </a>
             </div>
+            <p className="mt-3 text-sm text-slate-300">Limited free access</p>
             {/* Owner 2026-10-07 12:44 AM NZ: "Launch promo is currently ON" line removed from the hero (copy only). */}
           </div>
           <HomeVideo />
@@ -676,10 +718,10 @@ export default async function HomePage() {
                 First 100
               </p>
               <p className="mt-3 text-3xl font-semibold text-white">
-                $600<span className="text-base font-medium text-slate-400">/yr</span>
+                $420<span className="text-base font-medium text-slate-400">/yr</span>
               </p>
               <p className="mt-2 text-sm text-slate-300">
-                Billed annually (US$50/mo) · rate locked for life while you renew
+                Billed annually (US$35/mo) · rate locked for life while you renew
               </p>
               <ul className="mt-4 space-y-1.5 text-sm text-slate-200">
                 <li className="flex gap-2">

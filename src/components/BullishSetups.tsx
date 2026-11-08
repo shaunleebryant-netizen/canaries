@@ -24,7 +24,7 @@ function BullishBody() {
       </p>
       <p>
         The number beside each ticker is how many conditions it meets, and the
-        names with the most sit at the top. The The &ldquo;since&rdquo; date isldquo;AlertThe &ldquo;since&rdquo; date isrdquo; date is
+        names with the most sit at the top. The &ldquo;since&rdquo; date is
         the day it first made the list, and it keeps that date for as long as
         it stays on. Stocks that also show up in Bearish Setups are left out.
       </p>

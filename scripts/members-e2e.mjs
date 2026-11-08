@@ -118,7 +118,7 @@ check("webhook rejects bad signature (400)", r.status === 400);
 
 r = await u.req("/account");
 if (EXPECT === "founding") {
-  check("picker: founding $600/yr shown alone + highlighted", r.text.includes('data-testid="plan-launch_annual"') && r.text.includes("$600/yr") && !r.text.includes("plan-standard_monthly") && r.text.includes("Launch special"));
+  check("picker: founding $420/yr shown alone + highlighted", r.text.includes('data-testid="plan-launch_annual"') && r.text.includes("$420/yr") && !r.text.includes("plan-standard_monthly") && r.text.includes("Launch special"));
 } else {
   const ia = r.text.indexOf('data-testid="plan-standard_annual"'), im = r.text.indexOf('data-testid="plan-standard_monthly"');
   check("picker: standard annual $1,069/yr first + Recommended, then monthly $99/mo", ia > 0 && im > ia && r.text.includes("$1,069/yr") && r.text.includes("$99/mo") && r.text.includes("Recommended") && !r.text.includes("plan-launch_annual"));
@@ -130,7 +130,7 @@ if (EXPECT === "founding") {
 r = await u.req("/api/account/checkout", { method: "POST", form: {} });
 check(`checkout default -> (mock) checkout, ${DEFAULT_PLAN}`, r.status === 303 && r.location.includes(`/account/mock-checkout?plan=${DEFAULT_PLAN}`), r.location);
 r = await u.req(`/account/mock-checkout?plan=${DEFAULT_PLAN}`);
-check("mock checkout shows plan price", r.text.includes(EXPECT === "standard" ? "$1,069/yr" : "$600/yr") && r.text.includes("MOCK"));
+check("mock checkout shows plan price", r.text.includes(EXPECT === "standard" ? "$1,069/yr" : "$420/yr") && r.text.includes("MOCK"));
 
 r = await u.req("/api/account/mock/pay", { method: "POST", json: { plan: DEFAULT_PLAN, card: "4000 0000 0000 0002" } });
 check("declined test card -> 402, no access", r.status === 402 && !(await membersOpen(u)));
@@ -235,7 +235,7 @@ for (const t of ["signups", "payments", "events", "subscriptions", "member_event
 }
 
 r = await adm.req("/api/admin/export?table=payments");
-check("ledger records plan amount (USD minor units)", r.text.includes(EXPECT === "standard" ? ",106900,usd," : ",60000,usd,"));
+check("ledger records plan amount (USD minor units)", r.text.includes(EXPECT === "standard" ? ",106900,usd," : ",42000,usd,"));
 
 const failed = results.filter((x) => !x.ok);
 console.log(`\n${results.length - failed.length}/${results.length} passed`);

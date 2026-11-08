@@ -31,22 +31,20 @@ export type IndicatorProduct = {
 
 /** Owner 2026-10-16, verbatim. Education-only context line; not a signal or a returns claim. */
 export const PESSIMISM_LINE =
-  "While peak optimism is hard to catch, peak pessimism is a lot easier.";
+  "Peak optimism is hard to catch, peak pessimism is often easier.";
 
 export const SUPPORT_EMAIL = "shaun@canarydashboard.com";
 
 /**
- * Owner 2026-10-09 (ships Sat 10 Oct): Canary RelRSI (🙂🐟🥵💀) and MFI Washout (💵) are sold together as ONE
- * bundle, US$99 one-off for both; free for Canary Dashboard members, who keep access even if they cancel.
- * Vanna & Charm was on hold (hidden) 2026-10-09; owner 2026-10-10 put it back as its OWN listing, separate
- * from the bundle, with no price shown (pre-hide "$99 USD each, free for members" is not reused).
- * Replaces "$99 USD each" (2026-10-06).
+ * Owner 2026-10-27: each indicator is US$99 one-off on its own (no bundle). Free for Canary Dashboard
+ * members, who keep access even if they cancel. Legacy `bundle` orders still resolve via INDICATOR_BUNDLE.
  */
-export const SEPARATE_ACCESS_LINE = "Sold separately · US$99 · free for members";
-export const MEMBERS_FREE_LINE_ONE = "Free for Canary Dashboard members, and you keep it even if you cancel.";
-export const BUNDLE_PRICE_LABEL = "US$99";
-export const BUNDLE_PRICE_LINE = "US$99 one-off for both";
-export const MEMBERS_FREE_LINE = "Free for Canary Dashboard members, and you keep them even if you cancel.";
+export const SEPARATE_ACCESS_LINE = "US$99 one-time payment · free for members";
+export const MEMBERS_FREE_LINE_ONE = "Free for members.";
+export const BUNDLE_PRICE_LABEL = "US$99";  // legacy
+export const BUNDLE_PRICE_LINE = "US$99 one-time payment";
+export const MEMBERS_FREE_LINE = "Free for members.";
+export const EACH_PRICE_LINE = "US$99 one-time payment";
 
 const ALL_INDICATORS: IndicatorProduct[] = [
   {
@@ -60,37 +58,35 @@ const ALL_INDICATORS: IndicatorProduct[] = [
     tagline: "Know which part of the month you're trading in",
     // Owner 2026-10-11: cautious wording, no directional claims.
     helpsYou:
-      "Marks where you are in the options calendar: the days when options-dealer hedging flows (vanna and charm) tend to build, and the window around monthly expiry when they tend to fade. Flows are one input among many; they don't reliably predict direction on their own. Education only.",
+      "Marks the options-calendar windows when dealer hedging flows (vanna and charm) tend to build, and around monthly expiry when they tend to fade.",
     bullets: [
-      "👑✨ marks the days when vanna and charm hedging flows tend to build",
-      "🪟 marks the window around monthly expiry when those flows tend to fade (\"on holiday\")",
-      "The same calendar read as the Vanna & Charm box on the dashboard, on your own charts",
+      "👑✨ when vanna and charm flows tend to build",
+      "🪟 around monthly expiry, when those flows tend to fade",
+      "Same calendar read as the dashboard Vanna & Charm box",
     ],
     timeframe: "Daily chart only",
-    // Owner 2026-10-10 "ship all now": US$99 on its own, free for members, separate from the bundle.
     priceCents: 9900,
     priceLabel: "US$99",
-    separate: true,
   },
   {
     id: "fish-sweaty",
-    name: "Canary RelRSI: Time to Fish or Getting Sweaty",
+    name: "Canary RelRSI 🙂🐟 and 🥵",
     tvTitle: "Time to Fish 🙂🐟, or Getting Sweaty? 🥵💀",
     tradingViewUrl: "https://www.tradingview.com/script/CJgLPMDu-Time-to-Fish-or-Getting-Sweaty/",
     image: "/indicators/fish-sweaty.jpg",
     imageAlt: "Time to Fish or Getting Sweaty indicator on a daily Bitcoin chart, with 🙂🐟 and 🥵💀 marks",
     tagline: "Spot washed-out names and tired ones on your own charts",
     helpsYou:
-      "Puts the same 🙂🐟 and 🥵💀 marks from our Fish and Sweaty scanners on any chart you open. It helps you find stocks that look sold out and worth a closer look, and notice when a name has run hard and is getting tired.",
-    quote: PESSIMISM_LINE,
+      "Spot names that have meaningfully recovered from oversold conditions, and ones that have run too hard, too fast.",
+    // Owner 2026-11-02 (t939u): pessimism pull quote removed from the indicators page.
     bullets: [
-      "🙂🐟 appears when conditions favour buying or bottoming",
-      "🥵 appears when the stock looks exhausted, 💀 when price loses upside momentum",
-      "The same read behind the Fish and Sweaty boxes on the dashboard",
+      "🙂🐟 to visualise when RSI is recovering after a washout",
+      "🥵 when a run looks exhausted · 💀 when upside momentum fades",
+      "Same read as the Fish and Sweaty boxes on the dashboard",
     ],
     timeframe: "Daily chart only",
     priceCents: 9900,
-    priceLabel: "US$99 bundle",
+    priceLabel: "US$99",
   },
   {
     // Owner 2026-10-06: published on TradingView; the members MFI Scan runs v6.1 (= v6 + private depth and 🐟/🙂 gates) from 2026-10-08; card copy is v6-safe.
@@ -102,55 +98,52 @@ const ALL_INDICATORS: IndicatorProduct[] = [
     imageAlt: "MFI Washout indicator on a daily chart, with 💵 marks on price and the MFI pane below",
     tagline: "See when the selling looks washed out",
     helpsYou:
-      "Puts the 💵 mark from our MFI Scan on any chart you open. It watches the Money Flow Index, which blends price and volume, and marks the day money flow turns back up after a washout. It helps you find sold-out names worth a closer look.",
-    quote: PESSIMISM_LINE,
+      "Watches for high relative money flow to previous sessions, and marks when a ticker turns up after a washout.",
     bullets: [
-      "💵 appears when money flow hooks back up from a washed-out, oversold zone",
-      "It looks for a burst of heavy volume first, then quieter trading on the turn",
-      "Fires once per washout: the same read behind the MFI Scan box on the dashboard",
+      "💵 when money flow hooks up from a washout",
+      "Looks for heavy volume first, then a quieter turn",
+      "Once per washout — same read as the MFI Scan box",
     ],
     timeframe: "Daily chart only",
     priceCents: 9900,
-    priceLabel: "US$99 bundle",
+    priceLabel: "US$99",
   },
 ];
 
-/** The two bundled indicators (Canary RelRSI + MFI Washout). */
-export const INDICATOR_PRODUCTS: IndicatorProduct[] = ALL_INDICATORS.filter((p) => !p.hidden && !p.separate);
+/** All live indicators for sale (US$99 each). */
+export const INDICATOR_PRODUCTS: IndicatorProduct[] = ALL_INDICATORS.filter((p) => !p.hidden);
 
-/** Sold on their own, outside the bundle (owner 2026-10-10: Vanna & Charm, US$99, free for members). */
-export const SEPARATE_INDICATORS: IndicatorProduct[] = ALL_INDICATORS.filter((p) => !p.hidden && p.separate);
+/** @deprecated Owner 2026-10-27: no separate tier — kept empty for old imports. */
+export const SEPARATE_INDICATORS: IndicatorProduct[] = [];
 
-/** The only thing for sale: both indicators together. */
+/** Legacy bundle product for old order rows / ?script=bundle links. */
 export const INDICATOR_BUNDLE: IndicatorProduct = {
   id: "bundle",
-  name: "Canary RelRSI + MFI Washout bundle",
+  name: "Canary RelRSI + MFI Washout (legacy bundle)",
   tvTitle: "Time to Fish 🙂🐟, or Getting Sweaty? 🥵💀 + MFI Washout 💵",
-  // Orders store one URL column; access is granted on both scripts (space-separated links).
-  tradingViewUrl: INDICATOR_PRODUCTS.map((p) => p.tradingViewUrl).join(" "),
+  tradingViewUrl: ALL_INDICATORS.filter((p) => p.id === "fish-sweaty" || p.id === "mfi-washout")
+    .map((p) => p.tradingViewUrl)
+    .join(" "),
   image: "/indicators/fish-sweaty.jpg",
   imageAlt: "Canary RelRSI and MFI Washout indicators on TradingView",
-  tagline: "Both indicators, one bundle",
-  helpsYou: "Canary RelRSI (🙂🐟🥵💀) and MFI Washout (💵) together, on any daily chart you open.",
+  tagline: "Legacy two-script order",
+  helpsYou: "Legacy order covering RelRSI and MFI Washout together.",
   bullets: [],
   timeframe: "Daily chart only",
   priceCents: 9900,
   priceLabel: BUNDLE_PRICE_LABEL,
 };
 
-/** Lookup for display (incl. legacy order rows: single indicators, hidden ones). */
+/** Lookup for display (incl. legacy order rows: single indicators, hidden ones, bundle). */
 export function findIndicator(id: string | null | undefined): IndicatorProduct | undefined {
   if (id === INDICATOR_BUNDLE.id) return INDICATOR_BUNDLE;
   return ALL_INDICATORS.find((p) => p.id === id);
 }
 
-/** What can be ordered now: the bundle (old single bundled-indicator links map to it) or a separately sold
- * indicator (Vanna & Charm); hidden ones can't be ordered. */
+/** What can be ordered now: any live indicator, or the legacy bundle id. */
 export function findOrderable(id: string | null | undefined): IndicatorProduct | undefined {
   if (id === INDICATOR_BUNDLE.id) return INDICATOR_BUNDLE;
-  const separate = SEPARATE_INDICATORS.find((p) => p.id === id);
-  if (separate) return separate;
-  return INDICATOR_PRODUCTS.some((p) => p.id === id) ? INDICATOR_BUNDLE : undefined;
+  return INDICATOR_PRODUCTS.find((p) => p.id === id);
 }
 
 /** TradingView usernames: letters, numbers, underscore (dots/hyphens tolerated), 2-40 chars. */
@@ -158,4 +151,25 @@ export function normalizeTvUsername(raw: unknown): string | null {
   const u = String(raw ?? "").trim().replace(/^@+/, "");
   if (!/^[A-Za-z0-9_][A-Za-z0-9_.-]{1,39}$/.test(u)) return null;
   return u;
+}
+
+/**
+ * Owner 2026-11-02 (t909u): buyers can pick several indicators in one order. Accepts an array or a
+ * comma-separated string of ids; returns de-duplicated live products in catalog order (legacy
+ * "bundle" still resolves on its own). Stored on indicator_orders.script_id as "id1,id2".
+ */
+export function findOrderableMany(raw: unknown): IndicatorProduct[] {
+  const ids = (Array.isArray(raw) ? raw : String(raw ?? "").split(","))
+    .map((s) => String(s).trim())
+    .filter(Boolean)
+    .slice(0, 10);
+  if (ids.length === 1 && ids[0] === INDICATOR_BUNDLE.id) return [INDICATOR_BUNDLE];
+  const set = new Set(ids);
+  return INDICATOR_PRODUCTS.filter((p) => set.has(p.id));
+}
+
+/** Display lookup for a stored (possibly multi) script_id. */
+export function findIndicators(id: string | null | undefined): IndicatorProduct[] {
+  const ids = String(id ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  return ids.map((i) => findIndicator(i)).filter((p): p is IndicatorProduct => Boolean(p));
 }

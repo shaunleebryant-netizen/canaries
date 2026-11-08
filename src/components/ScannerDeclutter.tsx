@@ -10,6 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { LimitedAccessNotice } from "@/components/LimitedAccessNotice";
 
 const SHOW_LIMIT = 12;
 
@@ -41,6 +42,7 @@ export function ScannerEmojiLegend() {
     { emoji: "🐟", label: "Fish — a sold-off name starting to find its feet" },
     { emoji: "🙂", label: "Washout — selling looks worn out" },
     { emoji: "💵", label: "MFI washout — selling washed out, money flow turning up" },
+    { emoji: "🧚", label: "Bottom Zone — WVF extreme + RSI under 35 + up close" },
     { emoji: "🟢", label: "Weekly green — trend turned or staying bullish" },
   ];
   const bearish: Mark[] = [
@@ -154,6 +156,7 @@ export function ScannerDeclutterShell({
   myStocks,
   initialTab = "stocks",
   toolbarEnd,
+  lockedTabs = [],
 }: {
   canaries: ReactNode;
   main: ReactNode;
@@ -176,6 +179,8 @@ export function ScannerDeclutterShell({
   toolbarEnd?: ReactNode;
   /** Deep link (/members?tab=history). Falls back to Canaries. */
   initialTab?: DeclutterTab;
+  /** Tabs whose children must not be rendered. The server also omits that data. */
+  lockedTabs?: readonly DeclutterTab[];
 }) {
   const [tab, setTab] = useState<DeclutterTab>(
     (initialTab === "history" && !history) ||
@@ -185,7 +190,7 @@ export function ScannerDeclutterShell({
       ? "stocks"
       : initialTab
   );
-  const [moreOpen, setMoreOpen] = useState(true);
+  // Owner t1049u: Scanners accordion removed; always shown.
   // Owner t698u 2026-10-14: Main Scanner can be hidden like Sub Scanners; remembered on this device.
   const [mainOpen, setMainOpen] = useState(true);
   useEffect(() => {
@@ -239,10 +244,11 @@ export function ScannerDeclutterShell({
     return () => window.clearTimeout(t);
   }, [pendingHash, tab]);
 
+  const locked = new Set(lockedTabs);
   const tabs: { id: DeclutterTab; label: string }[] = [
+    { id: "etf", label: "ETFs" },
     { id: "stocks", label: "Stocks" },
     ...(ideas ? [{ id: "ideas" as const, label: "Ideas" }] : []),
-    { id: "etf", label: "ETFs" },
     { id: "crypto", label: "Crypto" },
     ...(insiders ? [{ id: "insiders" as const, label: "Insiders" }] : []),
     ...(myStocks ? [{ id: "mystocks" as const, label: "My Stocks" }] : []),
@@ -300,14 +306,15 @@ export function ScannerDeclutterShell({
       </div>
 
       {tab === "canaries" ? (
-        <div className="space-y-3">{canaries}</div>
+        locked.has("canaries") ? <LimitedAccessNotice tab="Canaries" tabId="canaries" /> : <div className="space-y-3">{canaries}</div>
       ) : null}
 
       {tab === "stocks" ? (
+        locked.has("stocks") ? <LimitedAccessNotice tab="Stocks" tabId="stocks" /> : (
         <div className="space-y-4">
           <ScannerEmojiLegend />
-          {stocksTop}
-          {mainOpen ? (
+          {/* Owner t852u: Canary Score ranking (stocksTop) now renders below Sub Scanners. */}
+          {main == null ? null : mainOpen ? (
             <div className="relative">
               <button
                 type="button"
@@ -337,51 +344,30 @@ export function ScannerDeclutterShell({
               </button>
             </div>
           )}
-          <div className="rounded-xl border border-white/10 bg-slate-950/40">
-            <button
-              type="button"
-              aria-expanded={moreOpen}
-              onClick={() => setMoreOpen((v) => !v)}
-              className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/5"
-            >
-              <span className="flex items-center gap-2">
-                <span aria-hidden className="text-slate-500">
-                  {moreOpen ? "▾" : "▸"}
-                </span>
-                Sub Scanners
-                <span className="text-[11px] font-normal text-slate-500">
-                  Time to fish · Sweaty stocks · MFI · IBD · Baby Bulls · Multi-week Warriors
-                </span>
-              </span>
-              <span className="text-[11px] font-normal text-slate-500">
-                {moreOpen ? "Hide" : "Show"}
-              </span>
-            </button>
-            {moreOpen ? (
-              <div className="border-t border-white/5 px-3 pb-3 pt-3">
-                {moreScans}
-              </div>
-            ) : null}
-          </div>
+          {/* Owner t1049u: no accordion — Scanners heading, description and boxes always shown. */}
+          <div>{moreScans}</div>
+          {stocksTop}
           {stocksBottom}
         </div>
-      ) : null}
+      )) : null}
 
-      {tab === "ideas" && ideas ? <div id="ideas-tab" className="space-y-3">{ideas}</div> : null}
+      {tab === "ideas" ? (locked.has("ideas") ? <LimitedAccessNotice tab="Ideas" tabId="ideas" /> : ideas ? <div id="ideas-tab" className="space-y-3">{ideas}</div> : null) : null}
 
       {tab === "etf" ? <div className="space-y-3">{etf}</div> : null}
 
-      {tab === "crypto" ? <div className="space-y-3">{crypto}</div> : null}
+      {tab === "crypto" ? (locked.has("crypto") ? <LimitedAccessNotice tab="Crypto" tabId="crypto" /> : <div className="space-y-3">{crypto}</div>) : null}
 
-      {tab === "insiders" && insiders ? (
+      {tab === "insiders" ? (
+        locked.has("insiders") ? <LimitedAccessNotice tab="Insiders" tabId="insiders" /> : insiders ? (
         <div id="insiders-tab" className="space-y-3">
           {insiders}
         </div>
+      ) : null
       ) : null}
 
-      {tab === "history" && history ? <div className="space-y-3">{history}</div> : null}
+      {tab === "history" ? (locked.has("history") ? <LimitedAccessNotice tab="Backtest" tabId="backtest" /> : history ? <div className="space-y-3">{history}</div> : null) : null}
 
-      {tab === "mystocks" && myStocks ? <div className="space-y-3">{myStocks}</div> : null}
+      {tab === "mystocks" ? (locked.has("mystocks") ? <LimitedAccessNotice tab="My Stocks" tabId="mystocks" /> : myStocks ? <div className="space-y-3">{myStocks}</div> : null) : null}
     </div>
   );
 }

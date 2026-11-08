@@ -1,9 +1,22 @@
+import { SubscribeNavButton } from "@/components/SubscribeLightbox";
 import { ABOUT_PAGE, FOOTER_LOGIN_LINK, FOOTER_TUITION_LINK, LEGAL_PAGES } from "@/lib/featureFlags";
 
-export function SiteFooter() {
+export function SiteFooter({ comingSoon = false }: { comingSoon?: boolean } = {}) {
   return (
     <footer className="border-t border-white/10 bg-slate-950">
       <div className="mx-auto max-w-5xl px-4 py-10 text-sm text-slate-400">
+        {comingSoon ? (
+          LEGAL_PAGES ? (
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+              <a href="/privacy" className="text-slate-300 hover:text-canary-gold">
+                Privacy
+              </a>
+              <a href="/terms" className="text-slate-300 hover:text-canary-gold">
+                Terms
+              </a>
+            </div>
+          ) : null
+        ) : (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <a href="/indicators" className="text-slate-300 hover:text-canary-gold">
             Indicators
@@ -25,6 +38,8 @@ export function SiteFooter() {
           <a href="/signup" className="text-slate-300 hover:text-canary-gold">
             Dashboard
           </a>
+          {/* Owner 2026-11-02 (t969u): Subscribe lives in the footer, not the header. */}
+          <SubscribeNavButton className="text-slate-300 hover:text-canary-gold" />
           {/* Order (owner 2026-09-28 11:53 PM NZ): Log in, Privacy, Terms. */}
           {FOOTER_LOGIN_LINK ? (
             <a href="/account/login" className="text-slate-300 hover:text-canary-gold">
@@ -42,11 +57,12 @@ export function SiteFooter() {
             </>
           ) : null}
         </div>
-        <p className="mt-6 font-medium text-slate-200">
+        )}
+        <p className={`font-medium text-slate-200${comingSoon && !LEGAL_PAGES ? "" : " mt-6"}`}>
           Education only — not investment advice.
         </p>
         <p className="mt-2 max-w-3xl leading-relaxed">
-          Canary Dashboard publishes educational market-health readings. We do{" "}
+          Canary Dashboard publishes educational real-time market health readings and stocks that meet our indicator requirements. We do{" "}
           <span className="text-slate-200">not</span> provide stock recommendations.
           Nothing on this site is a recommendation to buy or sell any security. Past
           readings do not promise future performance. You are responsible for your own

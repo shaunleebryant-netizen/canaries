@@ -1,4 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { resolveViewer } from "@/lib/members/previewAccess";
 
 /**
  * Members-only canary history chart data (owner PREVIEW 2026-10-09; flag MEMBERS_CANARY_CHARTS, default
@@ -15,6 +16,10 @@ type AssetsBinding = { fetch: (req: Request | string) => Promise<Response> };
 const ID_RE = /^[a-z0-9-]{2,40}$/;
 
 export async function GET(request: Request, ctx: { params: Promise<{ id: string }> }) {
+  const viewer = await resolveViewer();
+  if (viewer.tier !== "paid") {
+    return Response.json({ error: viewer.tier === "anon" ? "Unauthorized" : "Upgrade required" }, { status: viewer.tier === "anon" ? 401 : 403 });
+  }
   const raw = decodeURIComponent((await ctx.params).id || "").toLowerCase();
   if (!ID_RE.test(raw)) return Response.json({ error: "Bad canary" }, { status: 400 });
   const url = new URL(`/_chartdata/canary/${raw}.json`, request.url).toString();

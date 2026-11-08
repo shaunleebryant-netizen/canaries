@@ -13,8 +13,20 @@ export async function requireMemberAccessPage(): Promise<void> {
   if (!cur) redirect("/account/login?next=/members");
   // Phase 1: email must be verified before subscription access counts for /members.
   if (!isEmailVerified(cur.user)) redirect("/account/verify?next=/members");
-  const ent = await getEntitlement(await getMembersDb(), cur.user); // admin / comp / paid
-  if (!ent.access) redirect("/account?gate=members");
+  await getEntitlement(await getMembersDb(), cur.user);
+  // Verified accounts without a paid subscription see the free Decide and ETF surface.
+  // Paid, admin, and comp entitlements are unchanged. A success URL does not grant access.
+}
+
+/** Signed-in and verified, including a free account. Stub mode: null. */
+export async function verifiedSessionGuard(): Promise<NextResponse | null> {
+  if (!accountsEnabled()) return null;
+  const cur = await getCurrentUser();
+  if (!cur) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!isEmailVerified(cur.user)) {
+    return NextResponse.json({ error: "Email verification required" }, { status: 403 });
+  }
+  return null;
 }
 
 /** /api/members/* guard. Returns a response to send, or null to continue. Stub mode: null. */

@@ -8,7 +8,7 @@
  * DO NOT RUN until the owner has set up billing (owner 2026-09-25).
  *
  * Creates/reuses (by lookup_key) — pricing per owner update 2026-09-25, all USD:
- *   canary_founding_annual_usd   $600.00 / year   Founding, first 100, rate locked for life
+ *   canary_founding_annual_usd   $420.00 / year   Founding, first 100, rate locked for life
  *   canary_standard_annual_usd  $1,069.00 / year  Standard annual (default after 100)
  *   canary_standard_monthly_usd   $99.00 / month  Standard monthly
  * Configures the default Customer Portal: cancel at period end only (no proration/refund),
@@ -29,9 +29,9 @@ const PLANS = [
     lookup_key: "canary_founding_annual_usd",
     env: "STRIPE_PRICE_DASHBOARD",
     product: { name: "Canary Dashboard — Founding member (first 100)", metadata: { app: "canary", plan: "launch_annual" } },
-    unit_amount: 60000,
+    unit_amount: 42000,
     interval: "year",
-    nickname: "Founding annual $600/yr (rate locked for life while renewing)",
+    nickname: "Founding annual $420/yr (rate locked for life while renewing)",
   },
   {
     lookup_key: "canary_standard_annual_usd",
