@@ -69,8 +69,7 @@ export default async function AccountVerifyPage({
               {" "}
               Signed in as <span className="font-medium text-white">{cur.user.email}</span>.
             </>
-          ) : null}{" "}
-          With <code className="text-xs">EMAIL_SENDING</code> off, use test-mode link from signup or resend below.
+          ) : null}
         </p>
       ) : null}
 
