@@ -44,7 +44,26 @@ test("pending is counted separately from suppressed and is not eligible", () => 
   assert.equal(counts.eligible, 1);
 });
 
-test("snapshot pack log filters the saved signal history without claiming a better result", () => {
+test("a recorded red close withholds bullish marks and a missing close stays pending", () => {
+  const recorded = archiveFromNotes([
+    "2026-11-06 scripted Decide (x): S=-0.400 RED.",
+    "2026-10-21 scripted Decide (x): S=-0.138 AMBER.",
+  ]);
+  assert.equal(colourOn(recorded, "2026-11-06"), "red");
+  assert.equal(timingDecision("fish", "2026-11-06", recorded), "suppressed");
+  assert.equal(timingDecision("smile", "2026-11-06", recorded), "suppressed");
+  assert.equal(timingDecision("fairy", "2026-11-06", recorded), "suppressed");
+  assert.equal(timingDecision("mfi", "2026-11-06", recorded), "suppressed");
+  assert.equal(timingDecision("sweat", "2026-11-06", recorded), "ungated");
+  assert.equal(timingDecision("skull", "2026-11-06", recorded), "ungated");
+  assert.equal(timingDecision("fish", "2026-10-21", recorded), "eligible");
+  const withoutThatDay = archiveFromNotes(["2026-10-21 scripted Decide (x): S=-0.138 AMBER."]);
+  assert.equal(colourOn(withoutThatDay, "2026-11-06"), "unknown");
+  assert.equal(timingDecision("fish", "2026-11-06", withoutThatDay), "pending");
+  assert.equal(timingDecision("skull", "2026-11-06", withoutThatDay), "ungated");
+});
+
+test("the saved signal history follows the pack log on disk", () => {
   const state = JSON.parse(readFileSync(new URL("../../data/state.json", import.meta.url), "utf8")) as {
     notes?: string[];
   };
@@ -52,20 +71,36 @@ test("snapshot pack log filters the saved signal history without claiming a bett
     rows?: { d?: string; k?: string }[];
   };
   const saved = archiveFromNotes(state.notes ?? []);
+  const known = new Set(saved.points.map((point) => point.date));
   const counts = emptyGateCounts();
-  let incompleteFwd = 0;
   const rawRows = history.rows ?? [];
+  let outside = 0;
   for (const row of rawRows) {
     const kind = String(row.k ?? "");
-    const decision = timingDecision(kind, String(row.d ?? ""), saved);
+    const date = String(row.d ?? "");
+    const decision = timingDecision(kind, date, saved);
     tally(counts, decision);
-    const fw = (row as { fw?: (number | null)[] }).fw;
-    if (!fw || fw.some((v) => v == null)) incompleteFwd += 1;
+    const colour = colourOn(saved, date);
+    const recorded = saved.points.find((point) => point.date === date);
+    assert.equal(colour, recorded ? recorded.light : "unknown");
+    if (kind === "skull" || kind === "sweat" || kind === "exhaustion") {
+      assert.equal(decision, "ungated");
+    } else if (kind === "fish" || kind === "smile" || kind === "fairy" || kind === "mfi") {
+      if (!known.has(date)) {
+        assert.equal(decision, "pending");
+        outside += 1;
+      } else if (colour === "red") assert.equal(decision, "suppressed");
+      else assert.equal(decision, "eligible");
+    }
   }
+  const absent = "1999-01-04";
+  assert.equal(known.has(absent), false);
+  assert.equal(colourOn(saved, absent), "unknown");
+  assert.equal(timingDecision("fish", absent, saved), "pending");
+  assert.equal(timingDecision("skull", absent, saved), "ungated");
   assert.equal(counts.raw, rawRows.length);
   assert.equal(counts.eligible + counts.suppressedRed + counts.pendingUnknown, counts.raw);
-  assert.ok(counts.eligible < counts.raw, "dated coverage is incomplete, so not every saved mark is eligible");
+  assert.ok(outside > 0, "saved marks dated outside the pack log stay pending");
   assert.ok(counts.pendingUnknown > 0, "marks outside the pack log stay pending");
-  assert.ok(incompleteFwd >= 0);
-  assert.equal(colourOn(saved, "2026-11-06"), "unknown");
+  assert.ok(counts.eligible < counts.raw, "dated coverage is incomplete, so not every saved mark is eligible");
 });

@@ -1,8 +1,8 @@
 /**
  * Composite history available in this checkout.
  * Built only from data/state.json notes plus the current pack composite when
- * it agrees with those notes. The 2026-11-06 live pack was not in the supplied
- * source, so this is not a complete daily archive.
+ * it agrees with those notes. A date the notes do not record stays unknown.
+ * This is not a complete daily archive.
  */
 import stateJson from "../../data/state.json";
 import {
@@ -26,7 +26,7 @@ export function loadCompositeArchive(): CompositeArchive {
   const state = stateJson as StateFile;
   const fromNotes = archiveFromNotes(
     state.notes ?? [],
-    "data/state.json notes (snapshot pack log, not the 2026-11-06 live pack)",
+    "data/state.json notes",
   );
   const day = typeof state.sessionDate === "string" ? state.sessionDate.slice(0, 10) : "";
   const light = colourWord(String(state.composite?.light ?? ""));
