@@ -5,12 +5,12 @@
  * Daily candlesticks (~12 months, opens on ~6) with our marks on the bars, from the members-only
  * /api/members/chart/[ticker] JSON (precomputed by scripts/build-ticker-charts.mjs with the same
  * engine ports as the boxes). Chart: TradingView Lightweight Charts™ (Apache-2.0; attribution logo
- * on the chart + notice in the footer, as the licence asks). The old TradingView widget stays as a tab.
+ * on the chart + notice in the footer, as the licence asks). The lightbox shows this chart only.
  * Education only.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { IPrimitivePaneView } from "lightweight-charts";
-import { INTERVAL_VIEW, loadTradingViewScript, StarToggle, type ChartInterval } from "@/components/TickerChartLightbox";
+import { StarToggle, type ChartInterval } from "@/components/TickerChartLightbox";
 import { TickerLightboxStats } from "@/components/TickerLightboxStats";
 import type { UniverseLightboxPack } from "@/lib/tickerLightboxStats";
 import {
@@ -264,58 +264,6 @@ export function CandleChart({
   );
 }
 
-function TradingViewTab({ ticker, interval }: { ticker: string; interval: ChartInterval }) {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const [err, setErr] = useState<string | null>(null);
-  useEffect(() => {
-    const host = hostRef.current;
-    if (!host) return;
-    const id = `tv2_${Math.random().toString(36).slice(2)}`;
-    host.innerHTML = `<div id="${id}" style="width:100%;height:100%"></div>`;
-    let widget: { remove?: () => void } | null = null;
-    let live = true;
-    loadTradingViewScript()
-      .then(() => {
-        const TV = window.TradingView;
-        if (!live || !TV?.MediumWidget) {
-          if (live) setErr("TradingView chart unavailable.");
-          return;
-        }
-        const view = INTERVAL_VIEW[interval] ?? INTERVAL_VIEW.D;
-        widget = new TV.MediumWidget({
-          container_id: id,
-          symbols: [[ticker, `${toTradingViewSymbol(ticker)}|${view.range}`]],
-          chartOnly: false,
-          width: "100%",
-          height: "100%",
-          locale: "en",
-          colorTheme: "dark",
-          autosize: true,
-          isTransparent: true,
-          dateRange: view.range,
-          showFloatingTooltip: true,
-          showVolume: false,
-        });
-      })
-      .catch(() => live && setErr("Could not load TradingView."));
-    return () => {
-      live = false;
-      try {
-        widget?.remove?.();
-      } catch {
-        /* ignore */
-      }
-      host.innerHTML = "";
-    };
-  }, [ticker, interval]);
-  return (
-    <>
-      {err ? <p className="absolute inset-0 flex items-center justify-center text-xs text-slate-400">{err}</p> : null}
-      <div ref={hostRef} className="absolute inset-0" />
-    </>
-  );
-}
-
 function LayerChip({
   pressed,
   emoji,
@@ -358,7 +306,6 @@ function LayerChip({
 
 export function TickerChartDialogV2({
   ticker,
-  interval = "D",
   onClose,
   titleId,
   name,
@@ -380,8 +327,6 @@ export function TickerChartDialogV2({
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const { doc, error, loading } = useChartDoc(ticker);
-  // Weekly / monthly links (Baby Bulls etc.) keep opening on the TradingView view.
-  const [tab, setTab] = useState<"marks" | "tv">(interval === "D" ? "marks" : "tv");
   // Lives on the dialog, so changing ticker keeps the choices. localStorage keeps them across opens.
   const [layers, setLayers] = useState<ChartLayers>(() =>
     clampChartLayers(readStoredChartLayers(typeof window === "undefined" ? null : window.localStorage), chartAccess)
@@ -397,10 +342,6 @@ export function TickerChartDialogV2({
     if (chartAccess === "free-etf" && FREE_ETF_LOCKED.includes(id)) return;
     setLayers((prev) => clampChartLayers({ ...prev, [id]: !prev[id] }, chartAccess));
   };
-  useEffect(() => {
-    if (error === "nodata") setTab("tv");
-  }, [error]);
-
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -459,9 +400,7 @@ export function TickerChartDialogV2({
               {title ? <span className="truncate text-sm font-normal text-slate-300">{title}</span> : null}
             </h2>
             <p className="mt-0.5 truncate text-[11px] text-slate-500">
-              {tab === "marks"
-                ? `Daily candles · ~12 months${doc ? ` · to ${doc.asOf}` : ""} · education only`
-                : `${(INTERVAL_VIEW[interval] ?? INTERVAL_VIEW.D).label} · TradingView · ${tvSymbol}`}
+              {`Daily candles · ~12 months${doc ? ` · to ${doc.asOf}` : ""} · education only`}
               {" · "}
               <a href={tvUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 underline decoration-white/20 underline-offset-2 hover:text-canary-gold">
                 Open on TradingView ↗
@@ -480,30 +419,8 @@ export function TickerChartDialogV2({
           </button>
         </div>
 
+        {latest.length ? (
         <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-white/5 px-4 py-2 sm:px-5">
-          <div role="tablist" aria-label="Chart view" className="inline-flex rounded-lg border border-white/10 bg-slate-900/70 p-0.5 text-xs">
-            {(
-              [
-                ["marks", "Canary marks"],
-                ["tv", "TradingView"],
-              ] as const
-            ).map(([id, label]) => (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={tab === id}
-                onClick={() => setTab(id)}
-                disabled={id === "marks" && error === "nodata"}
-                className={`rounded-md px-2.5 py-1 font-medium transition disabled:opacity-40 ${
-                  tab === id ? "bg-sky-500/20 text-sky-100" : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          {tab === "marks" && latest.length ? (
             <ul className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-slate-400" aria-label="Latest marks">
               <li className="text-slate-500">Latest:</li>
               {latest.map(({ k, date }) => (
@@ -512,24 +429,24 @@ export function TickerChartDialogV2({
                 </li>
               ))}
             </ul>
-          ) : null}
         </div>
+        ) : null}
 
         <div className="relative h-[min(56vh,520px)] min-h-[300px] shrink-0 bg-slate-950">
-          {tab === "marks" ? (
-            doc ? (
-              <CandleChart doc={doc} layers={shownLayers} />
-            ) : (
-              <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-xs text-slate-400">
-                {loading ? "Loading chart…" : error === "nodata" ? "No Canary chart for this ticker yet." : "Could not load the chart."}
-              </p>
-            )
+          {doc ? (
+            <CandleChart doc={doc} layers={shownLayers} />
           ) : (
-            <TradingViewTab ticker={ticker} interval={interval} />
+            <p className="absolute inset-0 flex items-center justify-center px-6 text-center text-sm text-slate-300">
+              {loading
+                ? "Loading chart…"
+                : error === "nodata"
+                  ? "No Canary chart for this ticker yet. Open on TradingView stays available above."
+                  : "Could not load the chart."}
+            </p>
           )}
         </div>
 
-        {tab === "marks" ? (
+        {doc ? (
           <div className="shrink-0 border-t border-white/10 px-4 py-2 sm:px-5">
             <p className="mb-1.5 text-[10px] leading-snug text-slate-400">Click to toggle</p>
             <div role="group" aria-label="Mark layers" className="flex flex-wrap gap-1.5">

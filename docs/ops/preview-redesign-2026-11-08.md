@@ -38,6 +38,12 @@ Held Backtest and Engulfing work was not merged.
 
 `allowedDevOrigins` includes `127.0.0.1` and `localhost`. Run the preview with `--hostname 127.0.0.1`.
 
+## Upgrade journey (preview)
+
+Free Decide and the ETF tab are the confirmed free surface. Other tabs render generic blurred bars and an upgrade box. They do not include paid rows. Checkout is a Canary handoff under `/preview/checkout`. It does not call Stripe. A verified simulated payment writes `data/preview-fulfillment.json` and only then refreshes the preview cookie. `?checkout=success` alone does not unlock. The backup outbox stays `pending` until a separate simulated sync. Access does not wait for that sync.
+
+Production still uses `/api/stripe/webhook` (signature check, idempotent `stripe_events`, D1 subscription rows) and the CSV exporters in `scripts/export-members-sheet.mjs` and `scripts/export-indicator-buyers.mjs`. There is no durable membership backup outbox in production. The preview file is not that outbox and is not a production backup.
+
 ## Preview entitlement
 
 Set `CANARY_PREVIEW_TIER=1` and run outside production (`next dev`). The httpOnly cookie is ignored when the flag is off or `NODE_ENV` is production. A stub members cookie or a real paid entitlement stays paid. Free signup stores optional marketing consent in gitignored `data/preview-consents.json` and does not send mail.

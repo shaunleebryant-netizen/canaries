@@ -11,6 +11,7 @@
 next-env.d.ts
 /data/newsletter-signups.json
 /data/preview-consents.json
+/data/preview-fulfillment.json
 /data/seminar-signups.json
 /data/tuition-leads.json
 *-debug.log*

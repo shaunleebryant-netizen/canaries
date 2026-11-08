@@ -45,7 +45,7 @@ import { LearnCanariesButton } from "@/components/LearnCanariesButton";
 import { CanaryMarkGroups } from "@/components/CanaryMarkGroups";
 import { CompositeHistoryChart } from "@/components/CompositeHistoryChart";
 import { ExplainTitle } from "@/components/ExplainTitle";
-import { LimitedAccessNotice } from "@/components/LimitedAccessNotice";
+import { LockedUniverseButton } from "@/components/LimitedAccessNotice";
 import { StockMarkSearch } from "@/components/StockMarkSearch";
 import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
@@ -323,7 +323,7 @@ export async function MembersDashboard({
           {/* Owner 2026-10-06: public-safe ticker universe pop-up (tickers only, no signals).
               Owner 2026-10-10: on the tabbed layout it sits on the tab-bar row (toolbarEnd), no own row. */}
           {/* Outside TickerChartProvider: plain list (the stock table needs the chart context). */}
-          {SCANNER_DECLUTTER ? null : <div className="flex justify-end"><TickerUniverseButton groups={loadTickerUniverse()} className="whitespace-nowrap rounded-lg border border-[#eab308]/40 px-3 py-1.5 text-xs font-medium text-[#eab308] hover:bg-[#eab308]/10" /></div>}
+          {SCANNER_DECLUTTER || !paid ? null : <div className="flex justify-end"><TickerUniverseButton groups={loadTickerUniverse()} className="whitespace-nowrap rounded-lg border border-[#eab308]/40 px-3 py-1.5 text-xs font-medium text-[#eab308] hover:bg-[#eab308]/10" /></div>}
           <TickerChartProvider v2={design.chartV2} myStocks={design.myStocks && paid} universe={design.myStocks && paid ? loadTickerUniverse() : undefined} names={designNames} lightbox={paid ? loadUniverseLightbox() : null} chartAccess={chartAccess}>
             {/* Scanners: SCANNER_DECLUTTER mock (default off) or the live layout. */}
             {SCANNER_DECLUTTER ? (
@@ -332,7 +332,7 @@ export async function MembersDashboard({
                   initialTab={initialTab}
                   stocksTop={paid ? <>{/* Owner t765u: Ideas box removed from Stocks. */}{/* Owner t773u: drop outer FoldBox — GrowthScoreRanking already collapses. */}{MEMBERS_GROWTH_SCORE && growthRanking.length ? (<GrowthScoreRanking rows={growthRanking} asOf={loadGrowthAsOf()} />) : null}</> : null}
                   stocksBottom={null /* Owner t757u: Track record moved to Backtest. */}
-                  toolbarEnd={universeButton}
+                  toolbarEnd={paid ? universeButton : <LockedUniverseButton />}
                   insiders={paid ? (
                     <section aria-labelledby="insiders-tab-label" className="space-y-3">
                       {themed ? (
@@ -357,10 +357,14 @@ export async function MembersDashboard({
                         <InsiderHistory rows={insiderHistory.rows} asOf={insiderHistory.asOf} windowStart={insiderHistory.windowStart} />
                       </div>
                     </section>
-                  ) : undefined}
+                  ) : (
+                    <span className="sr-only">Insiders</span>
+                  )}
                   myStocks={
                     paid && myStocksData ? (
                       <MyStocks rows={myStocksData.rows} universe={myStocksData.universe} asOf={mainScanner.asOf} growth={MEMBERS_GROWTH_SCORE ? pickGrowth(myStocksData.universe.map((u) => u.t)) : undefined} growthScored={growthScored} />
+                    ) : !paid ? (
+                      <span className="sr-only">My Stocks</span>
                     ) : undefined
                   }
                   lockedTabs={paid ? [] : ["stocks", "crypto", "insiders", "ideas", "mystocks", "history", "canaries"]}
@@ -385,6 +389,8 @@ export async function MembersDashboard({
                         {/* Owner t765u: Ideas track record removed from Backtest. */}
                         <SignalHistory data={signalHistory} />
                       </section>
+                    ) : !paid ? (
+                      <span className="sr-only">Backtest</span>
                     ) : undefined
                   }
                   canaries={

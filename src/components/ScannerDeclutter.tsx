@@ -306,11 +306,11 @@ export function ScannerDeclutterShell({
       </div>
 
       {tab === "canaries" ? (
-        locked.has("canaries") ? <LimitedAccessNotice tab="Canaries" /> : <div className="space-y-3">{canaries}</div>
+        locked.has("canaries") ? <LimitedAccessNotice tab="Canaries" tabId="canaries" /> : <div className="space-y-3">{canaries}</div>
       ) : null}
 
       {tab === "stocks" ? (
-        locked.has("stocks") ? <LimitedAccessNotice tab="Stocks" /> : (
+        locked.has("stocks") ? <LimitedAccessNotice tab="Stocks" tabId="stocks" /> : (
         <div className="space-y-4">
           <ScannerEmojiLegend />
           {/* Owner t852u: Canary Score ranking (stocksTop) now renders below Sub Scanners. */}
@@ -351,23 +351,23 @@ export function ScannerDeclutterShell({
         </div>
       )) : null}
 
-      {tab === "ideas" ? (locked.has("ideas") ? <LimitedAccessNotice tab="Ideas" /> : ideas ? <div id="ideas-tab" className="space-y-3">{ideas}</div> : null) : null}
+      {tab === "ideas" ? (locked.has("ideas") ? <LimitedAccessNotice tab="Ideas" tabId="ideas" /> : ideas ? <div id="ideas-tab" className="space-y-3">{ideas}</div> : null) : null}
 
       {tab === "etf" ? <div className="space-y-3">{etf}</div> : null}
 
-      {tab === "crypto" ? (locked.has("crypto") ? <LimitedAccessNotice tab="Crypto" /> : <div className="space-y-3">{crypto}</div>) : null}
+      {tab === "crypto" ? (locked.has("crypto") ? <LimitedAccessNotice tab="Crypto" tabId="crypto" /> : <div className="space-y-3">{crypto}</div>) : null}
 
       {tab === "insiders" ? (
-        locked.has("insiders") ? <LimitedAccessNotice tab="Insiders" /> : insiders ? (
+        locked.has("insiders") ? <LimitedAccessNotice tab="Insiders" tabId="insiders" /> : insiders ? (
         <div id="insiders-tab" className="space-y-3">
           {insiders}
         </div>
       ) : null
       ) : null}
 
-      {tab === "history" ? (locked.has("history") ? <LimitedAccessNotice tab="Backtest" /> : history ? <div className="space-y-3">{history}</div> : null) : null}
+      {tab === "history" ? (locked.has("history") ? <LimitedAccessNotice tab="Backtest" tabId="backtest" /> : history ? <div className="space-y-3">{history}</div> : null) : null}
 
-      {tab === "mystocks" ? (locked.has("mystocks") ? <LimitedAccessNotice tab="My Stocks" /> : myStocks ? <div className="space-y-3">{myStocks}</div> : null) : null}
+      {tab === "mystocks" ? (locked.has("mystocks") ? <LimitedAccessNotice tab="My Stocks" tabId="mystocks" /> : myStocks ? <div className="space-y-3">{myStocks}</div> : null) : null}
     </div>
   );
 }
