@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sessionSecret, siteOrigin } from "@/lib/members/config";
 import { getMembersDb } from "@/lib/members/db";
 import { accountsOr404 } from "@/lib/members/guard";
+import { safeNext } from "@/lib/members/http";
 import { createSessionCookie } from "@/lib/members/session";
 import { sendWelcomeEmail } from "@/lib/members/verify";
 import {
@@ -80,7 +81,7 @@ export async function GET(request: Request) {
       await sendWelcomeEmail(user.email, request);
     }
 
-    const destPath = pending.next.startsWith("/") ? pending.next : "/account";
+    const destPath = safeNext(pending.next, "/members");
     const dest = new URL(destPath, siteOrigin(request));
     const res = NextResponse.redirect(dest.toString(), 302);
     res.cookies.set(GOOGLE_OAUTH_COOKIE, "", {

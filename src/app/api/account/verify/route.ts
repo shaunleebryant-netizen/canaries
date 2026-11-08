@@ -14,6 +14,6 @@ export async function POST(request: Request) {
   const result = await consumeEmailVerification(db, b.token || "", request);
   if (!result.ok) return jsonError("Verify link is invalid or expired.", 400);
 
-  const next = safeNext(b.next, "/account");
+  const next = safeNext(b.next, "/members");
   return NextResponse.json({ ok: true, next, already: Boolean(result.already) });
 }

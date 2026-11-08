@@ -52,7 +52,7 @@ export async function GET(request: Request) {
   }
 
   const url = new URL(request.url);
-  const next = safeNext(url.searchParams.get("next") || undefined, "/account");
+  const next = safeNext(url.searchParams.get("next") || undefined, "/members");
   const verifier = newPkceVerifier();
   const state = newOAuthState();
   const challenge = await pkceChallenge(verifier);

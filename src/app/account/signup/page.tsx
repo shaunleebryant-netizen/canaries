@@ -5,13 +5,15 @@ import { AccountForm } from "@/components/account/AccountForm";
 import { GoogleSignInButton } from "@/components/account/GoogleSignInButton";
 import { TestModeBanner } from "@/components/account/TestModeBanner";
 import { accountsEnabled } from "@/lib/members/config";
+import { isEmailVerified } from "@/lib/members/verify";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Create account", robots: { index: false } };
 
 export default async function AccountSignupPage() {
   if (!accountsEnabled()) notFound();
-  if (await getCurrentUser()) redirect("/account"); // already logged in
+  const cur = await getCurrentUser();
+  if (cur) redirect(isEmailVerified(cur.user) ? "/members" : "/account/verify?pending=1");
   return (
     <div className="mx-auto max-w-md px-4 py-14">
       <TestModeBanner />
@@ -40,7 +42,7 @@ export default async function AccountSignupPage() {
           },
         ]}
       />
-      <GoogleSignInButton next="/account" />
+      <GoogleSignInButton next="/members" />
       <p className="mt-6 text-sm text-slate-400">
         Already have an account?{" "}
         <Link href="/account/login" className="text-canary-gold underline">

@@ -40,7 +40,7 @@ export default async function AccountVerifyPage({
     redirect(sp.next);
   }
   if (verified && !token) {
-    redirect("/account");
+    redirect("/members");
   }
 
   return (
@@ -77,11 +77,11 @@ export default async function AccountVerifyPage({
       {consumeOk ? (
         <p className="mt-8 text-sm text-slate-300">
           {cur ? (
-            <Link href="/account" className="text-canary-gold underline">
-              Continue to your account →
+            <Link href="/members" className="text-canary-gold underline">
+              Continue to the dashboard →
             </Link>
           ) : (
-            <Link href="/account/login?next=/account" className="text-canary-gold underline">
+            <Link href="/account/login?next=/members" className="text-canary-gold underline">
               Log in to continue →
             </Link>
           )}
