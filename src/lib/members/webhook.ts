@@ -220,7 +220,7 @@ export async function processStripeEvent(
       eventType: event.type,
     });
     if (queued === "queued") {
-      summary += "; backup queued for Canary Members sheet; not pushed";
+      summary += "; backup queued for Drive snapshot; not verified";
     } else if (queued === "unavailable") {
       summary += "; backup table unavailable";
     }

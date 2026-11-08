@@ -15,18 +15,11 @@ test("marketing consent is stored only for boolean true", () => {
   assert.equal(marketingOptIn(undefined), false);
 });
 
-test("the Canary Members sheet push is the only completed backup", () => {
-  const missing = backupOutcomeAfterSheetPush({ pushed: false, credentialMissing: true, attempts: 4 });
-  assert.equal(missing.complete, false);
-  assert.equal(missing.status, "pending");
-  assert.equal(missing.attempts, 4);
-  assert.equal(missing.unresolved, "GOOGLE_SERVICE_ACCOUNT_JSON");
-  const failedPush = backupOutcomeAfterSheetPush({ pushed: false, credentialMissing: false, attempts: 5 });
-  assert.equal(failedPush.status, "pending");
-  assert.equal(failedPush.attempts, 6);
-  assert.equal(failedPush.complete, false);
-  const again = backupOutcomeAfterSheetPush({ pushed: true, credentialMissing: false, attempts: failedPush.attempts });
-  assert.deepEqual(again, { status: "synced", attempts: 7, complete: true, unresolved: null });
+test("a sheet push does not complete the Drive backup", () => {
+  const pushed = backupOutcomeAfterSheetPush({ pushed: true, attempts: 4 });
+  assert.equal(pushed.complete, false);
+  assert.equal(pushed.status, "pending");
+  assert.equal(pushed.attempts, 4);
 });
 
 test("only outbox rows present at the snapshot can be marked synced", () => {
