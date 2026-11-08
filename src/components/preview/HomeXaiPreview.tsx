@@ -207,7 +207,6 @@ export function HomeXaiPreview() {
             <h2 className="text-3xl font-bold tracking-tight text-white">
               Join us and be among our Founding Members
             </h2>
-            <p className="mt-3 text-sm font-semibold text-white">Limited free access</p>
             <p className="mt-4 font-medium text-white">
               US$35/month, billed annually (US$420) · Not subject to future price increases
             </p>
