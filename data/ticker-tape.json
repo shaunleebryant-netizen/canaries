@@ -1,0 +1,8 @@
+{
+  "asOf": "2026-10-23",
+  "sessionDate": "2026-10-23",
+  "S": -0.535,
+  "light": "red",
+  "groups": [],
+  "previewNote": "Ticker groups were not in the 2026-11-08 source archive. The light is the 2026-10-23 snapshot composite in data/state.json, not the 2026-11-06 pack. No tickers were invented."
+}

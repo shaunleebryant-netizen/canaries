@@ -1,3 +1,4 @@
+import { ExplainTitle } from "@/components/ExplainTitle";
 import { HeldNote } from "./HeldNote";
 import type {
   ComputeVolCurveResult,
@@ -66,37 +67,11 @@ const STANCE_LINE: Record<VolCurveStance, string> = {
     "Short-term fear is high, so smaller positions, hedges or cash make more sense.",
 };
 
-function HowToRead() {
+function VolExplain() {
   return (
-    <details className="rounded-lg border border-white/10 bg-slate-950/40 px-2.5 py-1.5">
-      <summary className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-        How to read
-      </summary>
-      <div className="mt-2 space-y-2 text-left text-[11px] leading-relaxed text-slate-400">
-        <p>
-          The vol curve compares how nervous investors are about the next month
-          with how nervous they are about the next few months. It uses the VIX
-          (the market&apos;s &ldquo;fear gauge&rdquo;) and its three-month
-          version.
-        </p>
-        <p>
-          In normal times, people worry more about the long run than about next
-          week, so the short-term number sits lower. When short-term fear
-          catches up with or overtakes the longer one, markets are usually under
-          stress. The number shown is simply one divided by the other: lower
-          is calmer.
-        </p>
-        <p>
-          <span className="text-emerald-300">Safe</span>,{" "}
-          <span className="text-amber-300">Caution</span> and{" "}
-          <span className="text-red-300">Danger</span> sum that up. Use it to
-          decide how big your positions should be, not when to buy or sell. If the date says
-          &ldquo;held since&rdquo;, the data wasn&apos;t updated today and we
-          are showing the last good reading.
-          Education only, not advice.
-        </p>
-      </div>
-    </details>
+    <p>
+      Vol curve is VIX divided by VIX3M. Lower is calmer. Safe, Caution and Danger describe that ratio. A held-since date means the last good reading. Education only.
+    </p>
   );
 }
 
@@ -104,11 +79,13 @@ export function VolCurveCanary({
   data,
   compact = false,
   heldSince = null,
+  explain = true,
 }: {
   data: VolCurveView;
   compact?: boolean;
   /** Set when this box was not refreshed on the pack session. */
   heldSince?: string | null;
+  explain?: boolean;
 }) {
   const stanceLabel = data.stance.replaceAll("_", " ");
   const checklist = data.checklist.filter(
@@ -122,9 +99,9 @@ export function VolCurveCanary({
         className="w-full rounded-xl border border-white/10 bg-slate-900/70 p-3 shadow-sm"
       >
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-canary-gold">
-            Vol curve
-          </h2>
+          <ExplainTitle title="Vol curve" enabled={explain}>
+            <VolExplain />
+          </ExplainTitle>
           <p className="text-[10px] tabular-nums text-slate-500">
             {heldSince ? <HeldNote since={heldSince} /> : data.asOf}
           </p>
@@ -150,9 +127,6 @@ export function VolCurveCanary({
           {STANCE_LINE[data.stance]}
         </p>
 
-        <div className="mt-2">
-          <HowToRead />
-        </div>
       </section>
     );
   }
@@ -215,7 +189,7 @@ export function VolCurveCanary({
       </div>
 
       <div className="mt-4">
-        <HowToRead />
+        <VolExplain />
       </div>
 
       <p className="mt-3 text-[11px] leading-snug text-slate-600">

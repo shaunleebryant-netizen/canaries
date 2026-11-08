@@ -4,6 +4,7 @@ import type {
   RegimeStateName,
   SpecLevel,
 } from "@/lib/regime/computeRegime";
+import { ExplainTitle } from "@/components/ExplainTitle";
 
 const STATE_PILL: Record<RegimeStateName, string> = {
   RISK_ON: "bg-emerald-500 text-slate-950 ring-emerald-400/40",
@@ -66,47 +67,26 @@ function plainLine(state: RegimeStateName, spec: SpecLevel): string {
   return `Signals are mixed, so patience may pay. ${specText}`;
 }
 
-function HowToRead() {
+function RegimeExplain() {
   return (
-    <details className="rounded-lg border border-white/10 bg-slate-950/40 px-2.5 py-1.5">
-      <summary className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-        How to read
-      </summary>
-      <div className="mt-2 space-y-2 text-left text-[11px] leading-relaxed text-slate-400">
-        <p>
-          Regime is a quick read on the overall market mood: Risk-On, Mixed or
-          Risk-Off. It weighs a handful of big-picture signals, such as how the
-          Nasdaq is trending, whether investors prefer growth or safety,
-          volatility and credit markets. Each one gets a simple up, down or
-          neutral vote.
-        </p>
-        <p>
-          The days count shows how long the current regime has lasted. It only
-          changes after the new reading holds for a little while, so it
-          doesn&apos;t flip on one noisy day.
-        </p>
-        <p>
-          <span className="font-medium text-slate-300">Spec</span> (Full, Half
-          or Off) is a separate check on whether the market is friendly to
-          riskier, speculative trades like small caps. It looks at how broad
-          the rally is. Use Regime to decide how much risk to take overall.
-          Education only, not advice.
-        </p>
-      </div>
-    </details>
+    <p>
+      Regime votes Nasdaq, growth, fear and credit up, down or flat, then waits before the label changes. Spec (Full, Half or Off) is a separate small-cap check. Education only.
+    </p>
   );
 }
 
 export function MarketRegime({
   data,
   compact = false,
+  explain = true,
 }: {
   data: MarketRegimeView;
   /** Kept for call-site compat; flock S lives on traffic light, not this box. */
   canaryLight?: string | null;
   canaryS?: number | null;
-  /** Cockpit: pills + lights only; essays behind How to read. */
+  /** Cockpit: pills + lights only; the title opens a short explainer. */
   compact?: boolean;
+  explain?: boolean;
 }) {
   const coreLights = data.lights.slice(0, 4);
   const gateLights = data.lights.slice(4);
@@ -120,9 +100,9 @@ export function MarketRegime({
         className="w-full rounded-xl border border-white/10 bg-slate-900/70 p-3 shadow-sm"
       >
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-canary-gold">
-            Regime
-          </h2>
+          <ExplainTitle title="Regime" enabled={explain}>
+            <RegimeExplain />
+          </ExplainTitle>
           <p className="text-[10px] tabular-nums text-slate-500">
             {data.asOf}
             {isDraft ? " · draft" : ""}
@@ -164,9 +144,6 @@ export function MarketRegime({
           {plainLine(data.stateShown, data.spec)}
         </p>
 
-        <div className="mt-2">
-          <HowToRead />
-        </div>
       </section>
     );
   }
@@ -251,7 +228,7 @@ export function MarketRegime({
       <p className="mt-4 text-sm leading-snug text-slate-300">{data.oneLiner}</p>
 
       <div className="mt-4">
-        <HowToRead />
+        <RegimeExplain />
       </div>
     </section>
   );

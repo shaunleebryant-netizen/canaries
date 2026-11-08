@@ -70,13 +70,17 @@ function HomeFoundingBox({ className = "" }: { className?: string }) {
       </div>
       <p className="mt-4 text-sm text-slate-300">
         Founding rate locked for life while you renew. After the first 100: US$99/mo or
-        US$1,069/yr.
+        US$1,069/yr. Paid checkout is unchanged and is not started from the free form.
       </p>
       <a
-        href="/signup"
+        href="/signup/free"
         className="mt-5 block rounded-xl bg-canary-gold px-6 py-3 text-center text-sm font-semibold text-slate-950 hover:bg-yellow-400"
       >
-        Claim your founding spot
+        Create a free account
+      </a>
+      <p className="mt-2 text-center text-sm text-slate-300">Limited free access</p>
+      <a href="/signup" className="mt-2 block text-center text-sm text-slate-300 underline">
+        Founding annual · US$35/mo, billed annually US$420/yr
       </a>
       <p className="mt-3 text-xs text-slate-500">Educational market data only. Not financial advice.</p>
     </div>

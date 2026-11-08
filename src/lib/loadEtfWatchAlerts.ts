@@ -6,6 +6,8 @@
 
 import etfJson from "../../data/etf-watch-alerts.json";
 import etfUniverse from "../../data/etf-watch-universe.json";
+import { filterSignals } from "@/lib/compositeGate";
+import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
 
 /** Only show funds still in the Sector ETFs list (owner t697u: XAUUSD/XAGUSD dropped), even from a held file. */
 const IN_UNIVERSE = new Set<string>((etfUniverse as { tickers: string[] }).tickers);
@@ -60,7 +62,12 @@ export function loadEtfWatchAlerts(): EtfWatchAlert[] {
     : Array.isArray(raw?.signals)
       ? raw.signals
       : [];
-  return rows.filter(isAlert).filter((r) => IN_UNIVERSE.has(r.ticker));
+  const archive = loadCompositeArchive();
+  return rows
+    .filter(isAlert)
+    .filter((r) => IN_UNIVERSE.has(r.ticker))
+    .map((r) => ({ ...r, signals: filterSignals(r.signals, r.asOf.slice(0, 10), archive) }))
+    .filter((r) => r.signals.length > 0);
 }
 
 /** Optional scan meta for UI. */

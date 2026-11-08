@@ -4,6 +4,8 @@
  */
 
 import fishJson from "../../data/fish-alerts.json";
+import { rowDecision } from "@/lib/compositeGate";
+import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
 
 export type FishSignal = "smile" | "fish" | "both";
 
@@ -41,7 +43,11 @@ export function loadFishAlerts(): FishAlert[] {
     : Array.isArray(raw?.signals)
       ? raw.signals
       : [];
-  return rows.filter(isAlert);
+  const archive = loadCompositeArchive();
+  return rows.filter(isAlert).filter((r) => {
+    const kinds = r.signal === "both" ? ["fish", "smile"] : [r.signal];
+    return rowDecision(kinds, r.asOf.slice(0, 10), archive) === "eligible";
+  });
 }
 
 /** Optional scan meta for UI. */

@@ -1,56 +1,38 @@
 /**
  * Layer visibility for the Canary-marks candlestick chart.
- * Event marks default on. Vanna & Charm is the NY options calendar (same dates on every
- * ticker) and defaults off so a chart does not get busier until the member asks.
+ * Smiley and monthly trend start on. Other marks start off; a paid member can opt in.
+ * Vanna & Charm is not a chart layer.
  */
-import { classifyVannaCharmYmd, type VannaCharmStatus } from "./vannaCharm";
-
 export type MarkKind = "fish" | "smile" | "mfi" | "fairy" | "m20" | "sweat" | "skull";
 
-export const MARK_ORDER: readonly MarkKind[] = ["fish", "smile", "mfi", "fairy", "m20", "sweat", "skull"];
+export const MARK_ORDER: readonly MarkKind[] = ["smile", "m20", "fish", "mfi", "fairy", "sweat", "skull"];
 
-export type ChartLayerId = MarkKind | "vanna";
+export type ChartLayerId = MarkKind;
 
-export const LAYER_IDS: readonly ChartLayerId[] = [...MARK_ORDER, "vanna"];
+export const LAYER_IDS: readonly ChartLayerId[] = [...MARK_ORDER];
 
 export type ChartLayers = Record<ChartLayerId, boolean>;
 
+/** Paid default. Free ETF charts force every id in FREE_ETF_LOCKED off. */
 export const DEFAULT_CHART_LAYERS: ChartLayers = {
-  fish: true,
   smile: true,
-  mfi: true,
-  fairy: true,
   m20: true,
-  sweat: true,
-  skull: true,
-  vanna: false,
+  fish: false,
+  mfi: false,
+  fairy: false,
+  sweat: false,
+  skull: false,
 };
 
-export const CHART_LAYERS_STORAGE_KEY = "canary.chartLayers.v1";
+export const FREE_ETF_LOCKED: readonly MarkKind[] = ["fish", "mfi", "fairy", "sweat", "skull"];
 
-export const VANNA_PAINT: Record<
-  VannaCharmStatus,
-  { emoji: string; label: string; shade: string }
-> = {
-  SUPPORTIVE: {
-    emoji: "👑✨",
-    label: "Supportive",
-    shade: "rgba(16, 185, 129, 0.22)",
-  },
-  ON_HOLIDAY: {
-    emoji: "🪟",
-    label: "On holiday",
-    shade: "rgba(99, 102, 241, 0.18)",
-  },
-};
+export const CHART_LAYERS_STORAGE_KEY = "canary.chartLayers.v2";
 
-export function vannaMark(status: VannaCharmStatus) {
-  return VANNA_PAINT[status];
-}
-
-/** Calendar regime for a bar date. The ticker is irrelevant: this is not a per-stock signal. */
-export function vannaStatusForYmd(ymd: string): VannaCharmStatus {
-  return classifyVannaCharmYmd(ymd).status;
+export function clampChartLayers(layers: ChartLayers, access: "paid" | "free-etf"): ChartLayers {
+  if (access !== "free-etf") return layers;
+  const next = { ...layers };
+  for (const id of FREE_ETF_LOCKED) next[id] = false;
+  return next;
 }
 
 export function parseChartLayers(raw: unknown): ChartLayers {
@@ -102,10 +84,6 @@ export function hoverReadoutMarks(
     const mark = marks[kind];
     if (!layers[kind] || !mark) continue;
     out.push(`${mark.emoji} ${mark.label}`);
-  }
-  if (layers.vanna) {
-    const vanna = vannaMark(vannaStatusForYmd(ymd));
-    out.push(`${vanna.emoji} ${vanna.label}`);
   }
   return out;
 }

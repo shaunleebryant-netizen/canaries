@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   DEFAULT_CHART_LAYERS,
+  FREE_ETF_LOCKED,
+  clampChartLayers,
   hoverReadoutMarks,
   latestVisibleMarks,
   parseChartLayers,
-  vannaStatusForYmd,
   type MarkKind,
 } from "./chartLayers";
 
@@ -19,31 +20,25 @@ const MARKS: Record<MarkKind, { emoji: string; label: string }> = {
   skull: { emoji: "💀", label: "Skull" },
 };
 
-test("event marks default on and Vanna & Charm defaults off", () => {
-  assert.deepEqual(DEFAULT_CHART_LAYERS, {
-    fish: true,
-    smile: true,
-    mfi: true,
-    fairy: true,
-    m20: true,
-    sweat: true,
-    skull: true,
-    vanna: false,
-  });
+test("Smiley and monthly trend start on; other layers start off", () => {
+  assert.equal(DEFAULT_CHART_LAYERS.smile, true);
+  assert.equal(DEFAULT_CHART_LAYERS.m20, true);
+  assert.equal(DEFAULT_CHART_LAYERS.fish, false);
+  assert.equal("vanna" in DEFAULT_CHART_LAYERS, false);
 });
 
 test("stored layers keep unknown keys out and fill missing ones from the defaults", () => {
-  const layers = parseChartLayers({ fish: false, vanna: true, unknown: true, fairy: true, mfi: "yes" });
-  assert.equal(layers.fish, false);
-  assert.equal(layers.vanna, true);
+  const layers = parseChartLayers({ fish: true, vanna: true, unknown: true, fairy: true, mfi: "yes" });
+  assert.equal(layers.fish, true);
   assert.equal(layers.fairy, true);
-  assert.equal(layers.mfi, true);
+  assert.equal(layers.mfi, false);
   assert.equal(layers.smile, true);
+  assert.equal("vanna" in layers, false);
   assert.equal("unknown" in layers, false);
 });
 
 test("latest row and hover drop marks the member turned off", () => {
-  const layers = { ...DEFAULT_CHART_LAYERS, fish: false, smile: false };
+  const layers = { ...DEFAULT_CHART_LAYERS, fish: false, smile: false, mfi: true, sweat: true };
   const latest = latestVisibleMarks(
     [
       [10, "fish"],
@@ -52,7 +47,7 @@ test("latest row and hover drop marks the member turned off", () => {
       [30, "fish"],
       [40, "mfi"],
     ],
-    layers
+    layers,
   );
   assert.deepEqual(latest, [
     { kind: "mfi", off: 40 },
@@ -63,15 +58,9 @@ test("latest row and hover drop marks the member turned off", () => {
   assert.deepEqual(hover, ["💵 MFI washout"]);
 });
 
-test("Vanna calendar is the same read for every ticker and stays out of the hover until it is on", () => {
-  const dates = ["2026-09-02", "2026-09-03", "2026-09-16", "2026-09-17", "2026-10-01", "2026-10-21", "2026-10-22"];
-  const expect = ["ON_HOLIDAY", "SUPPORTIVE", "SUPPORTIVE", "ON_HOLIDAY", "SUPPORTIVE", "SUPPORTIVE", "ON_HOLIDAY"];
-  assert.deepEqual(dates.map(vannaStatusForYmd), expect);
-  assert.deepEqual(dates.map(vannaStatusForYmd), expect);
-
-  const off = hoverReadoutMarks(["fish"], "2026-09-03", DEFAULT_CHART_LAYERS, MARKS);
-  assert.deepEqual(off, ["🐟 Fish"]);
-
-  const on = hoverReadoutMarks(["fish"], "2026-09-17", { ...DEFAULT_CHART_LAYERS, vanna: true }, MARKS);
-  assert.deepEqual(on, ["🐟 Fish", "🪟 On holiday"]);
+test("a free ETF chart cannot turn locked layers on from saved choices", () => {
+  const forced = clampChartLayers({ ...DEFAULT_CHART_LAYERS, fish: true, skull: true, smile: true }, "free-etf");
+  for (const id of FREE_ETF_LOCKED) assert.equal(forced[id], false);
+  assert.equal(forced.smile, true);
+  assert.equal(forced.m20, true);
 });

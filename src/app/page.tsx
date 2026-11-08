@@ -505,17 +505,43 @@ async function LegacyHomePage() {
             </ul>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href="/signup"
+                href="/signup/free"
                 className="w-full rounded-xl bg-canary-gold px-8 py-4 text-base font-bold text-slate-950 shadow-[0_0_30px_-5px_rgba(245,158,11,0.7)] transition hover:bg-amber-400 sm:w-auto"
               >
-                {launchOpen ? "Claim your founding spot →" : "Start membership →"}
+                Create a free account
               </a>
               <a
-                href="/account/login"
+                href="/signup"
                 className="w-full rounded-xl border border-white/20 px-6 py-4 text-sm font-medium text-white hover:bg-white/5 sm:w-auto"
               >
-                Log in
+                {launchOpen ? "Founding annual · US$35/mo" : "Start membership →"}
               </a>
+            </div>
+            <p className="mt-3 text-sm text-slate-300">Limited free access</p>
+            {launchOpen ? (
+              <p className="mt-2 text-xs text-slate-400">
+                Founding annual is US$35/mo, billed annually at US$420/yr.{" "}
+                <a href="/account/signup" className="underline">Founding monthly is US$70/mo</a>, the secondary option. Prices are the existing plans. This preview does not charge a card.
+              </p>
+            ) : null}
+            <div className="mx-auto mt-6 grid max-w-lg gap-3 text-left text-xs sm:grid-cols-2">
+              <div className="rounded-xl border border-white/10 p-3">
+                <p className="font-semibold text-white">Free account</p>
+                <ul className="mt-2 space-y-1 text-slate-400">
+                  <li>Limited free access</li>
+                  <li>ETF tab and ETF charts</li>
+                  <li>Read-only Decide overview</li>
+                  <li>Optional email updates, off unless you tick the box</li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-canary-gold/30 p-3">
+                <p className="font-semibold text-white">Paid membership</p>
+                <ul className="mt-2 space-y-1 text-slate-300">
+                  {INCLUDED.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <p className="mt-6 text-xs text-slate-500">
               Questions? Email shaun@canarydashboard.com.
@@ -558,21 +584,20 @@ async function LegacyHomePage() {
               curated list of tickers and sectors in favourable conditions.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {/* Owner 2026-10-06 6:27 PM NZ: hero primary button → "Go to Dashboard" (/members).
-                  Other "Start membership" buttons further down stay as they are. */}
               <a
-                href="/members"
+                href="/signup/free"
                 className="rounded-xl bg-canary-gold px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
               >
-                Go to Dashboard
+                Create a free account
               </a>
               <a
-                href="/account/login"
+                href="/signup"
                 className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10"
               >
-                Log in
+                Paid membership
               </a>
             </div>
+            <p className="mt-3 text-sm text-slate-300">Limited free access</p>
             {/* Owner 2026-10-07 12:44 AM NZ: "Launch promo is currently ON" line removed from the hero (copy only). */}
           </div>
           <HomeVideo />

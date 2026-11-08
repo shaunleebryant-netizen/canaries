@@ -5,6 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import { SiteFooter } from "@/components/Footer";
 import { TickerTape } from "@/components/TickerTape";
+import { DashboardNavLink } from "@/components/DashboardNavLink";
 
 const COMING_SOON = process.env.NEXT_PUBLIC_COMING_SOON === "1";
 
@@ -76,12 +77,7 @@ export default function RootLayout({
                   Support
                 </Link>
                 {/* Owner 2026-11-02 (t969u): Subscribe removed from header; hero box + footer carry it. */}
-                <Link
-                  href="/signup"
-                  className="rounded-lg bg-canary-gold px-3.5 py-1.5 text-sm font-semibold text-slate-950 hover:bg-yellow-400"
-                >
-                  Dashboard
-                </Link>
+                <DashboardNavLink className="rounded-lg bg-canary-gold px-3.5 py-1.5 text-sm font-semibold text-slate-950 hover:bg-yellow-400" />
               </nav>
             </div>
             <HeaderCanary />
