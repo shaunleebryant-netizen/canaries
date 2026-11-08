@@ -164,6 +164,60 @@ const ETF_DATE: Record<string, "smileAsOf" | "fishAsOf" | "exhaustionAsOf" | "sk
   skull: "skullAsOf",
 };
 
+type CryptoLike = {
+  signals: string[];
+  asOf: string;
+  smileAsOf?: string;
+  fishAsOf?: string;
+  mfiAsOf?: string;
+  fairyAsOf?: string;
+  exhaustionAsOf?: string;
+  skullAsOf?: string;
+};
+
+const CRYPTO_DATE: Record<string, keyof CryptoLike> = {
+  smile: "smileAsOf",
+  fish: "fishAsOf",
+  mfi: "mfiAsOf",
+  fairy: "fairyAsOf",
+  exhaustion: "exhaustionAsOf",
+  skull: "skullAsOf",
+};
+
+/**
+ * Crypto Watch display only. Uses the same equity-session window and the mark's own date.
+ * A weekend date is not a session and is not given another day's composite.
+ * The row asOf is replaced with the latest kept mark date and is never the gate date.
+ */
+export function cryptoForScanner<T extends CryptoLike>(
+  rows: readonly T[],
+  archive: CompositeArchive,
+  sessions: readonly string[],
+): { rows: T[]; missingDate: number } {
+  const out: T[] = [];
+  let missingDate = 0;
+  for (const row of rows) {
+    const kept: string[] = [];
+    const dates: string[] = [];
+    for (const kind of row.signals) {
+      const field = CRYPTO_DATE[kind];
+      const date = field ? eventDate(row[field] as string | undefined) : null;
+      if (!date) {
+        missingDate += 1;
+        continue;
+      }
+      if (printInWindow(kind, date, archive, sessions)) {
+        kept.push(kind);
+        dates.push(date);
+      }
+    }
+    if (!kept.length) continue;
+    dates.sort();
+    out.push({ ...row, signals: kept, asOf: dates.at(-1) ?? row.asOf });
+  }
+  return { rows: out, missingDate };
+}
+
 export function etfForScanner<T extends EtfLike>(rows: readonly T[], archive: CompositeArchive, sessions: readonly string[]): { rows: T[]; missingDate: number } {
   const out: T[] = [];
   let missingDate = 0;
