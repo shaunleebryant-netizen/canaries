@@ -15,7 +15,7 @@ export function MembersPricingNote({ compact = false }: { compact?: boolean }) {
       </p>
       <p className="mt-2 text-sm leading-relaxed text-slate-200">
         First 100:{" "}
-        <span className="font-semibold text-white">$600/yr</span> (US$50/mo, billed
+        <span className="font-semibold text-white">$420/yr</span> (US$35/mo, billed
         annually), locked for life while renewing. After 100:{" "}
         <span className="font-semibold text-white">$1,069/yr</span> or{" "}
         <span className="font-semibold text-white">$99/mo</span> monthly.

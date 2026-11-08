@@ -28,9 +28,6 @@ function MoneyFlowCalcBody() {
         beside each ticker is its MFI reading that day. It works best alongside
         the other boxes rather than on its own.
       </p>
-      <p className="border-l-2 border-canary-amber/70 pl-3 italic text-amber-100/90">
-        &ldquo;While peak optimism is hard to catch, peak pessimism is a lot easier.&rdquo;
-      </p>
       <p className="text-xs text-slate-400">
         Education only, not buy or sell advice.
       </p>

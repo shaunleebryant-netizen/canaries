@@ -52,9 +52,10 @@
     // EMAIL_SENDING (subscriber email), which stays OFF. "0" turns the notification off.
     "SUPPORT_NOTIFY": "1",
     // Go-live 2026-10-15 (owner approved): per-member accounts + live Stripe + transactional email (Resend).
-    // INDICATOR_CHECKOUT is intentionally NOT set (indicator sales on hold until packages are done).
+    // Owner 2026-10-27: INDICATOR_CHECKOUT on — indicators and membership both take live card payments.
     "MEMBERS_AUTH_MODE": "accounts",
     "MEMBERS_ALLOW_LIVE_STRIPE": "1",
+    "INDICATOR_CHECKOUT": "1",
     "MEMBERS_SITE_ORIGIN": "https://canarydashboard.com",
     "EMAIL_SENDING": "1"
   }

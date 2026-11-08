@@ -47,6 +47,7 @@ export function loadMainScannerInput(sessionDate) {
     ibd: rows(readJson("ibd-setups-alerts.json")),
     marketStates: rows(marketState, "states"),
     monthly20: rows(readJson("monthly-20ma-alerts.json")),
+    cciFairy: rows(readJson("cci-fairy.json")),
   };
 }
 

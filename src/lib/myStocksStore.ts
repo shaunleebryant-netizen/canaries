@@ -36,7 +36,31 @@ function write(next: string[]) {
   window.dispatchEvent(new Event(EVENT));
 }
 
+// Account sync (owner t963u 2026-11-02): signed in → D1 via /api/members/watchlist is the source of
+// truth; localStorage stays as cache/fallback. Local-only tickers are pushed up once on first sync.
+let server = false;
+let syncing: Promise<void> | null = null;
+function api(method: "POST" | "DELETE", t: string) {
+  if (!server) return;
+  fetch(method === "DELETE" ? `/api/members/watchlist?ticker=${encodeURIComponent(t)}` : "/api/members/watchlist", {
+    method, headers: { "content-type": "application/json" }, body: method === "POST" ? JSON.stringify({ ticker: t }) : undefined,
+  }).catch(() => {});
+}
+function sync() {
+  if (syncing || typeof window === "undefined") return;
+  syncing = fetch("/api/members/watchlist").then(async (r) => {
+    if (!r.ok) return;
+    const remote: string[] = ((await r.json()).tickers ?? []).map((t: string) => t.toUpperCase());
+    server = true;
+    const local = read();
+    const missing = local.filter((t) => !remote.includes(t));
+    for (const t of [...missing].reverse()) api("POST", t);
+    write([...missing, ...remote]);
+  }).catch(() => {});
+}
+
 function subscribe(cb: () => void) {
+  sync();
   const onStorage = (e: StorageEvent) => {
     if (e.key === KEY) {
       cache = null;
@@ -59,7 +83,9 @@ export function useMyStocks(allowed?: Set<string>) {
       const t = ticker.trim().toUpperCase();
       if (allowed && !allowed.has(t)) return;
       const cur = read();
-      write(cur.includes(t) ? cur.filter((x) => x !== t) : [t, ...cur]);
+      const has = cur.includes(t);
+      write(has ? cur.filter((x) => x !== t) : [t, ...cur]);
+      api(has ? "DELETE" : "POST", t);
     },
     [allowed]
   );
@@ -68,7 +94,7 @@ export function useMyStocks(allowed?: Set<string>) {
       const t = ticker.trim().toUpperCase();
       if (allowed && !allowed.has(t)) return;
       const cur = read();
-      if (!cur.includes(t)) write([t, ...cur]);
+      if (!cur.includes(t)) { write([t, ...cur]); api("POST", t); }
     },
     [allowed]
   );

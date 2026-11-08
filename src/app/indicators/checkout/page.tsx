@@ -1,5 +1,5 @@
 import { StripeStubButton } from "@/components/StripeStubButton";
-import { MEMBERS_FREE_LINE, MEMBERS_FREE_LINE_ONE, SUPPORT_EMAIL, findIndicator } from "@/lib/indicatorCatalog";
+import { MEMBERS_FREE_LINE_ONE, SUPPORT_EMAIL, findIndicators } from "@/lib/indicatorCatalog";
 import { getMembersDb } from "@/lib/members/db";
 import { indicatorCheckoutEnabled } from "@/lib/members/indicatorDelivery";
 
@@ -9,7 +9,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-/** Stripe step (stub). Stripe is not live: confirms the saved order and says payments are coming soon. */
+/** Stripe step. When INDICATOR_CHECKOUT=1 and an order exists, Pay with card → Stripe Checkout. */
 export default async function IndicatorCheckoutPage({
   searchParams,
 }: {
@@ -17,19 +17,28 @@ export default async function IndicatorCheckoutPage({
 }) {
   const { order, script, paid, error } = await searchParams;
   const live = indicatorCheckoutEnabled();
-  let saved: { script_id: string; status: string } | null = null;
+  let saved: { script_id: string; script_name: string | null; price_cents: number | null; status: string } | null = null;
   if (order && /^[0-9a-f-]{36}$/i.test(order)) {
     try {
       const db = await getMembersDb();
       saved = await db
-        .prepare("SELECT script_id, status FROM indicator_orders WHERE id = ?")
+        .prepare("SELECT script_id, script_name, price_cents, status FROM indicator_orders WHERE id = ?")
         .bind(order)
-        .first<{ script_id: string; status: string }>();
+        .first<{ script_id: string; script_name: string | null; price_cents: number | null; status: string }>();
     } catch {
       saved = null;
     }
   }
-  const product = findIndicator(saved?.script_id ?? script);
+  const items = findIndicators(saved?.script_id ?? script);
+  // Multi-indicator orders: prefer the combined name + summed price stored by /api/indicators/order.
+  const catalogCents = items.reduce((s, p) => s + p.priceCents, 0);
+  const totalCents = saved?.price_cents && saved.price_cents > 0 ? saved.price_cents : catalogCents;
+  const product = items.length || saved?.script_name
+    ? {
+        name: saved?.script_name || items.map((p) => p.name).join(" + "),
+        priceLabel: `US$${(totalCents / 100).toFixed(totalCents % 100 ? 2 : 0)}`,
+      }
+    : undefined;
 
   if (live && saved) {
     const isPaid = paid === "1" || saved.status === "paid" || saved.status === "granted";
@@ -96,7 +105,7 @@ export default async function IndicatorCheckoutPage({
           className="w-full rounded-xl border border-white/15 bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 hover:bg-slate-800"
         />
       </div>
-      <p className="mt-4 text-sm font-medium text-canary-amber">{product?.separate ? MEMBERS_FREE_LINE_ONE : MEMBERS_FREE_LINE}</p>
+      <p className="mt-4 text-sm font-medium text-canary-amber">{MEMBERS_FREE_LINE_ONE}</p>
       <p className="mt-6 text-sm text-slate-400">
         Questions? Email{" "}
         <a href={`mailto:${SUPPORT_EMAIL}`} className="text-slate-200 underline">

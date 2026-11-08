@@ -14,6 +14,7 @@ import type { MyStockCond, MyStockRow, MyStocksUniverseItem } from "@/lib/myStoc
 import type { SetupCondition } from "@/lib/setupsCore.mjs";
 import type { GrowthRow } from "@/lib/loadGrowthScore";
 import { GrowthCell } from "@/components/GrowthScore";
+import { TickerAlertsControl, useTickerAlerts } from "@/components/TickerAlertsControl";
 
 function Icons({ conds }: { conds: MyStockCond[] }) {
   return (
@@ -50,6 +51,7 @@ export function MyStocks({
   const byTicker = useMemo(() => new Map(universe.map((u) => [u.t, u])), [universe]);
   const { list, add, toggle, has } = useMyStocks(allowed);
   const { openTicker } = useTickerChart();
+  const alerts = useTickerAlerts();
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
 
@@ -116,7 +118,12 @@ export function MyStocks({
                   </li>
                 ))
               ) : (
-                <li className="px-3 py-2 text-xs text-slate-400">Not in our scanner universe.</li>
+                <li className="px-3 py-2 text-xs leading-relaxed text-slate-400">
+                  {/* Owner 2026-11-02 (t1010u): explain why a stock isn't here */}
+                  <span className="font-medium text-slate-200">Not in our ticker universe.</span> We only scan about 200
+                  stocks that meet our conditions, a bit like picking the players for a soccer team. Not every good
+                  company makes the squad, so some stocks you look for won&apos;t show up here.
+                </li>
               )}
             </ul>
           ) : null}
@@ -180,6 +187,7 @@ export function MyStocks({
                     {r?.last ? `last mark ${r.last.slice(5)}` : "—"}
                   </span>
                 </div>
+                <TickerAlertsControl ticker={t} alerts={alerts} />
                 <button
                   type="button"
                   onClick={() => openTicker(t)}
@@ -194,7 +202,7 @@ export function MyStocks({
         </ul>
       )}
       <p className="text-[10px] text-slate-500">
-        Icons match Bullish and Bearish Setups. Education only, not buy or sell advice.
+        Icons match Bullish and Bearish Setups. 🔔 Alerts email you a daily digest when a saved ticker prints the marks you pick. Education only, not buy or sell advice.
       </p>
     </section>
   );

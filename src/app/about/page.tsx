@@ -24,7 +24,7 @@ export const metadata: Metadata = ABOUT_PAGE
   ? {
       title: "About",
       description:
-        "About Canary Dashboard and its founder, Shaun Lee Bryant: how our Relative RSI marks work, recent examples with the full hit-rate record, and founding membership. Education only.",
+        "About Canary Dashboard and its founder, Shaun Lee Bryant: our mission and founding membership. Education only.",
       alternates: { canonical: "/about" },
     }
   : { title: "Not found", robots: { index: false, follow: false } };

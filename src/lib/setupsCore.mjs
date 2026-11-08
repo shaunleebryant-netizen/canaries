@@ -19,6 +19,7 @@
  *   weekly_bull 🟢 current weekly Market State = bull (green); dots = min(weeks,3); ONE condition
  *   monthly_20ma 📈 in Monthly 20MA output (this month or last)
  *   ibd     IBD  in IBD Setups box
+ *   cci_fairy 🧚 Bottom Zone (WVF extreme + RSI<35 + up close, owner pt801u) (data/cci-fairy.json, last 5 sessions) — timing print (owner t795u)
  * Bearish:
  *   mfi_ob  🍒  RETIRED 2026-10-06 (old MFI ≥ 80 zone; v6 has no sell side, so no new prints)
  *   sweaty  🥵  Sweaty (exhaustion) print within 14d
@@ -48,7 +49,7 @@ export const SETUPS_MIN_CONDITIONS = 2;
 /** Bump when qualification rules change — prior history is discarded (dates reset). */
 export const SETUPS_RULES_VERSION = 2;
 /** Timing prints: at least one must be present (within the 14-day window). */
-export const BULLISH_TIMING_IDS = ["fish", "smile", "mfi_os"];
+export const BULLISH_TIMING_IDS = ["fish", "smile", "mfi_os", "cci_fairy"];
 export const BEARISH_TIMING_IDS = ["mfi_ob", "sweaty", "skull"];
 
 const KIND_NOTE_TAGS = {
@@ -208,6 +209,7 @@ export function computeMainScanner(input) {
     ibd = [],
     marketStates = [],
     monthly20 = [],
+    cciFairy = [],
   } = input;
 
   /** ticker -> { conditions: Map(id -> cond) } */
@@ -306,6 +308,11 @@ export function computeMainScanner(input) {
       });
     }
   }
+  // Bottom Zone 🧚 (was CCI Fairy; owner t795u ★ condition, pt801u new math). Scan keeps each ticker's latest print in the last 5 sessions.
+  for (const r of cciFairy) {
+    if (!r?.asOf || r.asOf > asOf || !inWindow(asOf, r.asOf)) continue;
+    add(bull, r.ticker, { id: "cci_fairy", since: r.asOf, detail: `🧚 Bottom Zone${r.rsiMin3 != null ? ` · RSI ${r.rsiMin3}` : ""} @ ${r.asOf}` });
+  }
   // Monthly 20MA cross (state for the month).
   for (const r of monthly20) {
     add(bull, r.ticker, {
@@ -315,7 +322,7 @@ export function computeMainScanner(input) {
     });
   }
 
-  const BULL_ORDER = ["fish", "smile", "mfi_os", "weekly_bull", "monthly_20ma", "ibd"];
+  const BULL_ORDER = ["fish", "smile", "mfi_os", "cci_fairy", "weekly_bull", "monthly_20ma", "ibd"];
   const BEAR_ORDER = ["mfi_ob", "sweaty", "skull", "weekly_bear"];
   const finish = (side, order, timingIds) => {
     const out = [];

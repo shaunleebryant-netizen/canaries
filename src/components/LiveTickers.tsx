@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTickerChart } from "@/components/TickerChartLightbox";
 import type { MarketQuotesPayload, TickerStripItem } from "@/lib/marketQuotes";
+import { quoteStripChartTicker } from "@/lib/quoteStripChart";
 
 function formatPx(n: number): string {
   if (Math.abs(n) >= 1000)
@@ -10,30 +12,41 @@ function formatPx(n: number): string {
 }
 
 function TickerChip({ item }: { item: TickerStripItem }) {
+  const { openTicker } = useTickerChart();
+  const chartTicker = quoteStripChartTicker(item.id, item.label);
   const q = item.quote;
-  const tip = item.description;
+  const tip = `${item.description} Open the daily chart.`;
+  const open = () => openTicker(chartTicker);
   if (!q) {
     return (
-      <div
+      <button
+        type="button"
         title={tip}
-        className="min-w-0 flex-1 cursor-help rounded-lg border border-dashed border-white/10 bg-slate-950/40 px-1.5 py-0.5 text-center"
+        onClick={open}
+        aria-haspopup="dialog"
+        aria-label={`Open chart for ${item.label}`}
+        className="min-w-0 flex-1 cursor-pointer rounded-lg border border-dashed border-white/10 bg-slate-950/40 px-1.5 py-0.5 text-center transition hover:border-canary-gold/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-canary-gold/60"
       >
-        <p className="truncate text-[13px] font-semibold uppercase leading-tight tracking-wide text-slate-500">
+        <p className="truncate text-[13px] font-semibold uppercase leading-tight tracking-wide text-slate-400 underline decoration-canary-gold/40 decoration-dotted underline-offset-2">
           {item.label}
         </p>
         <p className="text-base leading-tight text-slate-600">—</p>
-      </div>
+      </button>
     );
   }
   const pct = q.changePct;
   const up = pct != null && pct >= 0;
   const down = pct != null && pct < 0;
   return (
-    <div
+    <button
+      type="button"
       title={tip}
-      className="min-w-0 flex-1 cursor-help rounded-lg border border-white/10 bg-slate-950/50 px-1.5 py-0.5 text-center shadow-sm"
+      onClick={open}
+      aria-haspopup="dialog"
+      aria-label={`Open chart for ${item.label}, last ${formatPx(q.last)}`}
+      className="min-w-0 flex-1 cursor-pointer rounded-lg border border-white/10 bg-slate-950/50 px-1.5 py-0.5 text-center shadow-sm transition hover:border-canary-gold/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-canary-gold/60"
     >
-      <p className="truncate text-[13px] font-semibold uppercase leading-tight tracking-wide text-slate-400">
+      <p className="truncate text-[13px] font-semibold uppercase leading-tight tracking-wide text-slate-300 underline decoration-canary-gold/40 decoration-dotted underline-offset-2">
         {item.label}
       </p>
       <div className="flex flex-wrap items-baseline justify-center gap-x-1 leading-tight">
@@ -57,7 +70,7 @@ function TickerChip({ item }: { item: TickerStripItem }) {
           <span className="text-base text-slate-600">n/a</span>
         )}
       </div>
-    </div>
+    </button>
   );
 }
 

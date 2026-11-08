@@ -8,6 +8,7 @@
  *   🐟 fish · 🙂 smile · 🥵 exhaustion (sweaty) · 💀 skull — src/lib/canaryTopsBottoms.mjs (Fish /
  *      Sweaty / Sector ETFs / Countries / Crypto boxes, TradingView "Canary RelRSI")
  *   💵 mfi — scripts/lib/mfi-washout-v6.1.mjs (MFI Scan box; stocks + Sector ETFs only, like the box)
+ *   🧚 fairy — Bottom Zone: WVF extreme + RSI(14) <35 + bullish close (scripts/lib/cci-fairy.mjs; stock universe, Bottom Zone box)
  *   📈 m20 — monthly close crosses above its 20-month SMA (Monthly 20MA scan / Bullish Setups 📈),
  *      placed on the first daily close in that month that is above the month's SMA20.
  * Thresholds never leave the server: files hold dates + kinds only.
@@ -27,6 +28,7 @@ import { join } from "node:path";
 import { runCanaryTopsBottoms } from "../src/lib/canaryTopsBottoms.mjs";
 import { CANARY_TOPS_BOTTOMS, CANARY_TOPS_BOTTOMS_VERSION } from "../src/lib/canaryTopsBottomsConfig.mjs";
 import { mfiWashoutV61 } from "./lib/mfi-washout-v6.1.mjs";
+import { cciFairyMarks } from "./lib/cci-fairy.mjs";
 import { ROOT, YAHOO_UA, sleep, pool, nzNowIso } from "./lib/scan-common.mjs";
 
 export const CHART_DATA_VERSION = 1;
@@ -152,7 +154,7 @@ function monthly20Marks(bars) {
 const r6 = (x) => (x == null || !Number.isFinite(x) ? null : Number(x.toPrecision(6)));
 const day = (ymd) => Math.round(Date.parse(`${ymd}T00:00:00Z`) / 86400000);
 
-export function buildChartDoc(ticker, got, { months = 12, mfi = true } = {}) {
+export function buildChartDoc(ticker, got, { months = 12, mfi = true, fairy = false } = {}) {
   const { bars } = got;
   const startYmd = (() => {
     const d = new Date(`${bars[bars.length - 1].asOf}T00:00:00Z`);
@@ -166,6 +168,8 @@ export function buildChartDoc(ticker, got, { months = 12, mfi = true } = {}) {
   const hasVolume = bars.slice(-20).some((b) => (b.volume || 0) > 0);
   if (mfi && hasVolume) mfiWashoutV61(bars).bottomSignal.forEach((s, i) => s && i >= from && marks.push([i, "mfi"]));
   for (const i of monthly20Marks(bars)) if (i >= from) marks.push([i, "m20"]);
+  // 🧚 Bottom Zone (owner t796u/pt801u): Canary stock universe only, like the Bottom Zone box.
+  if (fairy) for (const i of cciFairyMarks(bars)) if (i >= from) marks.push([i, "fairy"]);
   marks.sort((a, b) => a[0] - b[0]);
   const win = bars.slice(from);
   const d0 = day(win[0].asOf);
@@ -180,7 +184,7 @@ export function buildChartDoc(ticker, got, { months = 12, mfi = true } = {}) {
     // bars: [dayOffset from d0, open, high, low, close, volume]; d0 = days since 1970-01-01 (UTC)
     d0,
     b: win.map((b) => [day(b.asOf) - d0, r6(b.open), r6(b.high), r6(b.low), r6(b.close), hasVolume && b.volume != null ? Number(b.volume.toPrecision(3)) : null]),
-    // marks: [dayOffset, kind]  kind ∈ fish | smile | mfi | sweat | skull | m20
+    // marks: [dayOffset, kind]  kind ∈ fish | smile | mfi | sweat | skull | m20 | fairy
     m: marks.map(([i, k]) => [day(bars[i].asOf) - d0, k]),
   };
 }
@@ -204,7 +208,7 @@ async function main() {
     for (const t of u.tickers) {
       if (seen.has(t)) continue;
       seen.add(t);
-      jobs.push({ t, g, mfi });
+      jobs.push({ t, g, mfi, fairy: g === "stock" });
     }
   }
   let list = a.tickers ? a.tickers.map((t) => jobs.find((j) => j.t === t) || { t, g: "other", mfi: false }) : jobs;
@@ -219,7 +223,7 @@ async function main() {
         err = `${sym}: ${got.error}`;
         continue;
       }
-      const doc = buildChartDoc(job.t, got, { months: a.months, mfi: job.mfi });
+      const doc = buildChartDoc(job.t, got, { months: a.months, mfi: job.mfi, fairy: !!job.fairy });
       return { ok: true, t: job.t, g: job.g, doc };
     }
     return { ok: false, t: job.t, err };

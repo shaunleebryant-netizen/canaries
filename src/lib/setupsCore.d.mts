@@ -10,6 +10,7 @@ export type BullishConditionId =
   | "fish"
   | "smile"
   | "mfi_os"
+  | "cci_fairy"
   | "weekly_bull"
   | "monthly_20ma"
   | "ibd";
@@ -46,6 +47,7 @@ export interface MainScannerInput {
   ibd?: unknown[];
   marketStates?: unknown[];
   monthly20?: unknown[];
+  cciFairy?: unknown[];
 }
 
 export declare function daysBefore(asOf: string, d: string): number;

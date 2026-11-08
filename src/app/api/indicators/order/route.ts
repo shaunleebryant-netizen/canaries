@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { clean, guardFormPost, isBot, normalizeEmail } from "@/lib/leads";
 import { nowSec } from "@/lib/members/db";
-import { findOrderable, normalizeTvUsername } from "@/lib/indicatorCatalog";
+import { findOrderableMany, normalizeTvUsername } from "@/lib/indicatorCatalog";
 
 export const dynamic = "force-dynamic";
 
@@ -23,12 +23,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: guard.error }, { status: guard.status });
   }
 
-  const product = findOrderable(clean(body.script, 40)); // bundle, or Vanna & Charm on its own (owner 2026-10-10)
+  // Owner 2026-11-02: one or more indicators per order. Accepts `scripts: string[]` (new form) or legacy `script`.
+  const products = findOrderableMany(Array.isArray(body.scripts) ? body.scripts : clean(body.script, 200));
+  const product = products.length
+    ? {
+        id: products.map((p) => p.id).join(","),
+        name: products.map((p) => p.name).join(" + "),
+        tradingViewUrl: products.map((p) => p.tradingViewUrl).join(" "),
+        priceCents: products.reduce((s, p) => s + p.priceCents, 0),
+      }
+    : null;
   if (isBot(body)) {
     return NextResponse.json({ ok: true, next: `/indicators/checkout?script=${product?.id ?? ""}` });
   }
   if (!product) {
-    return NextResponse.json({ ok: false, error: "Please choose an indicator." }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "Please choose at least one indicator." }, { status: 400 });
   }
   const tvUsername = normalizeTvUsername(body.tvUsername);
   if (!tvUsername) {
@@ -58,6 +67,6 @@ export async function POST(request: Request) {
     ok: true,
     orderId: id,
     status: "pending_payment",
-    next: `/indicators/checkout?order=${id}&script=${product.id}`,
+    next: `/indicators/checkout?order=${id}&script=${encodeURIComponent(product.id)}`,
   });
 }

@@ -18,8 +18,7 @@ export default async function AccountSignupPage() {
       <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">Dashboard access</p>
       <h1 className="mt-2 text-3xl font-semibold text-white">Create your account</h1>
       <p className="mt-3 text-sm text-slate-400">
-        Step 1 of 2 — create a login. Step 2 is secure payment with Stripe. Email/password accounts need email
-        confirmation before the members dashboard unlocks.
+        Step 1 of 2
       </p>
       <AccountForm
         endpoint="/api/account/signup"
@@ -27,6 +26,13 @@ export default async function AccountSignupPage() {
         fields={[
           { name: "email", label: "Email", type: "email", autoComplete: "email" },
           { name: "password", label: "Password (min 10 characters)", type: "password", autoComplete: "new-password" },
+          {
+            name: "confirmPassword",
+            label: "Confirm password",
+            type: "password",
+            autoComplete: "new-password",
+            mustMatch: "password",
+          },
         ]}
       />
       <GoogleSignInButton next="/account" />

@@ -15,7 +15,7 @@ export function PessimismBoard({ rows, asOf, counts }: { rows: PessRow[]; asOf?:
         <h2 className="text-base font-bold uppercase tracking-[0.15em] text-canary-gold sm:text-lg">Pessimism Board</h2>
         <span className="text-[10px] text-slate-500">As of {fmtDate(asOf)} · {rows.length} of {counts?.washedOut ?? "—"} washed-out names pass the health check</span>
       </div>
-      <p className="mt-1 text-xs italic text-amber-200">&ldquo;While peak optimism is hard to catch, peak pessimism is a lot easier.&rdquo;</p>
+      <p className="mt-1 text-xs italic text-amber-200">&ldquo;Peak optimism is hard to catch, peak pessimism is often easier.&rdquo;</p>
       <p className="mt-1 text-[11px] leading-snug text-slate-400">
         Growing businesses whose share price has been sold down hard: 25%+ under the 52-week high and oversold (RSI 35 or lower in the last 5 sessions, or below the lower Bollinger band), with revenue still growing and a Canary Score of 40+. <span className="text-emerald-300">Turning</span> means the price has reclaimed its 20-day average or Fish/MFI fired. A washed-out stock can keep falling. Education only.
       </p>

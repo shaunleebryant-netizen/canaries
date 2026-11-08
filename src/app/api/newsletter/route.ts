@@ -44,14 +44,18 @@ export async function POST(request: Request) {
   const source = rawSource === "seminar" || rawSource === "singapore_seminar" ? "seminar" : "letter";
   const truthy = (v: unknown) => v === true || v === "true" || v === "on" || v === "1";
   const consent = truthy(body.consent);
-  if (source === "letter" && !consent) {
+  const founding = truthy(body.founding_interest);
+  const launchUpdates = truthy(body.launch_updates);
+  // Coming-soon form: founding / launch-update interest alone is allowed without letter consent.
+  if (source === "letter" && !consent && !founding && !launchUpdates) {
     return NextResponse.json(
       { ok: false, error: "Please tick the box to confirm you'd like the letter." },
       { status: 400 },
     );
   }
-  const tags: LeadTag[] = source === "seminar" ? ["seminar"] : ["letter"];
-  if (truthy(body.founding_interest)) tags.push("founding_interest");
+  const tags: LeadTag[] = source === "seminar" ? ["seminar"] : consent ? ["letter"] : [];
+  if (founding) tags.push("founding_interest");
+  if (launchUpdates) tags.push("launch_updates");
 
   const name = clean(body.name, 100);
   const note = clean(body.note, 1000);

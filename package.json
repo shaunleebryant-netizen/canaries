@@ -36,7 +36,8 @@
     "refresh:vol-curve": "node scripts/refresh-vol-curve.mjs",
     "scan:options": "node scripts/scan-options-scanner.mjs",
     "export:support": "node scripts/export-support.mjs",
-    "export:drive": "node scripts/export-drive.mjs"
+    "export:drive": "node scripts/export-drive.mjs",
+    "alerts:watchlist": "node scripts/watchlist-alerts.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.13",

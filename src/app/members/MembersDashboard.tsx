@@ -11,11 +11,13 @@ import { FishAlerts } from "@/components/FishAlerts";
 import { ExhaustionAlerts } from "@/components/ExhaustionAlerts";
 import { EtfWatch } from "@/components/EtfWatch";
 import { TickerUniverseButton } from "@/components/TickerUniverseButton";
-import { loadTickerUniverse } from "@/lib/tickerUniverse";
+import { loadTickerUniverse, loadUniverseStockRows } from "@/lib/tickerUniverse";
+import { AssetStatusStrip } from "@/components/AssetStatusStrip";
 import { CryptoWatch } from "@/components/CryptoWatch";
 import { MoneyFlowAlerts } from "@/components/MoneyFlowAlerts";
 import { BullishSetups } from "@/components/BullishSetups";
 import { IbdSetups } from "@/components/IbdSetups";
+import { CciFairy } from "@/components/CciFairy";
 import { InsiderBuying } from "@/components/InsiderBuying";
 import { InsiderHistory } from "@/components/InsiderHistory";
 import { XRumours } from "@/components/XRumours";
@@ -34,9 +36,12 @@ import { BearishSetups } from "@/components/BearishSetups";
 import { WeeklyStateTurns, BullishStrong } from "@/components/WeeklyMarketState";
 // Monthly20Ma box hidden (owner 2026-09-25); component kept in src/components/Monthly20Ma.tsx.
 import { TickerChartProvider } from "@/components/TickerChartLightbox";
+import { loadUniverseLightbox } from "@/lib/loadUniverseLightbox";
 import { LiveTickers } from "@/components/LiveTickers";
+import { quoteStripChartNames } from "@/lib/quoteStripChart";
 import { LocalTime } from "@/components/LocalTime";
 import { BookingModalButton } from "@/components/BookingModalButton";
+import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { DecideLayout } from "@/components/DecideLayout";
 import { DecideHeading, ScanHeading } from "@/components/DecideTheme";
 import { DECIDE_THEME, MEMBERS_CRYPTO_HERO_CHARTS, MEMBERS_DESK_IDEAS, MEMBERS_GROWTH_SCORE, MEMBERS_HISTORY_TAB, MEMBERS_SECTOR_SCREENER, MEMBERS_X_RUMOURS, SCANNER_DECLUTTER } from "@/lib/featureFlags";
@@ -55,6 +60,7 @@ import { COUNTRY_NAMES, loadEtfCountryAlerts, loadEtfCountryHeldSince } from "@/
 import { loadCryptoWatchAlerts } from "@/lib/loadCryptoWatchAlerts";
 import { loadMoneyFlowAlerts, loadMoneyFlowPrints, loadMoneyFlowSessionDates } from "@/lib/loadMoneyFlowAlerts";
 import { loadIbdSetupsAlerts } from "@/lib/loadIbdSetupsAlerts";
+import { loadCciFairy } from "@/lib/loadCciFairy";
 import { computeMainScannerSetups, loadPackAsOf } from "@/lib/mainScanner";
 import {
   computeBullishStrong,
@@ -69,10 +75,6 @@ import { loadSignalHistory } from "@/lib/loadSignalHistory";
 import { SignalHistory } from "@/components/SignalHistory";
 import { FoldBox } from "@/components/FoldBox";
 import type { PessRow } from "@/components/PessimismBoard";
-import { IdeasSection, type IdeasData } from "@/components/ideas/IdeasSection";
-import { TrackRecord, type ScoreSummary } from "@/components/ideas/TrackRecord";
-import ideasJson from "../../../data/ideas.json";
-import ideaScores from "../../../data/ideas-scores.json";
 import pessimismJson from "../../../data/pessimism-board.json";
 import prevStateJson from "../../../data/state.prev.json";
 import setupsHistoryJson from "../../../data/setups-history.json";
@@ -138,6 +140,7 @@ export async function MembersDashboard({
   const cryptoWatchAlerts = loadCryptoWatchAlerts();
   const moneyFlowAlerts = loadMoneyFlowAlerts();
   const ibdSetupsAlerts = loadIbdSetupsAlerts();
+  const cciFairy = loadCciFairy(); // Owner t795u: ★ condition (Main Scanner bullish).
   // Insider Buying sub scanner (owner approved 2026-10-09, t595u): SEC Form 4. Members only;
   // not a Main Scanner / Bullish Setups condition.
   const insiderBuying = loadInsiderBuying();
@@ -168,6 +171,7 @@ export async function MembersDashboard({
     ibd: ibdSetupsAlerts,
     marketStates,
     monthly20,
+    cciFairy: cciFairy.signals,
   });
   // Owner 2026-10-10 (MEMBERS_SETUPS_COLUMNS): P/E · EPS g y/y · EV/EBITDA for the Main Scanner rows only.
   const setupFundamentals = pickFundamentals([
@@ -290,6 +294,7 @@ export async function MembersDashboard({
   const universeButton = (
     <TickerUniverseButton
       groups={loadTickerUniverse()}
+      stocks={MEMBERS_GROWTH_SCORE ? loadUniverseStockRows() : undefined}
       className="whitespace-nowrap rounded-lg border border-[#eab308]/40 px-3 py-1.5 text-xs font-medium text-[#eab308] hover:bg-[#eab308]/10"
     />
   );
@@ -299,14 +304,15 @@ export async function MembersDashboard({
         <main className="min-w-0 flex-1 space-y-4">
           {/* Owner 2026-10-06: public-safe ticker universe pop-up (tickers only, no signals).
               Owner 2026-10-10: on the tabbed layout it sits on the tab-bar row (toolbarEnd), no own row. */}
-          {SCANNER_DECLUTTER ? null : <div className="flex justify-end">{universeButton}</div>}
-          <TickerChartProvider v2={design.chartV2} myStocks={design.myStocks} universe={design.myStocks ? loadTickerUniverse() : undefined} names={designNames}>
+          {/* Outside TickerChartProvider: plain list (the stock table needs the chart context). */}
+          {SCANNER_DECLUTTER ? null : <div className="flex justify-end"><TickerUniverseButton groups={loadTickerUniverse()} className="whitespace-nowrap rounded-lg border border-[#eab308]/40 px-3 py-1.5 text-xs font-medium text-[#eab308] hover:bg-[#eab308]/10" /></div>}
+          <TickerChartProvider v2={design.chartV2} myStocks={design.myStocks} universe={design.myStocks ? loadTickerUniverse() : undefined} names={designNames} lightbox={loadUniverseLightbox()}>
             {/* Scanners: SCANNER_DECLUTTER mock (default off) or the live layout. */}
             {SCANNER_DECLUTTER ? (
               <div data-scan-theme={scanTheme}>
                 <ScannerDeclutterShell
                   initialTab={initialTab}
-                  stocksTop={<>{/* Owner t753u: Canary Score ranking first, then Ideas. */}{MEMBERS_GROWTH_SCORE && growthRanking.length ? (<FoldBox id="growth-rank" summary={`Canary Score ranking: ${growthRanking.length} scored · top ${growthRanking.slice(0, 3).map((r) => r.t).join(", ")}`}><GrowthScoreRanking rows={growthRanking} asOf={loadGrowthAsOf()} /></FoldBox>) : null}<IdeasSection data={ideasJson as unknown as IdeasData} setupTickers={[...mainScanner.bullish, ...mainScanner.bearish].map((x) => (x as { ticker?: string; t?: string }).ticker ?? (x as { t?: string }).t ?? "")} /></>}
+                  stocksTop={<>{/* Owner t765u: Ideas box removed from Stocks. */}{/* Owner t773u: drop outer FoldBox — GrowthScoreRanking already collapses. */}{MEMBERS_GROWTH_SCORE && growthRanking.length ? (<GrowthScoreRanking rows={growthRanking} asOf={loadGrowthAsOf()} />) : null}</>}
                   stocksBottom={null /* Owner t757u: Track record moved to Backtest. */}
                   toolbarEnd={universeButton}
                   insiders={
@@ -357,7 +363,7 @@ export async function MembersDashboard({
                             Backtest
                           </h2>
                         )}
-                        <div className="mb-6"><TrackRecord s={ideaScores as unknown as ScoreSummary} /></div>
+                        {/* Owner t765u: Ideas track record removed from Backtest. */}
                         <SignalHistory data={signalHistory} />
                       </section>
                     ) : undefined
@@ -371,50 +377,7 @@ export async function MembersDashboard({
                       />
                     </>
                   }
-                  main={
-                    <section
-                      aria-labelledby="main-scanner-label"
-                      className="space-y-3"
-                    >
-                      {themed ? (
-                        <ScanHeading
-                          theme={theme}
-                          id="main-scanner-label"
-                          title="Main Scanner"
-                          subtitle={<MainScannerSubtitle />}
-                        />
-                      ) : (
-                        <h2
-                          id="main-scanner-label"
-                          className="text-base font-bold uppercase tracking-[0.15em] text-canary-gold sm:text-lg"
-                        >
-                          Main Scanner
-                        </h2>
-                      )}
-                      <div className="grid items-start gap-3 md:grid-cols-2">
-                        <FoldBox id="bullish" summary={`🟢 Bullish Setups (${mainScanner.bullish.length}) · ${newSetups} new · top ${bullTickers.slice(0, 3).join(", ")}`}><ScannerShowMore limit={12}>
-                          <BullishSetups
-                            setups={mainScanner.bullish}
-                            asOf={mainScanner.asOf}
-                            fundamentals={setupFundamentals}
-                            growth={setupGrowth}
-                            growthScored={growthScored}
-                          />
-                        </ScannerShowMore></FoldBox>
-                        <FoldBox id="bearish" summary={`🔴 Bearish Setups (${mainScanner.bearish.length}) · top ${mainScanner.bearish.slice(0, 3).map((r) => r.ticker).join(", ")}`}><ScannerShowMore limit={12}>
-                          <BearishSetups
-                            setups={mainScanner.bearish}
-                            asOf={mainScanner.asOf}
-                            fundamentals={setupFundamentals}
-                            growth={setupGrowth}
-                            growthScored={growthScored}
-                          />
-                        </ScannerShowMore></FoldBox>
-                      </div>
-                      {/* Owner 2026-10-10 (MEMBERS_GROWTH_SCORE): full-width Growth Score ranking under the
-                          Main Scanner boxes, above Sub Scanners. */}
-                    </section>
-                  }
+                  main={null /* Owner t852u: Main Scanner retired — Bullish Setups removed, Bearish Setups moved to Sub Scanners row 3. */}
                   moreScans={
                     <section
                       aria-labelledby="sub-scanners-label"
@@ -424,28 +387,32 @@ export async function MembersDashboard({
                         <ScanHeading
                           theme={theme}
                           id="sub-scanners-label"
-                          title="Sub Scanners"
-                          subtitle="Canary scanners for different trades"
+                          title="Scanners"
+                          subtitle="Proprietary scanners. Click each header for a short explanation, or click any stock to open its chart with indicator marks and information. Not every stock is in our ticker universe — we curate the list. To check one that isn’t here, open it on TradingView and load the invite-only scripts we granted you."
                         />
                       ) : (
                         <h2
                           id="sub-scanners-label"
                           className="text-base font-bold uppercase tracking-[0.15em] text-canary-gold sm:text-lg"
                         >
-                          Sub Scanners
+                          Scanners
                         </h2>
                       )}
+                      {/* Owner t852u: three fixed rows. Bullish Setups, New Highs, New Lows removed from Stocks. */}
+                      <div className="space-y-3">
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        <FoldBox id="fish" summary={sum("Time to fish", fishAlerts, "🐟")}><ScannerShowMore>
+                        <FoldBox id="fish" summary={sum("Fish", fishAlerts, "🐟")}><ScannerShowMore>
                           <FishAlerts alerts={fishAlerts} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="sweaty" summary={sum("Sweaty stocks", exhaustionAlerts, "🥵")}><ScannerShowMore>
-                          <ExhaustionAlerts alerts={exhaustionAlerts} />
-                        </ScannerShowMore></FoldBox>
-                        <FoldBox id="mfi" summary={sum("MFI washout", moneyFlowAlerts, "💵")}><ScannerShowMore>
+                        <FoldBox id="mfi" summary={sum("MFI", moneyFlowAlerts, "💵")}><ScannerShowMore>
                           <MoneyFlowAlerts alerts={moneyFlowAlerts} prints={loadMoneyFlowPrints()} sessionDates={loadMoneyFlowSessionDates()} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="ibd" summary={sum("IBD setups", ibdSetupsAlerts)}><ScannerShowMore>
+                        <FoldBox id="cci-fairy" summary={sum("Fairy Godmother", cciFairy.signals, "🧚")}><ScannerShowMore>
+                          <CciFairy rows={cciFairy.signals} asOf={cciFairy.asOf} />
+                        </ScannerShowMore></FoldBox>
+                      </div>
+                      <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
+                        <FoldBox id="ibd" summary={sum("IBD", ibdSetupsAlerts)}><ScannerShowMore>
                           <IbdSetups alerts={ibdSetupsAlerts} />
                         </ScannerShowMore></FoldBox>
                         <FoldBox id="baby-bulls" summary={`Baby Bulls: ${weeklyTurns.bulls.length} bulls · ${weeklyTurns.bears.length} bears${weeklyTurns.bulls[0] ? ` · top ${(weeklyTurns.bulls[0] as { ticker?: string }).ticker}` : ""}`}><ScannerShowMore>
@@ -455,17 +422,34 @@ export async function MembersDashboard({
                             meta={marketStateMeta}
                           />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="warriors" summary={sum("Multi-week Warriors", bullishStrong)}><ScannerShowMore>
+                        <FoldBox id="warriors" summary={sum("Warriors", bullishStrong)}><ScannerShowMore>
                           <BullishStrong
                             rows={bullishStrong}
                             meta={marketStateMeta}
                           />
                         </ScannerShowMore></FoldBox>
+                      </div>
+                      <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
+                        <FoldBox id="sweaty" summary={sum("Sweaty", exhaustionAlerts, "🥵")}><ScannerShowMore>
+                          <ExhaustionAlerts alerts={exhaustionAlerts} />
+                        </ScannerShowMore></FoldBox>
+                        <div className="min-w-0 md:col-span-2">
+                        <FoldBox id="bearish" summary={`🔴 Bearish (${mainScanner.bearish.length}) · top ${mainScanner.bearish.slice(0, 3).map((r) => r.ticker).join(", ")}`}><ScannerShowMore limit={12}>
+                          <BearishSetups
+                            setups={mainScanner.bearish}
+                            asOf={mainScanner.asOf}
+                            fundamentals={setupFundamentals}
+                            growth={setupGrowth}
+                            growthScored={growthScored}
+                          />
+                        </ScannerShowMore></FoldBox>
+                        </div>
                         {MEMBERS_DESK_IDEAS ? (
                           <FoldBox id="desk" summary={`Desk Ideas: ${deskIdeas.ideas.length} ideas`}><ScannerShowMore>
                             <DeskIdeas ideas={deskIdeas.ideas} windowDays={deskIdeas.windowDays} heldSince={deskHeld} />
                           </ScannerShowMore></FoldBox>
                         ) : null}
+                      </div>
                       </div>
                       {/* Owner 2026-10-10: Insider Buying moved to the Insiders tab; X Rumours keeps its
                           full-width row here, where Insider Buying used to be. */}
@@ -581,15 +565,15 @@ export async function MembersDashboard({
                     <ScanHeading
                       theme={theme}
                       id="sub-scanners-label"
-                      title="Sub Scanners"
-                      subtitle="Canary scanners for different trades"
+                      title="Scanners"
+                      subtitle="Proprietary scanners. Click each header for a short explanation, or click any stock to open its chart with indicator marks and information. Not every stock is in our ticker universe — we curate the list. To check one that isn’t here, open it on TradingView and load the invite-only scripts we granted you."
                     />
                   ) : (
                     <h2
                       id="sub-scanners-label"
                       className="text-base font-bold uppercase tracking-[0.15em] text-canary-gold sm:text-lg"
                     >
-                      Sub Scanners
+                      Scanners
                     </h2>
                   )}
                   <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -725,8 +709,15 @@ export async function MembersDashboard({
 
   return (
     <div className="mx-auto max-w-7xl px-3 py-6 text-slate-100 sm:px-4 lg:py-8">
+      {regimeKey(payload.light, payload.S) === "red" ? (
+        <RedCompositeNotice
+          light={typeof payload.light === "string" ? payload.light : null}
+          packDay={state.sessionDate ?? String(payload.asOf ?? "").slice(0, 10)}
+        />
+      ) : null}
       {/* Page title — heads the whole members page */}
-      <header className="mb-4">
+      <header className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
         <h1 className="text-xl font-semibold text-white sm:text-2xl">
           Canary Trader&apos;s Dashboard
         </h1>
@@ -739,13 +730,18 @@ export async function MembersDashboard({
             shaun@canarydashboard.com
           </a>
         </p>
+        </div>
+        {/* Owner t986u exploration: asset strip moved to Decide column (below composite). */}
       </header>
 
       {/* Owner t755u: Today strip removed; the Decide heading now names the regime. */}
 
-      {/* Live quotes strip — top of page, above Decide / Scan */}
+      {/* Live quotes strip — top of page, above Decide / Scan.
+          Own lightbox (the scanner provider sits inside the scan column). */}
       <div className="mb-5">
-        <LiveTickers initial={marketQuotes} />
+        <TickerChartProvider v2={design.chartV2} names={quoteStripChartNames()}>
+          <LiveTickers initial={marketQuotes} />
+        </TickerChartProvider>
       </div>
 
       {/* Cockpit B: compact DECIDE (sticky) | SCAN */}
@@ -788,6 +784,13 @@ export async function MembersDashboard({
             ) : null}
             <CompositeHowToRead />
           </div>
+
+          {/* 1b. Gold / silver / crypto status — owner t986u exploration (draft B, below composite) */}
+          <section className="rounded-xl border border-white/10 bg-slate-900/70 p-3 shadow-sm">
+            <TickerChartProvider v2={design.chartV2} myStocks={design.myStocks} universe={design.myStocks ? loadTickerUniverse() : undefined} names={designNames} lightbox={loadUniverseLightbox()}>
+              <AssetStatusStrip />
+            </TickerChartProvider>
+          </section>
 
           {/* 2. Commentary — short bullets (owner 2026-10-02: no Full commentary details).
               Owner 2026-10-12 (t688u): moved up, directly under the traffic light. */}

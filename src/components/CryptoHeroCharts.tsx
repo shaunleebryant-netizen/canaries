@@ -24,7 +24,7 @@ const KEY: { emoji: string; text: string }[] = [
   { emoji: "💀", text: "Skull: topping mark after a sweaty stretch" },
 ];
 
-const NAME: Record<MarkKind, string> = { fish: "Fish", smile: "Washout", mfi: "MFI washout", m20: "Monthly trend up", sweat: "Sweaty", skull: "Skull" };
+const NAME: Record<MarkKind, string> = { fish: "Fish", smile: "Washout", mfi: "MFI washout", m20: "Monthly trend up", fairy: "Bottom Zone", sweat: "Sweaty", skull: "Skull" };
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const fmtDay = (ymd: string) => `${Number(ymd.slice(8, 10))} ${MONTHS[Number(ymd.slice(5, 7)) - 1]} ${ymd.slice(0, 4)}`;
 const ymdOf = (d0: number, off: number) => new Date((d0 + off) * 86400000).toISOString().slice(0, 10);
@@ -82,12 +82,12 @@ export function CryptoHeroCharts() {
         ))}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-slate-200">
-        <span>These marks come from our Canary RelRSI and MFI Washout indicators on TradingView: one bundle, US$99 one-off for both, free for members.</span>
+        <span>These marks come from our Canary RelRSI and MFI Washout indicators on TradingView: US$99 one-time payment, free for members.</span>
         <a
           href="/indicators"
           className="inline-flex items-center justify-center rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-amber-400"
         >
-          See the indicators
+          Browse indicators
         </a>
       </div>
       <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] leading-relaxed text-slate-400" aria-label="Mark key">

@@ -28,7 +28,11 @@ const TV_SYMBOL_MAP: Record<string, string> = {
   XAGUSD: "TVC:SILVER",
   SPX: "TVC:SPX",
   SP600: "TVC:SPSMC",
-  // Futures / index aliases sometimes used in quotes
+  // Futures / index aliases sometimes used in quotes.
+  // WTI is the live-quotes label; Yahoo fetches CL=F. No chart pack — same
+  // continuous-future style as GC=F so the lightbox TradingView tab can open.
+  WTI: "NYMEX:CL1!",
+  "CL=F": "NYMEX:CL1!",
   "GC=F": "COMEX:GC1!",
   "SI=F": "COMEX:SI1!",
   "BTC-USD": "BITSTAMP:BTCUSD",

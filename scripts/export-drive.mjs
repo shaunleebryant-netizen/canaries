@@ -39,7 +39,7 @@ const letter = d1Select(
   r.note ?? "", r.status === "verified" ? "confirmed" : r.status, r.converted ? "yes" : "no", "d1",
 ]);
 
-// Members tab <- subscriptions JOIN users. founding = launch_annual plan (first-100 $600/yr rate,
+// Members tab <- subscriptions JOIN users. founding = launch_annual plan (first-100 $420/yr rate,
 // same rule as countLaunchMembers); founding_number = order of launch_annual subscriptions by start.
 // livemode comes from the latest Stripe webhook event for that subscription.
 const PAID_HEADER = ["member_id", "email", "plan", "status", "start_date_utc", "current_period_end_utc", "cancel_at_period_end", "founding_member", "founding_number", "stripe_customer_id", "stripe_subscription_id", "livemode", "updated_utc"];

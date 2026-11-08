@@ -283,3 +283,29 @@ html[data-decide="collapsed"] [data-decide-layout] [data-decide-rail] { display:
     gap: 3px;
   }
 }
+
+/* Owner 2026-11-02 (t992u): header canary (see HeaderCanary.tsx) */
+.header-canary-walker { position: absolute; bottom: 0; left: 0; transform: translateX(210px); }
+.header-canary-bird { display: block; opacity: 0.9; filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.35)); }
+.is-hopping .header-canary-bird { animation: header-canary-hop 0.38s ease-in-out infinite; }
+.header-canary-eye { transform-box: fill-box; transform-origin: center; animation: header-canary-blink 4.5s infinite; }
+@keyframes header-canary-hop { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px) rotate(-4deg); } }
+@keyframes header-canary-blink { 0%,94%,100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
+/* t1010u: wander + peck seeds instead of following */
+.header-canary-bird { transform-origin: 60% 90%; }
+.is-pecking .header-canary-bird { animation: header-canary-peck 0.65s ease-in-out 2; }
+@keyframes header-canary-peck { 0%,100% { transform: rotate(0); } 45% { transform: rotate(28deg) translateY(2px); } }
+.header-canary-seed { position: absolute; bottom: 2px; left: 0; width: 3px; height: 3px; border-radius: 9999px; background: #fde047; box-shadow: 0 0 3px rgba(250,204,21,.6); opacity: 0; transition: opacity .4s; }
+.header-canary-seed.is-seed { opacity: .85; }
+@media (prefers-reduced-motion: reduce) {
+  .is-hopping .header-canary-bird, .is-pecking .header-canary-bird, .header-canary-eye { animation: none; }
+  .header-canary-seed { display: none; }
+}
+
+/* Section sparkles (owner t1001u) */
+.canary-glint { position: absolute; border-radius: 9999px; opacity: 0; animation: canary-glint 5.5s ease-in-out infinite; }
+.canary-glint::before, .canary-glint::after { content: ""; position: absolute; left: 50%; top: 50%; background: inherit; opacity: .7; transform: translate(-50%,-50%); }
+.canary-glint::before { width: 600%; height: 1px; }
+.canary-glint::after { width: 1px; height: 600%; }
+@keyframes canary-glint { 0%,100% { opacity: 0; transform: scale(.4) rotate(0deg); } 12% { opacity: .95; transform: scale(1) rotate(20deg); } 26% { opacity: 0; transform: scale(.5) rotate(40deg); } }
+@media (prefers-reduced-motion: reduce) { .canary-glint { animation: none; opacity: .35; } }

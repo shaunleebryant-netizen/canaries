@@ -4,6 +4,9 @@
  * Re-runs the CURRENT engines over Yahoo daily history and merges bullish marks into
  * data/signal-history.json:
  *   🐟 fish / 🙂 smile — Canary RelRSI daily (src/lib/canaryTopsBottoms.mjs, same config as the boxes)
+ *   🧚 fairy          — Bottom Zone (WVF extreme + RSI(14) <35 + bullish close; scripts/lib/cci-fairy.mjs, owner pt801u); stock universe only.
+ *                       Stored `fairyEngine` differs from FAIRY_ENGINE → all 🧚 rows rebuilt over the window.
+ *                       First run with no 🧚 rows backfills 🧚 over the whole window.
  *   💵 mfi            — MFI Washout v6.1 (scripts/lib/mfi-washout-v6.1.mjs, owner t577u 2026-10-07),
  *                       MFI universe only (stocks ∪ Sector ETFs, same as the live MFI Scan box).
  *                       MFI_ENGINE=v6 rolls back. When the stored `mfiEngine` differs from the
@@ -20,7 +23,7 @@
  * "In a box now" is joined at render time from the same pack's box files (src/lib/loadSignalHistory.ts).
  * Refuses to write (exit 1) if too many fetches fail — the pack logs a warning and keeps the old file.
  *
- * row = { d, t, k: "fish"|"smile"|"mfi", g: "stock"|"sector"|"country"|"crypto", p: close on the mark bar }
+ * row = { d, t, k: "fish"|"smile"|"mfi"|"fairy", g: "stock"|"sector"|"country"|"crypto", p: close on the mark bar }
  * tickers[t] = { name, g, last, lastAsOf, removed?, removedSince? }
  * PRIVATE members data. Thresholds are not stored.
  *
@@ -35,8 +38,10 @@ import { runCanaryTopsBottoms } from "../src/lib/canaryTopsBottoms.mjs";
 import { CANARY_TOPS_BOTTOMS, CANARY_TOPS_BOTTOMS_VERSION } from "../src/lib/canaryTopsBottomsConfig.mjs";
 import { mfiWashoutV6 } from "./lib/mfi-washout-v6.mjs";
 import { mfiWashoutV61 } from "./lib/mfi-washout-v6.1.mjs";
+import { cciFairyMarks } from "./lib/cci-fairy.mjs";
 
 const MFI_ENGINE = process.env.MFI_ENGINE === "v6" ? "v6" : "v6.1";
+const FAIRY_ENGINE = "bottom-zone-v1"; // was CCI(27) cross −100 (no stored engine)
 const mfiSignals = (bars) => (MFI_ENGINE === "v6" ? mfiWashoutV6(bars) : mfiWashoutV61(bars)).bottomSignal;
 import { ROOT, MIRROR_DIR, YAHOO_UA, sleep, pool, nzNowIso } from "./lib/scan-common.mjs";
 
@@ -211,6 +216,7 @@ async function main() {
           const bottomSignal = mfiSignals(bars);
           bottomSignal.forEach((s, i) => s && marks.push({ d: bars[i].asOf, k: "mfi", i }));
         }
+        if (job.g === "stock") for (const i of cciFairyMarks(bars)) marks.push({ d: bars[i].asOf, k: "fairy", i });
       }
       // Keep only what the merge needs (marks carry their price now; calendar uses recent bars).
       const cut = Math.max(0, bars.length - KEEP_BARS);
@@ -248,13 +254,23 @@ async function main() {
 
   // 💵 engine change (e.g. v6 → v6.1): rebuild every 💵 row in the window for tickers scanned OK.
   const rebuildMfi = mode === "update" && (a.rebuildMfi || (existing?.mfiEngine ?? "v6") !== MFI_ENGINE);
+  const rebuildFairy = mode === "update" && (existing?.fairyEngine ?? "cci27") !== FAIRY_ENGINE;
+  const backfillFairy = rebuildFairy || (mode === "update" && !(existing?.rows ?? []).some((r) => r.k === "fairy"));
+  let fairyDropped = 0;
   const okTickers = new Set(results.filter((r) => r.ok && !r.job.priceOnly).map((r) => r.job.t));
 
+  const byTickerFwd = new Map(
+    results.filter((r) => r.ok).map((r) => [r.job.t, { bars: r.bars, idx: new Map(r.bars.map((b, i) => [b.asOf, i])) }])
+  );
   // Merge rows (idempotent on date|ticker|kind; stored price-at-mark wins).
   const rowMap = new Map();
   const before = existing?.rows?.length ?? 0;
   let mfiDropped = 0;
   for (const r of existing?.rows ?? []) {
+    if (rebuildFairy && r.k === "fairy") {
+      fairyDropped++;
+      continue;
+    }
     if (rebuildMfi && r.k === "mfi" && okTickers.has(r.t)) {
       mfiDropped++;
       continue;
@@ -266,7 +282,7 @@ async function main() {
     if (!r.ok || r.job.priceOnly) continue;
     const lastAsOf = r.bars[r.bars.length - 1].asOf;
     for (const m of r.marks) {
-      const from = rebuildMfi && m.k === "mfi" ? windowStart : addFrom;
+      const from = (rebuildMfi && m.k === "mfi") || (backfillFairy && m.k === "fairy") ? windowStart : addFrom;
       if (m.d < from || m.d < windowStart) continue;
       if (r.job.g !== "crypto" && m.d > asOf) continue;
       if (m.d > lastAsOf) continue;
@@ -286,6 +302,17 @@ async function main() {
   const rows = [...rowMap.values()].sort((x, y) =>
     x.d !== y.d ? (x.d < y.d ? 1 : -1) : x.k.localeCompare(y.k) || x.t.localeCompare(y.t)
   );
+
+  // Forward closes (preview, owner pt800u): fw = [close +3, +5, +10 sessions after the mark]; null until printed.
+  // Recomputed every run from the ticker's own bars; a failed fetch keeps the stored fw.
+  const FWD = [3, 5, 10];
+  for (const row of rows) {
+    const r = byTickerFwd.get(row.t);
+    if (!r) continue;
+    const i = r.idx.get(row.d);
+    if (i == null) continue;
+    row.fw = FWD.map((h) => (r.bars[i + h] ? +r.bars[i + h].close.toFixed(4) : null));
+  }
 
   // Ticker meta: refresh price now; tag left-universe tickers instead of deleting them.
   const used = new Set(rows.map((r) => r.t));
@@ -323,19 +350,20 @@ async function main() {
     sessions: windowSessions.length,
     builtAt: existing?.builtAt ?? nzNowIso(),
     updatedAt: nzNowIso(),
-    method: `fish/smile ${CANARY_TOPS_BOTTOMS_VERSION} · mfi MFI Washout ${MFI_ENGINE} · Yahoo 1d · ${mode}`,
+    method: `fish/smile ${CANARY_TOPS_BOTTOMS_VERSION} · mfi MFI Washout ${MFI_ENGINE} · fairy ${FAIRY_ENGINE} · Yahoo 1d · ${mode}`,
     mfiEngine: MFI_ENGINE,
+    fairyEngine: FAIRY_ENGINE,
     note:
-      "Members-only signal history (🐟 / 🙂 / 💵). Backfilled by re-running the current engines, then each post-close run adds new marks. Never invented.",
+      "Members-only signal history (🐟 / 🙂 / 💵 / 🧚). Backfilled by re-running the current engines, then each post-close run adds new marks. Never invented.",
     counts: rows.reduce((o, r) => ((o[r.k] = (o[r.k] || 0) + 1), o), {}),
     failed,
-    lastRun: { mode, added, pruned, leftUniverse: leftUniverse.length, addFrom, mfiRebuilt: rebuildMfi, mfiDropped, at: nzNowIso() },
+    lastRun: { mode, added, pruned, leftUniverse: leftUniverse.length, addFrom, mfiRebuilt: rebuildMfi, mfiDropped, fairyRebuilt: rebuildFairy, fairyDropped, at: nzNowIso() },
     rows,
     tickers,
   };
   console.log(
     `window ${windowStart} → ${asOf} (${windowSessions.length} sessions) · rows ${before} → ${rows.length}` +
-      ` (+${added} added, −${pruned} pruned${rebuildMfi ? `, 💵 rebuilt with ${MFI_ENGINE}: −${mfiDropped} old 💵 rows` : ""}) · left universe ${leftUniverse.length} · failed ${failed.length}`
+      ` (+${added} added, −${pruned} pruned${rebuildMfi ? `, 💵 rebuilt with ${MFI_ENGINE}: −${mfiDropped} old 💵 rows` : ""}${rebuildFairy ? `, 🧚 rebuilt with ${FAIRY_ENGINE}: −${fairyDropped} old 🧚 rows` : ""}) · left universe ${leftUniverse.length} · failed ${failed.length}`
   );
   if (failed.length) console.log("failed:", failed.map((f) => `${f.ticker} (${f.error})`).join(" | "));
   if (a.dryRun) return;

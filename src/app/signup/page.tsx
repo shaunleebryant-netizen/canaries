@@ -1,19 +1,39 @@
+import { FOUNDING_BENEFITS } from "@/lib/foundingBenefits";
+import { FIRST_100_CAP, accountsEnabled } from "@/lib/members/config";
+import { countLaunchMembers, getMembersDb } from "@/lib/members/db";
+
 export const metadata = {
   alternates: { canonical: "/signup" },
   title: "Sign up",
   description: "Create a Canary Dashboard account or log in to the members dashboard.",
 };
 
-const CHECKLIST = [
-  "Full Dashboard",
-  "Learning tools",
-  "Weekly commentary + email",
-  "Time to Fish 🐟 List",
-  "Sweaty 🥵/💀 List",
-  "WhatsApp / Email support",
-];
+// Founding-spots highlight switches when the first 100 fill.
+export const dynamic = "force-dynamic";
 
-export default function SignupPage() {
+
+async function foundingSpotsOpen(): Promise<boolean> {
+  if (!accountsEnabled()) return true;
+  try {
+    return (await countLaunchMembers(await getMembersDb())) < FIRST_100_CAP;
+  } catch {
+    return true;
+  }
+}
+
+export default async function SignupPage() {
+  const launchOpen = await foundingSpotsOpen();
+  const foundingBox = launchOpen
+    ? "rounded-xl border border-canary-gold/30 bg-slate-950/60 px-4 py-3"
+    : "rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 opacity-60";
+  const afterBox = launchOpen
+    ? "rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 opacity-60"
+    : "rounded-xl border border-canary-gold/30 bg-slate-950/60 px-4 py-3";
+  const foundingLabel = launchOpen ? "text-canary-gold" : "text-slate-500";
+  const afterLabel = launchOpen ? "text-slate-500" : "text-canary-gold";
+  const foundingPrice = launchOpen ? "text-white" : "text-slate-400";
+  const afterPrice = launchOpen ? "text-slate-400" : "text-white";
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-14">
       <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
@@ -46,22 +66,22 @@ export default function SignupPage() {
           <p className="mt-2 text-sm text-slate-300">Secure card payment by Stripe. All prices in USD.</p>
 
           <div className="mt-5 space-y-3">
-            <div className="rounded-xl border border-canary-gold/30 bg-slate-950/60 px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-widest text-canary-gold">
+            <div className={foundingBox}>
+              <p className={`text-xs font-semibold uppercase tracking-widest ${foundingLabel}`}>
                 First 100 · launch special
               </p>
-              <p className="mt-1 text-2xl font-semibold text-white">
-                $600<span className="text-sm font-medium text-slate-400">/yr</span>
+              <p className={`mt-1 text-2xl font-semibold ${foundingPrice}`}>
+                $35<span className="text-sm font-medium text-slate-400">/month</span>
               </p>
               <p className="mt-1 text-xs text-slate-400">
-                Billed annually (US$50/mo) · rate locked for life while you renew
+                Billed annually (US$420/year) · not subject to future increments
               </p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+            <div className={afterBox}>
+              <p className={`text-xs font-semibold uppercase tracking-widest ${afterLabel}`}>
                 After 100
               </p>
-              <p className="mt-1 text-xl font-semibold text-white">
+              <p className={`mt-1 text-xl font-semibold ${afterPrice}`}>
                 $1,069<span className="text-sm font-medium text-slate-400">/yr</span>
                 <span className="text-sm font-medium text-slate-400"> · or $99/mo monthly</span>
               </p>
@@ -69,7 +89,7 @@ export default function SignupPage() {
           </div>
 
           <ul className="mt-5 space-y-1.5 text-sm text-slate-300">
-            {CHECKLIST.map((item) => (
+            {FOUNDING_BENEFITS.map((item) => (
               <li key={item} className="flex gap-2">
                 <span className="text-canary-gold">✓</span>
                 {item}

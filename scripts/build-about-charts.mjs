@@ -19,18 +19,30 @@ const { chromium } = await import(PW);
 const sharp = (await import("sharp")).default;
 
 const EXAMPLES = [
-  { t: "NU", mark: "2026-09-28", kind: "fish", from: "2026-08-12" },
-  { t: "SMTC", mark: "2026-07-29", kind: "fish", from: "2026-06-15" },
-  { t: "ENTG", mark: "2026-07-30", kind: "mfi", from: "2026-06-15" },
-  { t: "SHOP", mark: "2026-09-09", kind: "smile", from: "2026-07-25" },
-  { t: "CIEN", mark: "2026-09-03", kind: "fish", from: "2026-07-20" },
+  { t: "ARM", mark: "2026-06-15", kind: "sweat", from: "2026-05-01" },
+  { t: "AMKR", mark: "2026-06-18", kind: "sweat", from: "2026-05-04" },
+  { t: "WDAY", mark: "2026-06-23", kind: "mfi", from: "2026-05-10" },
+  { t: "PLTR", mark: "2026-06-26", kind: "mfi", from: "2026-05-12" },
+  { t: "MSFT", mark: "2026-06-25", kind: "fish", from: "2026-05-11" },
+  { t: "SWKS", mark: "2026-07-08", kind: "smile", from: "2026-05-24" },
+  { t: "TEM", mark: "2026-07-28", kind: "fairy", from: "2026-06-12" },
+  { t: "NCNO", mark: "2026-05-15", kind: "fairy", from: "2026-04-01" },
 ];
-const EMOJI = { fish: "🐟", smile: "🙂", mfi: "💵" };
-const LABEL = { fish: "Fish", smile: "Washout (Smiley)", mfi: "MFI Washout" };
+const EMOJI = { fish: "🐟", smile: "🙂", mfi: "💵", sweat: "🥵", skull: "💀", fairy: "🧚" };
+const LABEL = { fish: "Fish", smile: "Washout (Smiley)", mfi: "MFI Washout", sweat: "Getting Sweaty", skull: "Rolling over", fairy: "Fairy Godmother" };
 
 const hist = JSON.parse(fs.readFileSync(path.join(ROOT, "data/signal-history.json"), "utf8"));
 const key = (t) => t.toUpperCase().replace(/[^A-Z0-9.-]/g, "_");
 const barsCache = {};
+const cmCache = {};
+/** chartdata `m` marks ([dayOffset, kind]) as {d, k}, limited to kinds we label. */
+function chartMarks(t) {
+  if (cmCache[t] !== undefined) return cmCache[t];
+  const p = path.join(ROOT, "public/_chartdata", `${key(t)}.json`);
+  if (!fs.existsSync(p)) return (cmCache[t] = []);
+  const d = JSON.parse(fs.readFileSync(p, "utf8"));
+  return (cmCache[t] = (d.m || []).filter((x) => EMOJI[x[1]]).map((x) => ({ d: new Date((d.d0 + x[0]) * 864e5).toISOString().slice(0, 10), k: x[1] })));
+}
 function bars(t) {
   if (barsCache[t] !== undefined) return barsCache[t];
   const p = path.join(ROOT, "public/_chartdata", `${key(t)}.json`);
@@ -85,21 +97,26 @@ const examples = EXAMPLES.map((e) => {
   const b = bars(e.t);
   const i = b.findIndex((x) => x.time === e.mark);
   if (i < 0) throw new Error(`${e.t}: no bar on ${e.mark}`);
-  const markRow = hist.rows.find((r) => r.t === e.t && r.d === e.mark && r.k === e.kind);
-  if (!markRow) throw new Error(`${e.t}: no ${e.kind} mark on ${e.mark} in signal-history`);
+  const markRow = hist.rows.find((r) => r.t === e.t && r.d === e.mark && r.k === e.kind)
+    || chartMarks(e.t).find((m) => m.d === e.mark && m.k === e.kind);
+  if (!markRow) throw new Error(`${e.t}: no ${e.kind} mark on ${e.mark} in signal-history or chartdata`);
   const after = b.slice(i + 1);
   const last = b[b.length - 1];
-  let peak = after[0];
-  for (const x of after) if (x.close > peak.close) peak = x;
-  const marks = hist.rows
-    .filter((r) => r.t === e.t && r.d >= e.from && r.d <= last.time)
-    .map((r) => ({ d: r.d, k: r.k }));
+  const bear = e.kind === "sweat" || e.kind === "skull";
+  let peak = after[0]; // for warning marks "peak" = deepest trough
+  for (const x of after) if (bear ? x.close < peak.close : x.close > peak.close) peak = x;
+  const seenM = new Set();
+  const marks = [
+    ...hist.rows.filter((r) => r.t === e.t).map((r) => ({ d: r.d, k: r.k })),
+    ...chartMarks(e.t),
+  ].filter((m) => m.d >= e.from && m.d <= last.time && !seenM.has(m.d + m.k) && seenM.add(m.d + m.k));
+  const sameDay = [...new Set(marks.filter((m) => m.d === e.mark).map((m) => m.k))];
   return {
     ticker: e.t,
     name: hist.tickers[e.t]?.name ?? e.t,
     kind: e.kind,
     markDate: e.mark,
-    sameDay: hist.rows.filter((r) => r.t === e.t && r.d === e.mark).map((r) => r.k),
+    sameDay: sameDay.length ? sameDay : [e.kind],
     priceAtMark: b[i].close,
     lastDate: last.time,
     lastClose: last.close,
@@ -129,14 +146,14 @@ for (const ex of examples) {
   .top{display:flex;justify-content:space-between;align-items:flex-start}
   .tk{font-size:28px;font-weight:700;letter-spacing:.02em}.nm{font-size:14px;color:#94a3b8;margin-top:2px}
   .mk{font-size:14px;color:#eab308;margin-top:6px}
-  .pct{font-size:40px;font-weight:800;color:#34d399;text-align:right;line-height:1}
+  .pct{font-size:40px;font-weight:800;color:${ex.pctNow < 0 ? "#fb7185" : "#34d399"};text-align:right;line-height:1}
   .sub{font-size:13px;color:#94a3b8;text-align:right;margin-top:6px}
   #c{flex:1;margin-top:8px}
   .ft{display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-top:4px}
   </style></head><body><div class="card">
   <div class="top"><div><div class="tk">${ex.ticker}</div><div class="nm">${ex.name}</div>
   <div class="mk">${ex.sameDay.map((k) => EMOJI[k]).join("")} ${ex.sameDay.map((k) => LABEL[k]).join(" + ")} · ${dmy(ex.markDate)} · close $${ex.priceAtMark.toFixed(2)}</div></div>
-  <div><div class="pct">${ex.pctNow >= 0 ? "+" : ""}${ex.pctNow}%</div><div class="sub">to $${ex.lastClose.toFixed(2)} on ${dmy(ex.lastDate)} · ${ex.sessionsNow} sessions${ex.pctPeak > ex.pctNow + 0.5 ? `<br>peak +${ex.pctPeak}% (${dmy(ex.peakDate)})` : ""}</div></div></div>
+  <div><div class="pct">${ex.pctNow >= 0 ? "+" : ""}${ex.pctNow}%</div><div class="sub">to $${ex.lastClose.toFixed(2)} on ${dmy(ex.lastDate)} · ${ex.sessionsNow} sessions${["sweat", "skull"].includes(ex.kind) ? (ex.pctPeak < ex.pctNow - 0.5 ? `<br>low ${ex.pctPeak}% (${dmy(ex.peakDate)})` : "") : ex.pctPeak > ex.pctNow + 0.5 ? `<br>peak ${ex.pctPeak >= 0 ? "+" : ""}${ex.pctPeak}% (${dmy(ex.peakDate)})` : ""}</div></div></div>
   <div id="c"></div>
   <div class="ft"><span>Canary Dashboard · daily candles · marks from our own signal history</span><span>Education only · past examples don't guarantee future results</span></div>
   </div><script>${lcJs}</script><script>(()=>{
@@ -150,8 +167,8 @@ for (const ex of examples) {
   s.createPriceLine({price:${ex.priceAtMark},color:'#eab308',lineWidth:1,lineStyle:2,axisLabelVisible:true,title:'mark close'});
   const ln=chart.addSeries(LightweightCharts.LineSeries,{color:'rgba(234,179,8,0.9)',lineWidth:2,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
   ln.setData([{time:'${ex.markDate}',value:${ex.priceAtMark}},{time:'${ex.lastDate}',value:${ex.lastClose}}]);
-  const byDay={};for(const m of marks){(byDay[m.d]??=[]).push(E[m.k]);}
-  LightweightCharts.createSeriesMarkers(s,Object.entries(byDay).sort().map(([d,em])=>({time:d,position:'belowBar',shape:'arrowUp',color:d==='${ex.markDate}'?'#eab308':'#64748b',text:em.join(''),size:d==='${ex.markDate}'?2:1})));
+  const B=new Set(['sweat','skull']);const byDay={};for(const m of marks){const g=B.has(m.k)?'a':'b';(byDay[m.d+'|'+g]??=[]).push(E[m.k]);}
+  LightweightCharts.createSeriesMarkers(s,Object.entries(byDay).map(([dk,em])=>{const [d,g]=dk.split('|');const hot=d==='${ex.markDate}';return {time:d,position:g==='a'?'aboveBar':'belowBar',shape:g==='a'?'arrowDown':'arrowUp',color:hot?'#eab308':(g==='a'?'#fb7185':'#64748b'),text:em.join(''),size:hot?2:1};}).sort((x,y)=>x.time<y.time?-1:x.time>y.time?1:0));
   chart.timeScale().fitContent();
   })();</script></body></html>`;
   await page.goto("about:blank");

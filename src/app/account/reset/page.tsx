@@ -23,7 +23,16 @@ export default async function AccountResetPage({
           endpoint="/api/account/reset/confirm"
           submitLabel="Set new password"
           hidden={{ token }}
-          fields={[{ name: "password", label: "New password (min 10 characters)", type: "password", autoComplete: "new-password" }]}
+          fields={[
+            { name: "password", label: "New password (min 10 characters)", type: "password", autoComplete: "new-password" },
+            {
+              name: "confirmPassword",
+              label: "Confirm password",
+              type: "password",
+              autoComplete: "new-password",
+              mustMatch: "password",
+            },
+          ]}
         />
       ) : (
         <>

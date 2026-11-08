@@ -230,6 +230,24 @@ const near = (m, end, back) => {
   return undefined;
 };
 
+/** Single-quarter diluted EPS by period end (split-adjusted, filer units). Map(end → value). */
+function quarterEps(facts, adj) {
+  for (const [tax, tag] of [["us-gaap", "EarningsPerShareDiluted"], ["us-gaap", "EarningsPerShareBasicAndDiluted"], ["ifrs-full", "DilutedEarningsLossPerShare"]]) {
+    const { rs } = rows(facts, tax, tag);
+    const dur = rs.filter((x) => x.start).map((x) => ({ s: x.start, e: x.end, d: days(x.start, x.end), v: adj(x) }));
+    const out = new Map();
+    for (const x of dur) if (x.d >= 80 && x.d <= 100) out.set(x.e, x.v);
+    // Q4 = FY − 9-month YTD ending ~3 months before FY end, same fiscal start.
+    for (const a of dur.filter((x) => x.d >= 350 && x.d <= 380)) {
+      if (out.has(a.e)) continue;
+      const ytd = dur.find((y) => y.d >= 260 && y.d <= 285 && Math.abs(days(y.s, a.s)) <= 7);
+      if (ytd) out.set(a.e, a.v - ytd.v);
+    }
+    if (out.size >= 2) return out;
+  }
+  return new Map();
+}
+
 /* ---------- per-ticker metrics ---------- */
 function metrics({ ticker, price, facts, splits, fx, asOf }) {
   const notes = [];
@@ -288,6 +306,24 @@ function metrics({ ticker, price, facts, splits, fx, asOf }) {
     }
     r.fe = e;
   } else Object.assign(r, { pe: null, pw: "missing", g: null, gw: "missing" });
+
+  // --- EPS q/q (owner t1010u): latest single-quarter diluted EPS vs the quarter before (sequential).
+  // Fiscal Q4 is rarely tagged on its own, so it is derived as FY − 9-month YTD (approximate).
+  try {
+    const q = quarterEps(facts, splitAdj);
+    const ends = [...q.keys()].sort();
+    const e1 = ends[ends.length - 1];
+    const e0 = ends.find((k) => Math.abs(days(k, shift(e1, -91))) <= 12);
+    if (!e1 || days(e1, asOf) > STALE_DAYS) Object.assign(r, { qq: null, qqw: e1 ? "stale" : "missing" });
+    else if (!e0) Object.assign(r, { qq: null, qqw: "missing" });
+    else {
+      const c = q.get(e1), pq = q.get(e0);
+      if (c > 0 && pq > 0) Object.assign(r, { qq: c / pq - 1, qqw: null });
+      else Object.assign(r, { qq: null, qqw: "nm" });
+    }
+  } catch {
+    Object.assign(r, { qq: null, qqw: "missing" });
+  }
 
   // --- EV / EBITDA
   const done = (why, detail) => {
@@ -716,6 +752,59 @@ function scoreGrowth(R, evx, fx) {
 }
 
 /* ---------- main ---------- */
+async function addAnalystTargets(tickers, out) {
+  const dir = join(CACHE, "yahoo-targets");
+  mkdirSync(dir, { recursive: true });
+  let session = null;
+  const getSession = async () => {
+    if (session !== null) return session;
+    session = false;
+    try {
+      const r1 = await fetch("https://fc.yahoo.com", { headers: { "User-Agent": "Mozilla/5.0" }, redirect: "manual" });
+      const cookie = (r1.headers.getSetCookie?.() ?? [r1.headers.get("set-cookie") ?? ""]).map((c) => c.split(";")[0]).filter(Boolean).join("; ");
+      const r2 = await fetch("https://query2.finance.yahoo.com/v1/test/getcrumb", { headers: { "User-Agent": "Mozilla/5.0", Cookie: cookie } });
+      const crumb = (await r2.text()).trim();
+      if (r2.ok && crumb && !crumb.includes("<")) session = { cookie, crumb };
+    } catch (e) {
+      stats.failures.push(`yahoo crumb: ${e instanceof Error ? e.message : e}`);
+    }
+    return session;
+  };
+  let got = 0;
+  for (const t of tickers) {
+    if (!out[t]) continue;
+    const path = join(dir, `${t.replace(/[^A-Z0-9.-]/gi, "_")}.json`);
+    let fd = null;
+    if (fresh(path, YAHOO_TTL_MS)) {
+      try { fd = JSON.parse(readFileSync(path, "utf8")); } catch {}
+    } else if (!OFFLINE) {
+      const s = await getSession();
+      if (!s) break;
+      await new Promise((res) => setTimeout(res, YAHOO_GAP_MS));
+      try {
+        const r = await fetch(`https://query2.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(t)}?modules=financialData&crumb=${encodeURIComponent(s.crumb)}`, { headers: { "User-Agent": "Mozilla/5.0", Cookie: s.cookie, Accept: "application/json" } });
+        stats.yahoo++;
+        if (r.ok) {
+          const j = await r.json();
+          const f = j?.quoteSummary?.result?.[0]?.financialData ?? {};
+          fd = { tm: f.targetMeanPrice?.raw ?? null, ao: f.numberOfAnalystOpinions?.raw ?? null };
+          writeAtomic(path, JSON.stringify(fd));
+        } else stats.failures.push(`${t} targets: HTTP ${r.status}`);
+      } catch (e) {
+        stats.failures.push(`${t} targets: ${e instanceof Error ? e.message : e}`);
+      }
+    } else if (existsSync(path)) {
+      try { fd = JSON.parse(readFileSync(path, "utf8")); } catch {}
+    }
+    if (fd && typeof fd.tm === "number" && fd.tm > 0) {
+      out[t].tm = Math.round(fd.tm * 100) / 100;
+      out[t].ao = typeof fd.ao === "number" ? fd.ao : null;
+      got++;
+    }
+  }
+  console.log(`analyst targets: ${got}/${tickers.length}`);
+}
+
 async function main() {
   const t0 = Date.now();
   const sessionDate = argVal("--session-date") || new Date().toISOString().slice(0, 10);
@@ -870,8 +959,12 @@ async function main() {
       out[w.t] = { p: w.price, pe: null, pw: "missing", g: null, gw: "missing", ev: null, evw: "missing", n: "calc error" };
     }
   }
+  // 3) Analyst average price target (owner t1010u). Yahoo quoteSummary financialData (cookie + crumb),
+  // cached per ticker 20h. Stored as tm (mean target) + ao (number of opinions); the UI shows tm only when ao > 5.
+  await addAnalystTargets(work.map((w) => w.t), out);
   // round
   for (const v of Object.values(out)) {
+    if (v.qq != null) v.qq = Math.round(v.qq * 1000) / 1000;
     if (v.pe != null) v.pe = Math.round(v.pe * 10) / 10;
     if (v.ev != null) v.ev = Math.round(v.ev * 10) / 10;
     if (v.g != null) v.g = Math.round(v.g * 1000) / 1000;
@@ -883,10 +976,10 @@ async function main() {
     v: 1,
     asOf: sessionDate,
     builtAt: new Date().toISOString(),
-    source: "SEC EDGAR XBRL company facts (TTM, GAAP as filed) + pack closes; Yahoo for recent splits and FX",
-    method: "P/E = close / TTM diluted EPS · EPS g = TTM EPS vs a year earlier · EV/EBITDA = (mcap + debt − cash & ST investments) / (operating income + D&A). n/m: negative, margin <5%, >100×, banks/insurers/lenders.",
+    source: "SEC EDGAR XBRL company facts (TTM, GAAP as filed) + pack closes; Yahoo for recent splits, FX and analyst average targets",
+    method: "P/E = close / TTM diluted EPS · EPS g = TTM EPS vs a year earlier · EPS q/q = latest quarter vs prior quarter (Q4 = FY − 9M) · Avg target = Yahoo analyst mean (shown when > 5 opinions) · EV/EBITDA = (mcap + debt − cash & ST investments) / (operating income + D&A). n/m: negative, margin <5%, >100×, banks/insurers/lenders.",
     fx,
-    counts: { tickers: Object.keys(out).length, stocks: stocks.length, pe: count("pe", "pw"), epsGrowth: count("g", "gw"), evEbitda: count("ev", "evw") },
+    counts: { tickers: Object.keys(out).length, stocks: stocks.length, pe: count("pe", "pw"), epsGrowth: count("g", "gw"), epsQoq: count("qq", "qqw"), analystTargets: stocks.filter((v) => v.tm != null && (v.ao ?? 0) > 5).length, evEbitda: count("ev", "evw") },
     fetch: { secRequests: stats.sec, submissionsFetched: stats.secSub, factsFetched: stats.secFacts, factsFromCache: stats.factsFromCache, yahooRequests: stats.yahoo, failures: stats.failures.slice(0, 20), errors: errors.slice(0, 20), seconds: Math.round((Date.now() - t0) / 100) / 10 },
     tickers: Object.fromEntries(Object.entries(out).sort(([a], [b]) => a.localeCompare(b))),
   };

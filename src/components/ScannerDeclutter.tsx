@@ -41,6 +41,7 @@ export function ScannerEmojiLegend() {
     { emoji: "🐟", label: "Fish — a sold-off name starting to find its feet" },
     { emoji: "🙂", label: "Washout — selling looks worn out" },
     { emoji: "💵", label: "MFI washout — selling washed out, money flow turning up" },
+    { emoji: "🧚", label: "Bottom Zone — WVF extreme + RSI under 35 + up close" },
     { emoji: "🟢", label: "Weekly green — trend turned or staying bullish" },
   ];
   const bearish: Mark[] = [
@@ -185,7 +186,7 @@ export function ScannerDeclutterShell({
       ? "stocks"
       : initialTab
   );
-  const [moreOpen, setMoreOpen] = useState(true);
+  // Owner t1049u: Scanners accordion removed; always shown.
   // Owner t698u 2026-10-14: Main Scanner can be hidden like Sub Scanners; remembered on this device.
   const [mainOpen, setMainOpen] = useState(true);
   useEffect(() => {
@@ -306,8 +307,8 @@ export function ScannerDeclutterShell({
       {tab === "stocks" ? (
         <div className="space-y-4">
           <ScannerEmojiLegend />
-          {stocksTop}
-          {mainOpen ? (
+          {/* Owner t852u: Canary Score ranking (stocksTop) now renders below Sub Scanners. */}
+          {main == null ? null : mainOpen ? (
             <div className="relative">
               <button
                 type="button"
@@ -337,32 +338,9 @@ export function ScannerDeclutterShell({
               </button>
             </div>
           )}
-          <div className="rounded-xl border border-white/10 bg-slate-950/40">
-            <button
-              type="button"
-              aria-expanded={moreOpen}
-              onClick={() => setMoreOpen((v) => !v)}
-              className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/5"
-            >
-              <span className="flex items-center gap-2">
-                <span aria-hidden className="text-slate-500">
-                  {moreOpen ? "▾" : "▸"}
-                </span>
-                Sub Scanners
-                <span className="text-[11px] font-normal text-slate-500">
-                  Time to fish · Sweaty stocks · MFI · IBD · Baby Bulls · Multi-week Warriors
-                </span>
-              </span>
-              <span className="text-[11px] font-normal text-slate-500">
-                {moreOpen ? "Hide" : "Show"}
-              </span>
-            </button>
-            {moreOpen ? (
-              <div className="border-t border-white/5 px-3 pb-3 pt-3">
-                {moreScans}
-              </div>
-            ) : null}
-          </div>
+          {/* Owner t1049u: no accordion — Scanners heading, description and boxes always shown. */}
+          <div>{moreScans}</div>
+          {stocksTop}
           {stocksBottom}
         </div>
       ) : null}
