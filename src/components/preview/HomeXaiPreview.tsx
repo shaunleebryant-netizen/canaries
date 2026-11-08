@@ -98,9 +98,8 @@ export function HomeXaiPreview() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="/account/signup" className="rounded-xl bg-canary-gold px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-300">Create a free account</a>
-              <a href="/signup" className="rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-white hover:bg-white/5">Paid membership</a>
+              <a href="/indicators" className="rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-white hover:bg-white/5">Indicators</a>
             </div>
-            <p className="mt-3 text-sm text-slate-300">Limited free access</p>
           </div>
           <HomeVideo />
         </div>
