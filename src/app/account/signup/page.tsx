@@ -35,7 +35,7 @@ export default async function AccountSignupPage() {
           },
           {
             name: "marketing",
-            label: "Send me occasional product notes. Leave this unticked and nothing is stored as consent.",
+            label: "Send me occasional updates on Canary Dashboard (optional)",
             type: "checkbox",
           },
         ]}
