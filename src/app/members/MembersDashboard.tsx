@@ -738,10 +738,10 @@ export async function MembersDashboard({
                 Personal tuition
               </p>
               <h2 className="mt-1 text-base font-semibold text-white">
-                Build confidence with Canary
+                Build confidence in trading
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                Book a one-to-one session to understand the dashboard and apply it to your trading. Members pay US$70 per hour.
+                Book a one-to-one session to master the dashboard and apply it to your trading.
               </p>
               {paid ? <LearnCanariesButton className="mt-4 inline-flex items-center justify-center rounded-xl border border-amber-400/40 px-3.5 py-2 text-sm font-semibold text-amber-100 hover:bg-amber-500/10" /> : null}
               <BookingModalButton
