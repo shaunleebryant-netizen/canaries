@@ -76,6 +76,11 @@ export default async function SignupPage() {
               <p className="mt-1 text-xs text-slate-400">
                 Billed annually (US$420/year) · not subject to future increments
               </p>
+              {launchOpen ? (
+                <p className="mt-2 text-xs text-slate-400">
+                  Secondary: founding monthly US$70/mo. Same existing plan, chosen on the account page. No price was changed here.
+                </p>
+              ) : null}
             </div>
             <div className={afterBox}>
               <p className={`text-xs font-semibold uppercase tracking-widest ${afterLabel}`}>

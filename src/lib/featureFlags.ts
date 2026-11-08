@@ -154,7 +154,7 @@ export const MEMBERS_DECIDE_COLLAPSE: boolean =
  * MEMBERS_TICKER_CHART_V2 (owner t581u; APPROVED t583s2392 2026-10-08, default ON): ticker
  * lightbox shows a daily candlestick chart (lightweight-charts) with our marks (🐟 🙂 💵 🥵 💀 📈),
  * from per-ticker JSON written by scripts/build-ticker-charts.mjs and served members-only by
- * /api/members/chart/[ticker]. The TradingView widget stays as a second tab.
+ * /api/members/chart/[ticker]. The lightbox shows that chart directly.
  * Roll back with NEXT_PUBLIC_MEMBERS_TICKER_CHART_V2=0.
  */
 export const MEMBERS_TICKER_CHART_V2: boolean =

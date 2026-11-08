@@ -10,5 +10,8 @@ const ok = (r: unknown): r is FairyRow => !!r && typeof (r as FairyRow).ticker =
 
 export function loadCciFairy(): { asOf: string | null; signals: FairyRow[] } {
   const f = json as unknown as File;
-  return { asOf: f?.asOf ?? null, signals: (f?.signals ?? []).filter(ok) };
+  return {
+    asOf: f?.asOf ?? null,
+    signals: (f?.signals ?? []).filter(ok),
+  };
 }

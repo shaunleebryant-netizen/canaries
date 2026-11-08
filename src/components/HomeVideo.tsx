@@ -73,10 +73,14 @@ function HomeFoundingBox({ className = "" }: { className?: string }) {
         US$1,069/yr.
       </p>
       <a
-        href="/signup"
+        href="/account/signup"
         className="mt-5 block rounded-xl bg-canary-gold px-6 py-3 text-center text-sm font-semibold text-slate-950 hover:bg-yellow-400"
       >
-        Claim your founding spot
+        Create a free account
+      </a>
+      <p className="mt-2 text-center text-sm text-slate-300">Limited free access</p>
+      <a href="/signup" className="mt-2 block text-center text-sm text-slate-300 underline">
+        Founding annual · US$35/mo, billed annually US$420/yr
       </a>
       <p className="mt-3 text-xs text-slate-500">Educational market data only. Not financial advice.</p>
     </div>

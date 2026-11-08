@@ -5,6 +5,9 @@
  * PRIVATE: members pages only. Do not import from a public route.
  */
 import historyJson from "../../data/signal-history.json";
+import { archiveSpan } from "@/lib/compositeArchive";
+import { emptyGateCounts, tally, timingDecision } from "@/lib/compositeGate";
+import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
 import type { HistoryGroup, HistoryKind, SignalHistoryPayload } from "@/lib/signalHistoryShared";
 
 export type { HistoryGroup, HistoryKind, SignalHistoryPayload, SignalHistoryRow } from "@/lib/signalHistoryShared";
@@ -27,11 +30,15 @@ export function loadSignalHistory(countryNames: Record<string, string> = {}): Si
   const meta = raw.tickers ?? {};
   const byKey = new Map<string, SignalHistoryPayload["rows"][number]>();
   const groupOf = new Map<string, HistoryGroup>();
+  const archive = loadCompositeArchive();
+  const span = archiveSpan(archive);
+  const gate = { ...emptyGateCounts(), archiveFrom: span.from, archiveTo: span.to };
   let markCount = 0;
   for (const r of raw.rows ?? []) {
     if (!r || typeof r.d !== "string" || typeof r.t !== "string") continue;
     const k = r.k as HistoryKind;
     if (!KIND_LETTER[k] || !Number.isFinite(r.p)) continue;
+    tally(gate, timingDecision(k, r.d.slice(0, 10), archive));
     markCount++;
     if (!groupOf.has(r.t)) groupOf.set(r.t, (GROUPS.includes(r.g as HistoryGroup) ? r.g : "stock") as HistoryGroup);
     const key = `${r.d}|${r.t}`;
@@ -59,6 +66,8 @@ export function loadSignalHistory(countryNames: Record<string, string> = {}): Si
     windowStart: raw.windowStart ?? null,
     sessions: raw.sessions ?? 0,
     markCount,
+    gate,
+    compositeByDate: Object.fromEntries(archive.points.map((p) => [p.date, p.light])),
     rows,
     tickers,
   };

@@ -6,7 +6,6 @@
 
 import etfJson from "../../data/etf-watch-alerts.json";
 import etfUniverse from "../../data/etf-watch-universe.json";
-
 /** Only show funds still in the Sector ETFs list (owner t697u: XAUUSD/XAGUSD dropped), even from a held file. */
 const IN_UNIVERSE = new Set<string>((etfUniverse as { tickers: string[] }).tickers);
 
@@ -17,6 +16,10 @@ export interface EtfWatchAlert {
   /** Which Canary RelRSI kinds fired in the recent window. */
   signals: EtfWatchKind[];
   asOf: string;
+  smileAsOf?: string;
+  fishAsOf?: string;
+  exhaustionAsOf?: string;
+  skullAsOf?: string;
   note?: string;
   timeframe?: string;
 }
