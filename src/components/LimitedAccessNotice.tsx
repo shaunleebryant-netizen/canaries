@@ -18,21 +18,16 @@ export function LimitedAccessNotice({ tab, tabId }: { tab: string; tabId: string
         <div className="w-full max-w-sm rounded-2xl border border-canary-gold/40 bg-slate-950/95 p-5 text-center shadow-xl">
           <h2 id={`lock-${tabId}`} className="text-lg font-semibold text-white">
             <span className="sr-only">{tab}. </span>
-            Upgrade to paid membership
+            Upgrade to view this tab
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-slate-300">Upgrade to paid to become a member.</p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-300">This tab is reserved for members.</p>
           <form action="/api/account/checkout" method="post" className="mt-4">
             <input type="hidden" name="tab" value={tabId} />
             <input type="hidden" name="plan" value="launch_annual" />
             <button type="submit" className="w-full rounded-xl bg-canary-gold px-4 py-3 text-sm font-semibold text-slate-950">
-              Upgrade to paid membership
+              Upgrade to Founding Member
             </button>
           </form>
-          <p className="mt-3 text-xs text-slate-400">
-            <a className="underline" href="/signup">
-              Founding monthly is US$70/mo
-            </a>
-          </p>
         </div>
       </div>
     </section>
