@@ -1,20 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import raw from "../../data/sector-screener.json";
 import { TickerLink } from "@/components/TickerChartLightbox";
-import { loadEtfWatchAlerts } from "@/lib/loadEtfWatchAlerts";
 import {
   leadersAndLaggards,
   monthBars,
   monthReturn,
   performanceOrder,
-  recordedMarks,
   type SectorPack,
 } from "@/lib/sectorEtfLayout";
 
 const pack = raw as unknown as SectorPack;
-const MARK = { smile: "🙂", fish: "🐟", exhaustion: "🥵", skull: "💀" } as const;
 
 function pct(value: number | null): string {
   if (value == null || Number.isNaN(value)) return "—";
@@ -30,9 +27,7 @@ function tone(value: number | null): string {
 
 /** Sector layout on the members ETF tab. Charts use the surrounding member chart. */
 export function SectorEtfBoard() {
-  const [view, setView] = useState<"performance" | "signals">("performance");
   const [open, setOpen] = useState<string | null>(null);
-  const alerts = useMemo(() => new Map(loadEtfWatchAlerts().map((row) => [row.ticker, row])), []);
   const ordered = performanceOrder(pack.rows);
   const { leaders, laggards } = leadersAndLaggards(pack.rows);
   const bars = monthBars(pack.rows);
@@ -65,22 +60,12 @@ export function SectorEtfBoard() {
       ) : null}
 
       <div className="mt-4 flex gap-2" role="tablist" aria-label="Sector view">
-        {(["performance", "signals"] as const).map((id) => (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            aria-selected={view === id}
-            onClick={() => setView(id)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-semibold ${view === id ? "bg-amber-400 text-slate-950" : "border border-white/15 text-slate-300"}`}
-          >
-            {id === "performance" ? "Performance" : "Signals"}
-          </button>
-        ))}
+        <button type="button" role="tab" aria-selected="true" className="rounded-lg bg-amber-400 px-3 py-1.5 text-sm font-semibold text-slate-950">
+          Performance
+        </button>
       </div>
 
-      {view === "performance" ? (
-        <div className="mt-3 divide-y divide-white/10 rounded-xl border border-white/10">
+      <div className="mt-3 divide-y divide-white/10 rounded-xl border border-white/10">
           <div className="grid grid-cols-[1fr_4.5rem_4.5rem] px-3 py-2 text-[10px] uppercase tracking-wide text-slate-500">
             <span>Sector</span><span className="text-right">Today</span><span className="text-right">1 month</span>
           </div>
@@ -110,24 +95,7 @@ export function SectorEtfBoard() {
               </div>
             );
           })}
-        </div>
-      ) : (
-        <ul className="mt-3 divide-y divide-white/10 rounded-xl border border-white/10">
-          {ordered.map((row) => {
-            const marks = recordedMarks(alerts.get(row.symbol));
-            return (
-              <li key={row.symbol} className="flex flex-wrap items-baseline justify-between gap-2 px-3 py-2 text-sm">
-                <span className="font-semibold text-white">{row.symbol} <span className="font-normal text-slate-500">{row.name}</span></span>
-                {marks.length ? (
-                  <span className="text-slate-300">{marks.map((mark) => `${MARK[mark.kind]} ${mark.date}`).join(" · ")}</span>
-                ) : (
-                  <span className="text-slate-500">No dated mark</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      </div>
 
       {bars.length > 0 ? (
         <section className="mt-5">
