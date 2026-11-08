@@ -11,6 +11,7 @@ import { getEntitlement } from "./entitlement";
 import { getMembersDb } from "./db";
 import { PREVIEW_TIER_COOKIE, previewTierEnabled, readPreviewTier, type PreviewTierName } from "./previewTier";
 import { getCurrentUser } from "./session";
+import { isEmailVerified } from "./verify";
 
 export type ViewerTier = "paid" | "free" | "anon";
 
@@ -53,6 +54,15 @@ export async function resolveViewer(): Promise<Viewer> {
             tier: "paid",
             email: cur.user.email,
             indicatorGrant: await grantForEmail(cur.user.email),
+            source: "account",
+          };
+        }
+        if (isEmailVerified(cur.user)) {
+          return {
+            signedIn: true,
+            tier: "free",
+            email: cur.user.email,
+            indicatorGrant: false,
             source: "account",
           };
         }

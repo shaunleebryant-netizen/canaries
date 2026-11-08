@@ -16,7 +16,7 @@
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "cf-build": "opennextjs-cloudflare build",
-    "test:preview": "npx --yes tsx --test src/lib/compositeArchive.test.ts src/lib/compositeGate.test.ts src/lib/chartPayload.test.ts src/lib/chartLayers.test.ts src/lib/signalHistoryShared.test.ts src/lib/members/previewTier.test.ts src/lib/members/previewFulfillment.test.ts src/lib/canaryGroups.test.ts src/lib/scannerSearch.test.ts src/lib/compositeHistory.test.ts src/lib/scannerWindow.test.ts",
+    "test:preview": "npx --yes tsx --test src/lib/compositeArchive.test.ts src/lib/compositeGate.test.ts src/lib/chartPayload.test.ts src/lib/chartLayers.test.ts src/lib/signalHistoryShared.test.ts src/lib/members/previewTier.test.ts src/lib/members/previewFulfillment.test.ts src/lib/canaryGroups.test.ts src/lib/scannerSearch.test.ts src/lib/compositeHistory.test.ts src/lib/scannerWindow.test.ts src/lib/members/membershipBackup.test.ts",
     "test:regime": "node scripts/test-regime.mjs",
     "test:vol-curve": "node scripts/test-vol-curve.mjs",
     "test:vanna-charm": "node scripts/test-vanna-charm.mjs",

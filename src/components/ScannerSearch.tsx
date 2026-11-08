@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { TickerLink } from "@/components/TickerChartLightbox";
 import { searchScannerMembership, type ScannerGroupInput, type ScannerRow } from "@/lib/scannerSearch";
 
-/** Current scanner membership only. History stays in the separate recent-marks search. */
+/** Current scanner membership only. Older marks stay on the Backtest tab. */
 export function ScannerSearch({
   groups,
   universe,
@@ -41,7 +41,7 @@ export function ScannerSearch({
           </button>
         ) : null}
       </div>
-      <p className="mt-1.5 text-[11px] leading-snug text-slate-500">Today's scanner rows only. Past marks are in Search recent marks.</p>
+      <p className="mt-1.5 text-[11px] leading-snug text-slate-500">Today's scanner rows only. Older marks are in Backtest.</p>
       <div aria-live="polite" className="mt-2 text-xs text-slate-300">
         {!result.query ? null : tickerCount ? (
           <>

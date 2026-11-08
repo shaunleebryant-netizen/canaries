@@ -45,7 +45,6 @@ import { LearnCanariesButton } from "@/components/LearnCanariesButton";
 import { CompositeHistoryChart } from "@/components/CompositeHistoryChart";
 import { ExplainTitle } from "@/components/ExplainTitle";
 import { LockedUniverseButton } from "@/components/LimitedAccessNotice";
-import { StockMarkSearch } from "@/components/StockMarkSearch";
 import { ScannerSearch } from "@/components/ScannerSearch";
 import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
@@ -507,7 +506,6 @@ export async function MembersDashboard({
                         ) : null}
                       </div>
                       </div>
-                      {signalHistory ? <StockMarkSearch data={signalHistory} granted={viewer.indicatorGrant} /> : null}
                       {/* Owner 2026-10-10: Insider Buying moved to the Insiders tab; X Rumours keeps its
                           full-width row here, where Insider Buying used to be. */}
                       {/* Owner t752u: X Rumours removed from Stocks for now. */}
@@ -737,13 +735,13 @@ export async function MembersDashboard({
                 with "1-to-1 class" preselected (was a link to /tuition). Amber, never yellow. */}
             <div className="rounded-xl border border-amber-500/30 bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/30 p-4 shadow-sm">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-400">
-                Bookings
+                Personal tuition
               </p>
               <h2 className="mt-1 text-base font-semibold text-white">
-                Learn, or book a tutor
+                Build confidence with Canary
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                Member tuition is <span className="font-semibold text-white">$70 USD/hr</span>.
+                Book a one-to-one session to understand the dashboard and apply it to your trading. Members pay US$70 per hour.
               </p>
               {paid ? <LearnCanariesButton className="mt-4 inline-flex items-center justify-center rounded-xl border border-amber-400/40 px-3.5 py-2 text-sm font-semibold text-amber-100 hover:bg-amber-500/10" /> : null}
               <BookingModalButton
@@ -751,9 +749,9 @@ export async function MembersDashboard({
                 className="mt-4 inline-flex items-center justify-center rounded-xl bg-amber-500 px-3.5 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-400"
               />
               <p className="mt-2 text-[10px] text-slate-500">
-                Want Shaun to speak at your event?{" "}
+                For speaking engagements, see{" "}
                 <Link href="/bookings" className="text-amber-300 underline decoration-amber-400/40 underline-offset-2 hover:text-amber-200">
-                  See Bookings
+                  Bookings
                 </Link>
                 .
               </p>
