@@ -27,6 +27,10 @@
  *   OUT_DIR=/workspace/exports/members-sheet node scripts/export-members-sheet.mjs --remote
  *   GOOGLE_SERVICE_ACCOUNT_JSON=/path/sa.json node scripts/export-members-sheet.mjs --remote --push
  *
+ * Scheduled drain is not installed by this script. After the service-account file exists on the
+ * deployment host, restore the paused job with that command. A missing key exits 2 and leaves
+ * outbox rows pending. Only ids captured before this run's D1 snapshot are marked synced.
+ *
  * Output contains member emails: keep it out of git (default OUT_DIR is under /exports,
  * which is gitignored) and never paste it into chat or logs.
  */
@@ -90,6 +94,18 @@ function d1(sql) {
 let d1Status = "ok";
 let leadsStatus = "missing";
 let users = [], subs = [], events = [], leads = [];
+const snapshotAt = Math.floor(Date.now() / 1000);
+let coveredOutboxIds = null;
+try {
+  const queued = d1(
+    "SELECT id, status, created_at FROM membership_backup_outbox WHERE status IN ('pending','failed') AND created_at <= " +
+      snapshotAt,
+  );
+  coveredOutboxIds = queued.map((row) => String(row.id));
+} catch {
+  coveredOutboxIds = null;
+  notes.push("outbox not read (0013 not applied); this run cannot mark any row synced");
+}
 try {
   users = d1("SELECT id, email, stripe_customer_id, created_at FROM users ORDER BY created_at");
   subs = d1("SELECT * FROM subscriptions ORDER BY created_at");
@@ -263,11 +279,11 @@ console.log(`-> ${OUT}`);
 if (process.argv.includes("--push")) {
   try {
     const pushed = await pushToSheet(bundle);
-    if (pushed) markOutboxSynced();
+    if (pushed) markOutboxSynced(coveredOutboxIds, snapshotAt);
     else noteOutboxNotPushed();
   } catch (e) {
     console.error(`push failed: ${String(e.message || e).split("\n")[0].slice(0, 200)}`);
-    recordOutboxFailure();
+    recordOutboxFailure(coveredOutboxIds);
     process.exitCode = 1;
   }
 }
@@ -328,31 +344,58 @@ async function pushToSheet(b) {
   return true;
 }
 
-/** Only after pushToSheet returns true. A missing table is logged and is not treated as synced. */
-function markOutboxSynced() {
+function outboxIdList(ids) {
+  return ids.map((id) => "'" + String(id).replaceAll("'", "''") + "'").join(",");
+}
+
+/** Only ids captured before the D1 snapshot, and only after pushToSheet returns true. */
+function markOutboxSynced(ids, capturedAt) {
+  if (!ids) {
+    console.error("outbox: sheet was updated but no snapshot id list existed, so no row was marked synced");
+    process.exitCode = 3;
+    return;
+  }
+  if (!ids.length) {
+    console.log("outbox: sheet updated; no pending or failed rows were in the snapshot");
+    return;
+  }
   const now = Math.floor(Date.now() / 1000);
   try {
-    d1(`UPDATE membership_backup_outbox SET status = 'synced', attempts = attempts + 1, last_error = NULL, updated_at = ${now} WHERE status = 'pending'`);
-    console.log("outbox: pending rows marked synced after the sheet push");
+    d1(
+      "UPDATE membership_backup_outbox SET status = 'synced', attempts = attempts + 1, last_error = NULL, updated_at = " +
+        now +
+        " WHERE id IN (" +
+        outboxIdList(ids) +
+        ") AND created_at <= " +
+        capturedAt +
+        " AND status IN ('pending','failed')",
+    );
+    console.log(`outbox: ${ids.length} snapshot row(s) marked synced`);
   } catch (e) {
-    console.error(`outbox: sheet was updated but pending rows were not marked synced (${String(e.message || e).split("\n")[0].slice(0, 160)})`);
+    console.error(`outbox: sheet was updated but snapshot rows were not marked synced (${String(e.message || e).split("\n")[0].slice(0, 160)})`);
     process.exitCode = 3;
   }
 }
 
 function noteOutboxNotPushed() {
-  console.error("outbox: sheet was not updated, so pending rows stay pending. This is not a completed backup.");
+  console.error("outbox: sheet was not updated, so snapshot rows stay pending. This is not a completed backup.");
 }
 
-function recordOutboxFailure() {
+function recordOutboxFailure(ids) {
+  if (!ids?.length) {
+    console.error("outbox: sheet push failed. No snapshot rows to update. Not synced.");
+    return;
+  }
   const now = Math.floor(Date.now() / 1000);
   try {
     d1(
-      "UPDATE membership_backup_outbox SET attempts = attempts + 1, status = CASE WHEN attempts + 1 >= 5 THEN 'failed' ELSE 'pending' END, last_error = 'sheet push failed', updated_at = " +
+      "UPDATE membership_backup_outbox SET attempts = attempts + 1, status = 'pending', last_error = 'sheet push failed', updated_at = " +
         now +
-        " WHERE status = 'pending'",
+        " WHERE id IN (" +
+        outboxIdList(ids) +
+        ") AND status IN ('pending','failed')",
     );
-    console.error("outbox: sheet push failed. Pending rows stay pending until 5 attempts, then failed. Not synced.");
+    console.error("outbox: sheet push failed. Those snapshot rows stay pending and will be retried on the next successful push.");
   } catch (e) {
     console.error(`outbox: could not record the failed push (${String(e.message || e).split("\n")[0].slice(0, 160)})`);
   }

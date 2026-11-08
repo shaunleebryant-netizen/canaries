@@ -15,21 +15,31 @@ export function successQueryGrantsAccess(_query: string | undefined): boolean {
   return false;
 }
 
-/** Sheet push is the only success. No credential and no HTTP receiver both leave the row unfinished. */
+/** Sheet push is the only success. A missing key leaves every covered row pending. A failed push stays retryable. */
 export function backupOutcomeAfterSheetPush(input: {
   pushed: boolean;
   credentialMissing: boolean;
   attempts: number;
-  maxAttempts?: number;
 }): { status: BackupStatus; attempts: number; complete: boolean; unresolved: string | null } {
-  if (input.credentialMissing) {
-    return { status: "pending", attempts: input.attempts, complete: false, unresolved: "GOOGLE_SERVICE_ACCOUNT_JSON" };
-  }
-  if (!input.pushed) {
-    const next = applyBackupAttempt(input.attempts, false, input.maxAttempts ?? 5);
-    return { ...next, complete: false, unresolved: null };
+  if (input.credentialMissing || !input.pushed) {
+    return {
+      status: "pending",
+      attempts: input.credentialMissing ? input.attempts : input.attempts + 1,
+      complete: false,
+      unresolved: input.credentialMissing ? "GOOGLE_SERVICE_ACCOUNT_JSON" : null,
+    };
   }
   return { status: "synced", attempts: input.attempts + 1, complete: true, unresolved: null };
+}
+
+/** Ids read before the sheet snapshot. Later rows, and rows already synced, are excluded. */
+export function outboxIdsCoveredBySnapshot(
+  rows: readonly { id: string; status: string; created_at: number }[],
+  snapshotAt: number,
+): string[] {
+  return rows
+    .filter((row) => (row.status === "pending" || row.status === "failed") && row.created_at <= snapshotAt)
+    .map((row) => row.id);
 }
 
 export function applyBackupAttempt(
