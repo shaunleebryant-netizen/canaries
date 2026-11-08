@@ -456,28 +456,29 @@ export async function MembersDashboard({
                       {/* Owner t852u: three fixed rows. Bullish Setups, New Highs, New Lows removed from Stocks. */}
                       <div className="space-y-3">
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        <FoldBox id="fish" summary={sum("Fish", fishShown, "🐟")}><ScannerShowMore>
+                        {/* Stocks scanners start open for this visit. Leaving the tab remounts them open. A collapse stays until then, including a quote refresh. Not stored. */}
+                        <FoldBox id="fish" defaultOpen persist={false} summary={sum("Fish", fishShown, "🐟")}><ScannerShowMore>
                           <FishAlerts alerts={fishShown} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="mfi" summary={sum("MFI", mfiShown, "💵")}><ScannerShowMore>
+                        <FoldBox id="mfi" defaultOpen persist={false} summary={sum("MFI", mfiShown, "💵")}><ScannerShowMore>
                           <MoneyFlowAlerts alerts={mfiShown.filter((r) => r.asOf.slice(0, 10) === loadPackAsOf())} prints={mfiPrintsShown} sessionDates={printSessions} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="cci-fairy" summary={sum("Fairy Godmother", fairyShown, "🧚")}><ScannerShowMore>
+                        <FoldBox id="cci-fairy" defaultOpen persist={false} summary={sum("Fairy Godmother", fairyShown, "🧚")}><ScannerShowMore>
                           <CciFairy rows={fairyShown} asOf={cciFairy.asOf} />
                         </ScannerShowMore></FoldBox>
                       </div>
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        <FoldBox id="ibd" summary={sum("IBD", ibdSetupsAlerts)}><ScannerShowMore>
+                        <FoldBox id="ibd" defaultOpen persist={false} summary={sum("IBD", ibdSetupsAlerts)}><ScannerShowMore>
                           <IbdSetups alerts={ibdSetupsAlerts} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="baby-bulls" summary={`Baby Bulls: ${weeklyTurns.bulls.length} bulls · ${weeklyTurns.bears.length} bears${weeklyTurns.bulls[0] ? ` · top ${(weeklyTurns.bulls[0] as { ticker?: string }).ticker}` : ""}`}><ScannerShowMore>
+                        <FoldBox id="baby-bulls" defaultOpen persist={false} summary={`Baby Bulls: ${weeklyTurns.bulls.length} bulls · ${weeklyTurns.bears.length} bears${weeklyTurns.bulls[0] ? ` · top ${(weeklyTurns.bulls[0] as { ticker?: string }).ticker}` : ""}`}><ScannerShowMore>
                           <WeeklyStateTurns
                             bulls={weeklyTurns.bulls}
                             bears={weeklyTurns.bears}
                             meta={marketStateMeta}
                           />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="warriors" summary={sum("Warriors", bullishStrong)}><ScannerShowMore>
+                        <FoldBox id="warriors" defaultOpen persist={false} summary={sum("Warriors", bullishStrong)}><ScannerShowMore>
                           <BullishStrong
                             rows={bullishStrong}
                             meta={marketStateMeta}
@@ -485,11 +486,11 @@ export async function MembersDashboard({
                         </ScannerShowMore></FoldBox>
                       </div>
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        <FoldBox id="sweaty" summary={sum("Sweaty", sweatyShown, "🥵")}><ScannerShowMore>
+                        <FoldBox id="sweaty" defaultOpen persist={false} summary={sum("Sweaty", sweatyShown, "🥵")}><ScannerShowMore>
                           <ExhaustionAlerts alerts={sweatyShown} />
                         </ScannerShowMore></FoldBox>
                         <div className="min-w-0 md:col-span-2">
-                        <FoldBox id="bearish" summary={`🔴 Bearish (${mainScanner.bearish.length}) · top ${mainScanner.bearish.slice(0, 3).map((r) => r.ticker).join(", ")}`}><ScannerShowMore limit={12}>
+                        <FoldBox id="bearish" defaultOpen persist={false} summary={`🔴 Bearish (${mainScanner.bearish.length}) · top ${mainScanner.bearish.slice(0, 3).map((r) => r.ticker).join(", ")}`}><ScannerShowMore limit={12}>
                           <BearishSetups
                             setups={mainScanner.bearish}
                             asOf={mainScanner.asOf}
@@ -500,7 +501,7 @@ export async function MembersDashboard({
                         </ScannerShowMore></FoldBox>
                         </div>
                         {MEMBERS_DESK_IDEAS ? (
-                          <FoldBox id="desk" summary={`Desk Ideas: ${deskIdeas.ideas.length} ideas`}><ScannerShowMore>
+                          <FoldBox id="desk" defaultOpen persist={false} summary={`Desk Ideas: ${deskIdeas.ideas.length} ideas`}><ScannerShowMore>
                             <DeskIdeas ideas={deskIdeas.ideas} windowDays={deskIdeas.windowDays} heldSince={deskHeld} />
                           </ScannerShowMore></FoldBox>
                         ) : null}
