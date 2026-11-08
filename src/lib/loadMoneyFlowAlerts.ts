@@ -5,8 +5,6 @@
  */
 
 import moneyFlowJson from "../../data/money-flow-alerts.json";
-import { timingDecision } from "@/lib/compositeGate";
-import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
 
 export type MoneyFlowSignal = "mfi_os" | "mfi_ob";
 
@@ -49,8 +47,7 @@ export function loadMoneyFlowAlerts(): MoneyFlowAlert[] {
     : Array.isArray(raw?.signals)
       ? raw.signals
       : [];
-  const archive = loadCompositeArchive();
-  return rows.filter(isAlert).filter((r) => timingDecision("mfi", r.asOf.slice(0, 10), archive) === "eligible");
+  return rows.filter(isAlert);
 }
 
 /**
@@ -61,8 +58,7 @@ export function loadMoneyFlowAlerts(): MoneyFlowAlert[] {
 export function loadMoneyFlowPrints(): MoneyFlowAlert[] {
   const raw = moneyFlowJson as MoneyFlowFile;
   if (!Array.isArray(raw) && Array.isArray(raw?.prints)) {
-    const archive = loadCompositeArchive();
-    return raw.prints.filter(isAlert).filter((r) => timingDecision("mfi", r.asOf.slice(0, 10), archive) === "eligible");
+    return raw.prints.filter(isAlert);
   }
   return loadMoneyFlowAlerts();
 }

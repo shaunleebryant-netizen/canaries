@@ -20,6 +20,17 @@ export type SpxClosePack = {
   closes: BenchmarkClose[];
 };
 
+export function loadSpxSessionDates(): string[] {
+  const doc = spxJson as unknown as SpxFile;
+  if (typeof doc.d0 !== "number" || !Array.isArray(doc.b)) return [];
+  const dates: string[] = [];
+  for (const bar of doc.b) {
+    if (bar.length < 1 || typeof bar[0] !== "number") continue;
+    dates.push(ymdFromChartOffset(doc.d0, bar[0]));
+  }
+  return dates;
+}
+
 export function loadSpxClosesForDates(dates: readonly string[]): SpxClosePack {
   const doc = spxJson as unknown as SpxFile;
   const d0 = doc.d0;

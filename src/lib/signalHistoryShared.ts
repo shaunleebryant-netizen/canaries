@@ -43,6 +43,8 @@ export interface SignalHistoryPayload {
   sessions: number;
   markCount: number;
   gate?: SignalHistoryGate;
+  /** Dated pack-log colours for the optional backtest comparison. Not applied unless asked. */
+  compositeByDate?: Record<string, "green" | "amber" | "red">;
   rows: [string, string, string, number, [number | null, number | null, number | null]][];
   tickers: Record<string, [string | null, HistoryGroup, number | null, string | null, 0 | 1]>;
 }

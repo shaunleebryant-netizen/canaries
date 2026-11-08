@@ -38,9 +38,7 @@ export function loadSignalHistory(countryNames: Record<string, string> = {}): Si
     if (!r || typeof r.d !== "string" || typeof r.t !== "string") continue;
     const k = r.k as HistoryKind;
     if (!KIND_LETTER[k] || !Number.isFinite(r.p)) continue;
-    const decision = timingDecision(k, r.d.slice(0, 10), archive);
-    tally(gate, decision);
-    if (decision !== "eligible") continue;
+    tally(gate, timingDecision(k, r.d.slice(0, 10), archive));
     markCount++;
     if (!groupOf.has(r.t)) groupOf.set(r.t, (GROUPS.includes(r.g as HistoryGroup) ? r.g : "stock") as HistoryGroup);
     const key = `${r.d}|${r.t}`;
@@ -69,6 +67,7 @@ export function loadSignalHistory(countryNames: Record<string, string> = {}): Si
     sessions: raw.sessions ?? 0,
     markCount,
     gate,
+    compositeByDate: Object.fromEntries(archive.points.map((p) => [p.date, p.light])),
     rows,
     tickers,
   };

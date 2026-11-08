@@ -126,6 +126,7 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
   const [horizons, setHorizons] = useState<number[]>([5]);
   const [showSince, setShowSince] = useState(false);
   const [limit, setLimit] = useState(PAGE);
+  const [colourLimit, setColourLimit] = useState(false);
 
   const reset = () => setLimit(PAGE);
 
@@ -138,9 +139,13 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
       if (to && r.date > to) return false;
       if (needle && !r.ticker.toLowerCase().includes(needle) && !(r.name ?? "").toLowerCase().includes(needle))
         return false;
+      if (colourLimit) {
+        const colour = data.compositeByDate?.[r.date];
+        if (colour !== "amber" && colour !== "green") return false;
+      }
       return true;
     });
-  }, [allRows, kinds, group, from, to, q]);
+  }, [allRows, kinds, group, from, to, q, colourLimit, data.compositeByDate]);
 
   const shown = filtered.slice(0, limit);
   const uniqueTickers = useMemo(() => new Set(filtered.map((r) => r.ticker)).size, [filtered]);
@@ -300,14 +305,22 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
         </div>
       </div>
 
-      {data.gate ? (
-        <p className="mt-2 text-[11px] leading-snug text-slate-500">
-          {data.gate.eligible.toLocaleString()} marks eligible
-          {data.gate.archiveFrom ? ` (composite log ${data.gate.archiveFrom} to ${data.gate.archiveTo})` : ""}.{" "}
-          {data.gate.suppressedRed.toLocaleString()} held back because the composite was red at that close.{" "}
-          {data.gate.pendingUnknown.toLocaleString()} waiting on a dated composite score, not counted as zero.
-        </p>
-      ) : null}
+      <label className="mt-2 flex items-start gap-2 text-[11px] leading-snug text-slate-400">
+        <input
+          type="checkbox"
+          checked={colourLimit}
+          onChange={(e) => {
+            setColourLimit(e.target.checked);
+            reset();
+          }}
+          className="mt-0.5 accent-sky-400"
+        />
+        <span>
+          Optional: only Fish, Smiley, Fairy and MFI from an amber or green close in the pack log
+          {data.gate?.archiveFrom ? ` (${data.gate.archiveFrom} to ${data.gate.archiveTo})` : ""}. Off by default.
+          This is not a performance result. Red or missing scores stay in the list until this is ticked.
+        </span>
+      </label>
 
       <p className="mt-2 text-[11px] text-slate-500">
         {filtered.length.toLocaleString()} marks · {uniqueTickers} tickers · newest first

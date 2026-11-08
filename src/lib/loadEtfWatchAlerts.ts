@@ -6,9 +6,6 @@
 
 import etfJson from "../../data/etf-watch-alerts.json";
 import etfUniverse from "../../data/etf-watch-universe.json";
-import { filterSignals } from "@/lib/compositeGate";
-import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
-
 /** Only show funds still in the Sector ETFs list (owner t697u: XAUUSD/XAGUSD dropped), even from a held file. */
 const IN_UNIVERSE = new Set<string>((etfUniverse as { tickers: string[] }).tickers);
 
@@ -19,6 +16,10 @@ export interface EtfWatchAlert {
   /** Which Canary RelRSI kinds fired in the recent window. */
   signals: EtfWatchKind[];
   asOf: string;
+  smileAsOf?: string;
+  fishAsOf?: string;
+  exhaustionAsOf?: string;
+  skullAsOf?: string;
   note?: string;
   timeframe?: string;
 }
@@ -62,12 +63,7 @@ export function loadEtfWatchAlerts(): EtfWatchAlert[] {
     : Array.isArray(raw?.signals)
       ? raw.signals
       : [];
-  const archive = loadCompositeArchive();
-  return rows
-    .filter(isAlert)
-    .filter((r) => IN_UNIVERSE.has(r.ticker))
-    .map((r) => ({ ...r, signals: filterSignals(r.signals, r.asOf.slice(0, 10), archive) }))
-    .filter((r) => r.signals.length > 0);
+  return rows.filter(isAlert).filter((r) => IN_UNIVERSE.has(r.ticker));
 }
 
 /** Optional scan meta for UI. */

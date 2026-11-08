@@ -15,7 +15,7 @@ test("chart offsets use the same UTC day as the lightbox", () => {
   assert.equal(ymdFromChartOffset(20000, 3), new Date(20003 * 86400000).toISOString().slice(0, 10));
 });
 
-test("paid charts drop red and unknown gated marks and keep sweaty, skull and monthly trend", () => {
+test("paid charts keep historical marks, including a red or unknown gated mark", () => {
   const amber = Date.parse("2026-10-21T00:00:00Z") / 86400000;
   const red = Date.parse("2026-10-23T00:00:00Z") / 86400000;
   const d0 = amber;
@@ -31,6 +31,8 @@ test("paid charts drop red and unknown gated marks and keep sweaty, skull and mo
   const kept = filterChartMarks(marks, d0, archive, "paid");
   assert.deepEqual(kept, [
     [0, "smile"],
+    [red - amber, "fish"],
+    [50, "fairy"],
     [1, "sweat"],
     [1, "skull"],
     [1, "m20"],

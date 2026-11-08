@@ -1,9 +1,8 @@
 /**
  * Server-side chart mark filter. Raw public/_chartdata files are not rewritten.
- * Gated marks (fish, smile, mfi, fairy) need an amber or green composite on that bar's date.
- * Free ETF charts may only keep Smiley and monthly trend, and Smiley is still gated.
+ * Composite colour does not remove marks here. Scanners apply that rule.
+ * Free ETF charts may only keep Smiley and monthly trend.
  */
-import { timingDecision } from "./compositeGate";
 import type { CompositeArchive } from "./compositeArchive";
 
 export type ChartAccess = "paid" | "free-etf";
@@ -17,7 +16,7 @@ export function ymdFromChartOffset(d0: number, off: number): string {
 export function filterChartMarks(
   marks: readonly (readonly [number, string])[],
   d0: number,
-  archive: CompositeArchive,
+  _archive: CompositeArchive,
   access: ChartAccess,
 ): [number, string][] {
   const out: [number, string][] = [];
@@ -27,8 +26,6 @@ export function filterChartMarks(
     if (typeof off !== "number" || typeof kind !== "string") continue;
     if (kind === "vanna") continue;
     if (access === "free-etf" && FREE_HIDDEN.has(kind)) continue;
-    const decision = timingDecision(kind, ymdFromChartOffset(d0, off), archive);
-    if (decision === "suppressed" || decision === "pending") continue;
     out.push([off, kind]);
   }
   return out;

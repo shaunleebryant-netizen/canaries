@@ -49,7 +49,8 @@ import { StockMarkSearch } from "@/components/StockMarkSearch";
 import { ScannerSearch } from "@/components/ScannerSearch";
 import { RedCompositeNotice } from "@/components/RedCompositeNotice";
 import { loadCompositeArchive } from "@/lib/loadCompositeArchive";
-import { loadSpxClosesForDates } from "@/lib/loadSpxCloses";
+import { loadSpxClosesForDates, loadSpxSessionDates } from "@/lib/loadSpxCloses";
+import { datedPrintsForScanner, etfForScanner, exhaustionForScanner, fishForScanner, lastTradingSessions } from "@/lib/scannerWindow";
 import { resolveViewer } from "@/lib/members/previewAccess";
 import { DecideLayout } from "@/components/DecideLayout";
 import { DecideHeading, ScanHeading } from "@/components/DecideTheme";
@@ -149,6 +150,14 @@ export async function MembersDashboard({
   const volCurve = loadVolCurve();
   const fishAlerts = loadFishAlerts();
   const exhaustionAlerts = loadExhaustionAlerts();
+  const printSessions = lastTradingSessions(loadSpxSessionDates(), loadPackAsOf(), 5);
+  const printArchive = loadCompositeArchive();
+  const fishShown = fishForScanner(fishAlerts, printArchive, printSessions).rows;
+  const mfiShown = datedPrintsForScanner(loadMoneyFlowAlerts(), "mfi", printArchive, printSessions).rows;
+  const mfiPrintsShown = datedPrintsForScanner(loadMoneyFlowPrints(), "mfi", printArchive, printSessions).rows;
+  const fairyShown = datedPrintsForScanner(loadCciFairy().signals, "fairy", printArchive, printSessions).rows;
+  const sweatyShown = exhaustionForScanner(exhaustionAlerts, printSessions).rows;
+  const etfShown = etfForScanner(loadEtfWatchAlerts(), printArchive, printSessions).rows;
   const etfWatchAlerts = loadEtfWatchAlerts();
   // Owner 2026-10-06: ETF box split into Sector ETFs + Countries (Countries does not feed Main Scanner).
   const etfCountryAlerts = loadEtfCountryAlerts();
@@ -426,15 +435,21 @@ export async function MembersDashboard({
                           Scanners
                         </h2>
                       )}
+                      <p className="text-[11px] leading-snug text-slate-400">
+                        Bullish signals are withheld when the Composite is red. Warning signals remain visible.
+                        {" "}Fish, Smiley, Fairy, MFI, Sweaty and Skull shown here are from the last 5 trading sessions
+                        through {loadPackAsOf()}{printSessions.length ? ` (${printSessions[0]} to ${printSessions[printSessions.length - 1]})` : ""}.
+                        Older prints are in Backtest. IBD, Warriors, Baby Bulls and Bearish stay the current snapshot.
+                      </p>
                       <ScannerSearch
                         groups={[
-                          { id: "fish", label: "Fish", rows: fishAlerts },
-                          { id: "mfi", label: "MFI", rows: moneyFlowAlerts },
-                          { id: "fairy", label: "Fairy Godmother", rows: cciFairy.signals },
+                          { id: "fish", label: "Fish", rows: fishShown },
+                          { id: "mfi", label: "MFI", rows: [...mfiShown, ...mfiPrintsShown] },
+                          { id: "fairy", label: "Fairy Godmother", rows: fairyShown },
                           { id: "ibd", label: "IBD", rows: ibdSetupsAlerts },
                           { id: "baby-bulls", label: "Baby Bulls", rows: [...weeklyTurns.bulls, ...weeklyTurns.bears] },
                           { id: "warriors", label: "Warriors", rows: bullishStrong },
-                          { id: "sweaty", label: "Sweaty", rows: exhaustionAlerts },
+                          { id: "sweaty", label: "Sweaty", rows: sweatyShown },
                           { id: "bearish", label: "Bearish", rows: mainScanner.bearish },
                         ]}
                         universe={loadTickerUniverse().find((g) => g.id === "stocks")?.items ?? []}
@@ -442,14 +457,14 @@ export async function MembersDashboard({
                       {/* Owner t852u: three fixed rows. Bullish Setups, New Highs, New Lows removed from Stocks. */}
                       <div className="space-y-3">
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        <FoldBox id="fish" summary={sum("Fish", fishAlerts, "🐟")}><ScannerShowMore>
-                          <FishAlerts alerts={fishAlerts} />
+                        <FoldBox id="fish" summary={sum("Fish", fishShown, "🐟")}><ScannerShowMore>
+                          <FishAlerts alerts={fishShown} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="mfi" summary={sum("MFI", moneyFlowAlerts, "💵")}><ScannerShowMore>
-                          <MoneyFlowAlerts alerts={moneyFlowAlerts} prints={loadMoneyFlowPrints()} sessionDates={loadMoneyFlowSessionDates()} />
+                        <FoldBox id="mfi" summary={sum("MFI", mfiShown, "💵")}><ScannerShowMore>
+                          <MoneyFlowAlerts alerts={mfiShown.filter((r) => r.asOf.slice(0, 10) === loadPackAsOf())} prints={mfiPrintsShown} sessionDates={printSessions} />
                         </ScannerShowMore></FoldBox>
-                        <FoldBox id="cci-fairy" summary={sum("Fairy Godmother", cciFairy.signals, "🧚")}><ScannerShowMore>
-                          <CciFairy rows={cciFairy.signals} asOf={cciFairy.asOf} />
+                        <FoldBox id="cci-fairy" summary={sum("Fairy Godmother", fairyShown, "🧚")}><ScannerShowMore>
+                          <CciFairy rows={fairyShown} asOf={cciFairy.asOf} />
                         </ScannerShowMore></FoldBox>
                       </div>
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -471,8 +486,8 @@ export async function MembersDashboard({
                         </ScannerShowMore></FoldBox>
                       </div>
                       <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        <FoldBox id="sweaty" summary={sum("Sweaty", exhaustionAlerts, "🥵")}><ScannerShowMore>
-                          <ExhaustionAlerts alerts={exhaustionAlerts} />
+                        <FoldBox id="sweaty" summary={sum("Sweaty", sweatyShown, "🥵")}><ScannerShowMore>
+                          <ExhaustionAlerts alerts={sweatyShown} />
                         </ScannerShowMore></FoldBox>
                         <div className="min-w-0 md:col-span-2">
                         <FoldBox id="bearish" summary={`🔴 Bearish (${mainScanner.bearish.length}) · top ${mainScanner.bearish.slice(0, 3).map((r) => r.ticker).join(", ")}`}><ScannerShowMore limit={12}>
@@ -518,10 +533,10 @@ export async function MembersDashboard({
                           ETFs
                         </h2>
                       )}
-                      {MEMBERS_SECTOR_SCREENER ? <SectorScreener etfAlerts={etfWatchAlerts} /> : null}
+                      {MEMBERS_SECTOR_SCREENER ? <SectorScreener etfAlerts={etfShown} /> : null}
                       {/* Owner t697u 2026-10-14: Countries box + Country Screener removed from the ETFs tab. */}
-                      <FoldBox id="etf" summary={sum("Sector ETFs", etfWatchAlerts)}><ScannerShowMore>
-                        <EtfWatch alerts={etfWatchAlerts} />
+                      <FoldBox id="etf" summary={sum("Sector ETFs", etfShown)}><ScannerShowMore>
+                        <EtfWatch alerts={etfShown} />
                       </ScannerShowMore></FoldBox>
                       {/* Owner t748u: 1Y charts under the ETF boxes, same pattern as Crypto BTC/ETH. */}
                       <EtfHeroChartsLazy />
@@ -622,9 +637,9 @@ export async function MembersDashboard({
                     {/* Order (owner 2026-09-29 12:17 PM NZ):
                         Time to fish, Sweaty stocks, MFI / IBD, Baby Bulls, Multi-week Warriors.
                         All six share max-h-[min(320px,40vh)] so each row lines up. */}
-                    <FishAlerts alerts={fishAlerts} />
-                    <ExhaustionAlerts alerts={exhaustionAlerts} />
-                    <MoneyFlowAlerts alerts={moneyFlowAlerts} prints={loadMoneyFlowPrints()} sessionDates={loadMoneyFlowSessionDates()} />
+                    <FishAlerts alerts={fishShown} />
+                    <ExhaustionAlerts alerts={sweatyShown} />
+                    <MoneyFlowAlerts alerts={mfiShown.filter((r) => r.asOf.slice(0, 10) === loadPackAsOf())} prints={mfiPrintsShown} sessionDates={printSessions} />
                     <IbdSetups alerts={ibdSetupsAlerts} />
                     <WeeklyStateTurns
                       bulls={weeklyTurns.bulls}
@@ -673,7 +688,7 @@ export async function MembersDashboard({
                     </h2>
                   )}
                   <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                    <EtfWatch alerts={etfWatchAlerts} />
+                    <EtfWatch alerts={etfShown} />
                     <CryptoWatch alerts={cryptoWatchAlerts} />
                   </div>
                 </section>
@@ -682,7 +697,7 @@ export async function MembersDashboard({
           </TickerChartProvider>
 
           {/* CanaryTable lives in the Canaries tab when SCANNER_DECLUTTER is on. */}
-          {!SCANNER_DECLUTTER ? (
+          {!SCANNER_DECLUTTER && paid ? (
             <>
               <CanaryBookingNote />
               <CanaryTable rows={canaries} emptyNotes={sparkPayload.emptyNotes} />
