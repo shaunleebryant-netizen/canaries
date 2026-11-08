@@ -817,7 +817,7 @@ export async function MembersDashboard({
           <div className="rounded-xl border border-canary-gold/20 bg-slate-900/80 p-3 shadow-sm ring-1 ring-canary-gold/10">
             <ExplainTitle title="Canary Composite Score" enabled={paid}>
               <p>
-                S is the weighted sum of the 13 canary votes. Green is S at least +0.6, amber is from −0.3 up to +0.6, and red is below −0.3. A veto can hold green at amber when VIX/VIX3M is at least 1 and both breadth canaries are sick. Education only.
+                This is the weighted sum of the 13 canaries. Find out more on the &quot;Canaries&quot; tab.
               </p>
             </ExplainTitle>
             <TrafficLightDisplay
