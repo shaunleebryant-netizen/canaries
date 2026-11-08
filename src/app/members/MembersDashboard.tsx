@@ -743,11 +743,13 @@ export async function MembersDashboard({
               <p className="mt-2 text-xs leading-relaxed text-slate-300">
                 Book a one-to-one session to understand the dashboard and apply it to your trading. Members pay US$70 per hour.
               </p>
-              {paid ? <LearnCanariesButton className="mt-4 inline-flex items-center justify-center rounded-xl border border-amber-400/40 px-3.5 py-2 text-sm font-semibold text-amber-100 hover:bg-amber-500/10" /> : null}
-              <BookingModalButton
-                label="Book a tutor"
-                className="mt-4 inline-flex items-center justify-center rounded-xl bg-amber-500 px-3.5 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-400"
-              />
+              <div className="mt-4 flex flex-wrap gap-3">
+                {paid ? <LearnCanariesButton className="inline-flex items-center justify-center rounded-xl border border-amber-400/40 px-3.5 py-2 text-sm font-semibold text-amber-100 hover:bg-amber-500/10" /> : null}
+                <BookingModalButton
+                  label="Book a tutor"
+                  className="inline-flex items-center justify-center rounded-xl bg-amber-500 px-3.5 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-400"
+                />
+              </div>
               <p className="mt-2 text-[10px] text-slate-500">
                 For speaking engagements, see{" "}
                 <Link href="/bookings" className="text-amber-300 underline decoration-amber-400/40 underline-offset-2 hover:text-amber-200">
