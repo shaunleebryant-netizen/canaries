@@ -1,6 +1,8 @@
 /**
  * Layer visibility for the Canary-marks candlestick chart.
- * Smiley and monthly trend start on. Other marks start off; a paid member can opt in.
+ * Every entitled layer starts on, whether or not this ticker has that mark.
+ * A member's explicit toggle is stored and restored. Free ETF charts still
+ * force the locked layers off for display only; that force is not saved.
  * Vanna & Charm is not a chart layer.
  */
 export type MarkKind = "fish" | "smile" | "mfi" | "fairy" | "m20" | "sweat" | "skull";
@@ -13,20 +15,21 @@ export const LAYER_IDS: readonly ChartLayerId[] = [...MARK_ORDER];
 
 export type ChartLayers = Record<ChartLayerId, boolean>;
 
-/** Paid default. Free ETF charts force every id in FREE_ETF_LOCKED off. */
+/** Paid default: every layer on. Free ETF charts force FREE_ETF_LOCKED off when shown. */
 export const DEFAULT_CHART_LAYERS: ChartLayers = {
   smile: true,
   m20: true,
-  fish: false,
-  mfi: false,
-  fairy: false,
-  sweat: false,
-  skull: false,
+  fish: true,
+  mfi: true,
+  fairy: true,
+  sweat: true,
+  skull: true,
 };
 
 export const FREE_ETF_LOCKED: readonly MarkKind[] = ["fish", "mfi", "fairy", "sweat", "skull"];
 
-export const CHART_LAYERS_STORAGE_KEY = "canary.chartLayers.v2";
+/** v3 ignores the old default-off save so the first open after this change starts all on. */
+export const CHART_LAYERS_STORAGE_KEY = "canary.chartLayers.v3";
 
 export function clampChartLayers(layers: ChartLayers, access: "paid" | "free-etf"): ChartLayers {
   if (access !== "free-etf") return layers;

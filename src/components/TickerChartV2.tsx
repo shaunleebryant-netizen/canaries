@@ -327,9 +327,10 @@ export function TickerChartDialogV2({
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const { doc, error, loading } = useChartDoc(ticker);
-  // Lives on the dialog, so changing ticker keeps the choices. localStorage keeps them across opens.
+  // One set for every ticker. Closing writes it; the next open reads it.
+  // A free chart only hides locked layers. It does not save that hide.
   const [layers, setLayers] = useState<ChartLayers>(() =>
-    clampChartLayers(readStoredChartLayers(typeof window === "undefined" ? null : window.localStorage), chartAccess)
+    readStoredChartLayers(typeof window === "undefined" ? null : window.localStorage)
   );
   useEffect(() => {
     try {
@@ -340,7 +341,7 @@ export function TickerChartDialogV2({
   }, [layers]);
   const toggleLayer = (id: ChartLayerId) => {
     if (chartAccess === "free-etf" && FREE_ETF_LOCKED.includes(id)) return;
-    setLayers((prev) => clampChartLayers({ ...prev, [id]: !prev[id] }, chartAccess));
+    setLayers((prev) => ({ ...prev, [id]: !prev[id] }));
   };
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
