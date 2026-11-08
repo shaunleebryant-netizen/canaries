@@ -70,7 +70,7 @@ function HomeFoundingBox({ className = "" }: { className?: string }) {
       </div>
       <p className="mt-4 text-sm text-slate-300">
         Founding rate locked for life while you renew. After the first 100: US$99/mo or
-        US$1,069/yr. Paid checkout is unchanged and is not started from the free form.
+        US$1,069/yr.
       </p>
       <a
         href="/signup/free"

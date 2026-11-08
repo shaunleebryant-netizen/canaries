@@ -305,7 +305,7 @@ export function SignalHistory({ data }: { data: SignalHistoryPayload }) {
           {data.gate.eligible.toLocaleString()} marks eligible
           {data.gate.archiveFrom ? ` (composite log ${data.gate.archiveFrom} to ${data.gate.archiveTo})` : ""}.{" "}
           {data.gate.suppressedRed.toLocaleString()} held back because the composite was red at that close.{" "}
-          {data.gate.pendingUnknown.toLocaleString()} waiting on a dated composite score, not counted as zero. Raw marks are unchanged.
+          {data.gate.pendingUnknown.toLocaleString()} waiting on a dated composite score, not counted as zero.
         </p>
       ) : null}
 

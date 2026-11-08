@@ -6,6 +6,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/Footer";
 import { TickerTape } from "@/components/TickerTape";
 import { DashboardNavLink } from "@/components/DashboardNavLink";
+import { PreviewBanner } from "@/components/PreviewBanner";
 
 const COMING_SOON = process.env.NEXT_PUBLIC_COMING_SOON === "1";
 
@@ -85,6 +86,7 @@ export default function RootLayout({
             <HeaderCanary variant="pink" />
           </header>
           )}
+          {COMING_SOON ? null : <PreviewBanner />}
           {COMING_SOON ? null : <TickerTape />}
           <main className="flex-1">{children}</main>
           <SiteFooter comingSoon={COMING_SOON} />

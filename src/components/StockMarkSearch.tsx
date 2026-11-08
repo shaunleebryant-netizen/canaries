@@ -45,9 +45,8 @@ export function StockMarkSearch({
         className="mt-1 w-full rounded-md border border-white/10 bg-slate-950 px-2.5 py-1.5 text-sm text-white placeholder:text-slate-600 focus:border-sky-400/50 focus:outline-none"
       />
       <p className="mt-2 text-[11px] leading-snug text-slate-400">
-        {granted
-          ? "Can’t find your stock? Open it on TradingView and load the invite-only Canary scripts we’ve granted you."
-          : "Can’t find your stock? Open it on TradingView. Invite-only Canary scripts are issued from the grant list. This account does not have a completed grant on file, so this line does not say scripts were granted to you."}
+        Can’t find your stock? Open it on TradingView.
+        {granted ? " Load the invite-only Canary scripts we’ve granted you." : ""}
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
         <span>Lookback</span>

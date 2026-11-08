@@ -396,9 +396,6 @@ export async function MembersDashboard({
                         rows={canaries.filter((c) => c.id !== "finra-margin")}
                         emptyNotes={sparkPayload.emptyNotes}
                       />
-                      <p className="text-[11px] leading-snug text-slate-500">
-                        FINRA margin debt still feeds the composite score. It is not shown as its own box.
-                      </p>
                     </>
                     ) : null
                   }
@@ -712,9 +709,7 @@ export async function MembersDashboard({
                 Learn, or book a tutor
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                Member tuition is{" "}
-                <span className="font-semibold text-white">$70 USD/hr</span>.
-                USD matches the membership prices and the previous class rate on this card.
+                Member tuition is <span className="font-semibold text-white">$70 USD/hr</span>.
               </p>
               {paid ? <LearnCanariesButton className="mt-4 inline-flex items-center justify-center rounded-xl border border-amber-400/40 px-3.5 py-2 text-sm font-semibold text-amber-100 hover:bg-amber-500/10" /> : null}
               <BookingModalButton
@@ -749,7 +744,7 @@ export async function MembersDashboard({
           Canary Trader&apos;s Dashboard
         </h1>
         <p className="mt-0.5 text-xs text-slate-400 sm:text-sm">
-          Welcome. Updated daily. Questions:{" "}
+          Welcome. Preview data as of {state.sessionDate ?? String(payload.asOf ?? "").slice(0, 10)}. Questions:{" "}
           <a
             href="mailto:shaun@canarydashboard.com"
             className="text-canary-gold underline decoration-canary-gold/40 underline-offset-2 transition hover:text-canary-amber"
@@ -816,20 +811,15 @@ export async function MembersDashboard({
               </ul>
             </div>
             <CompositeHistoryChart points={compositeArchive.points} source={compositeArchive.source} />
-            {heldInputs.length ? (
+            {heldInputs.some((c) => c.id !== "finra-margin") ? (
               <ul className="mt-2 space-y-0.5 border-t border-white/5 pt-1.5 text-[10px] text-slate-500">
-                {heldInputs.map((c) => (
+                {heldInputs.filter((c) => c.id !== "finra-margin").map((c) => (
                   <li key={c.id} className="flex flex-wrap items-center gap-1">
                     <span>{c.name}:</span>
                     <HeldNote since={c.heldSince ?? "—"} />
                   </li>
                 ))}
               </ul>
-            ) : null}
-            {!paid ? (
-              <p className="mt-2 text-[10px] leading-snug text-slate-500">
-                Free preview: this Decide column is a read-only overview. The how-to-read notes are part of a paid membership.
-              </p>
             ) : null}
           </div>
 

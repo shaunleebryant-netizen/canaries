@@ -47,7 +47,7 @@ export function LearnCanariesButton({
               Learn about canaries
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">
-              Video coming soon. This membership includes a walkthrough of the composite score, the regime and vol curve, and how the scanner marks are read. The video file has not been supplied for this preview, so nothing is playing here.
+              Video coming soon. It will walk through the composite score, the regime, the vol curve, and how to read the scanner marks.
             </p>
             <p className="mt-2 text-xs text-slate-500">Education only. Not financial advice.</p>
             <button

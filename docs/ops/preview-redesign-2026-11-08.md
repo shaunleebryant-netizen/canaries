@@ -32,6 +32,12 @@ Held Backtest and Engulfing work was not merged.
 - The TradingView grant sentence is shown only when a D1 `indicator_grant_tasks` row for that email is `done`. This preview cannot see a grant, so it does not claim one.
 - Fish, Smiley, Fairy, and MFI need the composite colour recorded for that session. Red is hidden. Missing dates stay pending and are not zero. Sweaty, Skull, and monthly trend are not gated. Raw JSON files are not rewritten.
 
+## Hydration
+
+`next dev --hostname 0.0.0.0` allows origin host `0.0.0.0` only. A browser at `http://127.0.0.1` sends `Origin: http://127.0.0.1:3456`, and Next's dev cross-site check answers the HMR upgrade with a raw `Unauthorized` body. Chrome then reports an invalid websocket handshake, and `hydrate()` never gets past `await initialServerResponse`, so clicks do nothing.
+
+`allowedDevOrigins` includes `127.0.0.1` and `localhost`. Run the preview with `--hostname 127.0.0.1`.
+
 ## Preview entitlement
 
 Set `CANARY_PREVIEW_TIER=1` and run outside production (`next dev`). The httpOnly cookie is ignored when the flag is off or `NODE_ENV` is production. A stub members cookie or a real paid entitlement stays paid. Free signup stores optional marketing consent in gitignored `data/preview-consents.json` and does not send mail.
