@@ -11,8 +11,7 @@ import { FOUNDING_BENEFITS } from "@/lib/foundingBenefits";
 const FREE_BENEFITS = [
   "Limited free access",
   "ETF tab and ETF charts",
-  "Read-only Decide overview",
-  "Optional notes, off unless you tick the box. No charge.",
+  "Current market regime & composite score",
 ] as const;
 
 type Plan = "free" | "paid";
@@ -29,7 +28,7 @@ function nextStep(plan: Plan, billing: Billing): string {
 }
 
 export function SignupBoxPreview() {
-  const [plan, setPlan] = useState<Plan>("free");
+  const [plan, setPlan] = useState<Plan>("paid");
   const [billing, setBilling] = useState<Billing>("annual");
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -63,7 +62,7 @@ export function SignupBoxPreview() {
                   choosePlan("free");
                 }
               }}
-              className={`cursor-pointer rounded-xl border p-4 ${plan === "free" ? "border-canary-gold bg-amber-500/10 ring-1 ring-canary-gold/50" : "border-white/10"}`}
+              className={`order-2 cursor-pointer rounded-xl border p-4 ${plan === "free" ? "border-canary-gold bg-amber-500/10 ring-1 ring-canary-gold/50" : "border-white/10"}`}
             >
               <div className="flex items-center justify-between gap-2">
                 <p className="text-lg font-semibold text-white">Free</p>
@@ -90,7 +89,7 @@ export function SignupBoxPreview() {
                   choosePlan("paid");
                 }
               }}
-              className={`cursor-pointer rounded-xl border p-4 ${plan === "paid" ? "border-canary-gold bg-amber-500/10 ring-1 ring-canary-gold/50" : "border-white/10"}`}
+              className={`order-1 cursor-pointer rounded-xl border p-4 ${plan === "paid" ? "border-canary-gold bg-amber-500/10 ring-1 ring-canary-gold/50" : "border-white/10"}`}
             >
               <div className="flex items-center justify-between gap-2">
                 <p className="text-lg font-semibold text-white">Paid</p>
