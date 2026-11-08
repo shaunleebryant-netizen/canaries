@@ -3,7 +3,7 @@ import { membershipThankYouMessage, sendAuthEmail } from "./authEmail";
 import { type D1Database, getUserByCustomer, getUserById, logMemberEvent, nowSec } from "./db";
 import { planForPriceId, isPlanId } from "./plans";
 import { handleIndicatorPaid } from "./indicatorDelivery";
-import { enqueueMembershipBackup, flushMembershipBackups } from "./membershipBackupDb";
+import { enqueueMembershipBackup } from "./membershipBackupDb";
 
 type SubLike = {
   id: string;
@@ -220,12 +220,7 @@ export async function processStripeEvent(
       eventType: event.type,
     });
     if (queued === "queued") {
-      try {
-        const flushed = await flushMembershipBackups(db);
-        summary += `; backup pending=${flushed.pending} synced=${flushed.synced} failed=${flushed.failed}`;
-      } catch {
-        summary += "; backup flush failed";
-      }
+      summary += "; backup queued for Canary Members sheet; not pushed";
     } else if (queued === "unavailable") {
       summary += "; backup table unavailable";
     }

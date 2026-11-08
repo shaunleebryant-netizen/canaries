@@ -260,7 +260,17 @@ writeFileSync(path.join(OUT, "sheet-bundle.json"), JSON.stringify(bundle, null, 
 console.log(`d1: ${d1Status} · leads: ${leadsStatus} · stripe: ${stripeStatus}`);
 console.log(`-> ${OUT}`);
 
-if (process.argv.includes("--push")) await pushToSheet(bundle);
+if (process.argv.includes("--push")) {
+  try {
+    const pushed = await pushToSheet(bundle);
+    if (pushed) markOutboxSynced();
+    else noteOutboxNotPushed();
+  } catch (e) {
+    console.error(`push failed: ${String(e.message || e).split("\n")[0].slice(0, 200)}`);
+    recordOutboxFailure();
+    process.exitCode = 1;
+  }
+}
 
 /* ---------- Google Sheets push (--push) ----------
  * Replaces each data tab (header row + rows) and appends one Log row, via the Sheets API.
@@ -273,9 +283,9 @@ async function pushToSheet(b) {
   const sheetId = process.env.MEMBERS_SHEET_ID || "12kYo2BehTgE-7EyNHLze8KNCkkf0v9h61ARO0iFHiJ4";
   const keyPath = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   if (!keyPath || !existsSync(keyPath)) {
-    console.error("push: GOOGLE_SERVICE_ACCOUNT_JSON not set / file missing; sheet NOT updated");
+    console.error("push: GOOGLE_SERVICE_ACCOUNT_JSON not set / file missing; sheet NOT updated. Pending outbox rows are not a completed backup.");
     process.exitCode = 2;
-    return;
+    return false;
   }
   const sa = JSON.parse(readFileSync(keyPath, "utf8"));
   const b64u = (x) => Buffer.from(x).toString("base64url");
@@ -315,4 +325,35 @@ async function pushToSheet(b) {
     values: b.tabs.Log.rows,
   });
   console.log(`push: sheet ${sheetId} updated (${dataTabs.map((t) => `${t} ${b.tabs[t].rows.length}`).join(", ")}, Log +1)`);
+  return true;
+}
+
+/** Only after pushToSheet returns true. A missing table is logged and is not treated as synced. */
+function markOutboxSynced() {
+  const now = Math.floor(Date.now() / 1000);
+  try {
+    d1(`UPDATE membership_backup_outbox SET status = 'synced', attempts = attempts + 1, last_error = NULL, updated_at = ${now} WHERE status = 'pending'`);
+    console.log("outbox: pending rows marked synced after the sheet push");
+  } catch (e) {
+    console.error(`outbox: sheet was updated but pending rows were not marked synced (${String(e.message || e).split("\n")[0].slice(0, 160)})`);
+    process.exitCode = 3;
+  }
+}
+
+function noteOutboxNotPushed() {
+  console.error("outbox: sheet was not updated, so pending rows stay pending. This is not a completed backup.");
+}
+
+function recordOutboxFailure() {
+  const now = Math.floor(Date.now() / 1000);
+  try {
+    d1(
+      "UPDATE membership_backup_outbox SET attempts = attempts + 1, status = CASE WHEN attempts + 1 >= 5 THEN 'failed' ELSE 'pending' END, last_error = 'sheet push failed', updated_at = " +
+        now +
+        " WHERE status = 'pending'",
+    );
+    console.error("outbox: sheet push failed. Pending rows stay pending until 5 attempts, then failed. Not synced.");
+  } catch (e) {
+    console.error(`outbox: could not record the failed push (${String(e.message || e).split("\n")[0].slice(0, 160)})`);
+  }
 }
