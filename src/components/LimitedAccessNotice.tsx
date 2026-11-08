@@ -39,17 +39,3 @@ export function LimitedAccessNotice({ tab, tabId }: { tab: string; tabId: string
   );
 }
 
-export function LockedUniverseButton() {
-  return (
-    <form action="/api/account/checkout" method="post">
-      <input type="hidden" name="tab" value="stocks" />
-      <input type="hidden" name="plan" value="launch_annual" />
-      <button
-        type="submit"
-        className="whitespace-nowrap rounded-lg border border-[#eab308]/40 px-3 py-1.5 text-xs font-medium text-[#eab308] hover:bg-[#eab308]/10"
-      >
-        Ticker Universe
-      </button>
-    </form>
-  );
-}
