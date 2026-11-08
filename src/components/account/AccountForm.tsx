@@ -44,8 +44,13 @@ export function AccountForm({
       setError(confirmTouched ? "Passwords do not match." : "Please confirm your password.");
       return;
     }
-    const payload: Record<string, string> = { ...hidden, ...values };
+    const payload: Record<string, string | boolean> = { ...hidden, ...values };
     for (const f of confirmFields) delete payload[f.name];
+    for (const f of fields) {
+      if (f.type !== "checkbox") continue;
+      if (payload[f.name] === "true") payload[f.name] = true;
+      else delete payload[f.name];
+    }
     setBusy(true);
     try {
       const res = await fetch(endpoint, {
@@ -79,20 +84,33 @@ export function AccountForm({
 
   return (
     <form onSubmit={onSubmit} className="mt-6 flex w-full flex-col gap-3">
-      {fields.map((f) => (
-        <label key={f.name} className="flex flex-col gap-1 text-sm font-medium text-slate-300">
-          {f.label}
-          <input
-            name={f.name}
-            type={f.type}
-            autoComplete={f.autoComplete}
-            value={values[f.name] || ""}
-            onChange={(e) => setValues((v) => ({ ...v, [f.name]: e.target.value }))}
-            className="rounded-xl border border-white/15 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:ring-2 focus:ring-canary-gold"
-            required
-          />
-        </label>
-      ))}
+      {fields.map((f) =>
+        f.type === "checkbox" ? (
+          <label key={f.name} className="flex items-start gap-2 text-sm text-slate-300">
+            <input
+              name={f.name}
+              type="checkbox"
+              checked={values[f.name] === "true"}
+              onChange={(e) => setValues((v) => ({ ...v, [f.name]: e.target.checked ? "true" : "" }))}
+              className="mt-1"
+            />
+            <span>{f.label}</span>
+          </label>
+        ) : (
+          <label key={f.name} className="flex flex-col gap-1 text-sm font-medium text-slate-300">
+            {f.label}
+            <input
+              name={f.name}
+              type={f.type}
+              autoComplete={f.autoComplete}
+              value={values[f.name] || ""}
+              onChange={(e) => setValues((v) => ({ ...v, [f.name]: e.target.value }))}
+              className="rounded-xl border border-white/15 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:ring-2 focus:ring-canary-gold"
+              required
+            />
+          </label>
+        ),
+      )}
       {mismatchError && !error ? <p className="text-sm text-canary-red">{mismatchError}</p> : null}
       {error ? <p className="text-sm text-canary-red">{error}</p> : null}
       {info ? <p className="text-sm text-emerald-300">{info}</p> : null}

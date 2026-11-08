@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE, accountsEnabled, sessionSecret } from "@/lib/members/config";
+import { PREVIEW_TIER_COOKIE, previewTierEnabled, readPreviewTier } from "@/lib/members/previewTier";
 import { verifySessionToken } from "@/lib/members/sessionToken";
 import { ACCESS_JWT_HEADER, isOwnerPath, verifyAccessJwt } from "@/lib/owner/accessJwt";
 
@@ -28,6 +29,10 @@ async function accountsMiddleware(request: NextRequest) {
     ok = false; // missing SESSION_SECRET -> fail closed
   }
   if (ok) return NextResponse.next();
+  if (previewTierEnabled()) {
+    const preview = await readPreviewTier(request.cookies.get(PREVIEW_TIER_COOKIE)?.value);
+    if (preview) return NextResponse.next();
+  }
   if (pathname.startsWith("/api/")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -58,6 +63,9 @@ async function ownerMiddleware(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/_chartdata")) {
+    return new NextResponse("Not found", { status: 404, headers: { "cache-control": "no-store", "x-robots-tag": NO_INDEX } });
+  }
   if (isOwnerPath(request.nextUrl.pathname)) return ownerMiddleware(request);
   if (accountsEnabled()) return accountsMiddleware(request);
 
@@ -80,6 +88,10 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get(MEMBERS_COOKIE)?.value;
 
   if (token === password) return NextResponse.next();
+  if (previewTierEnabled()) {
+    const preview = await readPreviewTier(request.cookies.get(PREVIEW_TIER_COOKIE)?.value);
+    if (preview) return NextResponse.next();
+  }
 
   if (pathname.startsWith("/api/")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -91,5 +103,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/members", "/members/:path*", "/api/members/:path*", "/owner", "/owner/:path*", "/api/owner", "/api/owner/:path*"],
+  matcher: ["/members", "/members/:path*", "/api/members/:path*", "/owner", "/owner/:path*", "/api/owner", "/api/owner/:path*", "/_chartdata/:path*"],
 };

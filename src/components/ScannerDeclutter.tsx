@@ -10,6 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { LimitedAccessNotice } from "@/components/LimitedAccessNotice";
 
 const SHOW_LIMIT = 12;
 
@@ -155,6 +156,7 @@ export function ScannerDeclutterShell({
   myStocks,
   initialTab = "stocks",
   toolbarEnd,
+  lockedTabs = [],
 }: {
   canaries: ReactNode;
   main: ReactNode;
@@ -177,6 +179,8 @@ export function ScannerDeclutterShell({
   toolbarEnd?: ReactNode;
   /** Deep link (/members?tab=history). Falls back to Canaries. */
   initialTab?: DeclutterTab;
+  /** Tabs whose children must not be rendered. The server also omits that data. */
+  lockedTabs?: readonly DeclutterTab[];
 }) {
   const [tab, setTab] = useState<DeclutterTab>(
     (initialTab === "history" && !history) ||
@@ -240,10 +244,11 @@ export function ScannerDeclutterShell({
     return () => window.clearTimeout(t);
   }, [pendingHash, tab]);
 
+  const locked = new Set(lockedTabs);
   const tabs: { id: DeclutterTab; label: string }[] = [
+    { id: "etf", label: "ETFs" },
     { id: "stocks", label: "Stocks" },
     ...(ideas ? [{ id: "ideas" as const, label: "Ideas" }] : []),
-    { id: "etf", label: "ETFs" },
     { id: "crypto", label: "Crypto" },
     ...(insiders ? [{ id: "insiders" as const, label: "Insiders" }] : []),
     ...(myStocks ? [{ id: "mystocks" as const, label: "My Stocks" }] : []),
@@ -301,10 +306,11 @@ export function ScannerDeclutterShell({
       </div>
 
       {tab === "canaries" ? (
-        <div className="space-y-3">{canaries}</div>
+        locked.has("canaries") ? <LimitedAccessNotice tab="Canaries" tabId="canaries" /> : <div className="space-y-3">{canaries}</div>
       ) : null}
 
       {tab === "stocks" ? (
+        locked.has("stocks") ? <LimitedAccessNotice tab="Stocks" tabId="stocks" /> : (
         <div className="space-y-4">
           <ScannerEmojiLegend />
           {/* Owner t852u: Canary Score ranking (stocksTop) now renders below Sub Scanners. */}
@@ -343,23 +349,25 @@ export function ScannerDeclutterShell({
           {stocksTop}
           {stocksBottom}
         </div>
-      ) : null}
+      )) : null}
 
-      {tab === "ideas" && ideas ? <div id="ideas-tab" className="space-y-3">{ideas}</div> : null}
+      {tab === "ideas" ? (locked.has("ideas") ? <LimitedAccessNotice tab="Ideas" tabId="ideas" /> : ideas ? <div id="ideas-tab" className="space-y-3">{ideas}</div> : null) : null}
 
       {tab === "etf" ? <div className="space-y-3">{etf}</div> : null}
 
-      {tab === "crypto" ? <div className="space-y-3">{crypto}</div> : null}
+      {tab === "crypto" ? (locked.has("crypto") ? <LimitedAccessNotice tab="Crypto" tabId="crypto" /> : <div className="space-y-3">{crypto}</div>) : null}
 
-      {tab === "insiders" && insiders ? (
+      {tab === "insiders" ? (
+        locked.has("insiders") ? <LimitedAccessNotice tab="Insiders" tabId="insiders" /> : insiders ? (
         <div id="insiders-tab" className="space-y-3">
           {insiders}
         </div>
+      ) : null
       ) : null}
 
-      {tab === "history" && history ? <div className="space-y-3">{history}</div> : null}
+      {tab === "history" ? (locked.has("history") ? <LimitedAccessNotice tab="Backtest" tabId="backtest" /> : history ? <div className="space-y-3">{history}</div> : null) : null}
 
-      {tab === "mystocks" && myStocks ? <div className="space-y-3">{myStocks}</div> : null}
+      {tab === "mystocks" ? (locked.has("mystocks") ? <LimitedAccessNotice tab="My Stocks" tabId="mystocks" /> : myStocks ? <div className="space-y-3">{myStocks}</div> : null) : null}
     </div>
   );
 }

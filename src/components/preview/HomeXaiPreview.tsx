@@ -45,7 +45,7 @@ const TOOLS = [
   { tab: "Cockpit", t: "Members cockpit", d: "Traffic light, regime and today’s scanner lists on one screen.", src: "/home/preview/members-top-green.png?v=nobang" },
   { tab: "Risk Guide", t: "Decide · traffic light", d: "Risk-On, Cautious or Risk-Off at a glance, with the math on how the score is weighted and derived.", src: "/home/preview/decide-regime-green.png?v=nobang" },
   { tab: "Insiders", t: "Insider buying", d: "Open-market insider buys from SEC Form 4 filings, updated daily.", src: "/home/preview/insiders-buying.png" },
-  { tab: "Backtest", t: "Backtest", d: "Check our past indicator marks by date over the next 5, 10 and 20 day % change.", src: "/home/preview/backtest-marks.png?v=green" },
+  { tab: "Backtest", t: "Backtest", d: "Past Fish, Smiley, MFI and Fairy marks. Forward columns are the percent change after 3, 5 or 10 trading sessions.", src: "/home/preview/backtest-marks.png?v=green" },
   { tab: "Crypto", t: "Crypto charts", d: "Bitcoin and Ethereum daily charts with the same Canary marks — Fish, Smiley and the rest — shown on the dashboard.", src: "/home/preview/crypto-btc-eth.png" },
   { tab: "Alerts", t: "Alerts", d: "Get alerts via email as a stock in your watchlist prints an emoji.", src: "/home/preview/alerts-email.png" },
   { tab: "Warnings", t: "Sweaty stocks 🥵", d: "Names stretched versus their own history, with 💀 when momentum rolls over.", src: "/home/preview/sweaty-stocks.png" },
@@ -97,9 +97,10 @@ export function HomeXaiPreview() {
               Your daily risk traffic light, market health, stock and crypto conditions screener and more.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="/about" className="rounded-xl bg-canary-gold px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-300">About us</a>
-              <a href="/account/login" className="rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-white hover:bg-white/5">Log in</a>
+              <a href="/account/signup" className="rounded-xl bg-canary-gold px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-300">Create a free account</a>
+              <a href="/signup" className="rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-white hover:bg-white/5">Paid membership</a>
             </div>
+            <p className="mt-3 text-sm text-slate-300">Limited free access</p>
           </div>
           <HomeVideo />
         </div>
@@ -206,10 +207,13 @@ export function HomeXaiPreview() {
             <h2 className="text-3xl font-bold tracking-tight text-white">
               Join us and be among our Founding Members
             </h2>
+            <p className="mt-3 text-sm font-semibold text-white">Limited free access</p>
             <p className="mt-4 font-medium text-white">
               US$35/month, billed annually (US$420) · Not subject to future price increases
             </p>
-            <p className="mt-1 text-sm text-slate-400">(Less than TradingView Premium&apos;s US$59.95/month)</p>
+            <p className="mt-1 text-sm text-slate-400">
+              Founding monthly is US$70/mo, the secondary option. After the first 100: US$99/mo or US$1,069/yr.
+            </p>
             <ul className="mt-5 space-y-2 text-sm text-slate-200">
               {FOUNDING_BENEFITS.map((item) => (
                 <li key={item} className="flex gap-2">
@@ -217,12 +221,27 @@ export function HomeXaiPreview() {
                 </li>
               ))}
             </ul>
+            <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+              <div className="rounded-xl border border-white/10 p-3">
+                <p className="font-semibold text-white">Free account</p>
+                <ul className="mt-2 space-y-1 text-slate-400">
+                  <li>Limited free access</li>
+                  <li>ETF tab and ETF charts</li>
+                  <li>Read-only Decide overview</li>
+                  <li>Optional notes, off unless you tick the box. No charge.</li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-canary-gold/30 p-3">
+                <p className="font-semibold text-white">Paid membership</p>
+                <p className="mt-2 text-slate-300">The founding benefits above, including the full dashboard.</p>
+              </div>
+            </div>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a href="/signup" className="w-full rounded-xl bg-canary-gold px-8 py-4 text-center text-base font-bold text-slate-950 shadow-[0_0_30px_-5px_rgba(245,158,11,0.7)] transition hover:bg-amber-400 sm:w-auto">
-                Claim your founding spot →
+              <a href="/account/signup" className="w-full rounded-xl bg-canary-gold px-8 py-4 text-center text-base font-bold text-slate-950 shadow-[0_0_30px_-5px_rgba(245,158,11,0.7)] transition hover:bg-amber-400 sm:w-auto">
+                Create a free account
               </a>
-              <a href="/account/login" className="w-full rounded-xl border border-white/20 px-6 py-4 text-center text-sm font-medium text-white hover:bg-white/5 sm:w-auto">
-                Log in
+              <a href="/signup" className="w-full rounded-xl border border-white/20 px-6 py-4 text-center text-sm font-medium text-white hover:bg-white/5 sm:w-auto">
+                Founding annual · US$35/mo
               </a>
             </div>
           </div>

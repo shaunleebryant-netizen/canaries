@@ -46,12 +46,27 @@ export function AssetStatusStrip() {
     Promise.all(ASSETS.map(([l, k]) => fetch(`/api/members/chart/${k}`).then((r) => (r.ok ? r.json() : null)).then((c) => (c ? compute(l, k, c) : null)).catch(() => null)))
       .then((r) => setRows(r.filter(Boolean) as Row[]));
   }, []);
-  if (!rows?.length) return null;
+  if (!rows) {
+    return (
+      <div className="w-full">
+        <div className="mb-1 text-[10px] font-bold tracking-[0.12em] text-canary-gold">GOLD · SILVER · ETH · BTC</div>
+        <p className="text-[11px] text-slate-500">Loading the latest daily status…</p>
+      </div>
+    );
+  }
+  if (!rows.length) {
+    return (
+      <div className="w-full">
+        <div className="mb-1 text-[10px] font-bold tracking-[0.12em] text-canary-gold">GOLD · SILVER · ETH · BTC</div>
+        <p className="text-[11px] text-slate-500">No chart for these symbols on this account.</p>
+      </div>
+    );
+  }
   const asOf = rows.map((r) => r.asOf).sort().pop()!;
   return (
     <div className="w-full">
       <div className="mb-1 text-[10px] font-bold tracking-[0.12em] text-canary-gold">
-        GOLD · SILVER · CRYPTO <span className="font-normal tracking-normal text-slate-500">· as of {fmtAsOf(asOf)}</span>
+        GOLD · SILVER · ETH · BTC <span className="font-normal tracking-normal text-slate-500">· as of {fmtAsOf(asOf)}</span>
       </div>
       <div className="rounded-lg border border-[#1d2a44] bg-[#0b1428] px-2.5 mt-1.5 py-1 text-xs">
         {rows.map((r) => (

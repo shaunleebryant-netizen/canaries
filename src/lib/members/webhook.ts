@@ -3,6 +3,7 @@ import { membershipThankYouMessage, sendAuthEmail } from "./authEmail";
 import { type D1Database, getUserByCustomer, getUserById, logMemberEvent, nowSec } from "./db";
 import { planForPriceId, isPlanId } from "./plans";
 import { handleIndicatorPaid } from "./indicatorDelivery";
+import { enqueueMembershipBackup } from "./membershipBackupDb";
 
 type SubLike = {
   id: string;
@@ -211,5 +212,18 @@ export async function processStripeEvent(
     )
     .bind(event.id, event.type, event.livemode ? 1 : 0, event.created, nowSec(), userId, subscriptionId, amount, currency, summary)
     .run();
+  if (userId && (event.type === "checkout.session.completed" || event.type.startsWith("customer.subscription."))) {
+    const queued = await enqueueMembershipBackup(db, {
+      eventId: event.id,
+      userId,
+      subscriptionId,
+      eventType: event.type,
+    });
+    if (queued === "queued") {
+      summary += "; backup queued for Drive snapshot; not verified";
+    } else if (queued === "unavailable") {
+      summary += "; backup table unavailable";
+    }
+  }
   return { duplicate: false, summary };
 }

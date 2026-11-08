@@ -33,6 +33,11 @@ export default async function AccountSignupPage() {
             autoComplete: "new-password",
             mustMatch: "password",
           },
+          {
+            name: "marketing",
+            label: "Send me occasional product notes. Leave this unticked and nothing is stored as consent.",
+            type: "checkbox",
+          },
         ]}
       />
       <GoogleSignInButton next="/account" />

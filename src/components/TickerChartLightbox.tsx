@@ -17,6 +17,7 @@ import { useMyStocks } from "@/lib/myStocksStore";
 import type { UniverseGroup } from "@/lib/tickerUniverse";
 import { TickerLightboxStats } from "@/components/TickerLightboxStats";
 import type { UniverseLightboxPack } from "@/lib/tickerLightboxStats";
+import { isFreeEtfChart } from "@/lib/etfChartAccess";
 
 /** v2 candlestick + marks dialog (owner t581u PREVIEW); own chunk, only loaded when v2 is on. */
 const TickerChartDialogV2 = dynamic(() => import("@/components/TickerChartV2").then((m) => m.TickerChartDialogV2), {
@@ -329,8 +330,7 @@ function TickerChartDialog({
         </div>
 
         <p className="shrink-0 border-t border-white/10 px-4 py-2.5 text-[11px] leading-snug text-slate-500 sm:px-5">
-          Education only — chart for study context. Not buy/sell advice. No
-          order buttons from Canary.
+          Not financial advice
         </p>
       </div>
     </div>
@@ -348,6 +348,7 @@ export function TickerChartProvider({
   universe,
   names,
   lightbox,
+  chartAccess = "paid",
 }: {
   children: ReactNode;
   /** MEMBERS_TICKER_CHART_V2 / design preview: candlestick + marks dialog. */
@@ -359,6 +360,8 @@ export function TickerChartProvider({
   names?: Record<string, string>;
   /** Canary Score and EPS for fish-universe companies. Off-universe charts omit the row. */
   lightbox?: UniverseLightboxPack | null;
+  /** Free accounts may open Sector ETF charts only. The API enforces the same rule. */
+  chartAccess?: "paid" | "free-etf";
 }) {
   const allowed = useMemo(
     () => (universe ? new Set(universe.flatMap((g) => g.items.map((i) => i.ticker.toUpperCase()))) : undefined),
@@ -372,11 +375,13 @@ export function TickerChartProvider({
   const lastTriggerRef = useRef<HTMLElement | null>(null);
 
   const openTicker = useCallback((next: string, iv: ChartInterval = "D") => {
+    const symbol = next.trim().toUpperCase();
+    if (chartAccess === "free-etf" && !isFreeEtfChart(symbol)) return;
     setChartInterval(iv);
     lastTriggerRef.current =
       (document.activeElement as HTMLElement | null) ?? null;
-    setTicker(next.trim().toUpperCase());
-  }, []);
+    setTicker(symbol);
+  }, [chartAccess]);
 
   const onClose = useCallback(() => {
     setTicker(null);
@@ -410,7 +415,8 @@ export function TickerChartProvider({
             titleId={titleId}
             name={names?.[ticker]}
             star={myStocksValue}
-            lightbox={lightbox}
+            lightbox={chartAccess === "paid" ? lightbox : null}
+            chartAccess={chartAccess}
           />
         ) : null
       ) : (

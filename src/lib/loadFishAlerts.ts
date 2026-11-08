@@ -11,6 +11,9 @@ export interface FishAlert {
   ticker: string;
   signal: FishSignal;
   asOf: string;
+  /** Mark dates. The file asOf is not a substitute. */
+  smileAsOf?: string;
+  fishAsOf?: string;
   note?: string;
   timeframe?: string;
 }

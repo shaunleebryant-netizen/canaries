@@ -27,6 +27,9 @@
  *   OUT_DIR=/workspace/exports/members-sheet node scripts/export-members-sheet.mjs --remote
  *   GOOGLE_SERVICE_ACCOUNT_JSON=/path/sa.json node scripts/export-members-sheet.mjs --remote --push
  *
+ * Optional sheet copy. It does not acknowledge the membership outbox. The release backup is
+ * scripts/membership-drive-backup.mjs, after the parent has verified the Drive file bytes.
+ *
  * Output contains member emails: keep it out of git (default OUT_DIR is under /exports,
  * which is gitignored) and never paste it into chat or logs.
  */
@@ -260,7 +263,17 @@ writeFileSync(path.join(OUT, "sheet-bundle.json"), JSON.stringify(bundle, null, 
 console.log(`d1: ${d1Status} · leads: ${leadsStatus} · stripe: ${stripeStatus}`);
 console.log(`-> ${OUT}`);
 
-if (process.argv.includes("--push")) await pushToSheet(bundle);
+if (process.argv.includes("--push")) {
+  try {
+    const pushed = await pushToSheet(bundle);
+    if (pushed) console.log("sheet updated; membership outbox was not acknowledged");
+    else console.error("sheet was not updated; membership outbox was not acknowledged");
+  } catch (e) {
+    console.error(`push failed: ${String(e.message || e).split("\n")[0].slice(0, 200)}`);
+    console.error("membership outbox was not acknowledged");
+    process.exitCode = 1;
+  }
+}
 
 /* ---------- Google Sheets push (--push) ----------
  * Replaces each data tab (header row + rows) and appends one Log row, via the Sheets API.
@@ -273,9 +286,9 @@ async function pushToSheet(b) {
   const sheetId = process.env.MEMBERS_SHEET_ID || "12kYo2BehTgE-7EyNHLze8KNCkkf0v9h61ARO0iFHiJ4";
   const keyPath = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   if (!keyPath || !existsSync(keyPath)) {
-    console.error("push: GOOGLE_SERVICE_ACCOUNT_JSON not set / file missing; sheet NOT updated");
+    console.error("push: GOOGLE_SERVICE_ACCOUNT_JSON not set / file missing; sheet NOT updated. Pending outbox rows are not a completed backup.");
     process.exitCode = 2;
-    return;
+    return false;
   }
   const sa = JSON.parse(readFileSync(keyPath, "utf8"));
   const b64u = (x) => Buffer.from(x).toString("base64url");
@@ -315,4 +328,5 @@ async function pushToSheet(b) {
     values: b.tabs.Log.rows,
   });
   console.log(`push: sheet ${sheetId} updated (${dataTabs.map((t) => `${t} ${b.tabs[t].rows.length}`).join(", ")}, Log +1)`);
+  return true;
 }

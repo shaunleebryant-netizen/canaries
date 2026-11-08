@@ -28,13 +28,31 @@ export interface SignalHistoryRow {
  *   tickers: { [t]: [name, group, priceNow, priceNowAsOf, removed 0|1] }
  * Expanded on the client by expandSignalHistory().
  */
+export interface SignalHistoryGate {
+  raw: number;
+  eligible: number;
+  suppressedRed: number;
+  pendingUnknown: number;
+  archiveFrom: string | null;
+  archiveTo: string | null;
+}
+
 export interface SignalHistoryPayload {
   asOf: string | null;
   windowStart: string | null;
   sessions: number;
   markCount: number;
+  gate?: SignalHistoryGate;
+  /** Dated pack-log colours for the optional backtest comparison. Not applied unless asked. */
+  compositeByDate?: Record<string, "green" | "amber" | "red">;
   rows: [string, string, string, number, [number | null, number | null, number | null]][];
   tickers: Record<string, [string | null, HistoryGroup, number | null, string | null, 0 | 1]>;
+}
+
+/** Close-to-close percent. A missing later close is pending, never zero. */
+export function formatHorizonPct(v: number | null): string {
+  if (v == null || !Number.isFinite(v)) return "pending";
+  return `${v >= 0 ? "+" : ""}${v.toFixed(1)}%`;
 }
 
 const LETTER_KIND: Record<string, HistoryKind> = { f: "fish", s: "smile", m: "mfi", c: "fairy" };

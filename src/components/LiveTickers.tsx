@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTickerChart } from "@/components/TickerChartLightbox";
 import type { MarketQuotesPayload, TickerStripItem } from "@/lib/marketQuotes";
 import { quoteStripChartTicker } from "@/lib/quoteStripChart";
+import { isFreeEtfChart } from "@/lib/etfChartAccess";
 
 function formatPx(n: number): string {
   if (Math.abs(n) >= 1000)
@@ -11,10 +12,38 @@ function formatPx(n: number): string {
   return n.toFixed(2);
 }
 
-function TickerChip({ item }: { item: TickerStripItem }) {
+function PlainQuote({ item }: { item: TickerStripItem }) {
+  const q = item.quote;
+  const pct = q?.changePct;
+  const up = pct != null && pct >= 0;
+  const down = pct != null && pct < 0;
+  return (
+    <div className="min-w-0 flex-1 rounded-lg border border-white/10 bg-slate-950/40 px-1.5 py-0.5 text-center" aria-label={`${item.label} quote`}>
+      <p className="truncate text-[13px] font-semibold uppercase leading-tight tracking-wide text-slate-300">{item.label}</p>
+      {q ? (
+        <div className="flex flex-wrap items-baseline justify-center gap-x-1 leading-tight">
+          <span className="text-base font-semibold tabular-nums text-white">{formatPx(q.last)}</span>
+          {pct != null ? (
+            <span className={`text-sm font-semibold tabular-nums ${up ? "text-canary-green" : down ? "text-canary-red" : "text-slate-400"}`}>
+              {up ? "+" : ""}
+              {pct.toFixed(2)}%
+            </span>
+          ) : (
+            <span className="text-base text-slate-600">n/a</span>
+          )}
+        </div>
+      ) : (
+        <p className="text-base leading-tight text-slate-600">—</p>
+      )}
+    </div>
+  );
+}
+
+function TickerChip({ item, interactive }: { item: TickerStripItem; interactive: boolean }) {
   const { openTicker } = useTickerChart();
   const chartTicker = quoteStripChartTicker(item.id, item.label);
   const q = item.quote;
+  if (!interactive) return <PlainQuote item={item} />;
   const tip = `${item.description} Open the daily chart.`;
   const open = () => openTicker(chartTicker);
   if (!q) {
@@ -74,7 +103,13 @@ function TickerChip({ item }: { item: TickerStripItem }) {
   );
 }
 
-export function LiveTickers({ initial }: { initial: MarketQuotesPayload }) {
+export function LiveTickers({
+  initial,
+  chartAccess = "paid",
+}: {
+  initial: MarketQuotesPayload;
+  chartAccess?: "paid" | "free-etf";
+}) {
   const [data, setData] = useState(initial);
   const [busy, setBusy] = useState(false);
 
@@ -123,9 +158,11 @@ export function LiveTickers({ initial }: { initial: MarketQuotesPayload }) {
         </button>
       </div>
       <div className="mt-1 grid w-full grid-cols-3 items-stretch gap-1 sm:flex sm:flex-nowrap sm:justify-between">
-        {data.tickers.map((t) => (
-          <TickerChip key={t.id} item={t} />
-        ))}
+        {data.tickers.map((t) => {
+          const symbol = quoteStripChartTicker(t.id, t.label);
+          const interactive = t.id !== "vix" && (chartAccess === "paid" || isFreeEtfChart(symbol));
+          return <TickerChip key={t.id} item={t} interactive={interactive} />;
+        })}
       </div>
     </section>
   );
