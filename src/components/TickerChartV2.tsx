@@ -316,36 +316,43 @@ function TradingViewTab({ ticker, interval }: { ticker: string; interval: ChartI
   );
 }
 
-function LayerCheck({
-  checked,
+function LayerChip({
+  pressed,
   emoji,
   label,
+  tone,
   disabled,
-  onChange,
+  onClick,
 }: {
-  checked: boolean;
+  pressed: boolean;
   emoji: string;
   label: string;
+  tone: "bull" | "bear";
   disabled?: boolean;
-  onChange: () => void;
+  onClick: () => void;
 }) {
+  const active =
+    tone === "bull"
+      ? "border-emerald-400/50 bg-emerald-500/20 text-emerald-50"
+      : "border-rose-400/50 bg-rose-500/20 text-rose-50";
   return (
-    <label
-      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-medium ${
-        disabled ? "cursor-not-allowed border-white/10 text-slate-500" : "cursor-pointer border-white/15 text-slate-200"
+    <button
+      type="button"
+      aria-pressed={pressed}
+      disabled={disabled}
+      onClick={onClick}
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-canary-gold/70 ${
+        disabled
+          ? "cursor-not-allowed border-white/10 bg-transparent text-slate-500"
+          : pressed
+            ? active
+            : "border-white/15 bg-transparent text-slate-500 hover:text-slate-300"
       }`}
     >
-      <input
-        type="checkbox"
-        checked={checked}
-        disabled={disabled}
-        onChange={onChange}
-        className="accent-sky-400"
-      />
       <span aria-hidden>{emoji}</span>
       {label}
       {disabled ? <span className="text-[10px] font-normal text-amber-200/80">Upgrade</span> : null}
-    </label>
+    </button>
   );
 }
 
@@ -524,17 +531,19 @@ export function TickerChartDialogV2({
 
         {tab === "marks" ? (
           <div className="shrink-0 border-t border-white/10 px-4 py-2 sm:px-5">
+            <p className="mb-1.5 text-[10px] leading-snug text-slate-400">Click to toggle</p>
             <div role="group" aria-label="Mark layers" className="flex flex-wrap gap-1.5">
               {MARK_ORDER.map((k) => {
                 const locked = chartAccess === "free-etf" && FREE_ETF_LOCKED.includes(k);
                 return (
-                  <LayerCheck
+                  <LayerChip
                     key={k}
-                    checked={shownLayers[k]}
+                    pressed={shownLayers[k]}
                     emoji={MARKS[k].emoji}
                     label={MARKS[k].label}
+                    tone={MARKS[k].side}
                     disabled={locked}
-                    onChange={() => toggleLayer(k)}
+                    onClick={() => toggleLayer(k)}
                   />
                 );
               })}
