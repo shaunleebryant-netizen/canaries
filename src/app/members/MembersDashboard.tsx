@@ -96,6 +96,9 @@ import {
   loadCanarySparklines,
 } from "@/lib/loadCanarySparklines";
 
+/** Owner t1138u: hide the dashboard letter archive for now. Flip to restore the box. */
+const SHOW_DASHBOARD_LETTER_ARCHIVE = false;
+
 /**
  * Slim amber note above the Canary readings (owner approved 2026-10-09, t595u). The button opens
  * the Bookings form in a modal with "1-to-1 class" preselected. Amber, never yellow.
@@ -702,7 +705,9 @@ export async function MembersDashboard({
             </>
           ) : null}
 
-          <section className="grid gap-4 md:grid-cols-2">
+          {/* Letter archive hidden for now (owner t1138u). Set this true to show it beside tuition again. */}
+          <section className={SHOW_DASHBOARD_LETTER_ARCHIVE ? "grid gap-4 md:grid-cols-2" : undefined}>
+            {SHOW_DASHBOARD_LETTER_ARCHIVE ? (
             <div className="rounded-xl border border-white/10 bg-slate-900/60 p-4 shadow-sm">
               <h2 className="text-base font-semibold text-white">
                 Letter archive
@@ -730,6 +735,7 @@ export async function MembersDashboard({
                 ))}
               </ul>
             </div>
+            ) : null}
 
             {/* Bookings card (owner approved 2026-10-09, t595u): opens the Bookings form in a modal
                 with "1-to-1 class" preselected (was a link to /tuition). Amber, never yellow. */}
